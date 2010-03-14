@@ -3,21 +3,21 @@
 ===Synchronize Game Files Between Computer and Thumb Drive===
 
 
-====1. Choose a synchronization direction.====
+1. Choose a synchronization direction.
 
 http://lh5.ggpht.com/_-Xzk-2Bdr-I/S5zmo-_xu0I/AAAAAAAAAJA/u5L7m0Aqyqw/startscreen.JPG
 
-====2. Select the game files you want to synchronize and click "Confirm".====
+2. Select the game files you want to synchronize and click "Confirm".
 
 http://lh3.ggpht.com/_-Xzk-2Bdr-I/S5znfKsCPmI/AAAAAAAAAJU/lBsQmtZn6xw/choosegamescreen.JPG
 
-====3. If synchronization is successful, you will be returned to the startup screen. If synchronization has failed, you can choose to look at the details of the errors by clicking "Errors" or start another synchronization task by clicking "Done".====
+3. If synchronization is successful, you will be returned to the startup screen. If synchronization has failed, you can choose to look at the details of the errors by clicking "Errors" or start another synchronization task by clicking "Done".
 
 http://lh5.ggpht.com/_-Xzk-2Bdr-I/S5z2nujaFLI/AAAAAAAAAJ0/YuOTaFCs3aM/step3.JPG
 
 http://lh5.ggpht.com/_-Xzk-2Bdr-I/S5z4NdZzp3I/AAAAAAAAAKA/QJRdPz7UUOQ/step3.1.JPG
 
-====4. After you are done viewing the detailed errors, click "Done" to return to the startup screen.====
+4. After you are done viewing the detailed errors, click "Done" to return to the startup screen.
 
 http://lh4.ggpht.com/_-Xzk-2Bdr-I/S5z56Ybmc9I/AAAAAAAAAKI/pON34-C6Xus/step4.JPG
 
