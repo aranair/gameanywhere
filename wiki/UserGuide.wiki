@@ -14,3 +14,7 @@ http://lh3.ggpht.com/_-Xzk-2Bdr-I/S5znfKsCPmI/AAAAAAAAAJU/lBsQmtZn6xw/choosegame
 ====3. If synchronization is successful, you will be returned to the startup screen.====
 
 http://lh5.ggpht.com/_-Xzk-2Bdr-I/S5z2nujaFLI/AAAAAAAAAJ0/YuOTaFCs3aM/step3.JPG
+
+If synchronization has failed, you can choose to look at the errors by clicking "Errors" or start another synchronization task by clicking "Done".
+
+http://lh5.ggpht.com/_-Xzk-2Bdr-I/S5z4NdZzp3I/AAAAAAAAAKA/QJRdPz7UUOQ/step3.1.JPG
