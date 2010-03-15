@@ -42,7 +42,7 @@ A. There can be many different reasons. The game file might be in use, locked or
 
 *Q. How can I ensure that synchronization errors do not occur?*
 
-A. Close your running games before you do a synchronization and do not tamper with the game files on both the computer and thumb drive on your own.
+A. Close your running games and open folder windows before you do a synchronization and do not tamper with the game files on both the computer and thumb drive on your own.
 
 *Q. Am I able to use my external hard disk instead of a thumb drive for this program?*
 
