@@ -51,7 +51,3 @@ A. Yes.
 *Q. Is there a possibility that the restoration of a computer to its original state can fail?*
 
 A. The likelihood is slim but it is possible. Please follow the on-screen instructions should a restoration fail.
-
-*Q. I have Football Manager 2010 installed but your software did not detect the game. Why?*
-
-A. Football Manager 2010 does not set up all its files during installation. You might need to run the game once first before attempting to synchronize.
