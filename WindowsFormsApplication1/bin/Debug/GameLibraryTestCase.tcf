@@ -1,0 +1,9 @@
+GameLibrary|void
+1~RefreshList|void|int:4|void
+2~GetGameList|int:2|int:4|void
+3~GetGameList|int:1|int:3|void
+4~GetGameList|int:1|int:0|void
+5~GetGameList|int:99|void|InvalidDirectionException
+6~GetGameList|int:2|int:3|void
+7~GetGameList|int:2|int:4|void
+8~GetGameList|int:2|int:4|void
