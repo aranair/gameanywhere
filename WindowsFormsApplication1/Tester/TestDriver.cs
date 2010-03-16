@@ -97,7 +97,7 @@ namespace GameAnywhere
         {
             foreach (TestCase t in testCases)
             {
-                t.invokeTestMethod(ref testClass);
+                t.invokeTestMethod(/*ref testClass*/);
             } 
             return testCases;
         }
@@ -125,7 +125,7 @@ namespace GameAnywhere
                     start = param_string[i].IndexOf("<");
                     end = param_string[i].IndexOf(">");
                     string type = param_string[i].Substring(start + 1, end - (start + 1));
-                    ArrayList temp = PreCondition.GetArrayList(param_string[i]);
+                    ArrayList temp = PreCondition.GetArrayList(param_string[i],OfflineSync.Uninitialize);
                     switch (type)
                     {
                         case "string":
@@ -162,7 +162,7 @@ namespace GameAnywhere
                 //format : Array<Type>:{obj1+obj2} 
                 else if (param_string[i].StartsWith("Array"))
                 {
-                    param[i] = PreCondition.GetArray(param_string[i]);
+                    param[i] = PreCondition.GetArray(param_string[i], OfflineSync.Uninitialize);
                 }
 
                 // add in other data type here, queue ... ...

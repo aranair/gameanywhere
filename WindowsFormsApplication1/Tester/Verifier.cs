@@ -503,7 +503,8 @@ namespace GameAnywhere
             switch (index)
             {
                 //case 1 - 3: ext to com
-                case 1: //verify config only  FIFA 10  
+                case 1: //verify config only  FIFA 10 
+ 
                     CheckSyncGamesExpectedOutput(expectedOutput, ref result, syncList, true);
                     CheckBackupAndSync(syncList, ref result, true);                 
                     break;
@@ -533,7 +534,7 @@ namespace GameAnywhere
                 case 6: // Verify that only Wc3 is sync
                     {
                         List<SyncAction> wc3Only = new List<SyncAction>();
-                        wc3Only.Add(new SyncAction(PreCondition.getGame("Warcraft 3"), SyncAction.ConfigFiles));
+                        wc3Only.Add(new SyncAction(PreCondition.getGame("Warcraft 3",OfflineSync.Uninitialize), SyncAction.ConfigFiles));
                         CheckSyncGamesExpectedOutput(expectedOutput, ref result, wc3Only,true);
                         
                         //passed in synclist for WC3
@@ -576,7 +577,7 @@ namespace GameAnywhere
                 case 8:
                     {
                         List<SyncAction> wc3Only = new List<SyncAction>();
-                        wc3Only.Add(new SyncAction(PreCondition.getGame("Warcraft 3"), SyncAction.AllFiles));
+                        wc3Only.Add(new SyncAction(PreCondition.getGame("Warcraft 3",OfflineSync.ExternalToCom), SyncAction.AllFiles));
 
                         CheckSyncGamesExpectedOutput(expectedOutput, ref result, wc3Only, true);
 
@@ -589,23 +590,26 @@ namespace GameAnywhere
                         {
                             if (action.MyGame.Name.Equals("FIFA 10"))
                             {
-                                //make sure they are in SyncError list
-                                List<string> verifyList = new List<string>();
-                                List<string> errorList = new List<string>();
 
-                                string[] saveFiles = Directory.GetDirectories(externalPath + @"\FIFA 10\savedGame");
-                                foreach (string s in saveFiles)
-                                    verifyList.Add(Path.GetFileName(s));
-
-                                foreach (SyncError error in action.UnsuccessfulSyncFiles)
-                                    errorList.Add(Path.GetFileName(error.FilePath));
-                                foreach (string name in verifyList)
+                                string[] extFiles = Directory.GetDirectories(externalPath + @"\FIFA 10\savedGame");
+                                string[] comFiles = Directory.GetDirectories(action.MyGame.SaveParentPath);
+                                List<string> comList = new List<string>();
+                                foreach (string s in comFiles)
                                 {
-                                    if (!errorList.Contains(name))
+                                    comList.Add(Path.GetFileName(s));
+                                }
+                                foreach (string name in extFiles)
+                                {
+                                    if (comList.Contains(Path.GetFileName(name)))
                                     {
                                         result.Result = false;
                                         result.AddRemarks("Failed! "+name+" is should not be copied over!");
                                     }
+                                }
+                                if (action.UnsuccessfulSyncFiles.Count != 1)
+                                {
+                                    result.Result = false;
+                                    result.AddRemarks("Failed! denied file not in unsuccessful list");
                                 }
                             }
                         }

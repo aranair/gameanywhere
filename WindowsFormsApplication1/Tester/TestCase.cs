@@ -16,7 +16,8 @@ namespace GameAnywhere
 {
     /// <summary>
     /// 
-    /// The purpose of Test Case is to 
+    /// The purpose of Test Case is to store the method to test, its input, expected output,
+    /// expected execption to be thrown, and the result
     /// 
     /// example of test case format which is stored in the file :-
     /// [method name]|[input parameters]|[Expected Output]|[Exceptions which may be thrown]
@@ -25,7 +26,7 @@ namespace GameAnywhere
     class TestCase
     {
 
-        //private object testClass;
+        private object testClass;
         private string methodName;
         private string testCase;
         private int index; //test case index
@@ -82,7 +83,7 @@ namespace GameAnywhere
         public TestCase(string testCaseDescription, object classType)
         {
             this.testCase = testCaseDescription; 
-            //this.testClass = classType;
+            this.testClass = classType;
             deletedFile = new List<FileInfo>();
             InitializeTestCase();
         }
@@ -108,7 +109,13 @@ namespace GameAnywhere
 
             // 3.   get the expected output, the return type
             string expected = testCaseComponent[2];
-            GetExpectedOutput(expected);
+            if(methodName.Equals("SynchronizeGames"))
+            {
+                OfflineSync offline = (OfflineSync)testClass;
+                GetExpectedOutput(expected,offline.SyncDirection);
+            }
+            else
+                GetExpectedOutput(expected, 0);
 
             // 4.   get the expected exceptions
             // Expception format: [FileNotFoundExpception("some messages"),DirectoryNotFoundException("Some messages")]
@@ -134,14 +141,13 @@ namespace GameAnywhere
                 result.AddRemarks(err.InnerException.ToString());
             return result;
         }
-
-        
+    
         /// <summary>
         /// Try and excute each test cases and get its results
         /// </summary>
         /// <param name="methodName"></param>
         /// <returns></returns>
-        public TestResult invokeTestMethod(ref object testClass)
+        public TestResult invokeTestMethod(/*ref object testClass*/)
         {
             object returnType = null;
             TestResult result = null;
@@ -299,7 +305,7 @@ namespace GameAnywhere
         /// Get and set the expected output based in the input
         /// </summary>
         /// <param name="expected"></param>
-        private void GetExpectedOutput(string expected)
+        private void GetExpectedOutput(string expected, int direction)
         {
             if (expected.Equals("void"))
             {
@@ -329,7 +335,7 @@ namespace GameAnywhere
                 start = expected.IndexOf("<");
                 end = expected.IndexOf(">");
                 string type = expected.Substring(start + 1, end - (start + 1));
-                ArrayList expectedList = PreCondition.GetArrayList(expected);
+                ArrayList expectedList = PreCondition.GetArrayList(expected,direction);
                 switch (type)
                 {
                     case "string":
@@ -363,7 +369,7 @@ namespace GameAnywhere
             }
             else if (expected.StartsWith("array") || expected.StartsWith("Array"))
             {
-                expectedOutput = PreCondition.GetArray(expected);
+                expectedOutput = PreCondition.GetArray(expected,direction);
             }
             //to add in more data types eg. Array
         }
@@ -393,7 +399,8 @@ namespace GameAnywhere
                     start = param_string[i].IndexOf("<");
                     end = param_string[i].IndexOf(">");
                     string type = param_string[i].Substring(start + 1, end - (start + 1));
-                    ArrayList temp = PreCondition.GetArrayList(param_string[i]);
+                    OfflineSync offline = (OfflineSync)testClass;
+                    ArrayList temp = PreCondition.GetArrayList(param_string[i], offline.SyncDirection);
                     switch (type)
                     {
                         //convert the arraylist to list
@@ -436,7 +443,8 @@ namespace GameAnywhere
                 //format : Array<Type>:{obj1,obj2} 
                 else if (param_string[i].StartsWith("Array"))
                 {
-                    param[i] = PreCondition.GetArray(param_string[i]);   
+                    OfflineSync offline = (OfflineSync)testClass;
+                    param[i] = PreCondition.GetArray(param_string[i],offline.SyncDirection);   
                 }
 
                 // add in other data type here, queue ... ...
