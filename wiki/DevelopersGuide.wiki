@@ -1,4 +1,4 @@
-#summary This document describes the code for GameAnywhere, and gives an high level software architecture overview for GameAnywhere developers.
+#summary This document gives an high level software architecture overview for GameAnywhere developers.
 
 = Developer Guide v0.9 =
 
