@@ -37,7 +37,7 @@ GameLibrary contains a list of Game.
 == Processes ==
 
 
-=== OfflineSync ===
+==== OfflineSync ====
 
 *Brief Description:* This class handles the file/folder manipulation on the computer and the external storage device. The sync direction can only be set once, so as to prevent accidental re-assignment and affecting other methods. This method would create a folder call "syncFolder". This folder would contain the game files that is assume to be in the external storage device.
 
@@ -59,5 +59,4 @@ The folder structure in "syncFolder" is that its subfolders are the game folder(
  #3) Remove backup folder
 
 == Reference == 
-API
-*LINK*
+[http://docs.google.com/Doc?docid=0AaWx7AIMLnNSZGNqY3JiMmdfNWcycDI1N2Zi&hl=en API]
