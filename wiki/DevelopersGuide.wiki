@@ -1,11 +1,11 @@
-#summary This document gives an high level software architecture overview for GameAnywhere developers.
+#summary This document gives an high level software architecture overview of the software coding for developers.
 
 = Developer Guide v0.9 =
 
 
 
 
-= High-Level Architecture =
+== High-Level Architecture ==
 
 http://lh4.ggpht.com/_-Xzk-2Bdr-I/S5-iBOIsmBI/AAAAAAAAAKg/pl0IsI3zVG8/highleveldiagram.JPG
 
