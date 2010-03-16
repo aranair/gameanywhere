@@ -87,9 +87,3 @@ The folder structure in "syncFolder" is that its subfolders are the game folder(
 == Reference == 
 
 [http://docs.google.com/Doc?docid=0AaWx7AIMLnNSZGNqY3JiMmdfNWcycDI1N2Zi&hl=en API]
------
-<wiki:gadget url="http://www.ohloh.net/p/gwt/widgets/project_languages.xml" width="340" height="200" border="1" />
-
-<wiki:gadget url="http://www.ohloh.net/p/gwt/widgets/project_users.xml" height="100" border="0" />
-
-<wiki:gadget url="http://www.ohloh.net/p/gwt/widgets/project_basic_stats.xml" height="220" border="1" />
