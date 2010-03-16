@@ -45,9 +45,9 @@ chosen by the user, through the method GetGameList(direction). The direction of 
 
 
 *Steps to follow to add more game support:*
- #1) Create method to use registry entry to check existence of the new game.
- #2) Create a new instance of Game object.
- #3) Edit the appropriate information for the Game to work:
+ # Create method to use registry entry to check existence of the new game.
+ # Create a new instance of Game object.
+ # Edit the appropriate information for the Game to work:
 {{{
 - configList = The list of paths to the configuration folders or files of the game.
 - saveList   = The list of paths to the saved game folders or files of the game.
@@ -59,9 +59,8 @@ chosen by the user, through the method GetGameList(direction). The direction of 
   windows xp, windows vista, and windows 7.
 - Methods to edit the configList and savedGameList are preferably seperated because of step 4.
 }}}
- #4) For the sync direction of external to computer, EditConfigAndSavedGameLists() function is to be editted to support the new game as well. Each new game instance in the common list between the external and the computer, upon finding that the thumbdrive has the appropriate folders for the synchronization, MUST be initialized with config/savedList containing the paths to the files in the external thumbdrive instead of paths to the computer's files.
-
- #5) You're set to synchronize. If you would like to add icons to your game in the program, you would have to edit the GUI class to load your icons as well.
+ # For the sync direction of external to computer, EditConfigAndSavedGameLists() function is to be editted to support the new game as well. Each new game instance in the common list between the external and the computer, upon finding that the thumbdrive has the appropriate folders for the synchronization, MUST be initialized with config/savedList containing the paths to the files in the external thumbdrive instead of paths to the computer's files. 
+ # You're set to synchronize. If you would like to add icons to your game in the program, you would have to edit the GUI class to load your icons as well.
 
 ==== OfflineSync ====
 
@@ -70,19 +69,19 @@ chosen by the user, through the method GetGameList(direction). The direction of 
 The folder structure in "syncFolder" is that its subfolders are the game folder(s). Each would game folder is named after the game. In each game folder, it would contain subfolder(s) of name "config" and/or "savedGame". These folder would save the game files as its name suggest.
 
 *Steps for synchronizing from External storage device to Computer*
- #1) Create a backup folder in the game file parent directory
- #2) Move original game files in the computer into the backup folder
- #3) Copy the game files in the external storage device into the computer
+ # Create a backup folder in the game file parent directory
+ # Move original game files in the computer into the backup folder
+ # Copy the game files in the external storage device into the computer
 
 *Steps for synchronizing from Computer to External storage device*
- #1) Remove existing game files in external storage device
- #2) Create the necessary game folder structure in the external storage device
- #3) Copy game files from computer into the new directory
+ # Remove existing game files in external storage device
+ # Create the necessary game folder structure in the external storage device
+ # Copy game files from computer into the new directory
 
 *Steps for restore*
- #1) Remove existing game files
- #2) Move game files from backup folder into it's original directory
- #3) Remove backup folder
+ # Remove existing game files
+ # Move game files from backup folder into it's original directory
+ # Remove backup folder
 
 -----
 == Reference == 
