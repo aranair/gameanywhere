@@ -2,15 +2,25 @@
 
 = Developer Guide v0.9 =
 
-Add your content here.
 
 
-= Details =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+= High-Level Architecture =
+
+http://lh4.ggpht.com/_-Xzk-2Bdr-I/S5-iBOIsmBI/AAAAAAAAAKg/pl0IsI3zVG8/highleveldiagram.JPG
+
+This diagram depicts what happens in the program. The Controller is declared and the Controller starts up the GUI.
+The GUI interacts with the user. In a typical synchronization scenario, the user indicates the direction of the
+synchronization first. The GUI will request information regarding the games from Controller, which in turn calls
+GameLibrary for the information to return to GUI. After the user selects the games to syncrhonize, GUI will then create a list of SyncAction with the games'
+information and send to Controller for synchronization. Controller will then provide the information
+to OfflineSync class to process.
+
+
+SyncError is a class to store the various aspects of a synchronization error. Game is a class to store the information
+regarding a Game. GameLibrary contains lists of Games. SyncAction initially contains an empty list of SyncErrors when it is created by the GUI. Only
+after OfflineSync processes the SyncActions then would the list of SyncErrors be filled.
+
 
 = Reference = 
 API
