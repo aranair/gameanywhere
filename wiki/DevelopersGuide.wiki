@@ -68,17 +68,17 @@ chosen by the user, through the method GetGameList(direction). The direction of 
 
 The folder structure in "syncFolder" is that its subfolders are the game folder(s). Each would game folder is named after the game. In each game folder, it would contain subfolder(s) of name "config" and/or "savedGame". These folder would save the game files as its name suggest.
 
-*Steps for synchronizing from External storage device to Computer*
+*Steps for synchronizing from External storage device to Computer:*
  # Create a backup folder in the game file parent directory
  # Move original game files in the computer into the backup folder
  # Copy the game files in the external storage device into the computer
 
-*Steps for synchronizing from Computer to External storage device*
+*Steps for synchronizing from Computer to External storage device:*
  # Remove existing game files in external storage device
  # Create the necessary game folder structure in the external storage device
  # Copy game files from computer into the new directory
 
-*Steps for restore*
+*Steps for restore:*
  # Remove existing game files
  # Move game files from backup folder into it's original directory
  # Remove backup folder
