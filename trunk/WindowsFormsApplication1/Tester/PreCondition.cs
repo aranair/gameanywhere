@@ -34,6 +34,10 @@ namespace GameAnywhere
         private static GameLibrary library = new GameLibrary();
         private static string fifaSavePath;
         private static string wc3InstallPath;
+
+        /// <summary>
+        /// Remove the test folders created for verifying the outcome of action
+        /// </summary>
         private static void DeleteTestBackup()
         {
             foreach (Game game in library.InstalledGameList)
@@ -52,7 +56,6 @@ namespace GameAnywhere
 
         [DllImport("wininet.dll")]
         private extern static bool InternetGetConnectedState(out int Description, int ReservedValue);
-
         /// <summary>
         /// Check the status of internet connection
         /// </summary>
@@ -124,9 +127,9 @@ namespace GameAnywhere
                             case 3:
                                 {
                                     DeleteTestBackup();
-                                    Game wc3 = PreCondition.getGame("Warcraft 3");
+                                    Game wc3 = PreCondition.getGame("Warcraft 3",OfflineSync.ExternalToCom);
                                     File.Delete(wc3.ConfigParentPath + @"\CustomKeys.txt");
-                                    Game fifa = PreCondition.getGame("FIFA 10");
+                                    Game fifa = PreCondition.getGame("FIFA 10",OfflineSync.ExternalToCom);
                                     Directory.Delete(fifa.SaveParentPath + @"\A. Profile",true);
                                     break;
                                 }
@@ -136,7 +139,7 @@ namespace GameAnywhere
                                     //rename back the games file
                                     RestoreTestFolderName();
                                     //delete the copied save files
-                                    Game fifa = PreCondition.getGame("FIFA 10");
+                                    Game fifa = PreCondition.getGame("FIFA 10",OfflineSync.ComToExternal);
                                     Directory.Delete(fifa.SaveParentPath+@".\A. Profiles",true);
                                     Directory.Delete(fifa.SaveParentPath + @".\I. Be A Pro - Bastard", true);
                                     Directory.Delete(fifa.SaveParentPath + @".\I. Be A Pro - Gerald", true);
@@ -148,8 +151,8 @@ namespace GameAnywhere
                                     //rename back the games file
                                     RestoreTestFolderName();
                                     //delete the copied save files
-                                    Game wc3 = PreCondition.getGame("Warcraft 3");
-                                    Game fifa = PreCondition.getGame("FIFA 10");
+                                    Game wc3 = PreCondition.getGame("Warcraft 3",OfflineSync.ComToExternal);
+                                    Game fifa = PreCondition.getGame("FIFA 10",OfflineSync.ComToExternal);
                                     Directory.Delete(wc3.SaveParentPath + @"\Save",true);
                                     Directory.Delete(fifa.ConfigParentPath + @"\User", true);
                                 break;
@@ -159,9 +162,9 @@ namespace GameAnywhere
                                     DeleteTestBackup();
                                     //resume the access of the foler
                                     string username = WindowsIdentity.GetCurrent().Name;
-                                    FolderOperation.RemoveFileSecurity(PreCondition.getGame("FIFA 10").ConfigParentPath, username,
+                                    FolderOperation.RemoveFileSecurity(PreCondition.getGame("FIFA 10",OfflineSync.ExternalToCom).ConfigParentPath, username,
                                         FileSystemRights.CreateDirectories, AccessControlType.Deny);
-                                    FolderOperation.AddFileSecurity(PreCondition.getGame("FIFA 10").ConfigParentPath, username,
+                                    FolderOperation.AddFileSecurity(PreCondition.getGame("FIFA 10",OfflineSync.ExternalToCom).ConfigParentPath, username,
                                         FileSystemRights.CreateDirectories, AccessControlType.Allow);
                                     break;
                                 }
@@ -212,15 +215,15 @@ namespace GameAnywhere
                                 //delete the save folder, test case 2
                                 if (index == 2)
                                 {
-                                    string path = getGame("Warcraft 3").SaveParentPath;
+                                    string path = getGame("Warcraft 3",OfflineSync.Uninitialize).SaveParentPath;
                                     if (Directory.Exists(path + @"\Save"))
                                         Directory.Delete(path + @"\Save", true);
                                 }
                                 //delete config files in wc3 and save files in fifa 10
                                 if (index == 3)
                                 {
-                                    Game wc3 = getGame("Warcraft 3");
-                                    Game fifa = getGame("FIFA 10");
+                                    Game wc3 = getGame("Warcraft 3",OfflineSync.Uninitialize);
+                                    Game fifa = getGame("FIFA 10",OfflineSync.Uninitialize);
                                     if (File.Exists(wc3.ConfigParentPath + @"\CustomKeys.txt"))
                                         File.Delete(wc3.ConfigParentPath + @"\CustomKeys.txt");
                                     if (Directory.Exists(fifa.SaveParentPath + @"\A. Profile"))
@@ -335,16 +338,16 @@ namespace GameAnywhere
                                 string username = WindowsIdentity.GetCurrent().Name;
                                 FolderOperation.AddFileSecurity(externalPath + @"\FIFA 10", username,
                                     FileSystemRights.FullControl, AccessControlType.Deny);
-                                fifaSavePath = getGame("FIFA 10").SaveParentPath;
+                                fifaSavePath = getGame("FIFA 10",OfflineSync.Uninitialize).SaveParentPath;
                                 FolderOperation.AddFileSecurity(fifaSavePath, username,
                                     FileSystemRights.FullControl, AccessControlType.Deny);
                                 break;
                             case 7:
-                                fifaSavePath = getGame("FIFA 10").SaveParentPath;
+                                fifaSavePath = getGame("FIFA 10",OfflineSync.Uninitialize).SaveParentPath;
                                 Directory.Move(fifaSavePath, fifaSavePath + "-test"); //rename the folder
                                 break;
                             case 8:
-                                wc3InstallPath = getGame("Warcraft 3").InstallPath;
+                                wc3InstallPath = getGame("Warcraft 3",OfflineSync.Uninitialize).InstallPath;
                                 Directory.Move(wc3InstallPath, wc3InstallPath.Substring(0,wc3InstallPath.Length-1)+"-test");
                                 break;
                             //Initialization test case
@@ -359,12 +362,7 @@ namespace GameAnywhere
                 case "SynchronizeGames":
                     OfflineSync offSync = (OfflineSync)testClass;
                     string user = WindowsIdentity.GetCurrent().Name; //get user account
-                    string programFiles = Environment.GetEnvironmentVariable("ProgramFiles(x86)"); //get environment
                     GameLibrary gameLibrary = new GameLibrary();
-                    if (programFiles == null)
-                    {
-                        programFiles = Environment.GetEnvironmentVariable("ProgramFiles");
-                    }
 
                     List<SyncAction> synclist = (List<SyncAction>)input[0];
                     switch (index)
@@ -379,13 +377,13 @@ namespace GameAnywhere
                             }
                         case 2: //test only save in ext to com direction
                             {
-                                Game wc3 = PreCondition.getGame("Warcraft 3");
+                                Game wc3 = PreCondition.getGame("Warcraft 3",OfflineSync.ExternalToCom);
                                 Directory.CreateDirectory(wc3.SaveParentPath + @"\Save");
                                 FileStream fs = File.Create(wc3.SaveParentPath + @"\Save\newsave.txt");
                                 fs.Close();
                                 foreach (SyncAction action in synclist)
                                     if (action.MyGame.Name.Equals("Warcraft 3"))
-                                        action.MyGame = getGame("Warcraft 3");
+                                        action.MyGame = getGame("Warcraft 3",OfflineSync.ExternalToCom);
 
                                 FolderOperation.CopyOriginalSettings(synclist, FolderOperation.SAVE, FolderOperation.ExtToCom);
                                 testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
@@ -399,10 +397,10 @@ namespace GameAnywhere
                                 offSync.SyncDirection = OfflineSync.ExternalToCom;
 
                                 //create a config file in wc3
-                                Game wc3 = PreCondition.getGame("Warcraft 3");
+                                Game wc3 = PreCondition.getGame("Warcraft 3",OfflineSync.ExternalToCom);
                                 FileStream wc3File = File.Create(wc3.ConfigParentPath + @"\CustomKeys.txt");
                                 wc3File.Close();
-                                Game fifa = PreCondition.getGame("FIFA 10");
+                                Game fifa = PreCondition.getGame("FIFA 10",OfflineSync.ExternalToCom);
                                 
                                 Directory.CreateDirectory(fifa.SaveParentPath + @"\A. Profile");
                                 FileStream fifaFile = File.Create(fifa.SaveParentPath + @"\A. Profile\SampleSave.save");
@@ -411,9 +409,9 @@ namespace GameAnywhere
                                 foreach (SyncAction action in synclist)
                                 {
                                     if (action.MyGame.Name.Equals("Warcraft 3"))
-                                        action.MyGame = getGame("Warcraft 3");
+                                        action.MyGame = getGame("Warcraft 3",OfflineSync.ExternalToCom);
                                     else if (action.MyGame.Name.Equals("FIFA 10"))
-                                        action.MyGame = getGame("FIFA 10");
+                                        action.MyGame = getGame("FIFA 10",OfflineSync.ExternalToCom);
                                 }
 
                                 FolderOperation.CopyOriginalSettings(synclist, FolderOperation.BOTH, FolderOperation.ExtToCom);
@@ -425,13 +423,13 @@ namespace GameAnywhere
                             {
                                 offSync.SyncDirection = OfflineSync.ComToExternal;
                                 //copy a FIFA save game to com
-                                Game fifa = getGame("FIFA 10");
+                                Game fifa = getGame("FIFA 10",OfflineSync.ComToExternal);
 
                                 FolderOperation.CopyDirectory(externalPath + @"\FIFA 10\savedGame",fifa.SaveParentPath);
                                 foreach (SyncAction action in synclist)
                                 {
                                     if (action.MyGame.Name.Equals("FIFA 10"))
-                                        action.MyGame = getGame("FIFA 10");
+                                        action.MyGame = getGame("FIFA 10",OfflineSync.ComToExternal);
                                 }
                                 
                                 //simulate empty thumb
@@ -444,16 +442,16 @@ namespace GameAnywhere
                             {
                                 offSync.SyncDirection = OfflineSync.ComToExternal;
                                 //copy a FIFA config and wc3 save game
-                                Game wc3 = getGame("Warcraft 3");
-                                Game fifa = getGame("FIFA 10");
+                                Game wc3 = getGame("Warcraft 3",OfflineSync.ComToExternal);
+                                Game fifa = getGame("FIFA 10",OfflineSync.ComToExternal);
                                 FolderOperation.CopyDirectory(externalPath + @".\Warcraft 3\savedGame\", wc3.SaveParentPath);
                                 FolderOperation.CopyDirectory(externalPath + @".\FIFA 10\config",fifa.ConfigParentPath);
                                 foreach (SyncAction action in synclist)
                                 {
                                     if (action.MyGame.Name.Equals("Warcraft 3"))
-                                        action.MyGame = getGame("Warcraft 3");
+                                        action.MyGame = getGame("Warcraft 3",OfflineSync.ComToExternal);
                                     else if (action.MyGame.Name.Equals("FIFA 10"))
-                                        action.MyGame = getGame("FIFA 10");
+                                        action.MyGame = getGame("FIFA 10",OfflineSync.ComToExternal);
                                 }
                                 //simulate empty thumb
                                 RemoveGamesInExt();
@@ -466,10 +464,10 @@ namespace GameAnywhere
                                 offSync.SyncDirection = OfflineSync.ExternalToCom;
 
                                 string username = WindowsIdentity.GetCurrent().Name;
-                                FolderOperation.AddFileSecurity(getGame("FIFA 10").ConfigParentPath, username,
+                                FolderOperation.AddFileSecurity(getGame("FIFA 10",OfflineSync.ExternalToCom).ConfigParentPath, username,
                                     FileSystemRights.CreateDirectories, AccessControlType.Deny);
                                 List<SyncAction> wc3Only = new List<SyncAction>();
-                                wc3Only.Add(new SyncAction(PreCondition.getGame("Warcraft 3"), SyncAction.ConfigFiles));
+                                wc3Only.Add(new SyncAction(PreCondition.getGame("Warcraft 3",OfflineSync.ExternalToCom), SyncAction.ConfigFiles));
                                 FolderOperation.CopyOriginalSettings(wc3Only, FolderOperation.CONFIG, FolderOperation.ExtToCom);
                                 testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
                                 break;
@@ -486,8 +484,10 @@ namespace GameAnywhere
                                 string username = WindowsIdentity.GetCurrent().Name;
                                 FolderOperation.AddFileSecurity(externalPath + @"\FIFA 10\savedGame\A. Profiles", username,
                                     FileSystemRights.FullControl, AccessControlType.Deny);
-                                
-                                FolderOperation.CopyOriginalSettings(synclist, FolderOperation.BOTH, FolderOperation.ExtToCom);
+                                List<SyncAction> wc3Only = new List<SyncAction>();
+
+                                wc3Only.Add(new SyncAction(PreCondition.getGame("Warcraft 3", OfflineSync.ExternalToCom), SyncAction.AllFiles));
+                                FolderOperation.CopyOriginalSettings(wc3Only, FolderOperation.BOTH, FolderOperation.ExtToCom);
                                 testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
                                 break;
                             }
@@ -498,7 +498,7 @@ namespace GameAnywhere
                                 string username = WindowsIdentity.GetCurrent().Name;
                                 FolderOperation.AddFileSecurity(externalPath + @"\FIFA 10", username,
                                     FileSystemRights.FullControl, AccessControlType.Deny);
-                                fifaSavePath = getGame("FIFA 10").SaveParentPath;
+                                fifaSavePath = getGame("FIFA 10",OfflineSync.ExternalToCom).SaveParentPath;
                                 FolderOperation.AddFileSecurity(fifaSavePath, username,
                                     FileSystemRights.FullControl, AccessControlType.Deny);
                                 //FolderOperation.CopyOriginalSettings(synclist, FolderOperation.BOTH, FolderOperation.ExtToCom);
@@ -537,7 +537,7 @@ namespace GameAnywhere
 
                             // lock the file access of FIFA, which is to be restored.
                             string username = WindowsIdentity.GetCurrent().Name;
-                            fifaSavePath = getGame("FIFA 10").SaveParentPath;
+                            fifaSavePath = getGame("FIFA 10",OfflineSync.ExternalToCom).SaveParentPath;
                             FolderOperation.AddFileSecurity(fifaSavePath, username,
                                     FileSystemRights.FullControl, AccessControlType.Deny);
 
@@ -607,7 +607,7 @@ namespace GameAnywhere
         /// <param name="type"></param>
         /// <param name="param"></param>
         /// <returns></returns>
-        public static object[] GetArray(string param)
+        public static object[] GetArray(string param, int direction)
         {
             //get the type
             int s, e;
@@ -636,7 +636,7 @@ namespace GameAnywhere
                     int i = 0;
                     foreach (string game in list)
                     {
-                        gameArr[i] = PreCondition.getGame(game);
+                        gameArr[i] = PreCondition.getGame(game,direction);
                         ++i;
                     }
                     return gameArr;
@@ -657,7 +657,7 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        public static ArrayList GetArrayList(string param)
+        public static ArrayList GetArrayList(string param, int direction)
         {
             ArrayList arrlist = null;
             //get the type
@@ -685,7 +685,8 @@ namespace GameAnywhere
                     int i = 0;
                     foreach (string s in list)
                     {
-                        gameArr[i] = PreCondition.getGame(s);
+                        string[] game = s.Split(new Char[] {'#'});
+                        gameArr[i] = PreCondition.getGame(game[0],Convert.ToInt32(game[1]));
                         ++i;
                     }
                     arrlist = new ArrayList(gameArr);
@@ -710,7 +711,8 @@ namespace GameAnywhere
                         foreach (string gameInfo in list)
                         {
                             string[] game = gameInfo.Split(new Char[] {';'});
-                            tempGame = getGame(game[0]);
+                            string[] newGame = game[0].Split(new Char[] {'#'});
+                            tempGame = getGame(newGame[0],Convert.ToInt32(newGame[1]));
                             syncList[j] = new SyncAction(tempGame, Convert.ToInt32(game[1])/*the sync action*/);
                             
                             ++j;
@@ -767,9 +769,9 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Game getGame(string name)
+        public static Game getGame(string name,int direction)
         {
-            if (!supportedGames.Contains(name)) throw new InvalidDataException("Game specified do not exist.");
+            //if (!supportedGames.Contains(name)) throw new InvalidDataException("Game specified do not exist.");
             Game game = null;
             Assembly assembly = Assembly.GetExecutingAssembly();
             Type foundType = null;
@@ -781,7 +783,7 @@ namespace GameAnywhere
             object testClass = Activator.CreateInstance(foundType, new object[0]);
 
             GameLibrary library = (GameLibrary)testClass;
-            List<Game> games = library.GetGameList(2);
+            List<Game> games = library.GetGameList(direction);
 
             foreach (Game g in games)
                 if (g.Name.Equals(name))
@@ -799,7 +801,7 @@ namespace GameAnywhere
             Shell32.Folder RootFolder =
             sc.NameSpace(Shell32.ShellSpecialFolderConstants.ssfCONTROLS);
             Shell32.Folder SrcFlder = null;
-            string Adapter = "Local Area Connection";
+            string Adapter = "Local Area Connection";   //Add in Adapter here
             ShellFolderItem fItem = null;
 
             foreach (Shell32.FolderItem2 fi in RootFolder.Items())

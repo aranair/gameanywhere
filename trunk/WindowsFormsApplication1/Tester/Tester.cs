@@ -66,6 +66,7 @@ namespace GameAnywhere
 
         private void ReadButton_Click(object sender, EventArgs e)
         {
+            //Move any existing SyncFolder
             if(Directory.Exists(@".\SyncFolder"))
                 Directory.Move(@".\SyncFolder", @".\SyncFolder-backup");
             Directory.Move(@".\Syncfolder-test",@"SyncFolder");
@@ -76,6 +77,7 @@ namespace GameAnywhere
             else
             {
                 MessageBox.Show("Please select a test file.");
+                return;
             }
             commentsText.Text = "Please wait...testing in progress...";
             List<TestCase> result = test.startTest();
@@ -93,6 +95,7 @@ namespace GameAnywhere
             //restore the syncfolder if it is backup
             if (Directory.Exists(@".\SyncFolder-backup"))
                 Directory.Move(@".\SyncFolder-backup", @".\SyncFolder");
+            
          }
 
         /// <summary>

@@ -18,6 +18,7 @@ namespace GameAnywhere
     {
         private string sourcePath;
 
+        #region properties
         public string SourcePath
         {
           get { return sourcePath; }
@@ -30,6 +31,7 @@ namespace GameAnywhere
           get { return targetPath; }
           set { targetPath = value; }
         }
+        #endregion
 
         public FolderOperation(string source, string target)
         {
@@ -46,6 +48,8 @@ namespace GameAnywhere
         /// <param name="settings"></param>
         public static void CopyOriginalSettings(List<SyncAction> synclist, int settings, int direction)
         {
+            GameLibrary library = new GameLibrary();
+            List<Game> gameList = library.GetGameList(OfflineSync.ComToExternal);
             //settings 1 - save, 2 - config, 3 - both
             if (settings != 1) // for settings 2 & 3
             {
@@ -57,7 +61,13 @@ namespace GameAnywhere
                     else
                         testbackup = Path.Combine(external, "ConfigTestBackup");
                     Directory.CreateDirectory(testbackup);
-                    foreach (string s in action.MyGame.ConfigPathList)
+                    List<string> list = null;
+                    foreach(Game g in gameList)
+                    {
+                        if (g.Name.Equals(action.MyGame.Name))
+                            list = g.ConfigPathList;
+                    }
+                    foreach (string s in list)
                     {
                         if (File.Exists(s))
                             File.Copy(s, testbackup+@"\"+Path.GetFileName(s));
@@ -79,10 +89,16 @@ namespace GameAnywhere
                     else
                         testbackup = Path.Combine(external, "SaveTestBackup");
                     Directory.CreateDirectory(testbackup);
-                    foreach (string s in action.MyGame.SavePathList)
+                    List<string> list = null;
+                    foreach (Game g in gameList)
+                    {
+                        if (g.Name.Equals(action.MyGame.Name))
+                            list = g.SavePathList;
+                    }
+                    foreach (string s in list)
                     {
                         if (File.Exists(s))
-                            File.Copy(s, testbackup);
+                            File.Copy(s, testbackup + @"\" + Path.GetFileName(s));
                         else
                         {
                             if (Directory.Exists(s))
@@ -238,6 +254,11 @@ namespace GameAnywhere
             return differences;
         }
 
+        /// <summary>
+        /// Get the number of files in the directory given the path of the directory
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static int GetDirectoryFileCount(string path)
         {
             int fileCount = 0;
@@ -299,8 +320,6 @@ namespace GameAnywhere
         /// <param name="rights"></param>
         /// <param name="controlType"></param>
         public static void AddFileSecurity(string fileName, string account,
-
-
             FileSystemRights rights, AccessControlType controlType)
         {
             // Get a FileSecurity object that represents the
