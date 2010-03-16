@@ -1,0 +1,27 @@
+User class test cases
+Login:
+1~test for activated account login
+2~test for non-activated account login
+3~test for non-existing email login
+4~test for invalid argument
+5~test for network connection issue
+Register:
+1~test for duplicate account
+2~test for unactivated account
+3~test for invalid input
+4~test for network connection issue
+RetrievePassword:
+1~test for unactivated account
+2~test for invalid user
+3~test for invalid input
+4~test for network conenction issue
+ChangePassword:
+1~test for invalid old password
+2~test for invalid user
+3~test for same new password
+4~test for network conenction issue
+5~test for invalid input
+ResendActivation:
+1~test for activated account
+2~test for invalid user
+3~test for network connection issue
