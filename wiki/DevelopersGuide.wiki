@@ -84,6 +84,27 @@ The folder structure in "syncFolder" is that its subfolders are the game folder(
  # Remove backup folder
 
 -----
+==Design of Login system==
+====Overview====
+To provide users with their own gameanywhere account, we need a database to store account information and Amazon Web Services(AWS) SimpleDB was chosen.
+
+====How the Components Interact====
+https://doc-0c-bs-docs.googleusercontent.com/docs/secure/rb76hs62dof3nkvdingba5cedl9ltjag/21svqoqo1ot7de3o413o23cncvn9ve21/1268762400000/16804469318689354468/*/0B2_cVjBwBxpNMTg3NzgzZDgtZGUwYi00NTI1LWJjNGEtZDY2MmU2NTQyZjcz
+
+The User component consists of user related functions such as Login, Register, ChangePassword and Logout.
+
+In AWS SimpleDB, a table is called a domain while rows are identified as items, and columns are attributes. The unique key is known as the item name. So here is an overview of the SimpleDB component, it is meant for database functions like:
+ * Inserting an item into Amazon SimpleDB, use the InsertItem method.
+ * Getting an item’s attribute value, use the GetAttribute method.
+ * Updating an item’s attribute value, use the UpdateAttributeValue method.
+ * Checking if an item exists in the domain, use the ItemExists method.
+
+AmazonSimpleDBClient component mainly deals with amazon simpleDB web service directly by sending requests and receiving responses from it. It hides all the low level amazon webservices programming like authentication and error handling. You may download the latest Amazon Web Services SDK for .NET from http://aws.amazon.com/sdkfornet/.
+
+====Data structure of Domain====
+The domain that has been created and we will be using is called “UserAccounts”. Each item has the following attributes: ItemName, Password, ActivationStatus, ActivationKey. The ItemName acts like a unique key, there should be no duplicates in the domain. Every attribute is of string datatype as it is a limitation of AWS SimpleDB.
+
+-----
 == Reference == 
 
 [http://docs.google.com/Doc?docid=0AaWx7AIMLnNSZGNqY3JiMmdfNWcycDI1N2Zi&hl=en API]
