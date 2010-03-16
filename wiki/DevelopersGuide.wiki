@@ -1,10 +1,10 @@
 #summary This document explains the high level software architecture of GameAnywhere for developers.
 
 = Developer Guide v0.9 =
-#sidebar TableOfContents
+
 <wiki:toc max_depth="2" />
 
-
+----
 == High-Level Architecture ==
 
 http://lh4.ggpht.com/_-Xzk-2Bdr-I/S5-iBOIsmBI/AAAAAAAAAKg/pl0IsI3zVG8/highleveldiagram.JPG
@@ -12,7 +12,7 @@ http://lh4.ggpht.com/_-Xzk-2Bdr-I/S5-iBOIsmBI/AAAAAAAAAKg/pl0IsI3zVG8/highleveld
 This diagram depicts what happens in the program. The Controller is declared and the Controller starts up the GUI. The GUI interacts with the user. In a typical synchronization scenario, the user indicates the direction of the synchronization first. The GUI will request information regarding the games from Controller, which in turn calls
 GameLibrary for the information to return to GUI. After the user selects the games to syncrhonize, GUI will then create a list of SyncAction with the games' information and send to Controller for synchronization. Controller will then provide the information
 to OfflineSync class to process.
-
+----
 == Data Structure ==
 
 ==== SyncError ====
@@ -33,9 +33,39 @@ Game is a class to store the information regarding a Game.
 
 GameLibrary contains a list of Game. 
 
-
+----
 == Processes ==
 
+==== GameLibrary ====
+
+*Brief Description:* The GameLibrary class, contains all the methods and information to initialize installed games into a list of games, that will contain all the appropriate paths to the config files and saved game files of each individual game.
+
+It will also resolve and return the common set of games that are found in both the source and target paths according to the synchronization direction
+chosen by the user, through the method GetGameList(direction). The direction of synchronization must be properly defined with this method.
+
+
+*Steps to follow to add more game support:*
+ #1) Create method to use registry entry to check existence of the new game.
+ #2) Create a new instance of Game object.
+ #3) Edit the appropriate information for the Game to work:
+
+ * configList = The list of paths to the configuration folders or files of the game.
+ * saveList   = The list of paths to the saved game folders or files of the game.
+ * configParentPath = the folder in which all the config files/folders are in.
+ * gameName = The name of the game.
+ * install path = The install path of the game ( found in the registry )
+
+ * Private helper methods have been made to find the documents path, the type of OS of user, registry software path, program files path to aid in finding generic paths for all 3 OS:
+  *windows xp, 
+  *windows vista and 
+  *windows 7.
+ * Methods to edit the configList and savedGameList are preferably separated because of step 4.
+
+ #4) For the sync direction of external to computer, EditConfigAndSavedGameLists() function is to be editted to support the new game as well.
+Each new game instance in the common list between the external and the computer, upon finding that the thumbdrive has the appropriate
+folders for the synchronization, MUST be initialized with config/savedList containing the paths to the files in the external thumbdrive instead of paths to the computer's files.
+
+ #5) You're set to synchronize. If you would like to add icons to your game in the program, you would have to edit the GUI class to load your icons as well.
 
 ==== OfflineSync ====
 
@@ -58,5 +88,6 @@ The folder structure in "syncFolder" is that its subfolders are the game folder(
  #2) Move game files from backup folder into it's original directory
  #3) Remove backup folder
 
+-----
 == Reference == 
 [http://docs.google.com/Doc?docid=0AaWx7AIMLnNSZGNqY3JiMmdfNWcycDI1N2Zi&hl=en API]
