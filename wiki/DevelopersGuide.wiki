@@ -2,7 +2,7 @@
 
 = Developer Guide v0.9 =
 
-<wiki:toc max_depth="3" />
+<wiki:toc max_depth="2" />
 
 ----
 == High-Level Architecture ==
