@@ -652,6 +652,43 @@ namespace GameAnywhere
                         }
                         break;
                     }
+                case 10:
+                    {
+                        CheckSyncGamesExpectedOutput(expectedOutput, ref result, syncList, false);
+
+                        foreach (SyncAction action in syncList)
+                        {
+                            if (action.MyGame.Name.Equals("Football Manager 2010"))
+                            {
+                                string verifyPath = action.MyGame.SaveParentPath + @"\games\config.xml";
+                                if (File.Exists(verifyPath))
+                                {
+                                    result.Result = false;
+                                    result.AddRemarks("Failed! save game from external should not copy over.");
+                                }
+                                verifyPath = action.MyGame.SaveParentPath + @"\games\FM2010Test.txt";
+                                if (!File.Exists(verifyPath))
+                                {
+                                    result.Result = false;
+                                    result.AddRemarks("Failed! Original game file is deleted!");
+                                }
+                                if (File.Exists(action.MyGame.SaveParentPath + @"\GA-savedGameBackup"))
+                                {
+                                    result.Result = false;
+                                    result.AddRemarks("Failed! Backup should not exist.");
+                                }
+                            }
+                            
+                        }
+
+                        break;
+                    }
+                case 11: //check for normal sync action
+                    {
+                        CheckSyncGamesExpectedOutput(expectedOutput, ref result, syncList, false);
+                        CheckBackupAndSync(syncList, ref result, true);  
+                        break;
+                    }
                 default: break;
             }
             return result;
@@ -837,6 +874,17 @@ namespace GameAnywhere
 
                     }  
                     break;
+                case 7:
+                    {
+                        //1. check return number of list is correct
+                        if (restoreList.Count != (int)expectedOutput)
+                            result.AddRemarks("Failed! : Expected List is " + expectedOutput + " returned : " + restoreList.Count);
+                        else
+                            result.AddRemarks("Passed: Expected output okay!");
+
+                        
+                        break;
+                    }
                 default:
                     break;
             }
@@ -930,7 +978,7 @@ namespace GameAnywhere
                     {
                         case 1: //save game file
                             {
-                                string testbackup = Path.Combine(action.MyGame.ConfigParentPath, "SaveTestBackup");
+                                string testbackup = Path.Combine(action.MyGame.SaveParentPath, "SaveTestBackup");
                                 //ensure no back up is created for the config
                                 if (Directory.Exists(Path.Combine(action.MyGame.ConfigParentPath, "GA-configBackup")))
                                 {
@@ -938,7 +986,7 @@ namespace GameAnywhere
                                     result.AddRemarks("Failed! " + action.MyGame.Name + " config back up should not exist!");
                                 }
 
-                                if (Directory.Exists(testbackup))
+                                if (Directory.Exists(Path.Combine(action.MyGame.SaveParentPath, "GA-savedGameBackup")))
                                 {
                                     try
                                     {
@@ -969,7 +1017,7 @@ namespace GameAnywhere
                                     result.AddRemarks("Failed! " + action.MyGame.Name + " Save Game Backup should not exist!");
                                 }
 
-                                if (Directory.Exists(testbackup))
+                                if (Directory.Exists(Path.Combine(action.MyGame.ConfigParentPath, "GA-configBackup")))
                                 {
                                     try
                                     {

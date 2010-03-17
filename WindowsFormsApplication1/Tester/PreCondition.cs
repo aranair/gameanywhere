@@ -73,6 +73,7 @@ namespace GameAnywhere
         /// <param name="index"></param>
         public static void CleanUp(string methodName, int index)
         {
+            string user = WindowsIdentity.GetCurrent().Name;
             switch (methodName)
             {
                 case "GetGameList":
@@ -161,10 +162,9 @@ namespace GameAnywhere
                                 {
                                     DeleteTestBackup();
                                     //resume the access of the foler
-                                    string username = WindowsIdentity.GetCurrent().Name;
-                                    FolderOperation.RemoveFileSecurity(PreCondition.getGame("FIFA 10",OfflineSync.ExternalToCom).ConfigParentPath, username,
+                                    FolderOperation.RemoveFileSecurity(PreCondition.getGame("FIFA 10",OfflineSync.ExternalToCom).ConfigParentPath, user,
                                         FileSystemRights.CreateDirectories, AccessControlType.Deny);
-                                    FolderOperation.AddFileSecurity(PreCondition.getGame("FIFA 10",OfflineSync.ExternalToCom).ConfigParentPath, username,
+                                    FolderOperation.AddFileSecurity(PreCondition.getGame("FIFA 10",OfflineSync.ExternalToCom).ConfigParentPath, user,
                                         FileSystemRights.CreateDirectories, AccessControlType.Allow);
                                     break;
                                 }
@@ -183,21 +183,35 @@ namespace GameAnywhere
                             }
                             case 9:
                             {
-                                string username = WindowsIdentity.GetCurrent().Name;
                                 //resume external
-                                FolderOperation.RemoveFileSecurity(externalPath + @"\FIFA 10", username,
+                                FolderOperation.RemoveFileSecurity(externalPath + @"\FIFA 10", user,
                                     FileSystemRights.FullControl, AccessControlType.Deny);
-                                FolderOperation.AddFileSecurity(externalPath + @"\FIFA 10", username,
+                                FolderOperation.AddFileSecurity(externalPath + @"\FIFA 10", user,
                                     FileSystemRights.FullControl, AccessControlType.Allow);
                                 //resume game folder
-                                FolderOperation.RemoveFileSecurity(fifaSavePath, username,
+                                FolderOperation.RemoveFileSecurity(fifaSavePath, user,
                                     FileSystemRights.FullControl, AccessControlType.Deny);
-                                FolderOperation.AddFileSecurity(fifaSavePath, username,
+                                FolderOperation.AddFileSecurity(fifaSavePath, user,
                                     FileSystemRights.FullControl, AccessControlType.Allow);
 
                                 DeleteTestBackup();
                                 break;
                             }
+                            case 10:
+                            {
+                                Game fm = PreCondition.getGame("Football Manager 2010", OfflineSync.ExternalToCom);
+                                //delete the temporary file created
+                                if (File.Exists(fm.SaveParentPath + @"\games\FM2010Test.txt"))
+                                    File.Delete(fm.SaveParentPath + @"\games\FM2010Test.txt");
+                                //resume external
+                                FolderOperation.RemoveFileSecurity(fm.SaveParentPath, user,
+                                    FileSystemRights.CreateDirectories, AccessControlType.Deny);
+                                FolderOperation.AddFileSecurity(fm.SaveParentPath, user,
+                                    FileSystemRights.CreateDirectories, AccessControlType.Allow);
+                                break;
+                            }
+                            case 11:
+                            break;
                             default : break;
                         }
                         break;
@@ -232,13 +246,38 @@ namespace GameAnywhere
                                 
                             break;
                             case 6: // resume file access control
-                            string username = WindowsIdentity.GetCurrent().Name;
-                            FolderOperation.RemoveFileSecurity(fifaSavePath, username,
-                                FileSystemRights.FullControl, AccessControlType.Deny);
-                            FolderOperation.AddFileSecurity(fifaSavePath, username,
-                                FileSystemRights.FullControl, AccessControlType.Allow);
-                            DeleteTestBackup();
-                            break;
+                            {
+                                string username = WindowsIdentity.GetCurrent().Name;
+                                FolderOperation.RemoveFileSecurity(fifaSavePath, username,
+                                    FileSystemRights.FullControl, AccessControlType.Deny);
+                                FolderOperation.AddFileSecurity(fifaSavePath, username,
+                                    FileSystemRights.FullControl, AccessControlType.Allow);
+                                DeleteTestBackup();
+                                break;
+                            }
+                            case 7:
+                            {
+                                Game fm = PreCondition.getGame("Football Manager 2010", OfflineSync.ExternalToCom);
+
+                                //resume external
+                                FolderOperation.RemoveFileSecurity(fm.SaveParentPath, user,
+                                    FileSystemRights.FullControl, AccessControlType.Deny);
+                                FolderOperation.AddFileSecurity(fm.SaveParentPath, user,
+                                    FileSystemRights.FullControl, AccessControlType.Allow);
+
+                                //delete the temporary file created
+                                if (File.Exists(fm.SaveParentPath + @"\games\FM2010Test.txt"))
+                                    File.Delete(fm.SaveParentPath + @"\games\FM2010Test.txt");
+
+                                Directory.CreateDirectory(fm.SaveParentPath + @"\games");
+
+                                if (Directory.Exists(fm.SaveParentPath + @"\GA-savedGameBackup"))
+                                    Directory.Delete(fm.SaveParentPath + @"\GA-savedGameBackup", true);
+
+                                if (Directory.Exists(fm.SaveParentPath + @"\SaveTestBackup"))
+                                    Directory.Delete(fm.SaveParentPath + @"\SaveTestBackup", true);
+                                break;
+                            }
                             default: break;
                         }
                         break;
@@ -302,6 +341,7 @@ namespace GameAnywhere
         /// <param name="testClass"></param>
         public static void SetPreCondition(int index,string methodName,ref object[] input, ref object testClass)
         {
+            string user = WindowsIdentity.GetCurrent().Name; //get user account
             switch (methodName)
             {
                 case "GetGameList":
@@ -361,7 +401,7 @@ namespace GameAnywhere
                     break;
                 case "SynchronizeGames":
                     OfflineSync offSync = (OfflineSync)testClass;
-                    string user = WindowsIdentity.GetCurrent().Name; //get user account
+                    
                     GameLibrary gameLibrary = new GameLibrary();
 
                     List<SyncAction> synclist = (List<SyncAction>)input[0];
@@ -463,8 +503,7 @@ namespace GameAnywhere
                             {
                                 offSync.SyncDirection = OfflineSync.ExternalToCom;
 
-                                string username = WindowsIdentity.GetCurrent().Name;
-                                FolderOperation.AddFileSecurity(getGame("FIFA 10",OfflineSync.ExternalToCom).ConfigParentPath, username,
+                                FolderOperation.AddFileSecurity(getGame("FIFA 10",OfflineSync.ExternalToCom).ConfigParentPath, user,
                                     FileSystemRights.CreateDirectories, AccessControlType.Deny);
                                 List<SyncAction> wc3Only = new List<SyncAction>();
                                 wc3Only.Add(new SyncAction(PreCondition.getGame("Warcraft 3",OfflineSync.ExternalToCom), SyncAction.ConfigFiles));
@@ -481,8 +520,7 @@ namespace GameAnywhere
                         case 8: //test locking one of the the file in external (FIFA 2010 save in external : A. Profiles)
                             {
                                 offSync.SyncDirection = OfflineSync.ExternalToCom;
-                                string username = WindowsIdentity.GetCurrent().Name;
-                                FolderOperation.AddFileSecurity(externalPath + @"\FIFA 10\savedGame\A. Profiles", username,
+                                FolderOperation.AddFileSecurity(externalPath + @"\FIFA 10\savedGame\A. Profiles", user,
                                     FileSystemRights.FullControl, AccessControlType.Deny);
                                 List<SyncAction> wc3Only = new List<SyncAction>();
 
@@ -502,6 +540,31 @@ namespace GameAnywhere
                                 FolderOperation.AddFileSecurity(fifaSavePath, username,
                                     FileSystemRights.FullControl, AccessControlType.Deny);
                                 //FolderOperation.CopyOriginalSettings(synclist, FolderOperation.BOTH, FolderOperation.ExtToCom);
+                                testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
+                                break;
+                            }
+                        case 10: //lock FM 2010 save path to unable to create directory
+                            {
+                                Game fm = PreCondition.getGame("Football Manager 2010",OfflineSync.ExternalToCom);
+
+                                //create a test file in game save folder 
+                                FileStream file = File.Create(fm.SaveParentPath + @"\games\FM2010Test.txt");
+                                file.Close();
+
+                                FolderOperation.AddFileSecurity(fm.SaveParentPath, user,
+                                    FileSystemRights.CreateDirectories,AccessControlType.Deny);
+                                testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
+
+                                break;
+                            }
+                        case 11:
+                            {
+                                Game fm = PreCondition.getGame("Football Manager 2010", OfflineSync.ExternalToCom);
+
+                                //create a test file in game save folder 
+                                FileStream file = File.Create(fm.SaveParentPath + @"\games\FM2010Test.txt");
+                                file.Close();
+                                FolderOperation.CopyOriginalSettings(synclist, FolderOperation.SAVE, FolderOperation.ExtToCom);
                                 testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
                                 break;
                             }
@@ -525,13 +588,13 @@ namespace GameAnywhere
                             
                         case 4:
                         case 5:
-                            restoreSync.SyncDirection = OfflineSync.ExternalToCom;
+                            //restoreSync.SyncDirection = OfflineSync.ExternalToCom;
                             CreateGATestBackup(restoreGame);
                             testClass = restoreSync;
                             
                             break;
                         case 6:
-                            restoreSync.SyncDirection = OfflineSync.ExternalToCom;
+                            //restoreSync.SyncDirection = OfflineSync.ExternalToCom;
                             CreateGATestBackup(restoreGame);
                             testClass = restoreSync;
 
@@ -540,7 +603,14 @@ namespace GameAnywhere
                             fifaSavePath = getGame("FIFA 10",OfflineSync.ExternalToCom).SaveParentPath;
                             FolderOperation.AddFileSecurity(fifaSavePath, username,
                                     FileSystemRights.FullControl, AccessControlType.Deny);
-
+                            testClass = restoreSync;
+                            break;
+                        case 7: //disable the option to delete a folder/file in FM 2010 save game
+                            
+                            Game fm = PreCondition.getGame("Football Manager 2010", OfflineSync.ExternalToCom);
+                            FolderOperation.AddFileSecurity(fm.SaveParentPath, user,
+                                    FileSystemRights.FullControl, AccessControlType.Deny);
+                            testClass = restoreSync;
                             break;
                         default: break;
                     }
