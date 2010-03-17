@@ -89,7 +89,7 @@ The folder structure in "syncFolder" is that its subfolders are the game folder(
 To provide users with their own gameanywhere account, we need a database to store account information and Amazon Web Services(AWS) SimpleDB was chosen.
 
 ====How the Components Interact====
-https://doc-0c-bs-docs.googleusercontent.com/docs/secure/rb76hs62dof3nkvdingba5cedl9ltjag/21svqoqo1ot7de3o413o23cncvn9ve21/1268762400000/16804469318689354468/*/0B2_cVjBwBxpNMTg3NzgzZDgtZGUwYi00NTI1LWJjNGEtZDY2MmU2NTQyZjcz
+[http://img30.imageshack.us/img30/381/onlinecomponents.jpg]
 
 The User component consists of user related functions such as Login, Register, ChangePassword and Logout.
 
