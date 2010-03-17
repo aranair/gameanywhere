@@ -949,7 +949,9 @@ namespace GameAnywhere
         public List<SyncAction> Restore()
         {
             List<SyncAction> syncActionList = DetermineGamesWithBackup(installedGameList);
+            List<SyncError> syncErrorList = new List<SyncError>();
             int errorCounter = 0;
+
             foreach (SyncAction sa in syncActionList)
             {
                 errorCounter += RestoreGame(sa, true);
@@ -959,7 +961,7 @@ namespace GameAnywhere
                 {
                     List<SyncAction> oneSyncAction = new List<SyncAction>();
                     oneSyncAction.Add(sa);
-                    RemoveAllBackup(oneSyncAction);
+                    sa.UnsuccessfulSyncFiles.AddRange(RemoveAllBackup(oneSyncAction));
                 }
 
                 errorCounter = 0;
