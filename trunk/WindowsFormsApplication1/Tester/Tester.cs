@@ -66,6 +66,7 @@ namespace GameAnywhere
 
         private void ReadButton_Click(object sender, EventArgs e)
         {
+
             //Move any existing SyncFolder
             if(Directory.Exists(@".\SyncFolder"))
                 Directory.Move(@".\SyncFolder", @".\SyncFolder-backup");
