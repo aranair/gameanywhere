@@ -1,6 +1,6 @@
 #summary This document explains the high level software architecture of GameAnywhere for developers.
 
-= Developer Guide v0.9 =
+= Developer Guide V0.9 =
 
 <wiki:toc max_depth="2" />
 
@@ -14,6 +14,8 @@ GameLibrary for the information to return to GUI. After the user selects the gam
 to OfflineSync class to process.
 ----
 == Data Structure ==
+
+This section describes the various classes that store information.
 
 === SyncError ===
 
@@ -35,6 +37,8 @@ GameLibrary contains a list of Game.
 
 ----
 == Processes ==
+
+This section deals with classes that do most of the processing in the software.
 
 === GameLibrary ===
 
