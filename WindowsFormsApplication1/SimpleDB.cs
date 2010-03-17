@@ -32,10 +32,12 @@ namespace GameAnywhere
         /// <param name="activationKey">activation key created by md5hash using email+password</param>
         public void InsertItem(string itemId, string password, string activationKey)
         {
+            //Pre-conditions
             Debug.Assert(!itemId.Equals("") && itemId != null);
             Debug.Assert(!password.Equals("") && password != null);
             Debug.Assert(!activationKey.Equals("") && activationKey != null);
 
+            //Setup request
             PutAttributesRequest putAttributesActionOne = new PutAttributesRequest().WithDomainName(domain).WithItemName(itemId);
             List<ReplaceableAttribute> attributesOne = putAttributesActionOne.Attribute;
             attributesOne.Add(new ReplaceableAttribute().WithName("Password").WithValue(password.Trim()));
@@ -43,12 +45,14 @@ namespace GameAnywhere
             attributesOne.Add(new ReplaceableAttribute().WithName("ActivationKey").WithValue(activationKey.Trim()));
             try
             {
+                //Send request and get response
                 sdb.PutAttributes(putAttributesActionOne);
             }
             catch(AmazonSimpleDBException ex)
             {
                 if (ex.InnerException != null && ex.InnerException.GetType().Equals(typeof(System.Net.WebException)))
                 {
+                    //System.Net.WebException thrown
                     Console.WriteLine("No internet connection.");
                     throw new System.Net.WebException("Unable to connect to the internet.");
                 }
@@ -57,6 +61,7 @@ namespace GameAnywhere
                     //ErrorCodes:
                     //NumberDomainBytesExceeded - Domain exceeds 10GB
                     //NumberDomainAttributesExceeded - Domain attributes exceed 1 million
+                    //AmazonSimpleDBException thrown
                     Console.WriteLine("ErrorCode=" + ex.ErrorCode);
                     throw;
                 }
@@ -71,20 +76,24 @@ namespace GameAnywhere
         /// <param name="newAttributeValue">new attribute value to replace</param>
         public void UpdateAttributeValue(string itemId, string attribute, string newAttributeValue)
         {
+            //Pre-conditions
             Debug.Assert(!itemId.Equals("") && itemId != null);
             Debug.Assert(!attribute.Equals("") && attribute != null);
             Debug.Assert(!newAttributeValue.Equals("") && newAttributeValue != null);
 
+            //Setup request
             ReplaceableAttribute replaceableAttribute = new ReplaceableAttribute().WithName(attribute).WithValue(newAttributeValue).WithReplace(true);
             PutAttributesRequest replaceAction = new PutAttributesRequest().WithDomainName(domain).WithItemName(itemId).WithAttribute(replaceableAttribute);
             try
             {
+                //Send request and get response
                 sdb.PutAttributes(replaceAction);
             }
             catch (AmazonSimpleDBException ex)
             {
                 if (ex.InnerException != null && ex.InnerException.GetType().Equals(typeof(System.Net.WebException)))
                 {
+                    //System.Net.WebException thrown
                     Console.WriteLine("No internet connection.");
                     throw new System.Net.WebException("Unable to connect to the internet.");
                 }
@@ -92,6 +101,7 @@ namespace GameAnywhere
                 {
                     //ErrorCodes:
                     //NumberDomainBytesExceeded - Domain exceeds 10GB
+                    //AmazonSimpleDBException thrown
                     Console.WriteLine("ErrorCode=" + ex.ErrorCode);
                     throw;
                 }
@@ -108,12 +118,15 @@ namespace GameAnywhere
         /// </returns>
         public bool ItemExists(string itemId)
         {
+            //Pre-conditions
             Debug.Assert(!itemId.Equals("") && itemId != null);
 
+            //Setup request - using select statement
             SelectRequest request = new SelectRequest();
             request.SelectExpression = "SELECT count(*) FROM " + domain + " WHERE itemName() = '" + itemId + "'";
             try
             {
+                //Send request and get response
                 SelectResponse selectResponse = sdb.Select(request);
                 Item DomainItem = selectResponse.SelectResult.Item[0];
                 string countResult = DomainItem.Attribute[0].Value;
@@ -129,6 +142,7 @@ namespace GameAnywhere
             }
             catch (AmazonSimpleDBException)
             {
+                //System.Net.WebException thrown
                 throw new System.Net.WebException("Unable to connect to the internet.");
             }
         }
@@ -141,14 +155,18 @@ namespace GameAnywhere
         /// <returns>attribute's value</returns>
         public string GetAttribute(string itemId, string attribute)
         {
+            //Pre-conditions
             Debug.Assert(!itemId.Equals("") && itemId != null);
             Debug.Assert(!attribute.Equals("") && attribute != null);
 
+            //Setup request
             GetAttributesRequest request = new GetAttributesRequest().WithDomainName(domain).WithItemName(itemId).WithAttributeName(attribute);
             try
             {
+                //Send request and get response
                 GetAttributesResponse response = sdb.GetAttributes(request);
                 GetAttributesResult result = response.GetAttributesResult;
+
                 if (result.IsSetAttribute())
                 {
                     StringBuilder sb = new StringBuilder();
@@ -168,75 +186,9 @@ namespace GameAnywhere
             }
             catch (AmazonSimpleDBException)
             {
+                //System.Net.WebException thrown
                 throw new System.Net.WebException("Unable to connect to the internet.");
             }
         }
-
-
-        //METHODS NOT USE BUT COULD BE HELPFUL IN FUTURE
-        /*
-        public void DeleteItem(string itemId)
-        {
-            Console.WriteLine("DELETE item from UserAccounts domain.\n");
-            DeleteAttributesRequest deleteItemAction = new DeleteAttributesRequest().WithDomainName(domain).WithItemName(itemId);
-            sdb.DeleteAttributes(deleteItemAction);
-        }
-
-        public void AddAttributeValue(string itemId, string attribute, string attributeValue)
-        {
-            //Adding an attribute+value
-            Console.WriteLine("ADDING Attribute+Value.\n");
-            PutAttributesRequest request = new PutAttributesRequest().WithDomainName(domain).WithItemName(itemId);
-            request.WithAttribute(new ReplaceableAttribute().WithName(attribute).WithValue(attributeValue));
-            sdb.PutAttributes(request);
-        }
-
-        public void DeleteAttribute(string itemId, string attribute)
-        {
-            //Deleting an attribute
-            Console.WriteLine("DELETE Attribute.\n");
-            Amazon.SimpleDB.Model.Attribute deleteAttribute = new Amazon.SimpleDB.Model.Attribute().WithName(attribute);
-            DeleteAttributesRequest deleteAttributeAction = new DeleteAttributesRequest().WithDomainName(domain).WithItemName(itemId).WithAttribute(deleteAttribute);
-            sdb.DeleteAttributes(deleteAttributeAction);
-        }
-
-        public void DeleteAttributeValue(string itemId, string attribute, string attributeValue)
-        {
-            // Deleting values from an attribute
-            Console.WriteLine("DELETE AttributeValue.\n");
-            Amazon.SimpleDB.Model.Attribute deleteValueAttribute = new Amazon.SimpleDB.Model.Attribute().WithName(attribute).WithValue(attributeValue);
-            DeleteAttributesRequest deleteValueAction = new DeleteAttributesRequest().WithDomainName(domain).WithItemName(itemId).WithAttribute(deleteValueAttribute);
-            sdb.DeleteAttributes(deleteValueAction);
-        }
-
-        public void CreateDomain()
-        {
-            CreateDomainRequest createDomain = (new CreateDomainRequest()).WithDomainName(domain);
-            sdb.CreateDomain(createDomain);
-        }
-
-        public void DeleteDomain()
-        {
-            DeleteDomainRequest deleteDomain = new DeleteDomainRequest();
-            deleteDomain.DomainName = domain;
-            sdb.DeleteDomain(deleteDomain);
-        }
-
-        public void ListDomains()
-        {
-            // Listing domains
-            ListDomainsResponse sdbListDomainsResponse = sdb.ListDomains(new ListDomainsRequest());
-            if (sdbListDomainsResponse.IsSetListDomainsResult())
-            {
-                ListDomainsResult listDomainsResult = sdbListDomainsResponse.ListDomainsResult;
-                Console.WriteLine("List of domains:\n");
-                foreach (String domain in listDomainsResult.DomainName)
-                {
-                    Console.WriteLine("  " + domain);
-                }
-            }
-            Console.WriteLine();
-        }
-        */
     }
 }

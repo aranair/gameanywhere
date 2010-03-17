@@ -54,11 +54,11 @@ namespace GameAnywhere
         /// <param name="password"></param>
         /// <returns>
         /// true - User exists and State changes to UserLoggedIn
-        /// false - Wrong password / User does not exist / User exists but no acivated
+        /// false - Wrong password / User does not exist / User exists but not activated
         /// </returns>
         public bool Login(string email, string password)
         {
-            //Check inputs
+            //Pre-conditions
             if (email.Trim().Equals("") || email == null)
                 throw new ArgumentException("Parameter cannot be empty/null", "email");
             if (password.Trim().Equals("") || password == null)
@@ -116,7 +116,7 @@ namespace GameAnywhere
         /// </returns>
         public int Register(string email, string password)
         {
-            //Check inputs
+            //Pre-conditions
             if (email.Trim().Equals("") || email == null)
                 throw new ArgumentException("Parameter cannot be empty/null", "email");
             if (password.Trim().Equals("") || password == null)
@@ -165,7 +165,7 @@ namespace GameAnywhere
         /// </returns>
         public int RetrievePassword(string email)
         {
-            //Check inputs
+            //Pre-conditions
             if (email.Trim().Equals("") || email == null)
                 throw new ArgumentException("Parameter cannot be empty/null", "email");
 
@@ -212,7 +212,7 @@ namespace GameAnywhere
         /// </returns>
         public int ChangePassword(string email, string oldPassword, string newPassword)
         {
-            //Check inputs
+            //Pre-conditions
             if (email.Trim().Equals("") || email == null)
                 throw new ArgumentException("Parameter cannot be empty/null", "email");
             if (oldPassword.Trim().Equals("") || oldPassword == null)
@@ -261,8 +261,10 @@ namespace GameAnywhere
         /// </returns>
         public int ResendActivation(string email, string inputPassword)
         {
-            //Check inputs
+            //Pre-conditions
             if (email.Trim().Equals("") || email == null)
+                throw new ArgumentException("Parameter cannot be empty/null", "email");
+            if (inputPassword.Trim().Equals("") || inputPassword == null)
                 throw new ArgumentException("Parameter cannot be empty/null", "email");
 
             try
@@ -332,7 +334,7 @@ namespace GameAnywhere
         /// </returns>
         private bool UserExists(string email)
         {
-            //Check inputs
+            //Pre-conditions
             if (email.Trim().Equals("") || email == null)
                 throw new ArgumentException("Parameter cannot be empty/null", "email");
 
@@ -364,7 +366,7 @@ namespace GameAnywhere
         /// </returns>
         private bool IsAccountActivated(string email)
         {
-            //Check inputs
+            //Pre-conditions
             if (email.Trim().Equals("") || email == null)
                 throw new ArgumentException("Parameter cannot be empty/null", "email");
 
@@ -396,7 +398,7 @@ namespace GameAnywhere
         /// <param name="activationKey"></param>
         private void SendActivationEmail(string email, string password, string activationKey)
         {
-            //Check inputs
+            //Pre-conditions
             if (email.Trim().Equals("") || email == null)
                 throw new ArgumentException("Parameter cannot be empty/null", "email");
             if (password.Trim().Equals("") || password == null)
@@ -449,7 +451,7 @@ namespace GameAnywhere
         /// <param name="password"></param>
         private void SendPasswordEmail(string email, string password)
         {
-            //Check inputs
+            //Pre-conditions
             if (email.Trim().Equals("") || email == null)
                 throw new ArgumentException("Parameter cannot be empty/null", "email");
             if (password.Trim().Equals("") || password == null)
@@ -495,15 +497,16 @@ namespace GameAnywhere
         /// <returns>A unique string of uppercase characters</returns>
         private string CreateMD5Hash(string input)
         {
+            //Pre-conditions
             if (input.Trim().Equals("") || input == null)
                 throw new ArgumentException("Parameter cannot be empty/null", "input");
 
-            // Use input string to calculate MD5 hash
+            //Use input string to calculate MD5 hash
             MD5 md5 = MD5.Create();
             byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
             byte[] hashBytes = md5.ComputeHash(inputBytes);
 
-            // Convert the byte array to hexadecimal string
+            //Convert the byte array to hexadecimal string
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < hashBytes.Length; i++)
             {
