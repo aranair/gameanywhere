@@ -17,8 +17,23 @@ ExtToCom
 Direction: ExtToCom
 8.Test Synchronize with both Games (FIFA 10) in external unable to access 
 5.Restore both
-9.Test synchronize Game FIFA 10, all files, ExtToThumb with both folders side lock 
-6.Test Restore Game with a Backup Folder locked.
+9.Test synchronize Game FIFA 10, all files, ExtToThumb with both folders side lock - failed
+6.Test Restore Game with a Backup Folder locked. -failed
+10.Test synchronize FM 2010 with save game and game folder unable to create backup - passed
+11.Test synchronize FM 2010 save game, able to create, but unable to delete backup
+7.Restore FM 2010 of test case 11
 
-
-
+TODO:
+simulate this test case ->
+tested with FM 2010
+in games folder add any file first
+1. sync thumb to com, backup create, sync ok
+2. open the text file in the backup folder and keep it open to simulate in use
+3. close program, the file in backup restore, but the backup folder still exist!
+4. inside backup folder now empty
+5. open program, close program, the orignial files gone
+it detects that there is a backup folder
+although no sync is done for tat game, it still ask if user wan to restore
+i'm thinking if there is a loop hole to just check backup folder to restore, cos for some reason like this, when the backup folder can't be deleted
+AM 02:48 the next time the user use the program, it might mess up and restore wrongly
+add on to 5. open program ->sync other game/do nothing -> ask restore->yes->files gone
