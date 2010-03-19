@@ -44,6 +44,19 @@ namespace GameAnywhere
             this.fileTable = new Dictionary<string, string>();
         }
 
+        public MetaData(Dictionary<string, string> hashTable)
+        {
+            if (hashTable == null)
+            {
+                //Creates new empty table
+                this.fileTable = new Dictionary<string, string>();
+            }
+            else
+            {
+                this.fileTable = hashTable;
+            }
+        }
+
         /// <summary>
         /// Adds an entry to the file table
         /// </summary>
