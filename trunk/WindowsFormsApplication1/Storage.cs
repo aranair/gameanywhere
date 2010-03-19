@@ -209,14 +209,6 @@ namespace GameAnywhere
                 DeleteFile(file);
             }
         }
-        public string GenerateHash(string path)
-        {
-            FileStream fs = File.Open(path, FileMode.Open);
-            MD5 md5 = MD5.Create();
-            string hash = BitConverter.ToString(md5.ComputeHash(fs)).Replace(@"-", @"").ToLower();
-            fs.Close();
-            return hash;
-        }
         public string GetHash(string key)
         {
             try
@@ -233,6 +225,16 @@ namespace GameAnywhere
             {
                 throw; //temporary
             }
+        }
+        public Dictionary<string,string> GetHashDictionary(string key)
+        {
+            Dictionary<string,string> dict = new Dictionary<string,string>();
+            List<string> files = ListFiles(key);
+            foreach (string file in files)
+            {
+                dict[file.Replace(key + '/',"")] = GetHash(file);
+            }
+            return dict;
         }
     }
 }
