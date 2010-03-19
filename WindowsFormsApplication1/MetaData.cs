@@ -217,7 +217,8 @@ namespace GameAnywhere
             Stream stream = new FileStream(fileName, FileMode.Open);
             MetaData obj = (MetaData)formatter.Deserialize(stream);
             stream.Close();
-            return obj;
+            this.fileTable = obj.fileTable;
+            return this;
         }
     }
 }
