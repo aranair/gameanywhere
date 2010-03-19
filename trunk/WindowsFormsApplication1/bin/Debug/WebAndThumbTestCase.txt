@@ -1,4 +1,5 @@
 WebAndThumbSync Test case
+Conflict = 0, upload = 1, download = 2, deleteLocal = 3, deleteWeb = 4
 
 Format:
 Local Hash : Local Meta | Web Hash : Web Meta
