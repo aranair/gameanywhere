@@ -2,6 +2,7 @@ WebAndThumbSync Test case
 Conflict = 0, upload = 1, download = 2, deleteLocal = 3, deleteWeb = 4
 
 Format:
+
 Local Hash : Local Meta | Web Hash : Web Meta
 
 1.Test for no change
@@ -73,7 +74,7 @@ file 4: D : D | none : D
 file 5: none : E | E : E
 file 6: F : none | none : none
 
-result : noConflict contains 3 entries: File 2, 1(dir) and File 3, 2, File 4,3 (DeleteThumb), File 5, 4 (DeleteWeb)
+result : noConflict contains 5 entries: File 2, 1(dir) and File 3, 2, File 4,3 (DeleteThumb), File 5, 4 (DeleteWeb)
 	 File 6, 1 (upload to web)
 	 conflict contains 1 entry: File 1, 0
 
@@ -98,8 +99,8 @@ File 2:	none : none | A : none
 File 3: A : none | none : none
 File 4: W : none | Z : none
 
-result : conflict contains 2 entry: File 1, 0
-	 noconflict contains 1 entry: File 2, 2 and File 3, 1
+result : conflict contains 2 entries: File 1, 0 and File 4,0
+	 noconflict contains 2 entries: File 2, 2 and File 3, 1
 
 12.Test for spceial case: 0,1,0,1 (Both side no file, but meta data exist)
 
