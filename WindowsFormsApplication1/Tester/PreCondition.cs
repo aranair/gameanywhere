@@ -76,6 +76,9 @@ namespace GameAnywhere
             string user = WindowsIdentity.GetCurrent().Name;
             switch (methodName)
             {
+                case "CheckConflicts":
+                    
+                    break;
                 case "GetGameList":
                     {
                         switch(index)
@@ -400,177 +403,189 @@ namespace GameAnywhere
                     }
                     break;
                 case "SynchronizeGames":
-                    OfflineSync offSync = (OfflineSync)testClass;
-                    
-                    GameLibrary gameLibrary = new GameLibrary();
-
-                    List<SyncAction> synclist = (List<SyncAction>)input[0];
-                    switch (index)
+                    if (testClass.GetType().Equals(typeof(OfflineSync)))
                     {
-                        case 1: //test only config in ext to com direction
-                            {
-                                
-                                testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
-                                offSync.SyncDirection = OfflineSync.ExternalToCom;
-                                FolderOperation.CopyOriginalSettings(synclist, FolderOperation.CONFIG, FolderOperation.ExtToCom);
-                                break;
-                            }
-                        case 2: //test only save in ext to com direction
-                            {
-                                Game wc3 = PreCondition.getGame("Warcraft 3",OfflineSync.ExternalToCom);
-                                Directory.CreateDirectory(wc3.SaveParentPath + @"\Save");
-                                FileStream fs = File.Create(wc3.SaveParentPath + @"\Save\newsave.txt");
-                                fs.Close();
-                                foreach (SyncAction action in synclist)
-                                    if (action.MyGame.Name.Equals("Warcraft 3"))
-                                        action.MyGame = getGame("Warcraft 3",OfflineSync.ExternalToCom);
-
-                                FolderOperation.CopyOriginalSettings(synclist, FolderOperation.SAVE, FolderOperation.ExtToCom);
-                                testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
-                                input[0] = synclist;
-                                //testClass = offlineSync;
-                                break;
-                            }
-                        case 3: //test save & config in ext to com, with 2 games
-                            {
-                                
-                                offSync.SyncDirection = OfflineSync.ExternalToCom;
-
-                                //create a config file in wc3
-                                Game wc3 = PreCondition.getGame("Warcraft 3",OfflineSync.ExternalToCom);
-                                FileStream wc3File = File.Create(wc3.ConfigParentPath + @"\CustomKeys.txt");
-                                wc3File.Close();
-                                Game fifa = PreCondition.getGame("FIFA 10",OfflineSync.ExternalToCom);
-                                
-                                Directory.CreateDirectory(fifa.SaveParentPath + @"\A. Profile");
-                                FileStream fifaFile = File.Create(fifa.SaveParentPath + @"\A. Profile\SampleSave.save");
-                                fifaFile.Close();
-
-                                foreach (SyncAction action in synclist)
-                                {
-                                    if (action.MyGame.Name.Equals("Warcraft 3"))
-                                        action.MyGame = getGame("Warcraft 3",OfflineSync.ExternalToCom);
-                                    else if (action.MyGame.Name.Equals("FIFA 10"))
-                                        action.MyGame = getGame("FIFA 10",OfflineSync.ExternalToCom);
-                                }
-
-                                FolderOperation.CopyOriginalSettings(synclist, FolderOperation.BOTH, FolderOperation.ExtToCom);
-                                testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
-                                input[0] = synclist;
-                                break;
-                            }
-                        case 4: //test save FIFA in com to ext direction, ext is empty
-                            {
-                                offSync.SyncDirection = OfflineSync.ComToExternal;
-                                //copy a FIFA save game to com
-                                Game fifa = getGame("FIFA 10",OfflineSync.ComToExternal);
-
-                                FolderOperation.CopyDirectory(externalPath + @"\FIFA 10\savedGame",fifa.SaveParentPath);
-                                foreach (SyncAction action in synclist)
-                                {
-                                    if (action.MyGame.Name.Equals("FIFA 10"))
-                                        action.MyGame = getGame("FIFA 10",OfflineSync.ComToExternal);
-                                }
-                                
-                                //simulate empty thumb
-                                RemoveGamesInExt();
-                                testClass = new OfflineSync(OfflineSync.ComToExternal, gameLibrary.GetGameList(OfflineSync.Uninitialize));
-                                input[0] = synclist;
-                                break;
-                            }
-                        case 5: //test config FIFA 10, Warcraft save in com to ext direction
-                            {
-                                offSync.SyncDirection = OfflineSync.ComToExternal;
-                                //copy a FIFA config and wc3 save game
-                                Game wc3 = getGame("Warcraft 3",OfflineSync.ComToExternal);
-                                Game fifa = getGame("FIFA 10",OfflineSync.ComToExternal);
-                                FolderOperation.CopyDirectory(externalPath + @".\Warcraft 3\savedGame\", wc3.SaveParentPath);
-                                FolderOperation.CopyDirectory(externalPath + @".\FIFA 10\config",fifa.ConfigParentPath);
-                                foreach (SyncAction action in synclist)
-                                {
-                                    if (action.MyGame.Name.Equals("Warcraft 3"))
-                                        action.MyGame = getGame("Warcraft 3",OfflineSync.ComToExternal);
-                                    else if (action.MyGame.Name.Equals("FIFA 10"))
-                                        action.MyGame = getGame("FIFA 10",OfflineSync.ComToExternal);
-                                }
-                                //simulate empty thumb
-                                RemoveGamesInExt();
-                                testClass = new OfflineSync(OfflineSync.ComToExternal, gameLibrary.GetGameList(OfflineSync.Uninitialize));
-                                input[0] = synclist;
-                                break;
-                            }
-                        case 6: //test unable to create Backup dir with FIFA 10 config
-                            {
-                                offSync.SyncDirection = OfflineSync.ExternalToCom;
-
-                                FolderOperation.AddFileSecurity(getGame("FIFA 10",OfflineSync.ExternalToCom).ConfigParentPath, user,
-                                    FileSystemRights.CreateDirectories, AccessControlType.Deny);
-                                List<SyncAction> wc3Only = new List<SyncAction>();
-                                wc3Only.Add(new SyncAction(PreCondition.getGame("Warcraft 3",OfflineSync.ExternalToCom), SyncAction.ConfigFiles));
-                                FolderOperation.CopyOriginalSettings(wc3Only, FolderOperation.CONFIG, FolderOperation.ExtToCom);
-                                testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
-                                break;
-                            }
-                        case 7: //test no action
-                            {
-                                offSync.SyncDirection = OfflineSync.ExternalToCom;
-                                testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
-                                break;
-                            }
-                        case 8: //test locking one of the the file in external (FIFA 2010 save in external : A. Profiles)
-                            {
-                                offSync.SyncDirection = OfflineSync.ExternalToCom;
-                                FolderOperation.AddFileSecurity(externalPath + @"\FIFA 10\savedGame\A. Profiles", user,
-                                    FileSystemRights.FullControl, AccessControlType.Deny);
-                                List<SyncAction> wc3Only = new List<SyncAction>();
-
-                                wc3Only.Add(new SyncAction(PreCondition.getGame("Warcraft 3", OfflineSync.ExternalToCom), SyncAction.AllFiles));
-                                FolderOperation.CopyOriginalSettings(wc3Only, FolderOperation.BOTH, FolderOperation.ExtToCom);
-                                testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
-                                break;
-                            }
-                        case 9: //test for both side 
-                            {
-                                offSync.SyncDirection = OfflineSync.ExternalToCom;
-                                testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
-                                string username = WindowsIdentity.GetCurrent().Name;
-                                FolderOperation.AddFileSecurity(externalPath + @"\FIFA 10", username,
-                                    FileSystemRights.FullControl, AccessControlType.Deny);
-                                fifaSavePath = getGame("FIFA 10",OfflineSync.ExternalToCom).SaveParentPath;
-                                FolderOperation.AddFileSecurity(fifaSavePath, username,
-                                    FileSystemRights.FullControl, AccessControlType.Deny);
-                                //FolderOperation.CopyOriginalSettings(synclist, FolderOperation.BOTH, FolderOperation.ExtToCom);
-                                testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
-                                break;
-                            }
-                        case 10: //lock FM 2010 save path to unable to create directory
-                            {
-                                Game fm = PreCondition.getGame("Football Manager 2010",OfflineSync.ExternalToCom);
-
-                                //create a test file in game save folder 
-                                FileStream file = File.Create(fm.SaveParentPath + @"\games\FM2010Test.txt");
-                                file.Close();
-
-                                FolderOperation.AddFileSecurity(fm.SaveParentPath, user,
-                                    FileSystemRights.CreateDirectories,AccessControlType.Deny);
-                                testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
-
-                                break;
-                            }
-                        case 11:
-                            {
-                                Game fm = PreCondition.getGame("Football Manager 2010", OfflineSync.ExternalToCom);
-
-                                //create a test file in game save folder 
-                                FileStream file = File.Create(fm.SaveParentPath + @"\games\FM2010Test.txt");
-                                file.Close();
-                                FolderOperation.CopyOriginalSettings(synclist, FolderOperation.SAVE, FolderOperation.ExtToCom);
-                                testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
-                                break;
-                            }
-                        default: break;
+                        SetOfflineSyncPreCondition(index, ref input, ref testClass, user);
+                        break;
                     }
+                    else
+                    {
+                        //Online sync Test cases
+                    }
+
                     break;
+
+                case "CheckConflicts":
+                    {
+                        MetaData localHash = new MetaData();
+                        MetaData localMeta = new MetaData();
+                        MetaData webHash = new MetaData();
+                        MetaData webMeta = new MetaData();
+
+                        switch (index)
+                        {
+                            case 1:
+                                localHash.AddEntry("File 1", "A");
+                                localHash.AddEntry("File 2", "B");
+                                localMeta.AddEntry("File 1", "A");
+                                localMeta.AddEntry("File 2", "B");
+                                webHash.AddEntry("File 1", "A");
+                                webHash.AddEntry("File 2", "B");
+                                webMeta.AddEntry("File 1", "A");
+                                webMeta.AddEntry("File 2", "B");
+                                break;
+                            case 2: //different file at web
+                                localHash.AddEntry("File 1", "A");
+                                localHash.AddEntry("File 2", "B");
+                                localMeta.AddEntry("File 1", "A");
+                                localMeta.AddEntry("File 2", "B");
+                                webHash.AddEntry("File 1", "X");
+                                webHash.AddEntry("File 2", "B");
+                                webMeta.AddEntry("File 1", "A");
+                                webMeta.AddEntry("File 2", "B");
+                                break;
+                            case 3: //different file at thumb
+                                localHash.AddEntry("File 1", "X");
+                                localHash.AddEntry("File 2", "B");
+                                localMeta.AddEntry("File 1", "A");
+                                localMeta.AddEntry("File 2", "B");
+                                webHash.AddEntry("File 1", "A");
+                                webHash.AddEntry("File 2", "B");
+                                webMeta.AddEntry("File 1", "A");
+                                webMeta.AddEntry("File 2", "B");
+                                break;
+                            case 4: //conflicts on both side
+                                localHash.AddEntry("File 1", "A");
+                                localHash.AddEntry("File 2", "X");
+                                localHash.AddEntry("File 3", "C");
+                                localHash.AddEntry("File 4", "D");
+                                localMeta.AddEntry("File 1", "A");
+                                localMeta.AddEntry("File 2", "B");
+                                localMeta.AddEntry("File 3", "C");
+                                localMeta.AddEntry("File 4", "D");
+                                webHash.AddEntry("File 1", "A");
+                                webHash.AddEntry("File 2", "B");
+                                webHash.AddEntry("File 3", "X");
+                                webHash.AddEntry("File 4", "D");
+                                webMeta.AddEntry("File 1", "A");
+                                webMeta.AddEntry("File 2", "B");
+                                webMeta.AddEntry("File 3", "C");
+                                webMeta.AddEntry("File 4", "D");
+                                break;
+                            case 5:
+                                localHash.AddEntry("File 1", "X");
+                                localHash.AddEntry("File 2", "X");
+                                localHash.AddEntry("File 3", "C");
+                                localHash.AddEntry("File 4", "D");
+                                localMeta.AddEntry("File 1", "A");
+                                localMeta.AddEntry("File 2", "B");
+                                localMeta.AddEntry("File 3", "C");
+                                localMeta.AddEntry("File 4", "D");
+                                webHash.AddEntry("File 1", "Y");
+                                webHash.AddEntry("File 2", "B");
+                                webHash.AddEntry("File 3", "X");
+                                webHash.AddEntry("File 4", "D");
+                                webMeta.AddEntry("File 1", "A");
+                                webMeta.AddEntry("File 2", "B");
+                                webMeta.AddEntry("File 3", "C");
+                                webMeta.AddEntry("File 4", "D");
+                                break;
+                            case 6:
+                                localHash.AddEntry("File 1", "X");
+                                localHash.AddEntry("File 2", "X");
+                                localHash.AddEntry("File 3", "C");
+                                localHash.AddEntry("File 4", "D");
+                                localMeta.AddEntry("File 1", "A");
+                                localMeta.AddEntry("File 2", "B");
+                                localMeta.AddEntry("File 3", "C");
+                                localMeta.AddEntry("File 4", "D");
+                                webHash.AddEntry("File 1", "Y");
+                                webHash.AddEntry("File 2", "B");
+                                webHash.AddEntry("File 3", "X");
+                                //webHash.AddEntry("File 4", "D");
+                                webMeta.AddEntry("File 1", "A");
+                                webMeta.AddEntry("File 2", "B");
+                                webMeta.AddEntry("File 3", "C");
+                                webMeta.AddEntry("File 4", "D");
+                                break;
+                            case 7:
+                                localHash.AddEntry("File 1", "X");
+                                localHash.AddEntry("File 2", "X");
+                                localHash.AddEntry("File 3", "C");
+                                //localHash.AddEntry("File 4", "D");
+                                localMeta.AddEntry("File 1", "A");
+                                localMeta.AddEntry("File 2", "B");
+                                localMeta.AddEntry("File 3", "C");
+                                localMeta.AddEntry("File 4", "D");
+                                webHash.AddEntry("File 1", "Y");
+                                webHash.AddEntry("File 2", "B");
+                                webHash.AddEntry("File 3", "X");
+                                webHash.AddEntry("File 4", "D");
+                                webMeta.AddEntry("File 1", "A");
+                                webMeta.AddEntry("File 2", "B");
+                                webMeta.AddEntry("File 3", "C");
+                                webMeta.AddEntry("File 4", "D");
+                                break;
+                            case 8:
+                                localHash.AddEntry("File 1", "X");
+                                localHash.AddEntry("File 2", "X");
+                                localHash.AddEntry("File 3", "C");
+                                localHash.AddEntry("File 4", "D");
+                                //none
+                                localHash.AddEntry("File 6", "F");
+                                localMeta.AddEntry("File 1", "A");
+                                localMeta.AddEntry("File 2", "B");
+                                localMeta.AddEntry("File 3", "C");
+                                localMeta.AddEntry("File 4", "D");
+                                localMeta.AddEntry("File 5", "E");
+                                //none
+                                webHash.AddEntry("File 1", "Y");
+                                webHash.AddEntry("File 2", "B");
+                                webHash.AddEntry("File 3", "X");
+                                //none
+                                localHash.AddEntry("File 5", "E");
+                                //none
+                                webMeta.AddEntry("File 1", "A");
+                                webMeta.AddEntry("File 2", "B");
+                                webMeta.AddEntry("File 3", "C");
+                                webMeta.AddEntry("File 4", "D");
+                                localHash.AddEntry("File 5", "E");
+                                //none
+                                break;
+                            case 9:
+                                localHash.AddEntry("File 1", "X");
+                                webHash.AddEntry("File 1", "Y");
+                                break;
+                            case 10:
+                                localHash.AddEntry("File 1", "X");
+                                webHash.AddEntry("File 1", "Y");
+                                webHash.AddEntry("File 2", "A");
+                                break;
+                            case 11:
+                                localHash.AddEntry("File 1", "X");
+                                //none
+                                localHash.AddEntry("File 3", "A");
+                                localHash.AddEntry("File 4", "W");
+                                webHash.AddEntry("File 1", "Y");
+                                webHash.AddEntry("File 2", "A");
+                                //none
+                                webHash.AddEntry("File 4", "Z");
+                                break;
+                            case 12: //special case
+                                localMeta.AddEntry("File 1", "A");
+                                webMeta.AddEntry("File 1", "A");
+                                break;
+                            default: break;
+                        }
+
+                        WebAndThumbSync webThumb = (WebAndThumbSync)testClass;
+                        webThumb.LocalHash = localHash;
+                        webThumb.LocalMeta = localMeta;
+                        webThumb.WebHash = webHash;
+                        webThumb.WebMeta = webMeta;
+                        testClass = webThumb;
+                        break;
+                    }
                 case "Restore":
                     GameLibrary lib = new GameLibrary();
                     OfflineSync testRestoreClass = (OfflineSync)testClass;
@@ -639,6 +654,209 @@ namespace GameAnywhere
                 default: break;
             } //end switch method
             
+        }
+
+        /// <summary>
+        /// Sets the pre-condition for the onine synchronization methods
+        /// a helper method for SetPreCondition
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="input"></param>
+        /// <param name="testClass"></param>
+        /// <param name="user"></param>
+        private static void SetOnlineSyncPreCondition(int index, ref object[] input, ref object testClass, string user)
+        {
+            OnlineSync online = (OnlineSync)testClass;
+            GameLibrary gameLibrary = new GameLibrary();
+            List<SyncAction> synclist = (List<SyncAction>)input[0];
+
+            switch (index)
+            {
+                case 1:
+                    break;
+
+                default: break;
+            }
+        }
+
+        /// <summary>
+        /// Sets the precondition for the offline synchronization methods
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="input"></param>
+        /// <param name="testClass"></param>
+        /// <param name="user"></param>
+        private static void SetOfflineSyncPreCondition(int index, ref object[] input, ref object testClass, string user)
+        {
+            OfflineSync offSync = (OfflineSync)testClass;
+            GameLibrary gameLibrary = new GameLibrary();
+            List<SyncAction> synclist = (List<SyncAction>)input[0];
+
+            switch (index)
+            {
+                case 1: //test only config in ext to com direction
+                    {
+
+                        testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
+                        offSync.SyncDirection = OfflineSync.ExternalToCom;
+                        FolderOperation.CopyOriginalSettings(synclist, FolderOperation.CONFIG, FolderOperation.ExtToCom);
+                        break;
+                    }
+                case 2: //test only save in ext to com direction
+                    {
+                        Game wc3 = PreCondition.getGame("Warcraft 3", OfflineSync.ExternalToCom);
+                        Directory.CreateDirectory(wc3.SaveParentPath + @"\Save");
+                        FileStream fs = File.Create(wc3.SaveParentPath + @"\Save\newsave.txt");
+                        fs.Close();
+                        foreach (SyncAction action in synclist)
+                            if (action.MyGame.Name.Equals("Warcraft 3"))
+                                action.MyGame = getGame("Warcraft 3", OfflineSync.ExternalToCom);
+
+                        FolderOperation.CopyOriginalSettings(synclist, FolderOperation.SAVE, FolderOperation.ExtToCom);
+                        testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
+                        input[0] = synclist;
+                        //testClass = offlineSync;
+                        break;
+                    }
+                case 3: //test save & config in ext to com, with 2 games
+                    {
+
+                        offSync.SyncDirection = OfflineSync.ExternalToCom;
+
+                        //create a config file in wc3
+                        Game wc3 = PreCondition.getGame("Warcraft 3", OfflineSync.ExternalToCom);
+                        FileStream wc3File = File.Create(wc3.ConfigParentPath + @"\CustomKeys.txt");
+                        wc3File.Close();
+                        Game fifa = PreCondition.getGame("FIFA 10", OfflineSync.ExternalToCom);
+
+                        Directory.CreateDirectory(fifa.SaveParentPath + @"\A. Profile");
+                        FileStream fifaFile = File.Create(fifa.SaveParentPath + @"\A. Profile\SampleSave.save");
+                        fifaFile.Close();
+
+                        foreach (SyncAction action in synclist)
+                        {
+                            if (action.MyGame.Name.Equals("Warcraft 3"))
+                                action.MyGame = getGame("Warcraft 3", OfflineSync.ExternalToCom);
+                            else if (action.MyGame.Name.Equals("FIFA 10"))
+                                action.MyGame = getGame("FIFA 10", OfflineSync.ExternalToCom);
+                        }
+
+                        FolderOperation.CopyOriginalSettings(synclist, FolderOperation.BOTH, FolderOperation.ExtToCom);
+                        testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
+                        input[0] = synclist;
+                        break;
+                    }
+                case 4: //test save FIFA in com to ext direction, ext is empty
+                    {
+                        offSync.SyncDirection = OfflineSync.ComToExternal;
+                        //copy a FIFA save game to com
+                        Game fifa = getGame("FIFA 10", OfflineSync.ComToExternal);
+
+                        FolderOperation.CopyDirectory(externalPath + @"\FIFA 10\savedGame", fifa.SaveParentPath);
+                        foreach (SyncAction action in synclist)
+                        {
+                            if (action.MyGame.Name.Equals("FIFA 10"))
+                                action.MyGame = getGame("FIFA 10", OfflineSync.ComToExternal);
+                        }
+
+                        //simulate empty thumb
+                        RemoveGamesInExt();
+                        testClass = new OfflineSync(OfflineSync.ComToExternal, gameLibrary.GetGameList(OfflineSync.Uninitialize));
+                        input[0] = synclist;
+                        break;
+                    }
+                case 5: //test config FIFA 10, Warcraft save in com to ext direction
+                    {
+                        offSync.SyncDirection = OfflineSync.ComToExternal;
+                        //copy a FIFA config and wc3 save game
+                        Game wc3 = getGame("Warcraft 3", OfflineSync.ComToExternal);
+                        Game fifa = getGame("FIFA 10", OfflineSync.ComToExternal);
+                        FolderOperation.CopyDirectory(externalPath + @".\Warcraft 3\savedGame\", wc3.SaveParentPath);
+                        FolderOperation.CopyDirectory(externalPath + @".\FIFA 10\config", fifa.ConfigParentPath);
+                        foreach (SyncAction action in synclist)
+                        {
+                            if (action.MyGame.Name.Equals("Warcraft 3"))
+                                action.MyGame = getGame("Warcraft 3", OfflineSync.ComToExternal);
+                            else if (action.MyGame.Name.Equals("FIFA 10"))
+                                action.MyGame = getGame("FIFA 10", OfflineSync.ComToExternal);
+                        }
+                        //simulate empty thumb
+                        RemoveGamesInExt();
+                        testClass = new OfflineSync(OfflineSync.ComToExternal, gameLibrary.GetGameList(OfflineSync.Uninitialize));
+                        input[0] = synclist;
+                        break;
+                    }
+                case 6: //test unable to create Backup dir with FIFA 10 config
+                    {
+                        offSync.SyncDirection = OfflineSync.ExternalToCom;
+
+                        FolderOperation.AddFileSecurity(getGame("FIFA 10", OfflineSync.ExternalToCom).ConfigParentPath, user,
+                            FileSystemRights.CreateDirectories, AccessControlType.Deny);
+                        List<SyncAction> wc3Only = new List<SyncAction>();
+                        wc3Only.Add(new SyncAction(PreCondition.getGame("Warcraft 3", OfflineSync.ExternalToCom), SyncAction.ConfigFiles));
+                        FolderOperation.CopyOriginalSettings(wc3Only, FolderOperation.CONFIG, FolderOperation.ExtToCom);
+                        testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
+                        break;
+                    }
+                case 7: //test no action
+                    {
+                        offSync.SyncDirection = OfflineSync.ExternalToCom;
+                        testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
+                        break;
+                    }
+                case 8: //test locking one of the the file in external (FIFA 2010 save in external : A. Profiles)
+                    {
+                        offSync.SyncDirection = OfflineSync.ExternalToCom;
+                        FolderOperation.AddFileSecurity(externalPath + @"\FIFA 10\savedGame\A. Profiles", user,
+                            FileSystemRights.FullControl, AccessControlType.Deny);
+                        List<SyncAction> wc3Only = new List<SyncAction>();
+
+                        wc3Only.Add(new SyncAction(PreCondition.getGame("Warcraft 3", OfflineSync.ExternalToCom), SyncAction.AllFiles));
+                        FolderOperation.CopyOriginalSettings(wc3Only, FolderOperation.BOTH, FolderOperation.ExtToCom);
+                        testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
+                        break;
+                    }
+                case 9: //test for both side 
+                    {
+                        offSync.SyncDirection = OfflineSync.ExternalToCom;
+                        testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
+                        string username = WindowsIdentity.GetCurrent().Name;
+                        FolderOperation.AddFileSecurity(externalPath + @"\FIFA 10", username,
+                            FileSystemRights.FullControl, AccessControlType.Deny);
+                        fifaSavePath = getGame("FIFA 10", OfflineSync.ExternalToCom).SaveParentPath;
+                        FolderOperation.AddFileSecurity(fifaSavePath, username,
+                            FileSystemRights.FullControl, AccessControlType.Deny);
+                        //FolderOperation.CopyOriginalSettings(synclist, FolderOperation.BOTH, FolderOperation.ExtToCom);
+                        testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
+                        break;
+                    }
+                case 10: //lock FM 2010 save path to unable to create directory
+                    {
+                        Game fm = PreCondition.getGame("Football Manager 2010", OfflineSync.ExternalToCom);
+
+                        //create a test file in game save folder 
+                        FileStream file = File.Create(fm.SaveParentPath + @"\games\FM2010Test.txt");
+                        file.Close();
+
+                        FolderOperation.AddFileSecurity(fm.SaveParentPath, user,
+                            FileSystemRights.CreateDirectories, AccessControlType.Deny);
+                        testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
+
+                        break;
+                    }
+                case 11:
+                    {
+                        Game fm = PreCondition.getGame("Football Manager 2010", OfflineSync.ExternalToCom);
+
+                        //create a test file in game save folder 
+                        FileStream file = File.Create(fm.SaveParentPath + @"\games\FM2010Test.txt");
+                        file.Close();
+                        FolderOperation.CopyOriginalSettings(synclist, FolderOperation.SAVE, FolderOperation.ExtToCom);
+                        testClass = new OfflineSync(OfflineSync.ExternalToCom, gameLibrary.GetGameList(OfflineSync.Uninitialize));
+                        break;
+                    }
+                default: break;
+            }
         }
 
         private static void RemoveGamesInExt()
@@ -871,7 +1089,8 @@ namespace GameAnywhere
             Shell32.Folder RootFolder =
             sc.NameSpace(Shell32.ShellSpecialFolderConstants.ssfCONTROLS);
             Shell32.Folder SrcFlder = null;
-            string Adapter = "Local Area Connection";   //Add in Adapter here
+            string adapter1 = "Local Area Connection";
+            string adapter2 = "Wireless Network Connection";//Add in Adapter here
             ShellFolderItem fItem = null;
 
             foreach (Shell32.FolderItem2 fi in RootFolder.Items())
@@ -888,7 +1107,7 @@ namespace GameAnywhere
 
             foreach (Shell32.FolderItem fi in SrcFlder.Items())
             {
-                if (fi.Name == Adapter)
+                if (fi.Name == adapter1 || fi.Name == adapter2)
                 {
                     fItem = (ShellFolderItem)fi;
                     break;

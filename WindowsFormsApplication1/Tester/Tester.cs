@@ -57,6 +57,12 @@ namespace GameAnywhere
                         param[i] = param_string[i].Substring(7, param_string.Length - 7);
                     else if (param_string[i].StartsWith("bool")) //eg. bool:true
                         param[i] = Convert.ToBoolean(param_string[i].Substring(5, param_string.Length - 5));
+                    else if (param_string[i].ToLower().StartsWith("user1"))
+                    {
+                        User newUser = new User();
+                        newUser.Email = "TestComToWeb@gmails.com";
+                        param[i] = newUser;
+                    }
                     //add in other primitve data here
                 }
                 //support for other data structure to be added        
