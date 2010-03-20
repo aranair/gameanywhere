@@ -9,7 +9,7 @@ namespace GameAnywhere
 {
     class WebAndThumbSync
     {
-        private Dictionary<string, int> noConflict, Conflicts;
+        public Dictionary<string, int> NoConflict, Conflicts;
         private MetaData localHash, localMeta, webHash, webMeta;
 
         public static readonly string LocalMetaDataFileName = "metadata.ga";
@@ -46,16 +46,19 @@ namespace GameAnywhere
 
         Storage s3 = new Storage();
 
-        WebAndThumbSync()
+        public WebAndThumbSync()
         {
+            NoConflict = new Dictionary<string,int>();
+            Conflicts = new Dictionary<string,int>();
         }
+        /*
         WebAndThumbSync(string email)
         {
             CreateMetaData(email);
-            noConflict = new Dictionary<string,int>();
+            NoConflict = new Dictionary<string,int>();
             Conflicts = new Dictionary<string, int>();
         }
-
+        */
         private string GenerateHash(string path)
         {
             FileStream fs = File.Open(path, FileMode.Open);
@@ -126,26 +129,26 @@ namespace GameAnywhere
                         {
                             if (direction == UPLOAD)
                             {
-                                noConflict.Add(entry.Key, UPLOAD);
+                                NoConflict[entry.Key] = UPLOAD;
                             }
                             else if (direction == DOWNLOAD)
                             {
-                                noConflict.Add(entry.Key, DOWNLOAD);
+                                NoConflict[entry.Key] = DOWNLOAD;
                             }
                         }
                         //If hash2 and meta2 are different (i.e. conflict)
                         else
                         {
-                            Conflicts.Add(entry.Key, CONFLICT);
+                            Conflicts[entry.Key] = CONFLICT;
                         }
                     }
                 }
                 else //New file
                 {
                     if (direction == UPLOAD)
-                        noConflict.Add(entry.Key, UPLOAD);
+                        NoConflict[entry.Key] = UPLOAD;
                     else if (direction == DOWNLOAD)
-                        noConflict.Add(entry.Key, DOWNLOAD);
+                        NoConflict[entry.Key] = DOWNLOAD;
                 }
             }
 
@@ -155,11 +158,11 @@ namespace GameAnywhere
                 {
                     if (direction == UPLOAD) //Delete from web
                     {
-                        noConflict.Add(entry.Key, DELETEWEB);
+                        NoConflict[entry.Key] = DELETEWEB;
                     }
                     if (direction == DOWNLOAD)//Delete from thumb
                     {
-                        noConflict.Add(entry.Key, DELETELOCAL);
+                        NoConflict[entry.Key] = DELETELOCAL;
                     }
                 }
 
