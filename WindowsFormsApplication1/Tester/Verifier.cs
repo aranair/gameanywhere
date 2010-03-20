@@ -28,7 +28,7 @@ namespace GameAnywhere
             WebAndThumbSync webThumb = (WebAndThumbSync)testClass;
             Dictionary<string, string> conflicts = new Dictionary<string, string>();
             if(returnType != null)
-                conflicts = (Dictionary<string,string>) returnType;
+                conflicts = (Dictionary<string,int>) returnType;
 
             switch (index)
             {
