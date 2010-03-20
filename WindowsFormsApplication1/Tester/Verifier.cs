@@ -26,7 +26,7 @@ namespace GameAnywhere
         {
             TestResult result = new TestResult(true);
             WebAndThumbSync webThumb = (WebAndThumbSync)testClass;
-            Dictionary<string, string> conflicts = new Dictionary<string, string>();
+            Dictionary<string, int> conflicts = new Dictionary<string, int>();
             if(returnType != null)
                 conflicts = (Dictionary<string,int>) returnType;
 
