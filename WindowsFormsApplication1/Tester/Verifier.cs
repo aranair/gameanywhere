@@ -381,7 +381,7 @@ namespace GameAnywhere
                         if (!webThumb.Conflicts.Contains(f4))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! Conflicts do not contain File 1 and 0!");
+                            result.AddRemarks("Failed! Conflicts do not contain File 4 and 0!");
                         }
                         if (webThumb.NoConflict.Count != 2)
                         {
