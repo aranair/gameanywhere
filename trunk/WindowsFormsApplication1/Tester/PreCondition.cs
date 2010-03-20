@@ -517,10 +517,12 @@ namespace GameAnywhere
                                 localMeta.AddEntry("File 2", "B");
                                 localMeta.AddEntry("File 3", "C");
                                 localMeta.AddEntry("File 4", "D");
+
                                 webHash.AddEntry("File 1", "Y");
                                 webHash.AddEntry("File 2", "B");
                                 webHash.AddEntry("File 3", "X");
                                 webHash.AddEntry("File 4", "D");
+
                                 webMeta.AddEntry("File 1", "A");
                                 webMeta.AddEntry("File 2", "B");
                                 webMeta.AddEntry("File 3", "C");
@@ -533,23 +535,25 @@ namespace GameAnywhere
                                 localHash.AddEntry("File 4", "D");
                                 //none
                                 localHash.AddEntry("File 6", "F");
+
                                 localMeta.AddEntry("File 1", "A");
                                 localMeta.AddEntry("File 2", "B");
                                 localMeta.AddEntry("File 3", "C");
                                 localMeta.AddEntry("File 4", "D");
                                 localMeta.AddEntry("File 5", "E");
                                 //none
+
                                 webHash.AddEntry("File 1", "Y");
                                 webHash.AddEntry("File 2", "B");
                                 webHash.AddEntry("File 3", "X");
                                 //none
-                                localHash.AddEntry("File 5", "E");
+                                webHash.AddEntry("File 5", "E");
                                 //none
                                 webMeta.AddEntry("File 1", "A");
                                 webMeta.AddEntry("File 2", "B");
                                 webMeta.AddEntry("File 3", "C");
                                 webMeta.AddEntry("File 4", "D");
-                                localHash.AddEntry("File 5", "E");
+                                webMeta.AddEntry("File 5", "E");
                                 //none
                                 break;
                             case 9:
@@ -583,6 +587,8 @@ namespace GameAnywhere
                         webThumb.LocalMeta = localMeta;
                         webThumb.WebHash = webHash;
                         webThumb.WebMeta = webMeta;
+                        webThumb.NoConflict.Clear();
+                        webThumb.Conflicts.Clear();
                         testClass = webThumb;
                         break;
                     }
