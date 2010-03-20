@@ -32,8 +32,10 @@ namespace GameAnywhere
 
             switch (index)
             {
+                
                 case 1:
                     {
+                        
                         if (conflicts.Count != (int)expectedOutput)
                         {
                             result.Result = false;
@@ -422,7 +424,10 @@ namespace GameAnywhere
                         break;
                     }
                 default: break;
+                
             }
+            webThumb.Conflicts.Clear();
+            webThumb.NoConflict.Clear();
             return result;
         }
         #endregion 

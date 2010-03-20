@@ -73,6 +73,12 @@ namespace GameAnywhere
         private void ReadButton_Click(object sender, EventArgs e)
         {
 
+            Dictionary<string, int> noConflict = new Dictionary<string, int>();
+            noConflict.Add("A", 1);
+            KeyValuePair<string, int> k = new KeyValuePair<string, int>("A", 1);
+            if (noConflict.Contains(k))
+                MessageBox.Show("Yes");
+
             //Move any existing SyncFolder
             if(Directory.Exists(@".\SyncFolder"))
                 Directory.Move(@".\SyncFolder", @".\SyncFolder-backup");
