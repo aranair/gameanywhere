@@ -109,10 +109,11 @@ namespace GameAnywhere
             else return true;
         }
 
-        public void CheckConflicts()
+        public Dictionary<string,int> CheckConflicts()
         {
             CheckConflictsHelper(localHash, localMeta, webHash, webMeta, UPLOAD);
             CheckConflictsHelper(webHash, webMeta, localHash, localMeta, DOWNLOAD);
+            return Conflicts;
         }
         
         private void CheckConflictsHelper(MetaData hash1, MetaData meta1, MetaData hash2, MetaData meta2, int direction)
@@ -145,10 +146,15 @@ namespace GameAnywhere
                 }
                 else //New file
                 {
-                    if (direction == UPLOAD)
-                        NoConflict[entry.Key] = UPLOAD;
-                    else if (direction == DOWNLOAD)
-                        NoConflict[entry.Key] = DOWNLOAD;
+                    if (hash2.EntryExist(entry.Key)) //both new files, conflict
+                        Conflicts[entry.Key] = CONFLICT;
+                    else
+                    {
+                        if (direction == UPLOAD)
+                            NoConflict[entry.Key] = UPLOAD;
+                        else if (direction == DOWNLOAD)
+                            NoConflict[entry.Key] = DOWNLOAD;
+                    }
                 }
             }
 
@@ -156,13 +162,18 @@ namespace GameAnywhere
             {
                 if (!hash1.EntryExist(entry.Key)) //Deleted file
                 {
-                    if (direction == UPLOAD) //Delete from web
+                    if (!hash2.EntryExist(entry.Key)) //both deleted, delete metadata
+                        DeleteMetaData(entry.Key);
+                    else
                     {
-                        NoConflict[entry.Key] = DELETEWEB;
-                    }
-                    if (direction == DOWNLOAD)//Delete from thumb
-                    {
-                        NoConflict[entry.Key] = DELETELOCAL;
+                        if (direction == UPLOAD) //Delete from web
+                        {
+                            NoConflict[entry.Key] = DELETEWEB;
+                        }
+                        if (direction == DOWNLOAD)//Delete from thumb
+                        {
+                            NoConflict[entry.Key] = DELETELOCAL;
+                        }
                     }
                 }
 
