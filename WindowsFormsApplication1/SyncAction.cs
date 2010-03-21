@@ -7,14 +7,26 @@ using System.Collections;
 namespace GameAnywhere
 {
     /// <summary>
-    /// A data structure that contains a Game and its sync information 
+    /// A data structure that contains a Game and its sync information.
     /// </summary>
     public class SyncAction
     {
-        //Sync action
+
+        /// <summary>
+        /// Sync action, do nothing.
+        /// </summary>
         public static readonly int DoNothing = 0; //default
+        /// <summary>
+        /// Sync action, saved game files.
+        /// </summary>
         public static readonly int SavedGameFiles = 1;
+        /// <summary>
+        /// Sync action, game configuration files.
+        /// </summary>
         public static readonly int ConfigFiles = 2;
+        /// <summary>
+        /// Sync action, all game files.
+        /// </summary>
         public static readonly int AllFiles = 3;
 
         //Data member
@@ -52,17 +64,22 @@ namespace GameAnywhere
         /// <summary>
         /// Overloaded consructor.
         /// </summary>
-        /// <param name="game">A game object.</param>
+        /// <param name="game">Game object.</param>
         public SyncAction(Game game)
         {
             myGame = game;
             unsuccessfulSyncFiles = new List<SyncError>();
         }
 
-        //added over loaded constructor
+       /// <summary>
+        /// Overloaded consructor.
+       /// </summary>
+        /// <param name="game">Game object.</param>
+       /// <param name="type">The sync action for the game.</param>
         public SyncAction(Game game, int type)
         {
-            myGame = game; action = type;
+            myGame = game; 
+            action = type;
             unsuccessfulSyncFiles = new List<SyncError>();
         }
        

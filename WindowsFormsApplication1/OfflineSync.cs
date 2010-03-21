@@ -15,39 +15,19 @@ namespace GameAnywhere
     {
         //Sync direction
         /// <summary>
-        /// Sync from external storage to computer.
+        /// Sync direction, from external storage to computer.
         /// </summary>
         public static readonly int ExternalToCom = 1;
 
         /// <summary>
-        /// Sync from compter to external storage.
+        /// Sync direction, from compter to external storage.
         /// </summary>
         public static readonly int ComToExternal = 2;
 
         /// <summary>
-        /// Uninitialize sync direction. Default value.
+        /// Sync direction uninitialize. Default value.
         /// </summary>
         public const int Uninitialize = 0; //Default
-
-        /// <summary>
-        /// Diretion of sync, can only be set once.
-        /// </summary>
-        private int syncDirection = Uninitialize;
-
-        /// <summary>
-        /// List of sync action to be carried out.
-        /// </summary>
-        private List<SyncAction> syncActionList;
-
-        /// <summary>
-        /// Default syncFolder is located in the same directory as the current executable program.
-        /// </summary>
-        private string syncFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "SyncFolder");
-
-        /// <summary>
-        /// Stores game information on the computer.
-        /// </summary>
-        private List<Game> installedGameList;
 
         /// <summary>
         /// Constructor.
@@ -60,6 +40,7 @@ namespace GameAnywhere
             //Make a default storage directory on the external storage device
             //Throws exception when failed
             CreateDirectory(syncFolderPath);
+            syncDirection = Uninitialize;
         }
 
         /// <summary>
@@ -92,7 +73,7 @@ namespace GameAnywhere
         /// <returns>List of games and their sync results.</returns>
         public override List<SyncAction> SynchronizeGames(List<SyncAction> list)
         {
-            Debug.Assert(syncDirection == ComToExternal || syncDirection == ExternalToCom);
+            Debug.Assert(syncDirection == ComToExternal || syncDirection == ExternalToCom, "Invalid sync direction.");
 
             syncActionList = list;
 
@@ -102,7 +83,8 @@ namespace GameAnywhere
             //Iterate through each game
             foreach (SyncAction sa in syncActionList)
             {
-                Debug.Assert(sa.MyGame != null);
+                Debug.Assert(sa.MyGame != null, "Game object not instantiated in SyncAction");
+                Debug.Assert(sa.UnsuccessfulSyncFiles != null, "UnsuccessfulSyncFiles not instantiated in SyncAction");
 
                 string syncFolderGamePath = Path.Combine(syncFolderPath, sa.MyGame.Name);
 
@@ -112,34 +94,45 @@ namespace GameAnywhere
                     //Backup original game files
                     int backupResult = Backup(sa);
                     CopyToComputer(sa, syncFolderGamePath, backupResult);
+
+                    // if an error occurred in the synchronization, undo the changes made
+                     if (sa.UnsuccessfulSyncFiles.Count > 0)
+                            UndoExternalToComSync(sa);
                 }
                 else if (syncDirection == ComToExternal)
                     CopyToExternal(sa, syncFolderGamePath);
-
-
-                // This section "restores" original status to computer if an error occurred in the synchronization of any file of the specific game
-                if (syncDirection == ExternalToCom)
-                {
-
-                    if (sa.UnsuccessfulSyncFiles.Count > 0)
-                    {
-
-                        DeleteCopiedFiles(sa);
-
-                        RestoreGame(sa, false);
-
-                        List<SyncAction> singleSyncAction = new List<SyncAction>();
-
-
-                        sa.MyGame = FindInstalledGame(sa.MyGame);
-                        singleSyncAction.Add(sa);
-
-                        RemoveAllBackup(singleSyncAction);
-                    }
-
-                }
+                       
             }
             return syncActionList;
+        }
+
+        /// <summary>
+        /// Undo changes made by ExternalToCom sychronization.
+        /// Restore original status to computer if an error occurred in the synchronization of any file of the specific game
+        /// </summary>
+        /// <param name="sa"></param>
+        private void UndoExternalToComSync(SyncAction sa)
+        {
+            if (syncDirection == ExternalToCom)
+            {
+
+                if (sa.UnsuccessfulSyncFiles.Count > 0)
+                {
+
+                    DeleteCopiedFiles(sa);
+
+                    RestoreGame(sa, false);
+
+                    List<SyncAction> singleSyncAction = new List<SyncAction>();
+
+
+                    sa.MyGame = FindInstalledGame(sa.MyGame);
+                    singleSyncAction.Add(sa);
+
+                    RemoveAllBackup(singleSyncAction);
+                }
+
+            }
         }
 
 
@@ -154,7 +147,6 @@ namespace GameAnywhere
             try
             {
                 //Create a game folder in the destination folder 
-                if (!Directory.Exists(targetGamePath))
                     CreateDirectory(targetGamePath);
             }
             catch (CreateFolderFailedException ex)
@@ -168,7 +160,7 @@ namespace GameAnywhere
                 return;
             }
 
-            Debug.Assert(Directory.Exists(targetGamePath));
+            Debug.Assert(Directory.Exists(targetGamePath), "Invalid destination path.");
 
             //Copy config files
             if (sa.Action == SyncAction.ConfigFiles || sa.Action == SyncAction.AllFiles)
@@ -219,8 +211,8 @@ namespace GameAnywhere
 
             // Might have enough space
 
-            Debug.Assert(gameItemList != null);
-            Debug.Assert(targetFolderName != null);
+            Debug.Assert(gameItemList != null, "Invalid game item path.");
+            Debug.Assert(targetFolderName != null, "Invalid target folder name");
 
             //Copy a list of path and update the error list if sync problem encounted
             string targetGameSubPath = Path.Combine(targetGamePath, targetFolderName);
@@ -228,49 +220,6 @@ namespace GameAnywhere
             return CopyPathListToExternal(gameItemList, processName, targetGameSubPath);
         }
 
-        /// <summary>
-        /// Takes in a game object and look for a game in installedGameList that has the same game name.
-        /// </summary>
-        /// <param name="externalGame">The game to match for.</param>
-        /// <returns>Return the first matched game in installedGameList based on matched game name.</returns>
-        public Game FindInstalledGame(Game externalGame)
-        {
-            return FindInstalledGame(externalGame, installedGameList);
-        }
-
-        /// <summary>
-        /// Saves original game files on the computer into a backup folder in the same directory.
-        /// </summary>
-        /// <param name="sa">The SyncAction that contains a game and it's synchronizing information.</param>
-        /// <returns>The backup status status, indicating what has been successfully backup.</returns>
-        public int Backup(SyncAction sa)
-        {
-            return Backup(sa, installedGameList);
-        }
-
-        /// <summary>
-        /// Pre-Condition: None.
-        /// Post-Condition: Backup are removed and a SyncError list is returned.
-        /// 
-        /// Description: Determines which games have backup and remove the backup of the games.
-        /// 
-        /// Exceptions: None.
-        /// </summary>
-        /// <returns>A list of sync error of the given path list.</returns>
-        public List<SyncError> RemoveAllBackup()
-        {
-            return RemoveAllBackup(installedGameList);
-        }
-
-        /// <summary>
-        /// Replace the saved game files and game configuration files with the backup files on the computer.
-        /// Backup folders will be removed.
-        /// </summary>
-        /// <returns>The list of SyncAction that contain failed restore files.</returns>
-        public List<SyncAction> Restore()
-        {
-            return Restore(installedGameList);
-        }
 
         /// <summary>
         /// Copy the game files from external storage device to computer, provided backup was successful.
@@ -509,7 +458,7 @@ namespace GameAnywhere
         /// <summary>
         /// Deletes a directory to Recycle bin.
         /// 
-        /// NOTE: Referencing to Microsoft.VisualBasic assembly is needed for this method to work.
+        /// NOTE: Reference to Microsoft.VisualBasic assembly is needed for this method to work.
         /// </summary>
         /// <param name="directory">Path of the directory to be deleted.</param>
         private void DeleteDirectory(string directory)
@@ -525,58 +474,6 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Make the given path into a list of SyncError
-        /// </summary>
-        /// <param name="errorPath">The file path that failed in a process.</param>
-        /// <param name="processName">A process description.</param>
-        /// <param name="errorMessage">The error message encountered.</param>
-        /// <returns>A list of SyncError of the given path.</returns>
-        private List<SyncError> GetSyncError(string errorPath, string processName, string errorMessage)
-        {
-            List<SyncError> errorList = new List<SyncError>();
-            Debug.WriteLine(errorMessage);
-
-            if (File.Exists(errorPath)) //Path is a file
-                errorList.Add(new SyncError(errorPath, processName, errorMessage));
-            else //Path is a folder
-            {
-                if (Directory.Exists(errorPath))
-                {
-                    /*//Add all files in the folder
-                    foreach (string errorFile in Directory.GetFiles(errorPath))
-                        errorList.Add(new SyncError(errorPath, processName, errorMessage));
-                    //Add all subfolders in the folder
-                    foreach (string subFolder in Directory.GetDirectories(errorPath))
-                        errorList.AddRange(GetSyncError(subFolder, processName, errorMessage));*/
-
-                    errorList.Add(new SyncError(errorPath, processName, errorMessage));
-                }
-                else
-                    errorList.Add(new SyncError(errorPath, processName, errorMessage));
-
-            }
-            return errorList;
-        }
-
-        /// <summary>
-        /// Make the given list of path into a list of SyncError
-        /// </summary>
-        /// <param name="errorPathList">The list of file path that failed in a process.</param>
-        /// <param name="processName">A process description.</param>
-        /// <param name="errorMessage">The error message encountered.</param>
-        /// <returns>A list of SyncError of the given path list.</returns>
-        private List<SyncError> GetSyncError(List<string> errorPathList, string processName, string errorMessage)
-        {
-            List<SyncError> errorList = new List<SyncError>();
-            foreach (string errorPath in errorPathList)
-                errorList.AddRange(GetSyncError(errorPath, processName, errorMessage));
-            return errorList;
-        }
-
-
-
-
-        /// <summary>
         /// Deletes all backup folder created by GameAnywhere after syncing.
         /// 
         /// Exception: DeleteDirectoryErrorException() - Unable to remove backup folder.
@@ -590,8 +487,8 @@ namespace GameAnywhere
             {
                 if (sa.Action > 0)
                 {
-                    errorList.AddRange(Delete(sa.MyGame.ConfigParentPath, BackupConfigFolderName));
-                    errorList.AddRange(Delete(sa.MyGame.SaveParentPath, BackupSavedGameFolderName));
+                    errorList.AddRange(DeleteDirectory(sa.MyGame.ConfigParentPath, BackupConfigFolderName));
+                    errorList.AddRange(DeleteDirectory(sa.MyGame.SaveParentPath, BackupSavedGameFolderName));
                 }
             }
             return errorList;
@@ -606,7 +503,7 @@ namespace GameAnywhere
         /// <param name="backupFolderParentPath">The list of path that contains backup folder</param>
         /// <param name="backupFolderName">The backup folder name</param>
         /// <returns>A list of SyncError of the given path list.</returns>
-        private List<SyncError> Delete(string backupFolderParentPath, string backupFolderName)
+        private List<SyncError> DeleteDirectory(string backupFolderParentPath, string backupFolderName)
         {
             List<SyncError> errorList = new List<SyncError>();
             //foreach (string path in backupFolderParentPathList)
@@ -623,35 +520,6 @@ namespace GameAnywhere
                     errorList.AddRange(GetSyncError(backupFolderParentPath + backupFolderName, processName, ex.errorMessage));
                 }
             }
-            return errorList;
-        }
-
-        /// <summary>
-        /// Moves all the path in the path list into Recycle bin.
-        /// </summary>
-        /// <param name="pathList">The list of path to be deleted.</param>
-        /// <returns></returns>
-        private List<SyncError> Delete(List<string> pathList)
-        {
-            List<SyncError> errorList = new List<SyncError>();
-            foreach (string path in pathList)
-                try
-                {
-                    if (File.Exists(path)) //path is a file
-                        File.Delete(path);
-                    else //path is a directory
-                        DeleteDirectory(path);
-                }
-                catch (DeleteDirectoryErrorException ex)
-                {
-                    string processName = "Remove backup file";
-                    errorList.AddRange(GetSyncError(path, processName, ex.errorMessage));
-                }
-                catch (Exception)
-                {
-                }
-
-
             return errorList;
         }
 
