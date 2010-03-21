@@ -5,6 +5,9 @@ using System.Diagnostics;
 
 namespace GameAnywhere
 {
+    /// <summary>
+    /// An abstract synchronization class. Contain methods to create and delete directory. And also backup and restore original game files. 
+    /// </summary>
     abstract class Sync
     {
         /// <summary>
@@ -31,6 +34,11 @@ namespace GameAnywhere
         /// Default syncFolder is located in the same directory as the current executable program.
         /// </summary>
         public static readonly string syncFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "SyncFolder");
+
+        /// <summary>
+        /// Sync direction uninitialize. Default value.
+        /// </summary>
+        public const int Uninitialize = 0; //Default
 
         /// <summary>
         /// Backup Status: No files.
@@ -71,6 +79,14 @@ namespace GameAnywhere
         protected int syncDirection;
 
 
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Sync"/> class.
+        /// </summary>
+        protected Sync()
+        {
+            syncDirection = Uninitialize;
+        }
 
 
         /// <summary>

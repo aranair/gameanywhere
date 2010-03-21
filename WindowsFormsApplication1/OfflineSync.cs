@@ -25,11 +25,6 @@ namespace GameAnywhere
         public static readonly int ComToExternal = 2;
 
         /// <summary>
-        /// Sync direction uninitialize. Default value.
-        /// </summary>
-        public const int Uninitialize = 0; //Default
-
-        /// <summary>
         /// Constructor.
         /// 
         /// Exception:
