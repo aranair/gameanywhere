@@ -63,7 +63,11 @@
     <Compile Include="CreateFolderFailedException.cs" />
     <Compile Include="DriveNotFoundException.cs" />
     <Compile Include="InsufficientSpaceException.cs" />
+    <Compile Include="MetaData.cs" />
+    <Compile Include="OnlineSync.cs" />
     <Compile Include="SimpleDB.cs" />
+    <Compile Include="Storage.cs" />
+    <Compile Include="Sync.cs" />
     <Compile Include="SyncError.cs" />
     <Compile Include="SyncErrorDisplay.cs">
       <SubType>Form</SubType>
@@ -79,11 +83,7 @@
       <DependentUpon>ChooseGame.cs</DependentUpon>
     </Compile>
     <Compile Include="GameLibrary.cs" />
-    <Compile Include="InvalidSyncDirectionException.cs" />
-    <Compile Include="NoBackupFolderException.cs" />
     <Compile Include="OfflineSync.cs" />
-    <Compile Include="Tester\FolderOperation.cs" />
-    <Compile Include="Tester\PreCondition.cs" />
     <Compile Include="reconfirmationWarning.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -114,6 +114,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -124,18 +125,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="SyncAction.cs" />
-    <Compile Include="SyncFolderFileDiscrepancyException.cs" />
-    <Compile Include="Tester\Tester.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Tester\Tester.designer.cs">
-      <DependentUpon>Tester.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tester\TestCase.cs" />
-    <Compile Include="Tester\TestDriver.cs" />
-    <Compile Include="Tester\TestResult.cs" />
-    <Compile Include="Tester\Verifier.cs" />
     <Compile Include="User.cs" />
+    <Compile Include="WebAndThumbSync.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="startPage.resx">
@@ -283,10 +274,6 @@
     <EmbeddedResource Include="Resources\confirmGameChoicePopupButtonDulled.gif" />
     <EmbeddedResource Include="SyncErrorDisplay.resx">
       <DependentUpon>SyncErrorDisplay.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Tester\Tester.resx">
-      <DependentUpon>Tester.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
