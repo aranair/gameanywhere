@@ -52,6 +52,8 @@ namespace GameAnywhere
         /// </summary>
         private Game wantedGame;
 
+        protected List<Game> installedGameList; //Stores game information on the computer
+
 
         /// <summary>
         /// This is an abstract class. It should handle the synchronization for the given list of sync action. 
@@ -193,6 +195,15 @@ namespace GameAnywhere
             }
         }
 
+        /// <summary>
+        /// Saves original game files on the computer into a backup folder in the same directory.
+        /// </summary>
+        /// <param name="sa">The SyncAction that contains a game and it's synchronizing information.</param>
+        /// <returns>The backup status status, indicating what has been successfully backup.</returns>
+        public int Backup(SyncAction sa)
+        {
+            return Backup(sa, installedGameList);
+        }
 
         /// <summary>
         /// Saves original game files on the computer into a backup folder in the same directory.
@@ -546,7 +557,7 @@ namespace GameAnywhere
         /// <param name="processName">A process description.</param>
         /// <param name="errorMessage">The error message encountered.</param>
         /// <returns>A list of sync error of the given path list.</returns>
-        private List<SyncError> GetSyncError(string errorPath, string processName, string errorMessage)
+        protected List<SyncError> GetSyncError(string errorPath, string processName, string errorMessage)
         {
             List<SyncError> errorList = new List<SyncError>();
             Debug.WriteLine(errorMessage);
@@ -580,7 +591,7 @@ namespace GameAnywhere
         /// <param name="processName">A process description.</param>
         /// <param name="errorMessage">The error message encountered.</param>
         /// <returns>A list of sync error of the given path list.</returns>
-        private List<SyncError> GetSyncError(List<string> errorPathList, string processName, string errorMessage)
+        protected List<SyncError> GetSyncError(List<string> errorPathList, string processName, string errorMessage)
         {
             List<SyncError> errorList = new List<SyncError>();
             foreach (string errorPath in errorPathList)
