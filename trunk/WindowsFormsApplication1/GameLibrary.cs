@@ -26,6 +26,11 @@ namespace GameAnywhere
         /// </summary>
         private string typeOS;
 
+        /// <summary>
+        /// Controller class to communicate with other layers.
+        /// </summary>
+        private Controller controller;
+
         #region static game names
         public static readonly string Warcraft3GameName = "Warcraft 3";
         public static readonly string FIFA10GameName = "FIFA 10";
@@ -38,6 +43,19 @@ namespace GameAnywhere
         /// </summary>
         public GameLibrary()
         {
+            // Create an empty list of games.
+            installedGameList = new List<Game>();
+
+            // Find the OS name and stores it into the data member.
+            typeOS = GetOSName();
+        }
+
+        /// <summary>
+        /// Overloaded Constructor.
+        /// </summary>
+        public GameLibrary(Controller controller)
+        {
+            this.controller = controller;
             // Create an empty list of games.
             installedGameList = new List<Game>();
 
@@ -77,23 +95,112 @@ namespace GameAnywhere
 
         /// <summary>
         /// Returns a game list according to the direction passed in.
+        /// This is the default GetGameList function that handles only OFFLINE synchronizations.
+        /// Pre-condition: Direction passed in must be valid: either ExternalToCom or ComToExternal
+        /// Post-condition: A new list of installed games that are compatible with the direction will be returned.
         /// </summary>
         /// <param name="direction">Direction of sync</param>
         /// <returns>List of installed games that are compatible with the direction</returns>
         public List<Game> GetGameList(int direction) 
         {
-            //Debug.Assert(direction == OfflineSync.ExternalToCom || direction == OfflineSync.ComToExternal || direction == OfflineSync.Uninitialize);
+            Debug.Assert(direction == OfflineSync.ExternalToCom || direction == OfflineSync.ComToExternal);
             RefreshList();
 
             if (direction == OfflineSync.ExternalToCom)
             {
-                //NOTE: do not modify installedGameList
                 List<Game> newList = new List<Game>();
+                //NOTE: do not modify installedGameList        
                 AddGamesSupportedByThumbdrive(ref newList);
                 return newList;
             }
-            else 
+            else // ComToExternal, ComToWeb,
                 return this.InstalledGameList;
+        }
+        /// <summary>
+        /// Returns a game list according to the direction passed in.
+        /// This is the overloaded GetGameList function that handles only ONLINE synchronizations.
+        /// Pre-condition: Direction passed in must be valid: either WebToCom, ComToWeb or ExternalAndWeb.
+        /// Post-condition: A new list of installed games that are compatible with the direction will be returned.
+        /// </summary>
+        /// <param name="direction">Direction of sync.</param>
+        /// <param name="user">Email of current logged in user.</param>
+        /// <returns>List of installed games that are compatible with the direction</returns>
+        public List<Game> GetGameList(int direction, string user)
+        {
+            Debug.Assert(direction == OnlineSync.WebToCom || direction == OnlineSync.ComToWeb || direction == OnlineSync.ExternalAndWeb);
+            RefreshList();
+            List<Game> newList = new List<Game>();
+
+            if (direction == OnlineSync.WebToCom)
+            {
+                AddGamesSupportedByWeb(ref newList, user);
+                return newList;
+            }
+            else if (direction == OnlineSync.ExternalAndWeb)
+            {
+                return null;
+            }
+            else // ComToWeb,
+                return this.InstalledGameList;
+        }
+  
+        /// <summary>
+        /// Gets the corresponding games/files from the online database for each game in the master installedGameList
+        /// to see if there are config or saved game files available for them.
+        /// </summary>
+        /// <param name="newList">List to add the games supported by web</param>
+        private void AddGamesSupportedByWeb(ref List<Game> newList, string user)
+        {     
+            // Get the list of web game list from web.
+            List<string> webGameList = new List<string>();
+            //controller.GetGamesFromWeb(user);
+
+            //takes the current installedGameList. checks each game with web's and return all the games that is available.
+            foreach (Game installedGame in installedGameList)
+            {
+                MatchWebGameAndFiles(installedGame, webGameList, ref newList);
+            }//end foreach
+        }
+
+        /// <summary>
+        /// Finds a match for an installed game, with the list of games on the web passed in as strings 
+        /// and creates a new game to be added into the list of common games, and sets the config list/ saved game list
+        /// of the new game according to the web's availability.
+        /// </summary>
+        /// <param name="installedGame">Game to be searched for.</param>
+        /// <param name="webGameList">List of games (strings) on the web.</param>
+        /// <param name="newList">List for the game to be added in.</param>
+        private void MatchWebGameAndFiles(Game installedGame, List<string> webGameList, ref List<Game> newList)
+        {
+            bool gameExists = false;
+
+            List<string> newConfigPathList = new List<string>();
+            List<string> newSavePathList = new List<string>();
+
+            // Finds the games and file types that are available on the web.
+            foreach (string line in webGameList)
+            {
+                // line = e.g "Warcraft 3/Config"
+                string gameName = line.Remove(line.IndexOf('/'));
+                string gameFileType = line.Substring(line.IndexOf("/"));
+                // Game name matches.
+                if (gameName.Equals(installedGame.Name))
+                {
+                    gameExists = true;
+                    if (gameFileType.Equals("config"))
+                        newConfigPathList.Add("Available");
+
+                    if (gameFileType.Equals("savedGame"))
+                        newSavePathList.Add("Available");
+                }
+            }
+
+            if (gameExists)
+            {
+                Game newGame = new Game(newConfigPathList, newSavePathList, installedGame.Name, installedGame.InstallPath, installedGame.ConfigParentPath, installedGame.SaveParentPath);
+                newList.Add(newGame);
+            }
+
         }
 
         /// <summary>
@@ -104,7 +211,6 @@ namespace GameAnywhere
         /// <param name="newList">List to add the games supported by external thumbdrive</param>
         private void AddGamesSupportedByThumbdrive(ref List<Game> newList)
         {
-            
             //takes the current installedGameList. checks each game with thumbdrive,  returns all the games that is available.
             foreach (Game installedGame in installedGameList)
             {
@@ -134,52 +240,51 @@ namespace GameAnywhere
             Game newGame = new Game(installedGame.ConfigPathList, installedGame.SavePathList, installedGame.Name, installedGame.InstallPath, installedGame.ConfigParentPath, installedGame.SaveParentPath);
 
             // Checks if config/saved game files are available on the thumbdrive and sets list accordingly.
-            EditConfigAndSavedGameLists(ref newGame, OfflineSync.ExternalToCom);
+            EditConfigAndSavedGameLists(ref newGame);
 
             // add it to list to be returned;
             newList.Add(newGame);           
         }
 
+
         /// <summary>
-        /// Edits the config and saved game lists of the new game, according to the direction.
+        /// Edits the config and saved game lists of the new game for the direction: External To Computer.
         /// </summary>
-        private void EditConfigAndSavedGameLists(ref Game newGame, int direction)
+        private void EditConfigAndSavedGameLists(ref Game newGame)
         {
-            if (direction == OfflineSync.ExternalToCom)
+            string externalGameFolderPath = Directory.GetCurrentDirectory() + @"\SyncFolder\" + newGame.Name;
+            //if any of savedgame/config folder does not exist, make the fields blank
+            string configPath = externalGameFolderPath + @"\Config";
+            string savedGamePath = externalGameFolderPath + @"\SavedGame";
+
+            try
             {
-                string externalGameFolderPath = Directory.GetCurrentDirectory() + @"\SyncFolder\" + newGame.Name;
-                //if any of savedgame/config folder does not exist, make the fields blank
-                string configPath = externalGameFolderPath + @"\Config";
-                string savedGamePath = externalGameFolderPath + @"\SavedGame";
-
-                try
+                if (newGame.Name.Equals(FIFA10GameName))
                 {
-                    if (newGame.Name.Equals(FIFA10GameName))
-                    {
-                        InitializeFIFAConfigList(ref newGame, configPath);
-                        InitializeFIFASavedGameList(ref newGame, savedGamePath);
-                    }
-                    else if (newGame.Name.Equals(Warcraft3GameName))
-                    {
-                        InitializeWarcraft3ConfigList(ref newGame, configPath);
-                        InitializeWarcraft3SavedGameList(ref newGame, savedGamePath);
-                    }
-                    else if (newGame.Name.Equals(WOWGameName))
-                    {
-                        InitializeWOWConfigList(ref newGame, configPath);
-                        InitializeWOWSavedGameList(ref newGame, savedGamePath);
-                    }
-                    else if (newGame.Name.Equals(FM2010GameName))
-                    {
-                        InitializeFM2010SavedGameList(ref newGame, savedGamePath);
-                    }
+                    InitializeFIFAConfigList(ref newGame, configPath);
+                    InitializeFIFASavedGameList(ref newGame, savedGamePath);
                 }
-
-                catch (Exception)
+                else if (newGame.Name.Equals(Warcraft3GameName))
                 {
+                    InitializeWarcraft3ConfigList(ref newGame, configPath);
+                    InitializeWarcraft3SavedGameList(ref newGame, savedGamePath);
+                }
+                else if (newGame.Name.Equals(WOWGameName))
+                {
+                    InitializeWOWConfigList(ref newGame, configPath);
+                    InitializeWOWSavedGameList(ref newGame, savedGamePath);
+                }
+                else if (newGame.Name.Equals(FM2010GameName))
+                {
+                    InitializeFM2010SavedGameList(ref newGame, savedGamePath);
                 }
             }
+
+            catch (Exception)
+            {
+            }    
         }
+
         #endregion
 
         #region Currently supported games

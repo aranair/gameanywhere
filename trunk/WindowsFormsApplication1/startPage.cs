@@ -253,6 +253,87 @@ namespace GameAnywhere
         }
 
         #endregion
+
+        #region computerToWebButton
+        private void computerToWebButton_MouseClick(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void computerToWebButton_MouseDown(object sender, MouseEventArgs e)
+        {
+            SetBackgroundImage(computerToWebButton, "GameAnywhere.Resources.computerToWebButtonMouseDown.gif", ImageLayout.Zoom);
+        }
+
+        private void computerToWebButton_MouseEnter(object sender, EventArgs e)
+        {
+            SetBackgroundImage(computerToWebButton, "GameAnywhere.Resources.computerToWebButtonMouseOver.gif", ImageLayout.Zoom);
+        }
+
+        private void computerToWebButton_MouseLeave(object sender, EventArgs e)
+        {
+            SetBackgroundImage(computerToWebButton, "GameAnywhere.Resources.computerToWebButton.gif", ImageLayout.Zoom);
+        }
+
+        private void computerToWebButton_MouseUp(object sender, MouseEventArgs e)
+        {
+            SetBackgroundImage(computerToWebButton, "GameAnywhere.Resources.computerToWebButton.gif", ImageLayout.Zoom);
+        }
+        #endregion
+
+        #region webToComputerButton
+        private void webToComputerButton_MouseClick(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void webToComputerButton_MouseDown(object sender, MouseEventArgs e)
+        {
+            SetBackgroundImage(webToComputerButton, "GameAnywhere.Resources.webToComputerButtonMouseDown.gif", ImageLayout.Zoom);
+        }
+
+        private void webToComputerButton_MouseEnter(object sender, EventArgs e)
+        {
+            SetBackgroundImage(webToComputerButton, "GameAnywhere.Resources.webToComputerButtonMouseOver.gif", ImageLayout.Zoom);
+        }
+
+        private void webToComputerButton_MouseLeave(object sender, EventArgs e)
+        {
+            SetBackgroundImage(webToComputerButton, "GameAnywhere.Resources.webToComputerButton.gif", ImageLayout.Zoom);
+        }
+
+        private void webToComputerButton_MouseUp(object sender, MouseEventArgs e)
+        {
+            SetBackgroundImage(webToComputerButton, "GameAnywhere.Resources.webToComputerButton.gif", ImageLayout.Zoom);
+        }
+        #endregion
+
+        #region thumbdriveAndWebButton
+        private void thumbdriveAndWebButton_MouseClick(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void thumbdriveAndWebButton_MouseDown(object sender, MouseEventArgs e)
+        {
+            SetBackgroundImage(thumbdriveAndWebButton, "GameAnywhere.Resources.thumbdriveAndWebButtonMouseDown.gif", ImageLayout.Zoom);
+        }
+
+        private void thumbdriveAndWebButton_MouseEnter(object sender, EventArgs e)
+        {
+            SetBackgroundImage(thumbdriveAndWebButton, "GameAnywhere.Resources.thumbdriveAndWebButtonMouseOver.gif", ImageLayout.Zoom);
+        }
+
+        private void thumbdriveAndWebButton_MouseLeave(object sender, EventArgs e)
+        {
+            SetBackgroundImage(thumbdriveAndWebButton, "GameAnywhere.Resources.thumbdriveAndWebButton.gif", ImageLayout.Zoom);
+        }
+
+        private void thumbdriveAndWebButton_MouseUp(object sender, MouseEventArgs e)
+        {
+            SetBackgroundImage(thumbdriveAndWebButton, "GameAnywhere.Resources.thumbdriveAndWebButton.gif", ImageLayout.Zoom);
+        }
+        #endregion
         #endregion
 
         #region Login Panel ( and all it's content )
@@ -1353,7 +1434,9 @@ namespace GameAnywhere
         }
         #endregion
 
+
         
+
 
     }
 }
