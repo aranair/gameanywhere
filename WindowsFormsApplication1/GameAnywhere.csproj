@@ -83,6 +83,8 @@
       <DependentUpon>ChooseGame.cs</DependentUpon>
     </Compile>
     <Compile Include="GameLibrary.cs" />
+    <Compile Include="InvalidSyncDirectionException.cs" />
+    <Compile Include="NoBackupFolderException.cs" />
     <Compile Include="OfflineSync.cs" />
     <Compile Include="reconfirmationWarning.cs">
       <SubType>Form</SubType>
@@ -114,7 +116,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -125,6 +126,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="SyncAction.cs" />
+    <Compile Include="SyncFolderFileDiscrepancyException.cs" />
     <Compile Include="User.cs" />
     <Compile Include="WebAndThumbSync.cs" />
   </ItemGroup>
@@ -355,6 +357,39 @@
       <WrapperTool>tlbimp</WrapperTool>
       <Isolated>False</Isolated>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\computerToWebButton.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\computerToWebButtonMouseDown.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\computerToWebButtonMouseOver.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\thumbdriveAndWebButton.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\thumbdriveAndWebButtonMouseDown.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\thumbdriveAndWebButtonMouseOver.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\webToComputerButton.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\webToComputerButtonMouseDown.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\webToComputerButtonMouseOver.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\overallbackground3.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\overallbackground4.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
