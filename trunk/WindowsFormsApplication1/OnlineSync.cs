@@ -4,35 +4,22 @@ using System.Linq;
 using System.Diagnostics;
 using System.Text;
 using System.IO;
+using System.Security.Cryptography;
 
 namespace GameAnywhere
 {
-    class OnlineSync
+    class OnlineSync: Sync
     {
-        //Folder name
-        public static readonly string BackupConfigFolderName = "GA-configBackup";
-        public static readonly string BackupSavedGameFolderName = "GA-savedGameBackup";
-        public static readonly string webSavedGameFolderName = "savedGame";
-        public static readonly string webConfigFolderName = "config";
-
         //Sync direction
         public static readonly int Uninitialize = 0; //Default
         public static readonly int WebToCom = 4;
         public static readonly int ComToWeb = 5;
         public static readonly int ExternalAndWeb = 6;
 
-        //Constant
-        private const int NONE = 0;
-        private const int CONFIG = 1;
-        private const int SAVED_GAME = 2;
-        private const int All_FILES = 3;
-
         //Data member
         private int syncDirection = Uninitialize;
         private List<SyncAction> syncActionList;
         private User currentUser;
-        private Game wantedGame = null;
-        private List<Game> installedGameList; //Stores game information on the computer
         private string syncFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "SyncFolder");
 
         //S3 Objects
@@ -45,7 +32,7 @@ namespace GameAnywhere
             currentUser = user;
             s3 = new Storage();
         }
-        public List<SyncAction> SynchronizeGames(List<SyncAction> list)
+        public override List<SyncAction> SynchronizeGames(List<SyncAction> list)
         {
             syncActionList = list;
             foreach (SyncAction sa in syncActionList)
@@ -58,7 +45,7 @@ namespace GameAnywhere
                 if (syncDirection == WebToCom)
                 {
                     int backupResult = Backup(sa);
-                    if (backupResult == NONE) //Backup was not successful
+                    if (backupResult == None) //Backup was not successful
                         //Add all game files to error list
                         AddToUnsuccessfulSyncFiles(sa, syncFolderGamePath, "Unable to backup original game files");
                     else
@@ -82,9 +69,12 @@ namespace GameAnywhere
             {
                 Console.WriteLine(file);
                 string f = file.Substring(file.IndexOf('/') + 1);
+                string game, type;
                 if (f.IndexOf('/') != -1)
                 {
-                    gameSet.Add(f.Substring(0, f.IndexOf('/')));
+                    game = f.Substring(0, f.IndexOf('/'));
+                    type = f.Substring(f.IndexOf('/') + 1);
+                    gameSet.Add(game + "/" + type.Substring(0, type.IndexOf('/')));
                 }
             }
             return gameSet.ToList<string>();
@@ -102,15 +92,15 @@ namespace GameAnywhere
             DeleteGameDirectory(email, gameName);
 
             //Saved Files - SyncAction
-            if (action == SAVED_GAME || action == All_FILES)
+            if (action == SavedGame || action == AllFiles)
             {
-                Upload(email, gameName, webSavedGameFolderName, saveParentPath, savePathList);
+                Upload(email, gameName, SyncFolderSavedGameFolderName, saveParentPath, savePathList);
             }
 
             //Config Files - SyncAction
-            if (action == CONFIG || action == All_FILES)
+            if (action == Config || action == AllFiles)
             {
-                Upload(email, gameName, webConfigFolderName, configParentPath, configPathList);
+                Upload(email, gameName, SyncFolderConfigFolderName, configParentPath, configPathList);
             }
         }
         private void Upload(string email, string gameName, string saveFolder, string parentPath, List<string> pathList)
@@ -146,11 +136,11 @@ namespace GameAnywhere
             Debug.Assert(sa.MyGame != null);
 
             List<SyncError> errorList = null;
-            if (backupItem == CONFIG || backupItem == All_FILES)
+            if (backupItem == Config || backupItem == AllFiles)
             {
                 string processName = "Sync Config files from Web to Computer";
                 string webFolderGamePath = user + "/" + sa.MyGame.Name;
-                string webGameConfigPath = webFolderGamePath + "/" + webConfigFolderName;
+                string webGameConfigPath = webFolderGamePath + "/" + SyncFolderConfigFolderName;
 
                 //Copy over and add the error encounted into the error list
                 errorList = DownloadToParent(webGameConfigPath, sa.MyGame.ConfigParentPath, processName);
@@ -161,11 +151,11 @@ namespace GameAnywhere
                 errorList = null;
             }
 
-            if (backupItem == SAVED_GAME || backupItem == All_FILES)
+            if (backupItem == SavedGame || backupItem == AllFiles)
             {
                 string processName = "Sync Saved Game files from Web to Computer";
                 string webFolderGamePath = user + "/" + sa.MyGame.Name;
-                string webGameSavedGamePath = webFolderGamePath + "/" + webSavedGameFolderName;
+                string webGameSavedGamePath = webFolderGamePath + "/" + SyncFolderSavedGameFolderName;
                 //Debug.Assert(Directory.Exists(webFolderGameSavedGamePath));
 
                 //Copy over and add the error encounted into the error list
@@ -186,7 +176,7 @@ namespace GameAnywhere
             foreach (string file in files)
             {
                 Console.WriteLine(file);
-                webDirName = getWebFolderName(file);
+                webDirName = GetWebFolderName(file);
                 localDirName = Path.Combine(targetPath, webDirName);
                 Console.WriteLine(localDirName);
                 try
@@ -211,7 +201,8 @@ namespace GameAnywhere
             }
             return errorList;
         }
-        private string getWebFolderName(string key)
+
+        private string GetWebFolderName(string key)
         {
             //Gets the <folder>/<file> from <user>/<game>/<config or save folder>/<folder>/<file> on S3
             string filter;
@@ -220,9 +211,19 @@ namespace GameAnywhere
             filter = filter.Substring(filter.IndexOf('/')+1);
             return filter;
         }
-
-
-
+        /*
+        private string GetGameFolderName(string key)
+        {
+            string filter;
+            filter = key.Substring(key.IndexOf('/') + 1);
+            return filter;
+        }
+        */
+    }
+}
+        
+        //Old code - Keep it here temporarily first
+        /*
         //Code below copied from OfflineSync class with a few renames
         private int Backup(SyncAction sa)
         {
@@ -671,14 +672,14 @@ namespace GameAnywhere
             if (sa.Action == SyncAction.ConfigFiles || sa.Action == SyncAction.AllFiles)
             {
                 string processName = "Sync Config files from External Device to Computer";
-                targetSyncFiles = Path.Combine(gamePath, webConfigFolderName);
+                targetSyncFiles = Path.Combine(gamePath, SyncFolderConfigFolderName);
                 //Add all files to the error list 
                 sa.UnsuccessfulSyncFiles.AddRange(GetSyncError(targetSyncFiles, processName, errorMessage));
             }
             if (sa.Action == SyncAction.SavedGameFiles || sa.Action == SyncAction.AllFiles)
             {
                 string processName = "Sync Saved Game files from External Device to Computer";
-                targetSyncFiles = Path.Combine(gamePath, webSavedGameFolderName);
+                targetSyncFiles = Path.Combine(gamePath, SyncFolderSavedGameFolderName);
                 //Add all files to the error list 
                 sa.UnsuccessfulSyncFiles.AddRange(GetSyncError(targetSyncFiles, processName, errorMessage));
             }
@@ -801,6 +802,4 @@ namespace GameAnywhere
                 }
             }
             return errorList;
-        }
-    }
-}
+        }*/
