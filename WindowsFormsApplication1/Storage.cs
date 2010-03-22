@@ -264,7 +264,7 @@ namespace GameAnywhere
                     return hash;
                 }
             }
-            catch (AmazonS3Exception amazonS3Exception)
+            catch (AmazonS3Exception)
             {
                 throw; //temporary
             }
