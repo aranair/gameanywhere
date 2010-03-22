@@ -102,6 +102,13 @@ namespace GameAnywhere.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap bannerConflictResolve {
+            get {
+                object obj = ResourceManager.GetObject("bannerConflictResolve", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap bannerForgetPasswordPanel {
             get {
                 object obj = ResourceManager.GetObject("bannerForgetPasswordPanel", resourceCulture);
