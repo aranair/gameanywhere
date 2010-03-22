@@ -110,26 +110,14 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="fileName">path of file/directory</param>
         /// <param name="newValue">new value of entry</param>
-        /// <returns>
-        /// true - Entry is successfully updated with a new value
-        /// false - Entry not found
-        /// </returns>
-        public bool UpdateEntryValue(string fileName, string newValue)
+        public void UpdateEntryValue(string fileName, string newValue)
         {
             //Pre-conditions
             if (fileName.Equals("") || fileName == null)
                 throw new ArgumentException("Parameter cannot be empty/null", "fileName");
 
-            //Check if entry is in table before assigning a new value
-            if (fileTable.ContainsKey(fileName))
-            {
-                fileTable[fileName] = newValue;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            //Adds new entry if fileName not found in table, and update entry if fileName found in table
+            fileTable[fileName] = newValue;
         }
 
         /// <summary>
