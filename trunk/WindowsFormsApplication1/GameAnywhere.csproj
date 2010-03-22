@@ -129,6 +129,7 @@
     <Compile Include="SyncFolderFileDiscrepancyException.cs" />
     <Compile Include="User.cs" />
     <Compile Include="WebAndThumbSync.cs" />
+    <Compile Include="WebTransferException.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="startPage.resx">
