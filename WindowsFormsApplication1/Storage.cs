@@ -25,8 +25,8 @@ namespace GameAnywhere
         /// </summary>
         public Storage()
         {
-            accessKeyID = "*";
-            secretAccessKeyID = "*";
+            accessKeyID = "AKIAIF3ZSAPQXNF6ZIOQ";
+            secretAccessKeyID = "P7a+fn9UVxR0MXBn+u83hTAKbeskcsfJ80TGCiln";
             bucketName = "GameAnywhere";
             client = new AmazonS3Client(accessKeyID, secretAccessKeyID, new AmazonS3Config().WithCommunicationProtocol(Protocol.HTTP));
             //AmazonS3 client = Amazon.AWSClientFactory.CreateAmazonS3Client(accessKeyID, secretAccessKeyID);
@@ -210,7 +210,7 @@ namespace GameAnywhere
                 GetObjectMetadataRequest request = new GetObjectMetadataRequest().WithBucketName(bucketName).WithKey(key);
                 using (S3Response response = client.GetObjectMetadata(request))
                 {
-                    string hash = response.Headers.GetValues(5)[0].Replace("\"", "");
+                    string hash = response.Headers.GetValues("ETag")[0].Replace("\"", "");
                     return hash;
                 }
             }
