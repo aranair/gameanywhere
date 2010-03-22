@@ -116,16 +116,16 @@ namespace GameAnywhere
             }
 
             //Upload Saved Files - SyncAction
-            if (action == SAVED_GAME || action == All_FILES)
+            if (action == SavedGame || action == AllFiles)
             {
-                saveGameErrorList = Upload(email, gameName, webSavedGameFolderName, saveParentPath, savePathList);
+                saveGameErrorList = Upload(email, gameName, SyncFolderSavedGameFolderName, saveParentPath, savePathList);
 
             }
 
             //Upload Config Files - SyncAction
-            if (action == CONFIG || action == All_FILES)
+            if (action == Config || action == AllFiles)
             {
-                configFileErrorList = Upload(email, gameName, webConfigFolderName, configParentPath, configPathList);
+                configFileErrorList = Upload(email, gameName, SyncFolderConfigFolderName, configParentPath, configPathList);
             }
 
             //Updates list of unsuccessful sync files
