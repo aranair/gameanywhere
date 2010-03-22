@@ -139,7 +139,9 @@ namespace GameAnywhere
             }
             else
             {
-                throw new KeyNotFoundException("Entry \"{fileName}\" not found in metadata");
+                //Entry not found in metadata
+                //throw new KeyNotFoundException("Entry \"{fileName}\" not found in metadata");
+                return "";
             }
         }
 
