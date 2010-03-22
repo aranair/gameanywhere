@@ -35,7 +35,7 @@ namespace GameAnywhere
             //Make a default storage directory on the external storage device
             //Throws exception when failed
             CreateDirectory(syncFolderPath);
-            syncDirection = Uninitialize;
+            SyncDirection = Uninitialize;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace GameAnywhere
         /// <param name="gameList">A list of installed games on the computer</param>
         public OfflineSync(int direction, List<Game> gameList)
         {
-            syncDirection = direction;
+            SyncDirection = direction;
             installedGameList = gameList;
 
             //Make a default storage directory on the external storage device
@@ -68,7 +68,7 @@ namespace GameAnywhere
         /// <returns>List of games and their sync results.</returns>
         public override List<SyncAction> SynchronizeGames(List<SyncAction> list)
         {
-            Debug.Assert(syncDirection == ComToExternal || syncDirection == ExternalToCom, "Invalid sync direction.");
+            Debug.Assert(SyncDirection == ComToExternal || SyncDirection == ExternalToCom, "Invalid sync direction.");
 
             syncActionList = list;
 
@@ -84,7 +84,7 @@ namespace GameAnywhere
                 string syncFolderGamePath = Path.Combine(syncFolderPath, sa.MyGame.Name);
 
                 //Copy game files from external device to computer
-                if (syncDirection == ExternalToCom)
+                if (SyncDirection == ExternalToCom)
                 {
                     //Backup original game files
                     int backupResult = Backup(sa);
@@ -94,7 +94,7 @@ namespace GameAnywhere
                      if (sa.UnsuccessfulSyncFiles.Count > 0)
                             UndoExternalToComSync(sa);
                 }
-                else if (syncDirection == ComToExternal)
+                else if (SyncDirection == ComToExternal)
                     CopyToExternal(sa, syncFolderGamePath);
                        
             }
@@ -108,7 +108,7 @@ namespace GameAnywhere
         /// <param name="sa"></param>
         private void UndoExternalToComSync(SyncAction sa)
         {
-            if (syncDirection == ExternalToCom)
+            if (SyncDirection == ExternalToCom)
             {
 
                 if (sa.UnsuccessfulSyncFiles.Count > 0)
@@ -534,7 +534,7 @@ namespace GameAnywhere
                 return true;
 
             // Assert that direction is valid.
-            Debug.Assert(syncDirection == ComToExternal || syncDirection == ExternalToCom, "Direction is invalid.");
+            Debug.Assert(SyncDirection == ComToExternal || SyncDirection == ExternalToCom, "Direction is invalid.");
 
             // Get all available drives detected by computer.
             DriveInfo[] allDrives = DriveInfo.GetDrives();
@@ -547,12 +547,12 @@ namespace GameAnywhere
             sizeRequired += CalculateSpaceForFiles(pathList);
 
             // Get the destination drive information.
-            if (syncDirection == ExternalToCom)
+            if (SyncDirection == ExternalToCom)
             {
                 d = FindMatchingDrive(allDrives, Directory.GetDirectoryRoot(pathList[0]));
             }
 
-            else if (syncDirection == ComToExternal)
+            else if (SyncDirection == ComToExternal)
             {
                 d = FindMatchingDrive(allDrives, Application.StartupPath.Substring(0, 3));
             }
