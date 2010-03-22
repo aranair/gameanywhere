@@ -130,7 +130,7 @@ namespace GameAnywhere
         {
             CheckConflictsHelper(localHash, localMeta, webHash, webMeta, UPLOAD);
             CheckConflictsHelper(webHash, webMeta, localHash, localMeta, DOWNLOAD);
-            return Conflicts;
+            return FilterConflicts();
         }
         private void CheckConflictsHelper(MetaData hash1, MetaData meta1, MetaData hash2, MetaData meta2, int direction)
         {
@@ -212,10 +212,7 @@ namespace GameAnywhere
         public void SynchronizeGames(Dictionary<string, int> resolvedConflicts)
         {
             //Merge the resolved conflicts
-            foreach (string key in resolvedConflicts.Keys)
-            {
-                NoConflict[key] = resolvedConflicts[key];
-            }
+            MergeConflicts(resolvedConflicts);
 
             //Web operations and metadata object update
             foreach (string key in NoConflict.Keys)
@@ -249,6 +246,45 @@ namespace GameAnywhere
             s3.UploadFile(WebMetaDataPath,email + "/" + WebMetaDataFileName);
             File.Delete(WebMetaDataPath);
 
+        }
+
+        public Dictionary<string,int> FilterConflicts()
+        {
+            Dictionary<string, int> filteredConflicts = new Dictionary<string, int>();
+            foreach (string key in Conflicts.Keys)
+            {
+                filteredConflicts[GetGamesAndTypes(key)] = 0;
+            }
+            return filteredConflicts;
+        }
+        public void MergeConflicts(Dictionary<string, int> resolvedConflicts)
+        {
+            foreach (string key in Conflicts.Keys)
+            {
+                int side = resolvedConflicts[GetGamesAndTypes(key)];
+                switch (Conflicts[key])
+                {
+                    case 13:
+                        if (side == 1) NoConflict[key] = 1;
+                        else if (side == 2) NoConflict[key] = 3;
+                        break;
+                    case 14:
+                        if (side == 1) NoConflict[key] = 1;
+                        else if (side == 2) NoConflict[key] = 4;
+                        break;
+                    case 24:
+                        if (side == 1) NoConflict[key] = 2;
+                        else if (side == 2) NoConflict[key] = 4;
+                        break;
+                }
+            }
+        }
+
+        private string GetGamesAndTypes(string key)
+        {
+            string game = key.Substring(0, key.IndexOf('/'));
+            string type = key.Substring(key.IndexOf('/') + 1);
+            return game + "/" + type.Substring(0, type.IndexOf('/'));
         }
 
         private void UpdateMetaData(string key, string value)
