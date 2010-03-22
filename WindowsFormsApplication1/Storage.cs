@@ -18,8 +18,8 @@ namespace GameAnywhere
 
         public Storage()
         {
-            accessKeyID = "AKIAIF3ZSAPQXNF6ZIOQ";
-            secretAccessKeyID = "P7a+fn9UVxR0MXBn+u83hTAKbeskcsfJ80TGCiln";
+            accessKeyID = "*";
+            secretAccessKeyID = "*";
             bucketName = "GameAnywhere";
         }
 
