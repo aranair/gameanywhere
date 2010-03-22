@@ -16,13 +16,14 @@ namespace GameAnywhere
         public static readonly string WebMetaDataFileName = "metadata.web";
 
         
-        private const int CONFLICT = 0;
         private const int UPLOAD = 1;
         private const int DOWNLOAD = 2;
         private const int DELETELOCAL = 3;
         private const int DELETEWEB = 4;
+        private const int UPDOWNCONFLICT = 12;
+        private const int DELETELOCALCONFLICT = 13;
+        private const int DELETEWEBCONFLICT = 24;
 
-        enum Direction { UPLOAD, DOWNLOAD, DELETELOCAL, DELETEWEB, UPDOWN, UPDELETELOCAL, DOWNDELETEWEB }
 
         private static string syncFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "SyncFolder");
         private string LocalMetaDataPath = Path.Combine(syncFolderPath, LocalMetaDataFileName);
@@ -119,7 +120,12 @@ namespace GameAnywhere
             if (data1.GetEntryValue(key).Equals(data2.GetEntryValue(key))) return false;
             else return true;
         }
-
+        private bool FileIsDeleted(MetaData hash, MetaData meta, string key)
+        {
+            if (hash.GetEntryValue(key).Equals("") && !meta.GetEntryValue(key).Equals(""))
+                return true;
+            else return false;
+        }
         public Dictionary<string,int> CheckConflicts()
         {
             CheckConflictsHelper(localHash, localMeta, webHash, webMeta, UPLOAD);
@@ -135,8 +141,20 @@ namespace GameAnywhere
                     //If hash1 and meta1 are different (i.e. changed)
                     if (HashIsDifferent(hash1, meta1, entry.Key))
                     {
+                        //If hash2 and meta2 have a deleted file
+                        if (FileIsDeleted(hash2,meta2, entry.Key))
+                        {
+                            if (direction == UPLOAD)
+                            {
+                                Conflicts[entry.Key] = DELETELOCALCONFLICT;
+                            }
+                            else if (direction == DOWNLOAD)
+                            {
+                                Conflicts[entry.Key] = DELETEWEBCONFLICT;
+                            }
+                        }
                         //If hash2 and meta2 are same (i.e. not changed)
-                        if (!HashIsDifferent(hash2, meta2, entry.Key))
+                        else if (!HashIsDifferent(hash2, meta2, entry.Key))
                         {
                             if (direction == UPLOAD)
                             {
@@ -150,14 +168,14 @@ namespace GameAnywhere
                         //If hash2 and meta2 are different (i.e. conflict)
                         else
                         {
-                            Conflicts[entry.Key] = CONFLICT;
+                            Conflicts[entry.Key] = UPDOWNCONFLICT;
                         }
                     }
                 }
                 else //New file
                 {
                     if (hash2.EntryExist(entry.Key)) //both new files, conflict
-                        Conflicts[entry.Key] = CONFLICT;
+                        Conflicts[entry.Key] = UPDOWNCONFLICT;
                     else
                     {
                         if (direction == UPLOAD)
@@ -172,6 +190,7 @@ namespace GameAnywhere
             {
                 if (!hash1.EntryExist(entry.Key)) //Deleted file
                 {
+                    if (Conflicts.ContainsKey(entry.Key) || HashIsDifferent(hash2,meta2,entry.Key)) continue;
                     if (!hash2.EntryExist(entry.Key)) //both deleted, delete metadata
                         DeleteMetaData(entry.Key);
                     else
@@ -195,7 +214,7 @@ namespace GameAnywhere
             //Merge the resolved conflicts
             foreach (string key in resolvedConflicts.Keys)
             {
-                NoConflict.Add(key, resolvedConflicts[key]);
+                NoConflict[key] = resolvedConflicts[key];
             }
 
             //Web operations and metadata object update
@@ -254,7 +273,5 @@ namespace GameAnywhere
             webMeta.DeleteEntry(key);
             webHash.DeleteEntry(key);
         }
-
-
     }
 }
