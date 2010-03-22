@@ -103,7 +103,7 @@ namespace GameAnywhere
         /// <returns>List of installed games that are compatible with the direction</returns>
         public List<Game> GetGameList(int direction) 
         {
-            Debug.Assert(direction == OfflineSync.ExternalToCom || direction == OfflineSync.ComToExternal);
+            Debug.Assert(direction == OfflineSync.ExternalToCom || direction == OfflineSync.ComToExternal || direction == OfflineSync.Uninitialize);
             RefreshList();
 
             if (direction == OfflineSync.ExternalToCom)
