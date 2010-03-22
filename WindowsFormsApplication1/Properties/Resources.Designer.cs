@@ -60,6 +60,20 @@ namespace GameAnywhere.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap arrowDownload {
+            get {
+                object obj = ResourceManager.GetObject("arrowDownload", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap arrowUpload {
+            get {
+                object obj = ResourceManager.GetObject("arrowUpload", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap backGameChoicePopupButton {
             get {
                 object obj = ResourceManager.GetObject("backGameChoicePopupButton", resourceCulture);
