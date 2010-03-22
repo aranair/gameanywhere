@@ -29,7 +29,7 @@ namespace GameAnywhere
         /// <param name="user">user object</param>
         public OnlineSync(int direction, List<Game> gameList, User user)
         {
-            syncDirection = direction;
+            SyncDirection = direction;
             installedGameList = gameList;
             currentUser = user;
             s3 = new Storage();
@@ -56,7 +56,7 @@ namespace GameAnywhere
 
                 string syncFolderGamePath = Path.Combine(syncFolderPath, sa.MyGame.Name);
 
-                if (syncDirection == WebToCom)
+                if (SyncDirection == WebToCom)
                 {
                     //Backup files on computer
                     int backupResult = Backup(sa);
@@ -67,12 +67,12 @@ namespace GameAnywhere
                         //Synchronize from Web to Computer
                         WebToComputer(sa, currentUser.Email, backupResult);
                 }
-                else if (syncDirection == ComToWeb)
+                else if (SyncDirection == ComToWeb)
                 {
                     //Synchronize from Computer to Web
                     ComputerToWeb(currentUser.Email, sa);
                 }
-                else if (syncDirection == ExternalAndWeb)
+                else if (SyncDirection == ExternalAndWeb)
                 {
                     //Synchronize between Web and External (thumbdrive)
                     //TODO
