@@ -125,7 +125,7 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="fileName">path of file/directory</param>
         /// <returns>value of the key</returns>
-        /// Exceptions: ArgumentException, KeyNotFoundException
+        /// Exceptions: ArgumentException
         public string GetEntryValue(string fileName)
         {
             //Pre-conditions
