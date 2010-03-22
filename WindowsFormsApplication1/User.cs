@@ -6,6 +6,7 @@ using System.Text;
 using System.Net;
 using System.Net.Mail;
 using System.Security.Cryptography;
+using System.Diagnostics;
 
 
 namespace GameAnywhere
@@ -50,12 +51,13 @@ namespace GameAnywhere
         /// <summary>
         /// Login user
         /// </summary>
-        /// <param name="email"></param>
-        /// <param name="password"></param>
+        /// <param name="email">user email</param>
+        /// <param name="password">user password</param>
         /// <returns>
         /// true - User exists and State changes to UserLoggedIn
         /// false - Wrong password / User does not exist / User exists but not activated
         /// </returns>
+        /// Exceptions: ArgumentException, ConnectionFailureException
         public bool Login(string email, string password)
         {
             //Pre-conditions
@@ -63,6 +65,8 @@ namespace GameAnywhere
                 throw new ArgumentException("Parameter cannot be empty/null", "email");
             if (password.Trim().Equals("") || password == null)
                 throw new ArgumentException("Parameter cannot be empty/null", "password");
+
+            Debug.Assert(password.Length >= 6);
 
             try
             {
@@ -91,8 +95,8 @@ namespace GameAnywhere
             }
             catch
             {
-                //Exceptions: ArgumentException, System.Net.WebException
-                throw new ConnectionFailureException();
+                //Exceptions: ArgumentException, ConnectionFailureException
+                throw;
             }
         }
 
@@ -107,13 +111,14 @@ namespace GameAnywhere
         /// <summary>
         /// Registers a new account with GameAnywhere
         /// </summary>
-        /// <param name="email"></param>
-        /// <param name="password"></param>
+        /// <param name="email">user email</param>
+        /// <param name="password">user password</param>
         /// <returns>
         /// 1 - Registration complete
         /// 2 - Duplicate account
         /// 3 - Unactivated account
         /// </returns>
+        /// Exceptions: ArgumentException, SmtpException, ConnectionFailureException, AmazonSimpleDBException
         public int Register(string email, string password)
         {
             //Pre-conditions
@@ -121,6 +126,8 @@ namespace GameAnywhere
                 throw new ArgumentException("Parameter cannot be empty/null", "email");
             if (password.Trim().Equals("") || password == null)
                 throw new ArgumentException("Parameter cannot be empty/null", "password");
+
+            Debug.Assert(password.Length >= 6);
 
             try
             {
@@ -148,8 +155,8 @@ namespace GameAnywhere
             }
             catch
             {
-                //Exceptions: ArgumentException, System.Net.WebException, System.Net.Mail.SmtpException, AmazonSimpleDBException
-                throw new ConnectionFailureException();
+                //Exceptions: ArgumentException, SmtpException, ConnectionFailureException, AmazonSimpleDBException
+                throw;
             }
         }
 
@@ -157,12 +164,13 @@ namespace GameAnywhere
         /// Retrieve user’s password.
         /// An email will be sent to the user’s email with the password.
         /// </summary>
-        /// <param name="email"></param>
+        /// <param name="email">user email</param>
         /// <returns>
         /// 1 - Retrieve Complete – Emailed user’s password successfully
         /// 2 - Unactivated account - user registered but account not activated yet
         /// 3 - Invalid User – User does not exist in GameAnywhere DB
         /// </returns>
+        /// Exceptions: ArgumentException, SmtpException, ConnectionFailureException
         public int RetrievePassword(string email)
         {
             //Pre-conditions
@@ -194,22 +202,23 @@ namespace GameAnywhere
             }
             catch
             {
-                //Exceptions: ArgumentException, System.Net.WebException, System.Net.Mail.SmtpException
-                throw new ConnectionFailureException();
+                //Exceptions: ArgumentException, SmtpException, ConnectionFailureException
+                throw;
             }
         }
 
         /// <summary>
         /// Change user's password
         /// </summary>
-        /// <param name="email"></param>
-        /// <param name="oldPassword"></param>
-        /// <param name="newPassword"></param>
+        /// <param name="email">user email</param>
+        /// <param name="oldPassword">user old password</param>
+        /// <param name="newPassword">user new password</param>
         /// <returns>
         /// 1 - Password changed
         /// 2 - Invalid old password
         /// 3 - Invalid user
         /// </returns>
+        /// Exceptions: ArgumentException, SmtpException, ConnectionFailureException, AmazonSimpleDBException
         public int ChangePassword(string email, string oldPassword, string newPassword)
         {
             //Pre-conditions
@@ -219,6 +228,8 @@ namespace GameAnywhere
                 throw new ArgumentException("Parameter cannot be empty/null", "oldPassword");
             if (newPassword.Trim().Equals("") || newPassword == null)
                 throw new ArgumentException("Parameter cannot be empty/null", "newPassword");
+
+            Debug.Assert(newPassword.Length >= 6);
 
             try
             {
@@ -245,27 +256,30 @@ namespace GameAnywhere
             }
             catch
             {
-                //Exceptions: ArgumentException, System.Net.WebException, System.Net.Mail.SmtpException, AmazonSimpleDBException
-                throw new ConnectionFailureException();
+                //Exceptions: ArgumentException, SmtpException, ConnectionFailureException, AmazonSimpleDBException
+                throw;
             }
         }
 
         /// <summary>
         /// Resends activation email to user to activate account
         /// </summary>
-        /// <param name="email"></param>
+        /// <param name="email">user email</param>
         /// <returns>
         /// 1 - Activation email sent. Successfully emailed user a link to activate his/her account
         /// 2 - Account already activated
         /// 3 - Invalid user. User does not exist in GameAnywhere DB
         /// </returns>
+        /// Exceptions: ArgumentException, ConnectionFailureException, SmtpException
         public int ResendActivation(string email, string inputPassword)
         {
             //Pre-conditions
             if (email.Trim().Equals("") || email == null)
                 throw new ArgumentException("Parameter cannot be empty/null", "email");
             if (inputPassword.Trim().Equals("") || inputPassword == null)
-                throw new ArgumentException("Parameter cannot be empty/null", "email");
+                throw new ArgumentException("Parameter cannot be empty/null", "inputPassword");
+
+            Debug.Assert(inputPassword.Length >= 6);
 
             try
             {
@@ -275,7 +289,7 @@ namespace GameAnywhere
                     {
                         string password = db.GetAttribute(email, "Password");
                         string activationKey = CreateMD5Hash(email + password);
-                        // Wrong password.
+                        //Wrong password
                         if (!inputPassword.Equals(password))
                         {
                             return 0;
@@ -300,8 +314,8 @@ namespace GameAnywhere
             }
             catch
             {
-                //Exceptions: ArgumentException, System.Net.WebException, System.Net.Mail.SmtpException
-                throw new ConnectionFailureException ();
+                //Exceptions: ArgumentException, ConnectionFailureException, SmtpException
+                throw;
             }
         }
 
@@ -327,11 +341,12 @@ namespace GameAnywhere
         /// <summary>
         /// Checks if user exists in GameAnywhere DB
         /// </summary>
-        /// <param name="email"></param>
+        /// <param name="email">user email</param>
         /// <returns>
         /// true - User exists in DB
         /// false - User not found in DB
         /// </returns>
+        /// Exceptions: ArgumentException, ConnectionFailureException
         private bool UserExists(string email)
         {
             //Pre-conditions
@@ -351,7 +366,7 @@ namespace GameAnywhere
             }
             catch
             {
-                //Exceptions: ArgumentException, System.Net.WebException
+                //Exceptions: ConnectionFailureException
                 throw;
             }
         }
@@ -359,11 +374,12 @@ namespace GameAnywhere
         /// <summary>
         /// Checks if user’s account has been activated in DB
         /// </summary>
-        /// <param name="email"></param>
+        /// <param name="email">user email</param>
         /// <returns>
         /// true - User is already activated
         /// false - User is not activated
         /// </returns>
+        /// Exceptions: ArgumentException, ConnectionFailureException
         private bool IsAccountActivated(string email)
         {
             //Pre-conditions
@@ -385,7 +401,7 @@ namespace GameAnywhere
             }
             catch
             {
-                //Exceptions: ArgumentException, System.Net.WebException
+                //Exceptions: ConnectionFailureException
                 throw;
             }
         }
@@ -393,9 +409,10 @@ namespace GameAnywhere
         /// <summary>
         /// Sends activation email to user
         /// </summary>
-        /// <param name="email"></param>
-        /// <param name="password"></param>
-        /// <param name="activationKey"></param>
+        /// <param name="email">user email</param>
+        /// <param name="password">user password</param>
+        /// <param name="activationKey">activation key</param>
+        /// Exceptions: ArgumentException, SmtpException
         private void SendActivationEmail(string email, string password, string activationKey)
         {
             //Pre-conditions
@@ -406,6 +423,9 @@ namespace GameAnywhere
             if (activationKey.Trim().Equals("") || activationKey == null)
                 throw new ArgumentException("Parameter cannot be empty/null", "activationKey");
 
+            Debug.Assert(password.Length >= 6);
+
+            //Setup mail message
             MailMessage message = new MailMessage();
             message.From = new MailAddress("gameanywhere@gmail.com", "GameAnywhere");
             message.To.Add(email);
@@ -427,28 +447,31 @@ namespace GameAnywhere
                 </body></html>
                 ", activationKey, email, password);
 
+            //Setup smtp client
             SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
             client.EnableSsl = true;
             client.Credentials = new NetworkCredential("gameanywhere@gmail.com", "*");
 
+            //Send email
             try
             {
                 client.Send(message);
                 message = null;
                 client = null;
             }
-            catch (Exception)
+            catch
             {
-                //System.Net.Mail.SmtpException - Failure sending mail
-                throw;
+                //Exceptions: System.Net.Mail.SmtpException, System.Net.Mail.SmtpFailedRecipientsException - Failure sending mail
+                throw new SmtpException("Failure sending email.");
             }
         }
 
         /// <summary>
         /// Sends user's password by email
         /// </summary>
-        /// <param name="email"></param>
-        /// <param name="password"></param>
+        /// <param name="email">user email</param>
+        /// <param name="password">user password</param>
+        /// Exceptions: ArgumentException, SmtpException
         private void SendPasswordEmail(string email, string password)
         {
             //Pre-conditions
@@ -457,6 +480,9 @@ namespace GameAnywhere
             if (password.Trim().Equals("") || password == null)
                 throw new ArgumentException("Parameter cannot be empty/null", "password");
 
+            Debug.Assert(password.Length >= 6);
+
+            //Setup mail message
             MailMessage message = new MailMessage();
             message.From = new MailAddress("gameanywhere@gmail.com", "GameAnywhere");
             message.To.Add(email);
@@ -473,10 +499,12 @@ namespace GameAnywhere
                 </body></html>
                 ", email, password);
 
+            //Setup smtp client
             SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
             client.EnableSsl = true;
             client.Credentials = new NetworkCredential("gameanywhere@gmail.com", "*");
 
+            //Send email
             try
             {
                 client.Send(message);
@@ -485,8 +513,8 @@ namespace GameAnywhere
             }
             catch (Exception)
             {
-                //System.Net.Mail.SmtpException - Failure sending mail
-                throw;
+                //Exceptions: System.Net.Mail.SmtpException, System.Net.Mail.SmtpFailedRecipientsException - Failure sending mail
+                throw new SmtpException("Failure sending email.");
             }
         }
 
@@ -495,6 +523,7 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="input"></param>
         /// <returns>A unique string of uppercase characters</returns>
+        /// Exceptions: ArgumentException
         private string CreateMD5Hash(string input)
         {
             //Pre-conditions
