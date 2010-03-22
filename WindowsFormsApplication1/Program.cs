@@ -28,6 +28,13 @@ namespace GameAnywhere
             */
             
             Controller c = new Controller();
+            Dictionary<string,int> d = new Dictionary<string,int>();
+            d.Add("Warcraft 3/config", 0);
+            d.Add("Warcraft 3/savedGame", 0);
+            d.Add("World of Warcraft/savedGame", 0);
+            ConflictResolve cr = new ConflictResolve(c, d);
+            cr.ShowDialog();
+
         }
     }
 }
