@@ -98,9 +98,7 @@ namespace GameAnywhere
             //Generate hash from local and create Metadata object
             Dictionary<string, string> localDict = new Dictionary<string, string>();
             GenerateHashDictionary(syncFolderPath, localDict);
-            MetaData localHash = new MetaData(localDict);
-
-
+            localHash = new MetaData(localDict);
         }
 
         private bool HashIsDifferent(MetaData data1, MetaData data2, string key)
