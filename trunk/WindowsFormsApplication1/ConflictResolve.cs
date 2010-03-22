@@ -23,6 +23,11 @@ namespace GameAnywhere
         private List<CheckBox> checkBoxList;
 
         /// <summary>
+        /// List of pictureboxes that contains the arrows picture.
+        /// </summary>
+        private List<PictureBox> arrowPictureBoxList;
+
+        /// <summary>
         /// yAxis location to put the current new dynamic control at.
         /// </summary>
         private int yAxisLocation = 37;
@@ -56,6 +61,7 @@ namespace GameAnywhere
         private void DisplayConflicts()
         {
             checkBoxList = new List<CheckBox>();
+            arrowPictureBoxList = new List<PictureBox>();
 
             allConflictedGamesAndType = FindConflictedGamesAndType(conflictsList);
             // 1st string is       : gameName
@@ -107,7 +113,26 @@ namespace GameAnywhere
         {
             CreateLabel(new System.Drawing.Point(85, yAxisLocation), "Saved Game Files:", showConflictsPanel);
             CreateUploadCheckBox(gameName, "savedGame");
+            CreateArrowPictureBox(gameName, "savedGame");
             CreateDownloadCheckBox(gameName, "savedGame");
+        }
+
+        /// <summary>
+        /// Creates an arrow picture box for the "direction" of the conflict resolve.
+        /// </summary>
+        /// <param name="gameName">Name of the game to display this for.</param>
+        /// <param name="type">Type of file of the game to display this for.</param>
+        private void CreateArrowPictureBox(string gameName, string type)
+        {
+            System.Windows.Forms.PictureBox arrowPictureBox = new PictureBox();
+            arrowPictureBox.Name = gameName + type;
+            arrowPictureBox.Visible = false;
+            SetBackgroundImage(arrowPictureBox, "GameAnywhere.Resources.arrowUpload.gif", ImageLayout.Center);
+            arrowPictureBox.Font = new System.Drawing.Font("Verdana", 8F);
+            arrowPictureBox.Size = new System.Drawing.Size(50, 38);
+            arrowPictureBox.Location = new System.Drawing.Point(380, yAxisLocation - 10);
+            arrowPictureBoxList.Add(arrowPictureBox);
+            showConflictsPanel.Controls.Add(arrowPictureBox);
         }
 
         /// <summary>
@@ -118,6 +143,7 @@ namespace GameAnywhere
         {
             CreateLabel(new System.Drawing.Point(85, yAxisLocation), "Config Files:", showConflictsPanel);
             CreateUploadCheckBox(gameName, "config");
+            CreateArrowPictureBox(gameName, "config");
             CreateDownloadCheckBox(gameName, "config");
         }
 
@@ -135,7 +161,7 @@ namespace GameAnywhere
             //SetBackgroundImage(uploadCheckBox, "GameAnywhere.Resources.upload.gif", ImageLayout.Center);
             SetImageForBackground(uploadCheckBox, "GameAnywhere.Resources.upload.gif", ContentAlignment.MiddleLeft);
             uploadCheckBox.Font = new System.Drawing.Font("Verdana", 8F);
-            uploadCheckBox.Size = new System.Drawing.Size(150, 38);
+            uploadCheckBox.Size = new System.Drawing.Size(100, 38);
             uploadCheckBox.Location = new System.Drawing.Point(270, yAxisLocation-10);
             uploadCheckBox.BackColor = System.Drawing.Color.Transparent;
             uploadCheckBox.Click += new EventHandler(groupCheckBox_Click);
@@ -161,9 +187,9 @@ namespace GameAnywhere
             //SetBackgroundImage(downloadCheckBox, "GameAnywhere.Resources.download.gif", ImageLayout.Center);
             SetImageForBackground(downloadCheckBox, "GameAnywhere.Resources.download.gif", ContentAlignment.MiddleRight);
 
-            downloadCheckBox.Size = new System.Drawing.Size(120, 38);
+            downloadCheckBox.Size = new System.Drawing.Size(100, 38);
             downloadCheckBox.Font = new System.Drawing.Font("Verdana", 8F);
-            downloadCheckBox.Location = new System.Drawing.Point(410, yAxisLocation-10);
+            downloadCheckBox.Location = new System.Drawing.Point(420, yAxisLocation-10);
             downloadCheckBox.BackColor = System.Drawing.Color.Transparent;
             downloadCheckBox.Click += new EventHandler(groupCheckBox_Click);
             downloadCheckBox.CheckedChanged += new EventHandler(groupCheckBox_CheckChanged);
@@ -389,6 +415,7 @@ namespace GameAnywhere
    
                 if (value.Equals ("savedGame") || value.Equals ("both"))
                     VerifySavedCheckBoxes(key, ref allGamesVerified);
+                
             }
 
             if (allGamesVerified)
@@ -414,9 +441,38 @@ namespace GameAnywhere
             // find corresponding checkbox first.
             CheckBox uploadCheckBox = FindCheckBox("upload/" + key + "savedGame");
             CheckBox downloadCheckBox = FindCheckBox("download/" + key + "savedGame");
+            PictureBox arrowPictureBox = FindPictureBox(key + "savedGame");
 
             if (!uploadCheckBox.Checked && !downloadCheckBox.Checked)
+            {
+                arrowPictureBox.Visible = false;
                 allGamesVerified = false;
+            }
+            else if (uploadCheckBox.Checked)
+            {
+                arrowPictureBox.Visible = true;
+                SetBackgroundImage(arrowPictureBox, "GameAnywhere.Resources.arrowUpload.gif", ImageLayout.Center);
+            }
+            else if (downloadCheckBox.Checked)
+            {
+                arrowPictureBox.Visible = true;
+                SetBackgroundImage(arrowPictureBox, "GameAnywhere.Resources.arrowDownload.gif", ImageLayout.Center);
+            }
+        }
+
+        /// <summary>
+        /// Finds a picture box from the list of arrow pictureboxes that has the name passed in.
+        /// </summary>
+        /// <param name="pictureBoxName">Name of the pictureBox to be found.</param>
+        /// <returns></returns>
+        private PictureBox FindPictureBox(string pictureBoxName)
+        {
+            foreach (PictureBox pictureBox in arrowPictureBoxList)
+            {
+                if (pictureBox.Name.Equals(pictureBoxName))
+                    return pictureBox;
+            }
+            return null;
         }
 
         /// <summary>
@@ -429,9 +485,23 @@ namespace GameAnywhere
             // find corresponding checkbox first.
             CheckBox uploadCheckBox = FindCheckBox("upload/" + key + "config");
             CheckBox downloadCheckBox = FindCheckBox("download/" + key + "config");
+            PictureBox arrowPictureBox = FindPictureBox(key + "config");
 
             if (!uploadCheckBox.Checked && !downloadCheckBox.Checked)
+            {
+                arrowPictureBox.Visible = false;
                 allGamesVerified = false;
+            }
+            else if (uploadCheckBox.Checked)
+            {
+                arrowPictureBox.Visible = true;
+                SetBackgroundImage(arrowPictureBox, "GameAnywhere.Resources.arrowUpload.gif", ImageLayout.Center);
+            }
+            else if (downloadCheckBox.Checked)
+            {
+                arrowPictureBox.Visible = true;
+                SetBackgroundImage(arrowPictureBox, "GameAnywhere.Resources.arrowDownload.gif", ImageLayout.Center);
+            }
         }
 
         /// <summary>
