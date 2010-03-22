@@ -76,7 +76,7 @@ namespace GameAnywhere
         /// <summary>
         /// Direction of sync. 
         /// </summary>
-        private int syncDirection;
+        protected int syncDirection;
 
         /// <summary>
         /// Property for SyncDirection
