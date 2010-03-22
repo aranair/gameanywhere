@@ -30,6 +30,7 @@ namespace GameAnywhere
         /// <param name="itemId">item id</param>
         /// <param name="password">user's password</param>
         /// <param name="activationKey">activation key created by md5hash using email+password</param>
+        /// Exceptions: ConnectionFailureException, AmazonSimpleDBException
         public void InsertItem(string itemId, string password, string activationKey)
         {
             //Pre-conditions
@@ -52,9 +53,8 @@ namespace GameAnywhere
             {
                 if (ex.InnerException != null && ex.InnerException.GetType().Equals(typeof(System.Net.WebException)))
                 {
-                    //System.Net.WebException thrown
-                    Console.WriteLine("No internet connection.");
-                    throw new System.Net.WebException("Unable to connect to the internet.");
+                    //ConnectionFailureException thrown
+                    throw new ConnectionFailureException("Internet connection failure.");
                 }
                 else
                 {
@@ -74,6 +74,7 @@ namespace GameAnywhere
         /// <param name="itemId">item id</param>
         /// <param name="attribute">attribute to update</param>
         /// <param name="newAttributeValue">new attribute value to replace</param>
+        /// Exceptions: ConnectionFailureException, AmazonSimpleDBException
         public void UpdateAttributeValue(string itemId, string attribute, string newAttributeValue)
         {
             //Pre-conditions
@@ -93,9 +94,8 @@ namespace GameAnywhere
             {
                 if (ex.InnerException != null && ex.InnerException.GetType().Equals(typeof(System.Net.WebException)))
                 {
-                    //System.Net.WebException thrown
-                    Console.WriteLine("No internet connection.");
-                    throw new System.Net.WebException("Unable to connect to the internet.");
+                    //ConnectionFailureException thrown
+                    throw new ConnectionFailureException("Internet connection failure.");
                 }
                 else
                 {
@@ -116,6 +116,7 @@ namespace GameAnywhere
         /// true - item exists in simpleDB
         /// false - item does not exists in simpleDB
         /// </returns>
+        /// Exceptions: ConnectionFailureException
         public bool ItemExists(string itemId)
         {
             //Pre-conditions
@@ -142,8 +143,8 @@ namespace GameAnywhere
             }
             catch (AmazonSimpleDBException)
             {
-                //System.Net.WebException thrown
-                throw new System.Net.WebException("Unable to connect to the internet.");
+                //ConnectionFailureException thrown
+                throw new ConnectionFailureException("Internet connection failure.");
             }
         }
 
@@ -153,6 +154,7 @@ namespace GameAnywhere
         /// <param name="itemId">item id</param>
         /// <param name="attribute">attribute</param>
         /// <returns>attribute's value</returns>
+        /// Exceptions: ConnectionFailureException
         public string GetAttribute(string itemId, string attribute)
         {
             //Pre-conditions
@@ -186,8 +188,8 @@ namespace GameAnywhere
             }
             catch (AmazonSimpleDBException)
             {
-                //System.Net.WebException thrown
-                throw new System.Net.WebException("Unable to connect to the internet.");
+                //ConnectionFailureException thrown
+                throw new ConnectionFailureException("Internet connection failure.");
             }
         }
     }
