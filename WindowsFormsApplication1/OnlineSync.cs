@@ -11,18 +11,12 @@ namespace GameAnywhere
     class OnlineSync: Sync
     {
         //Sync direction
-        public static readonly int Uninitialize = 0; //Default
         public static readonly int WebToCom = 4;
         public static readonly int ComToWeb = 5;
         public static readonly int ExternalAndWeb = 6;
 
         //Data member
-        private int syncDirection = Uninitialize;
-        private List<SyncAction> syncActionList;
         private User currentUser;
-        private string syncFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "SyncFolder");
-
-        //S3 Objects
         private Storage s3;
 
         public OnlineSync(int direction, List<Game> gameList, User user)
@@ -63,7 +57,6 @@ namespace GameAnywhere
         }
         public List<string> getGamesFromWeb(string user)
         {
-            Storage s3 = new Storage();
             HashSet<string> gameSet = new HashSet<string>();
             foreach (string file in s3.ListFiles(user))
             {
@@ -104,9 +97,8 @@ namespace GameAnywhere
                 if (getGamesFromWeb(email).Contains(gameName))
                 {
                     //Delete game directory in user's account
-                    bool isDeleted = DeleteGameDirectory(email, gameName);
-                    if (!isDeleted)
-                        syncAction.UnsuccessfulSyncFiles.Add(new SyncError(@"email/gameName", "ComputerToWeb Sync - DeleteGameDirectory", "Unable to delete game directory."));
+                    DeleteGameDirectory(email, gameName);
+                    //syncAction.UnsuccessfulSyncFiles.Add(new SyncError(@"email/gameName", "ComputerToWeb Sync - DeleteGameDirectory", "Unable to delete game directory."));
                 }
             }
             catch (Exception ex)
@@ -119,7 +111,6 @@ namespace GameAnywhere
             if (action == SavedGame || action == AllFiles)
             {
                 saveGameErrorList = Upload(email, gameName, SyncFolderSavedGameFolderName, saveParentPath, savePathList);
-
             }
 
             //Upload Config Files - SyncAction
@@ -194,8 +185,8 @@ namespace GameAnywhere
         /// true - Deletes game directory successfully on S3
         /// false - Fail to delete game directory on S3
         /// </returns>
-        /// Exceptions: ArgumentException, System.Net.WebException
-        private bool DeleteGameDirectory(string email, string gameName)
+        /// Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
+        private void DeleteGameDirectory(string email, string gameName)
         {
             Debug.Assert(getGamesFromWeb(email).Contains(gameName));
 
@@ -208,13 +199,11 @@ namespace GameAnywhere
                     throw new ArgumentException("Parameter cannot be empty/null. Invalid game directory.", gameName);
 
                 //Delete game directory
-                bool deleteStatus = s3.DeleteDirectory(email + "/" + gameName);
-
-                return deleteStatus;
+                s3.DeleteDirectory(email + "/" + gameName);
             }
             catch
             {
-                //Exceptions: ArgumentException, System.Net.WebException
+                //Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
                 throw;
             }
         }
