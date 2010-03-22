@@ -284,6 +284,20 @@ namespace GameAnywhere.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap download {
+            get {
+                object obj = ResourceManager.GetObject("download", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap downloadArrowed {
+            get {
+                object obj = ResourceManager.GetObject("downloadArrowed", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap errorsButton {
             get {
                 object obj = ResourceManager.GetObject("errorsButton", resourceCulture);
@@ -525,6 +539,20 @@ namespace GameAnywhere.Properties {
         internal static System.Drawing.Bitmap thumbdriveToComputerButtonMouseOver {
             get {
                 object obj = ResourceManager.GetObject("thumbdriveToComputerButtonMouseOver", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap upload {
+            get {
+                object obj = ResourceManager.GetObject("upload", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap uploadArrowed {
+            get {
+                object obj = ResourceManager.GetObject("uploadArrowed", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
