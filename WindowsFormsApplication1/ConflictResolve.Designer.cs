@@ -30,7 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConflictResolve));
             this.banner = new System.Windows.Forms.PictureBox();
-            this.showconflictsPanel = new System.Windows.Forms.Panel();
+            this.showConflictsPanel = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.banner)).BeginInit();
             this.SuspendLayout();
             // 
@@ -44,14 +44,14 @@
             this.banner.TabIndex = 3;
             this.banner.TabStop = false;
             // 
-            // showconflictsPanel
+            // showConflictsPanel
             // 
-            this.showconflictsPanel.AutoScroll = true;
-            this.showconflictsPanel.Font = new System.Drawing.Font("Verdana", 8F);
-            this.showconflictsPanel.Location = new System.Drawing.Point(43, 89);
-            this.showconflictsPanel.Name = "showconflictsPanel";
-            this.showconflictsPanel.Size = new System.Drawing.Size(699, 382);
-            this.showconflictsPanel.TabIndex = 4;
+            this.showConflictsPanel.AutoScroll = true;
+            this.showConflictsPanel.Font = new System.Drawing.Font("Verdana", 8F);
+            this.showConflictsPanel.Location = new System.Drawing.Point(43, 89);
+            this.showConflictsPanel.Name = "showConflictsPanel";
+            this.showConflictsPanel.Size = new System.Drawing.Size(699, 382);
+            this.showConflictsPanel.TabIndex = 4;
             // 
             // ConflictResolve
             // 
@@ -61,7 +61,7 @@
             this.BackgroundImage = global::GameAnywhere.Properties.Resources.GameChoicePopupBackground;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ClientSize = new System.Drawing.Size(784, 562);
-            this.Controls.Add(this.showconflictsPanel);
+            this.Controls.Add(this.showConflictsPanel);
             this.Controls.Add(this.banner);
             this.ForeColor = System.Drawing.Color.White;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -75,6 +75,6 @@
         #endregion
 
         private System.Windows.Forms.PictureBox banner;
-        private System.Windows.Forms.Panel showconflictsPanel;
+        private System.Windows.Forms.Panel showConflictsPanel;
     }
 }
