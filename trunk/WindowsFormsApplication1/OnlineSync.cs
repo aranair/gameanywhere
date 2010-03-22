@@ -52,8 +52,7 @@ namespace GameAnywhere
             foreach (SyncAction sa in syncActionList)
             {
                 Debug.Assert(sa.MyGame != null);
-                Debug.Assert(sa.MyGame.ConfigPathList.Count != 0 || sa.MyGame.SavePathList.Count != 0);
-
+                
                 string syncFolderGamePath = Path.Combine(syncFolderPath, sa.MyGame.Name);
 
                 if (SyncDirection == WebToCom)
@@ -212,7 +211,7 @@ namespace GameAnywhere
         /// </returns>
         private List<SyncError> Upload(string email, string gameName, string webSaveFolder, string parentPath, List<string> pathList)
         {
-            string gamePath = email + "/" + gameName + "/" + webSaveFolder + "/";
+            string gamePath = email + "/" + gameName + "/" + webSaveFolder;
             List<SyncError> errorList = new List<SyncError>();
 
             //Upload list of config/save files/dir
