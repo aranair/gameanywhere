@@ -12,39 +12,58 @@ namespace GameAnywhere
 {
     class Storage
     {
+        /// <summary>
+        /// Data Members
+        /// </summary>
         private string accessKeyID;
         private string secretAccessKeyID;
         private string bucketName;
+        private AmazonS3Client client;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public Storage()
         {
             accessKeyID = "*";
             secretAccessKeyID = "*";
             bucketName = "GameAnywhere";
+            client = new AmazonS3Client(accessKeyID, secretAccessKeyID, new AmazonS3Config().WithCommunicationProtocol(Protocol.HTTP));
+            //AmazonS3 client = Amazon.AWSClientFactory.CreateAmazonS3Client(accessKeyID, secretAccessKeyID);
         }
 
+        /// <summary>
+        /// Upload file to S3
+        /// </summary>
+        /// <param name="path">path of local file</param>
+        /// <param name="key">key of file on S3</param>
+        /// Exceptions: ArgumentException, ConnectionFailureException, AmazonS3Exception
         public void UploadFile(string path, string key)
         {
             try
             {
-                AmazonS3 client = Amazon.AWSClientFactory.CreateAmazonS3Client(accessKeyID, secretAccessKeyID);
-                // simple object put
-                PutObjectRequest request = new PutObjectRequest();
-                request.WithFilePath(path)
-                    .WithBucketName(bucketName)
-                    .WithKey(key);
+                //Pre-conditions
+                if (path.Trim().Equals("") || path == null)
+                    throw new ArgumentException("Parameter cannot be empty/null", "path");
+                if (key.Trim().Equals("") || key == null)
+                    throw new ArgumentException("Parameter cannot be empty/null", "key");
+                if(!File.Exists(path))
+                    throw new ArgumentException("Path to file does not exist", "path");
 
-                using (S3Response response = client.PutObject(request))
-                {
-                    //Error checking
-                }
+                //Setup request
+                PutObjectRequest request = new PutObjectRequest();
+                request.WithFilePath(path).WithBucketName(bucketName).WithKey(key);
+
+                //Send request
+                S3Response response = client.PutObject(request);
+                
+                response.Dispose();
             }
             catch (AmazonS3Exception ex)
             {
                 if (ex.InnerException != null && ex.InnerException.GetType().Equals(typeof(System.Net.WebException)))
                 {
-                    Console.WriteLine("No internet connection.");
-                    throw new System.Net.WebException("Unable to connect to the internet.");
+                    throw new ConnectionFailureException("Internet connection failure.");
                 }
                 else
                 {
@@ -53,6 +72,12 @@ namespace GameAnywhere
                 }
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="key"></param>
         public void DownloadFile(string path, string key)
         {
             try
@@ -82,8 +107,7 @@ namespace GameAnywhere
             {
                 if (ex.InnerException != null && ex.InnerException.GetType().Equals(typeof(System.Net.WebException)))
                 {
-                    Console.WriteLine("No internet connection.");
-                    throw new System.Net.WebException("Unable to connect to the internet.");
+                    throw new ConnectionFailureException("Internet connection failure.");
                 }
                 else
                 {
@@ -92,14 +116,20 @@ namespace GameAnywhere
                 }
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
         public void DeleteFile(string key)
         {
             try
             {
-                AmazonS3 client = Amazon.AWSClientFactory.CreateAmazonS3Client(accessKeyID, secretAccessKeyID);
+                //Setup request
                 DeleteObjectRequest request = new DeleteObjectRequest();
-                request.WithBucketName(bucketName)
-                    .WithKey(key);
+                request.WithBucketName(bucketName).WithKey(key);
+
+                //Send request
                 using (DeleteObjectResponse response = client.DeleteObject(request))
                 {
                     //Error Checking
@@ -109,8 +139,7 @@ namespace GameAnywhere
             {
                 if (ex.InnerException != null && ex.InnerException.GetType().Equals(typeof(System.Net.WebException)))
                 {
-                    Console.WriteLine("No internet connection.");
-                    throw new System.Net.WebException("Unable to connect to the internet.");
+                    throw new ConnectionFailureException("Internet connection failure.");
                 }
                 else
                 {
@@ -119,12 +148,17 @@ namespace GameAnywhere
                 }
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public List<string> ListFiles(string key)
         {
             List<string> fileList = new List<string>();
             try
             {
-                AmazonS3 client = Amazon.AWSClientFactory.CreateAmazonS3Client(accessKeyID, secretAccessKeyID);
                 ListObjectsRequest request = new ListObjectsRequest();
                 request.BucketName = bucketName;
                 request.WithPrefix(key);
@@ -141,8 +175,7 @@ namespace GameAnywhere
             {
                 if (ex.InnerException != null && ex.InnerException.GetType().Equals(typeof(System.Net.WebException)))
                 {
-                    Console.WriteLine("No internet connection.");
-                    throw new System.Net.WebException("Unable to connect to the internet.");
+                    throw new ConnectionFailureException("Internet connection failure.");
                 }
                 else
                 {
@@ -151,44 +184,11 @@ namespace GameAnywhere
                 }
             }
         }
-        public DateTime GetLastModified(string key)
-        {
-            try
-            {
-                AmazonS3 client = Amazon.AWSClientFactory.CreateAmazonS3Client(accessKeyID, secretAccessKeyID);
-                GetObjectMetadataRequest request = new GetObjectMetadataRequest().WithBucketName(bucketName).WithKey("wilsontgh@gmail.com/razer.jpg");
-                using (S3Response response = client.GetObjectMetadata(request))
-                {
-                    string longdate = response.Headers.GetValues("Last-Modified")[0];
-                    DateTime date;
-                    DateTime.TryParse(longdate, out date);
-                    return date;
-                }
-            }
-            catch (AmazonS3Exception amazonS3Exception)
-            {
-                throw; //temporary
-            }
-        }
-        public DateTime GetServerTime()
-        {
-            try
-            {
-                AmazonS3 client = Amazon.AWSClientFactory.CreateAmazonS3Client(accessKeyID, secretAccessKeyID);
-                //using (ListBucketsResponse response = client.ListBuckets())
-                GetACLRequest request = new GetACLRequest().WithBucketName(bucketName);
-                using (S3Response response = client.GetACL(request))
-                {
-                    DateTime date;
-                    DateTime.TryParse(response.Headers.GetValues("Date")[0], out date);
-                    return date;
-                }
-            }
-            catch (AmazonS3Exception amazonS3Exception)
-            {
-                throw amazonS3Exception;
-            }
-        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
         public void DeleteDirectory(string key)
         {
             List<string> files = ListFiles(key);
@@ -197,11 +197,16 @@ namespace GameAnywhere
                 DeleteFile(file);
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public string GetHash(string key)
         {
             try
             {
-                AmazonS3 client = Amazon.AWSClientFactory.CreateAmazonS3Client(accessKeyID, secretAccessKeyID);
                 GetObjectMetadataRequest request = new GetObjectMetadataRequest().WithBucketName(bucketName).WithKey(key);
                 using (S3Response response = client.GetObjectMetadata(request))
                 {
@@ -214,13 +219,20 @@ namespace GameAnywhere
                 throw; //temporary
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public Dictionary<string,string> GetHashDictionary(string key)
         {
             Dictionary<string,string> dict = new Dictionary<string,string>();
             List<string> files = ListFiles(key);
             foreach (string file in files)
             {
-                dict[file.Replace(key + '/',"")] = GetHash(file);
+                if (Path.GetFileName(file).Equals("metadata.web")) continue;
+                dict[file.Replace(key + '/', "")] = GetHash(file);
             }
             return dict;
         }
