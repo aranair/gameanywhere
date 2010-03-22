@@ -79,55 +79,144 @@ namespace GameAnywhere
             }
             return gameSet.ToList<string>();
         }
+        /// <summary>
+        /// Upload files from computer to the web(S3)
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="syncAction"></param>
         private void ComputerToWeb(string email, SyncAction syncAction)
         {
+            Debug.Assert(email != null && !email.Equals(""));
+            Debug.Assert(syncAction.Action == SyncAction.ConfigFiles || syncAction.Action == SyncAction.SavedGameFiles || syncAction.Action == SyncAction.AllFiles);
+            Debug.Assert(syncAction.MyGame != null);
+
             string gameName = syncAction.MyGame.Name;
             string saveParentPath = syncAction.MyGame.SaveParentPath;
             string configParentPath = syncAction.MyGame.ConfigParentPath;
             List<string> savePathList = syncAction.MyGame.SavePathList;
             List<string> configPathList = syncAction.MyGame.ConfigPathList;
             int action = syncAction.Action;
+            List<SyncError> saveGameErrorList = null;
+            List<SyncError> configFileErrorList = null;
 
-            //Delete game dir in user's account
-            DeleteGameDirectory(email, gameName);
-
-            //Saved Files - SyncAction
-            if (action == SavedGame || action == AllFiles)
+            try
             {
-                Upload(email, gameName, SyncFolderSavedGameFolderName, saveParentPath, savePathList);
+                if (getGamesFromWeb(email).Contains(gameName))
+                {
+                    //Delete game directory in user's account
+                    bool isDeleted = DeleteGameDirectory(email, gameName);
+                    if (!isDeleted)
+                        syncAction.UnsuccessfulSyncFiles.Add(new SyncError(@"email/gameName", "ComputerToWeb Sync - DeleteGameDirectory", "Unable to delete game directory."));
+                }
+            }
+            catch (Exception ex)
+            {
+                //Exceptions: ArgumentException, System.Net.WebException
+                syncAction.UnsuccessfulSyncFiles.Add(new SyncError(@"email/gameName", "ComputerToWeb Sync - DeleteGameDirectory", ex.Message));
             }
 
-            //Config Files - SyncAction
-            if (action == Config || action == AllFiles)
+            //Upload Saved Files - SyncAction
+            if (action == SAVED_GAME || action == All_FILES)
             {
-                Upload(email, gameName, SyncFolderConfigFolderName, configParentPath, configPathList);
+                saveGameErrorList = Upload(email, gameName, webSavedGameFolderName, saveParentPath, savePathList);
+
             }
+
+            //Upload Config Files - SyncAction
+            if (action == CONFIG || action == All_FILES)
+            {
+                configFileErrorList = Upload(email, gameName, webConfigFolderName, configParentPath, configPathList);
+            }
+
+            //Updates list of unsuccessful sync files
+            syncAction.UnsuccessfulSyncFiles.AddRange(saveGameErrorList);
+            syncAction.UnsuccessfulSyncFiles.AddRange(configFileErrorList);
+            saveGameErrorList = null;
+            configFileErrorList = null;
         }
-        private void Upload(string email, string gameName, string saveFolder, string parentPath, List<string> pathList)
+
+        /// <summary>
+        /// Upload config/save files to user's S3 account
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="gameName"></param>
+        /// <param name="webSaveFolder">webSavedGameFolderName or webConfigFolderName</param>
+        /// <param name="parentPath">Config/Save parent path</param>
+        /// <param name="pathList">List of Config/Save game files & directories</param>
+        /// <returns>
+        /// List of SyncError objects which contains errors during uploading
+        /// </returns>
+        private List<SyncError> Upload(string email, string gameName, string webSaveFolder, string parentPath, List<string> pathList)
         {
-            string gamePath = email + "/" + gameName + "/" + saveFolder + "/";
+            string gamePath = email + "/" + gameName + "/" + webSaveFolder + "/";
+            List<SyncError> errorList = new List<SyncError>();
 
             foreach (string path in pathList)
             {
                 if (Directory.Exists(path))
                 {
-                    s3.UploadDirectory(gamePath, parentPath, path);
+                    try
+                    {
+                        s3.UploadDirectory(gamePath, parentPath, path);
+                    }
+                    catch (Exception ex)
+                    {
+                        errorList.AddRange(GetSyncError(path, "ComputerToWeb Sync - Upload->UploadDirectory", ex.Message));
+                    }
                 }
                 else if (File.Exists(path))
                 {
                     string keyName = gamePath + path.Replace(parentPath, "").Replace(@"\", "/");
-                    s3.UploadFile(path, keyName);
+                    try
+                    {
+                        s3.UploadFile(path, keyName);
+                    }
+                    catch (Exception ex)
+                    {
+                        errorList.AddRange(GetSyncError(path, "ComputerToWeb Sync - Upload->UploadFile", ex.Message));
+                    }
                 }
                 else
                 {
-                    DeleteGameDirectory(email, gameName);
+                    errorList.AddRange(GetSyncError(path, "ComputerToWeb Sync - Upload", "File/Directory does not exist."));
                 }
             }
+
+            return errorList;
         }
-        private void DeleteGameDirectory(string email, string gameName)
+
+        /// <summary>
+        /// Delete a game directory in S3
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="gameName"></param>
+        /// <returns>
+        /// true - Deletes game directory successfully on S3
+        /// false - Fail to delete game directory on S3
+        /// </returns>
+        /// Exceptions: ArgumentException, System.Net.WebException
+        private bool DeleteGameDirectory(string email, string gameName)
         {
-            string key = email + "/" + gameName;
-            s3.DeleteDirectory(key);
+            Debug.Assert(getGamesFromWeb(email).Contains(gameName));
+
+            try
+            {
+                //Checks user and gamename validity
+                if (email.Equals("") && email == null && !email.Equals(currentUser.Email))
+                    throw new ArgumentException("Parameter cannot be empty/null. Invalid user/User not logged in", email);
+                if (gameName.Equals("") && gameName == null)
+                    throw new ArgumentException("Parameter cannot be empty/null. Invalid game directory.", gameName);
+
+                //Delete game directory
+                bool deleteStatus = s3.DeleteDirectory(email + "/" + gameName);
+
+                return deleteStatus;
+            }
+            catch
+            {
+                //Exceptions: ArgumentException, System.Net.WebException
+                throw;
+            }
         }
         private void WebToComputer(SyncAction sa, string user, int backupItem)
         {
