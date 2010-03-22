@@ -76,9 +76,16 @@ namespace GameAnywhere
         /// <summary>
         /// Direction of sync. 
         /// </summary>
-        protected int syncDirection;
+        private int syncDirection;
 
-
+        /// <summary>
+        /// Property for SyncDirection
+        /// </summary>
+        public int SyncDirection
+        {
+            get { return syncDirection; }
+            set { syncDirection = value; }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Sync"/> class.
