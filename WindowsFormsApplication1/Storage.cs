@@ -7,6 +7,7 @@ using System.IO;
 
 using Amazon.S3;
 using Amazon.S3.Model;
+using System.Security.Cryptography;
 
 namespace GameAnywhere
 {
@@ -25,11 +26,26 @@ namespace GameAnywhere
         /// </summary>
         public Storage()
         {
-            accessKeyID = "AKIAIF3ZSAPQXNF6ZIOQ";
-            secretAccessKeyID = "P7a+fn9UVxR0MXBn+u83hTAKbeskcsfJ80TGCiln";
+            accessKeyID = "*";
+            secretAccessKeyID = "*";
             bucketName = "GameAnywhere";
             client = new AmazonS3Client(accessKeyID, secretAccessKeyID, new AmazonS3Config().WithCommunicationProtocol(Protocol.HTTP));
             //AmazonS3 client = Amazon.AWSClientFactory.CreateAmazonS3Client(accessKeyID, secretAccessKeyID);
+        }
+
+        /// <summary>
+        /// Generate the MD5 hashcode of a file
+        /// </summary>
+        /// <param name="path">path to file</param>
+        /// <returns>MD5 hashcode of file</returns>
+        private string generateMD5(string path)
+        {
+            FileStream fs = File.Open(path, FileMode.Open);
+            MD5 md5 = MD5.Create();
+            string hash = BitConverter.ToString(md5.ComputeHash(fs)).Replace(@"-", @"").ToLower();
+            fs.Close();
+
+            return hash;
         }
 
         /// <summary>
@@ -47,7 +63,7 @@ namespace GameAnywhere
                     throw new ArgumentException("Parameter cannot be empty/null", "path");
                 if (key.Trim().Equals("") || key == null)
                     throw new ArgumentException("Parameter cannot be empty/null", "key");
-                if(!File.Exists(path))
+                if (!File.Exists(path))
                     throw new ArgumentException("Path to file does not exist", "path");
 
                 //Setup request
@@ -56,7 +72,17 @@ namespace GameAnywhere
 
                 //Send request
                 S3Response response = client.PutObject(request);
-                
+
+                //Get hashcode of uploaded file
+                string responseFileHash = response.Headers["ETag"].TrimStart('"').TrimEnd('"');
+                string fileHash = generateMD5(path);
+
+                //Compare file's hashcode with response's hashcode to confirm file correctly uploaded
+                if (!fileHash.Equals(responseFileHash))
+                {
+                    throw new WebTransferException("Upload file failure.");
+                }
+
                 response.Dispose();
             }
             catch (AmazonS3Exception ex)
@@ -67,41 +93,52 @@ namespace GameAnywhere
                 }
                 else
                 {
-                    Console.WriteLine("ErrorCode=" + ex.ErrorCode);
+                    //Console.WriteLine("ErrorCode=" + ex.ErrorCode);
                     throw;
                 }
             }
         }
 
         /// <summary>
-        /// 
+        /// Download file from S3 to computer
         /// </summary>
-        /// <param name="path"></param>
-        /// <param name="key"></param>
+        /// <param name="path">path of download location on computer</param>
+        /// <param name="key">key of file on S3</param>
+        /// Exceptions: ArgumentException, ConnectionFailureException, AmazonS3Exception
         public void DownloadFile(string path, string key)
         {
             try
             {
-                AmazonS3 client = Amazon.AWSClientFactory.CreateAmazonS3Client(accessKeyID, secretAccessKeyID);
+                //Pre-conditions
+                if (path.Trim().Equals("") || path == null)
+                    throw new ArgumentException("Parameter cannot be empty/null", "path");
+                if (key.Trim().Equals("") || key == null)
+                    throw new ArgumentException("Parameter cannot be empty/null", "key");
+
+                //Setup request
                 GetObjectRequest request = new GetObjectRequest().WithBucketName(bucketName).WithKey(key);
-                using (S3Response response = client.GetObject(request))
+                
+                //Send request
+                S3Response response = client.GetObject(request);
+
+                //TODO exceptions here?
+                using (FileStream fs = File.Create(path))
                 {
-                    using (FileStream fs = File.Create(path))
+                    const int BUFSIZE = 4096;
+                    byte[] buf = new byte[BUFSIZE];
+                    Stream s = response.ResponseStream;
+                    int n = 1;
+                    while (n != 0)
                     {
-                        const int BUFSIZE = 4096;
-                        byte[] buf = new byte[BUFSIZE];
-                        Stream s = response.ResponseStream;
-                        int n = 1;
-                        while (n != 0)
-                        {
-                            n = s.Read(buf, 0, BUFSIZE);
-                            if (n == 0) break;
-                            fs.Write(buf, 0, n);
-                        }
-                        s.Close();
-                        fs.Close();
+                        n = s.Read(buf, 0, BUFSIZE);
+                        if (n == 0) break;
+                        fs.Write(buf, 0, n);
                     }
+                    s.Close();
+                    fs.Close();
                 }
+
+                response.Dispose();
             }
             catch (AmazonS3Exception ex)
             {
@@ -111,29 +148,33 @@ namespace GameAnywhere
                 }
                 else
                 {
-                    Console.WriteLine("ErrorCode=" + ex.ErrorCode);
+                    //Console.WriteLine("ErrorCode=" + ex.ErrorCode);
                     throw;
                 }
             }
         }
 
         /// <summary>
-        /// 
+        /// Delete a file from web(S3)
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="key">key of file on S3</param>
+        /// Exceptions: ArgumentException, ConnectionFailureException, AmazonS3Exception
         public void DeleteFile(string key)
         {
             try
             {
+                //Pre-conditions
+                if (key.Trim().Equals("") || key == null)
+                    throw new ArgumentException("Parameter cannot be empty/null", "key");
+
                 //Setup request
                 DeleteObjectRequest request = new DeleteObjectRequest();
                 request.WithBucketName(bucketName).WithKey(key);
 
                 //Send request
-                using (DeleteObjectResponse response = client.DeleteObject(request))
-                {
-                    //Error Checking
-                }
+                DeleteObjectResponse response = client.DeleteObject(request);
+
+                response.Dispose();
             }
             catch (AmazonS3Exception ex)
             {
@@ -143,33 +184,42 @@ namespace GameAnywhere
                 }
                 else
                 {
-                    Console.WriteLine("ErrorCode=" + ex.ErrorCode);
+                    //Console.WriteLine("ErrorCode=" + ex.ErrorCode);
                     throw;
                 }
             }
         }
 
         /// <summary>
-        /// 
+        /// List all files on web(S3) base on the key
         /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
+        /// <param name="key">key of file on S3</param>
+        /// <returns>list of files on web(S3)</returns>
+        /// Exceptions: ArgumentException, ConnectionFailureException, AmazonS3Exception
         public List<string> ListFiles(string key)
         {
-            List<string> fileList = new List<string>();
             try
             {
+                //Pre-conditions
+                if (key.Trim().Equals("") || key == null)
+                    throw new ArgumentException("Parameter cannot be empty/null", "key");
+
+                //Setup request
                 ListObjectsRequest request = new ListObjectsRequest();
-                request.BucketName = bucketName;
-                request.WithPrefix(key);
-                using (ListObjectsResponse response = client.ListObjects(request))
+                request.WithBucketName(bucketName).WithPrefix(key);
+
+                //Send request
+                ListObjectsResponse response = client.ListObjects(request);
+
+                List<string> fileList = new List<string>();
+                foreach (S3Object entry in response.S3Objects)
                 {
-                    foreach (S3Object entry in response.S3Objects)
-                    {
-                        fileList.Add(entry.Key);
-                    }
-                    return fileList;
+                    fileList.Add(entry.Key);
                 }
+
+                response.Dispose();
+
+                return fileList;
             }
             catch (AmazonS3Exception ex)
             {
@@ -179,7 +229,7 @@ namespace GameAnywhere
                 }
                 else
                 {
-                    Console.WriteLine("ErrorCode=" + ex.ErrorCode);
+                    //Console.WriteLine("ErrorCode=" + ex.ErrorCode);
                     throw;
                 }
             }
