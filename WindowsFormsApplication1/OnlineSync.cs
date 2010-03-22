@@ -75,14 +75,16 @@ namespace GameAnywhere
         /// <summary>
         /// Upload files from computer to the web(S3)
         /// </summary>
-        /// <param name="email"></param>
-        /// <param name="syncAction"></param>
+        /// <param name="email">email of user</param>
+        /// <param name="syncAction">SyncAction object</param>
         private void ComputerToWeb(string email, SyncAction syncAction)
         {
+            //Pre-conditions
             Debug.Assert(email != null && !email.Equals(""));
             Debug.Assert(syncAction.Action == SyncAction.ConfigFiles || syncAction.Action == SyncAction.SavedGameFiles || syncAction.Action == SyncAction.AllFiles);
             Debug.Assert(syncAction.MyGame != null);
 
+            //Initialise variables from syncAction
             string gameName = syncAction.MyGame.Name;
             string saveParentPath = syncAction.MyGame.SaveParentPath;
             string configParentPath = syncAction.MyGame.ConfigParentPath;
@@ -98,12 +100,11 @@ namespace GameAnywhere
                 {
                     //Delete game directory in user's account
                     DeleteGameDirectory(email, gameName);
-                    //syncAction.UnsuccessfulSyncFiles.Add(new SyncError(@"email/gameName", "ComputerToWeb Sync - DeleteGameDirectory", "Unable to delete game directory."));
                 }
             }
             catch (Exception ex)
             {
-                //Exceptions: ArgumentException, System.Net.WebException
+                //Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
                 syncAction.UnsuccessfulSyncFiles.Add(new SyncError(@"email/gameName", "ComputerToWeb Sync - DeleteGameDirectory", ex.Message));
             }
 
@@ -127,11 +128,11 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Upload config/save files to user's S3 account
+        /// Upload config/save files to web(user's S3 account)
         /// </summary>
-        /// <param name="email"></param>
-        /// <param name="gameName"></param>
-        /// <param name="webSaveFolder">webSavedGameFolderName or webConfigFolderName</param>
+        /// <param name="email">email of user</param>
+        /// <param name="gameName">name of game</param>
+        /// <param name="webSaveFolder">SyncSavedGameFolderName or SyncConfigFolderName</param>
         /// <param name="parentPath">Config/Save parent path</param>
         /// <param name="pathList">List of Config/Save game files & directories</param>
         /// <returns>
@@ -146,14 +147,7 @@ namespace GameAnywhere
             {
                 if (Directory.Exists(path))
                 {
-                    try
-                    {
-                        s3.UploadDirectory(gamePath, parentPath, path);
-                    }
-                    catch (Exception ex)
-                    {
-                        errorList.AddRange(GetSyncError(path, "ComputerToWeb Sync - Upload->UploadDirectory", ex.Message));
-                    }
+                    UploadDirectory(gamePath, parentPath, path, ref errorList);
                 }
                 else if (File.Exists(path))
                 {
@@ -177,10 +171,42 @@ namespace GameAnywhere
         }
 
         /// <summary>
+        /// Upload a directory to web(S3)
+        /// </summary>
+        /// <param name="key">key of user's save/config web directory</param>
+        /// <param name="parent">Config/Save parent path</param>
+        /// <param name="dir">directory to upload</param>
+        /// <param name="errorList">reference to errorList</param>
+        private void UploadDirectory(string key, string parent, string dir, ref List<SyncError>errorList)
+        {
+            //Upload every file in current directory
+            foreach (string filePath in Directory.GetFiles(dir))
+            {
+                string keyName = key + filePath.Replace(parent, "").Replace(@"\", "/");
+                try
+                {
+                    //Upload a single file
+                    s3.UploadFile(filePath, keyName);
+                }
+                catch(Exception ex)
+                {
+                    //Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
+                    //Adds error due to file upload
+                    errorList.Add(new SyncError(filePath, "UploadDirectory", ex.Message));
+                }
+            }
+            //Upload every sub-directory in current directory
+            foreach (string subdir in Directory.GetDirectories(dir))
+            {
+                UploadDirectory(key, parent, subdir, ref errorList);
+            }
+        }
+
+        /// <summary>
         /// Delete a game directory in S3
         /// </summary>
-        /// <param name="email"></param>
-        /// <param name="gameName"></param>
+        /// <param name="email">email of user</param>
+        /// <param name="gameName">name of game</param>
         /// <returns>
         /// true - Deletes game directory successfully on S3
         /// false - Fail to delete game directory on S3
@@ -188,10 +214,11 @@ namespace GameAnywhere
         /// Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
         private void DeleteGameDirectory(string email, string gameName)
         {
-            Debug.Assert(getGamesFromWeb(email).Contains(gameName));
-
             try
             {
+                //Pre-conditions
+                Debug.Assert(getGamesFromWeb(email).Contains(gameName));
+
                 //Checks user and gamename validity
                 if (email.Equals("") && email == null && !email.Equals(currentUser.Email))
                     throw new ArgumentException("Parameter cannot be empty/null. Invalid user/User not logged in", email);

@@ -189,18 +189,6 @@ namespace GameAnywhere
                 throw amazonS3Exception;
             }
         }
-        public void UploadDirectory(string key, string parent, string dir)
-        {
-            foreach (string filePath in Directory.GetFiles(dir))
-            {
-                string keyName = key + filePath.Replace(parent, "").Replace(@"\", "/");
-                UploadFile(filePath, keyName);
-            }
-            foreach (string subdir in Directory.GetDirectories(dir))
-            {
-                UploadDirectory(key, parent, subdir);
-            }
-        }
         public void DeleteDirectory(string key)
         {
             List<string> files = ListFiles(key);
