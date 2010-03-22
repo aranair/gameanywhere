@@ -56,25 +56,13 @@ namespace GameAnywhere
             // 1 game name label, 1 checkBox if config files are available, 1 checkBox if saved game files are available.
             foreach (string key in conflictsList.Keys)
             {
-                string gameName = SubstringFromLeft(ref key);
-                string fileType = SubstringFromLeft(ref key);
+                string s = key;
+                string gameName = SubstringFromLeft(ref s);
+                string fileType = SubstringFromLeft(ref s);
 
                 // Creates and edit a new label to display each game name and add it to the display panel
                 CreateLabel(gameName, showConflictsPanel);
-
                 CreateGameIconPictureBox(gameName, showConflictsPanel);
-
-                // If config files exist for a game, create a checkBox for user to select.
-                if (g.ConfigPathList.Count > 0)
-                    CreateConfigCheckBox(g);
-                else // Config files do not exist, create an error label
-                    CreateErrorConfigFileLabel(g);
-
-                // If saved game files exist for a game, create a checkBox for user to select.
-                if (g.SavePathList.Count > 0)
-                    CreateSavedGameCheckBox(g);
-                else // if saved game files do not exist, create an error label to alert user (checkBox should not be created)                   
-                    CreateErrorSavedGameLabel(g);
 
                 yAxisLocation += 70;
 
@@ -109,9 +97,9 @@ namespace GameAnywhere
             gameLabel.BackColor = System.Drawing.Color.Black;
             gameLabel.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             gameLabel.Location = new System.Drawing.Point(85, yAxisLocation);
-            gameLabel.Name = "gameLabel" + g.Name;
+            gameLabel.Name = "gameLabel" + gameName;
             gameLabel.Size = new System.Drawing.Size(200, 20);
-            gameLabel.Text = g.Name;
+            gameLabel.Text = gameName;
             gameLabel.ForeColor = System.Drawing.Color.LimeGreen;
             container.Controls.Add(gameLabel);
         }
@@ -146,17 +134,6 @@ namespace GameAnywhere
         {
             c.Visible = makeVisible;
             c.Enabled = makeEnabled;
-        }
-
-        /// <summary>
-        /// Sets the error label of the start page.
-        /// </summary>
-        /// <param name="s">String to be dispalyed.</param>
-        /// <param name="c">Color to display the string in.</param>
-        public void SetErrorLabel(string s, System.Drawing.Color c)
-        {
-            errorLabel.Text = s;
-            errorLabel.ForeColor = c;
         }
 
         /// <summary>
