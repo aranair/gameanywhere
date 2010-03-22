@@ -53,19 +53,19 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="path">path of local file</param>
         /// <param name="key">key of file on S3</param>
-        /// Exceptions: ArgumentException, ConnectionFailureException, AmazonS3Exception
+        /// Exceptions: ArgumentException, WebTransferException, ConnectionFailureException, AmazonS3Exception
         public void UploadFile(string path, string key)
         {
+            //Pre-conditions
+            if (path.Trim().Equals("") || path == null)
+                throw new ArgumentException("Parameter cannot be empty/null", "path");
+            if (key.Trim().Equals("") || key == null)
+                throw new ArgumentException("Parameter cannot be empty/null", "key");
+            if (!File.Exists(path))
+                throw new ArgumentException("Path to file does not exist", "path");
+
             try
             {
-                //Pre-conditions
-                if (path.Trim().Equals("") || path == null)
-                    throw new ArgumentException("Parameter cannot be empty/null", "path");
-                if (key.Trim().Equals("") || key == null)
-                    throw new ArgumentException("Parameter cannot be empty/null", "key");
-                if (!File.Exists(path))
-                    throw new ArgumentException("Path to file does not exist", "path");
-
                 //Setup request
                 PutObjectRequest request = new PutObjectRequest();
                 request.WithFilePath(path).WithBucketName(bucketName).WithKey(key);
@@ -74,7 +74,7 @@ namespace GameAnywhere
                 S3Response response = client.PutObject(request);
 
                 //Get hashcode of uploaded file
-                string responseFileHash = response.Headers["ETag"].TrimStart('"').TrimEnd('"');
+                string responseFileHash = response.Headers["ETag"].Replace("\"", "");
                 string fileHash = generateMD5(path);
 
                 //Compare file's hashcode with response's hashcode to confirm file correctly uploaded
@@ -107,14 +107,14 @@ namespace GameAnywhere
         /// Exceptions: ArgumentException, ConnectionFailureException, AmazonS3Exception
         public void DownloadFile(string path, string key)
         {
+            //Pre-conditions
+            if (path.Trim().Equals("") || path == null)
+                throw new ArgumentException("Parameter cannot be empty/null", "path");
+            if (key.Trim().Equals("") || key == null)
+                throw new ArgumentException("Parameter cannot be empty/null", "key");
+
             try
             {
-                //Pre-conditions
-                if (path.Trim().Equals("") || path == null)
-                    throw new ArgumentException("Parameter cannot be empty/null", "path");
-                if (key.Trim().Equals("") || key == null)
-                    throw new ArgumentException("Parameter cannot be empty/null", "key");
-
                 //Setup request
                 GetObjectRequest request = new GetObjectRequest().WithBucketName(bucketName).WithKey(key);
                 
@@ -161,12 +161,12 @@ namespace GameAnywhere
         /// Exceptions: ArgumentException, ConnectionFailureException, AmazonS3Exception
         public void DeleteFile(string key)
         {
+            //Pre-conditions
+            if (key.Trim().Equals("") || key == null)
+                throw new ArgumentException("Parameter cannot be empty/null", "key");
+
             try
             {
-                //Pre-conditions
-                if (key.Trim().Equals("") || key == null)
-                    throw new ArgumentException("Parameter cannot be empty/null", "key");
-
                 //Setup request
                 DeleteObjectRequest request = new DeleteObjectRequest();
                 request.WithBucketName(bucketName).WithKey(key);
@@ -198,12 +198,12 @@ namespace GameAnywhere
         /// Exceptions: ArgumentException, ConnectionFailureException, AmazonS3Exception
         public List<string> ListFiles(string key)
         {
+            //Pre-conditions
+            if (key.Trim().Equals("") || key == null)
+                throw new ArgumentException("Parameter cannot be empty/null", "key");
+
             try
             {
-                //Pre-conditions
-                if (key.Trim().Equals("") || key == null)
-                    throw new ArgumentException("Parameter cannot be empty/null", "key");
-
                 //Setup request
                 ListObjectsRequest request = new ListObjectsRequest();
                 request.WithBucketName(bucketName).WithPrefix(key);
@@ -236,55 +236,97 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// 
+        /// Delete directory in web(S3) base on the key
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="key">key of file on S3</param>
+        /// Exceptions: ArgumentException, ConnectionFailureException, AmazonS3Exception
         public void DeleteDirectory(string key)
-        {
-            List<string> files = ListFiles(key);
-            foreach (string file in files)
-            {
-                DeleteFile(file);
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public string GetHash(string key)
         {
             try
             {
-                GetObjectMetadataRequest request = new GetObjectMetadataRequest().WithBucketName(bucketName).WithKey(key);
-                using (S3Response response = client.GetObjectMetadata(request))
+                List<string> files = ListFiles(key);
+                foreach (string file in files)
                 {
-                    string hash = response.Headers.GetValues("ETag")[0].Replace("\"", "");
-                    return hash;
+                    DeleteFile(file);
                 }
             }
-            catch (AmazonS3Exception)
+            catch
             {
-                throw; //temporary
+                throw;
             }
         }
 
         /// <summary>
-        /// 
+        /// Get the hashcode of a file on the web(S3) base on the key
         /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
+        /// <param name="key">key of file on S3</param>
+        /// <returns>hashcode of file</returns>
+        /// Exceptions: ArgumentException, ConnectionFailureException, AmazonS3Exception
+        public string GetHash(string key)
+        {
+            //Pre-conditions
+            if (key.Trim().Equals("") || key == null)
+                throw new ArgumentException("Parameter cannot be empty/null", "key");
+
+            try
+            {
+                //Setup request
+                GetObjectMetadataRequest request = new GetObjectMetadataRequest().WithBucketName(bucketName).WithKey(key);
+                
+                //Send request
+                S3Response response = client.GetObjectMetadata(request);
+
+                //Get hashcode of file
+                string hash = response.Headers["ETag"].Replace("\"", "");
+                response.Dispose();
+
+                return hash;
+            }
+            catch (AmazonS3Exception ex)
+            {
+                if (ex.InnerException != null && ex.InnerException.GetType().Equals(typeof(System.Net.WebException)))
+                {
+                    throw new ConnectionFailureException("Internet connection failure.");
+                }
+                else
+                {
+                    //Console.WriteLine("ErrorCode=" + ex.ErrorCode);
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the hashcode of all files on web(S3) base on the key
+        /// </summary>
+        /// <param name="key">key of file on S3</param>
+        /// <returns>Dictionary of files with its hashcode</returns>
+        /// Exceptions: ArgumentException, ConnectionFailureException, AmazonS3Exception
         public Dictionary<string,string> GetHashDictionary(string key)
         {
-            Dictionary<string,string> dict = new Dictionary<string,string>();
-            List<string> files = ListFiles(key);
-            foreach (string file in files)
+            //Pre-conditions
+            if (key.Trim().Equals("") || key == null)
+                throw new ArgumentException("Parameter cannot be empty/null", "key");
+
+            try
             {
-                if (Path.GetFileName(file).Equals("metadata.web")) continue;
-                dict[file.Replace(key + '/', "")] = GetHash(file);
+                //Get all files on web(S3)
+                List<string> files = ListFiles(key);
+                
+                //Add to Dictionary the filepath and hashcode of file
+                Dictionary<string, string> dict = new Dictionary<string, string>();
+                foreach (string file in files)
+                {
+                    if (Path.GetFileName(file).Equals("metadata.web")) continue;
+                    dict[file.Replace(key + '/', "")] = GetHash(file);
+                }
+
+                return dict;
             }
-            return dict;
+            catch
+            {
+                throw;
+            }
         }
     }
 }

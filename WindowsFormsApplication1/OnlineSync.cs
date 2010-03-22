@@ -87,21 +87,28 @@ namespace GameAnywhere
         /// <returns>list of game names on the user's web account</returns>
         public List<string> GetGamesFromWeb(string user)
         {
-            List<string> games = s3.ListFiles(user);
-            HashSet<string> gamesList = new HashSet<string>();
-            foreach (string game in games)
+            try
             {
-                string gameName = game.Replace(user + "/", "");
-                int length = gameName.IndexOf("/");
-                if (length < 0) continue;
-                gameName = gameName.Substring(0, length);
-                if (!gamesList.Contains(gameName))
+                List<string> games = s3.ListFiles(user);
+                HashSet<string> gamesList = new HashSet<string>();
+                foreach (string game in games)
                 {
-                    gamesList.Add(gameName);
+                    string gameName = game.Replace(user + "/", "");
+                    int length = gameName.IndexOf("/");
+                    if (length < 0) continue;
+                    gameName = gameName.Substring(0, length);
+                    if (!gamesList.Contains(gameName))
+                    {
+                        gamesList.Add(gameName);
+                    }
                 }
-            }
 
-            return gamesList.ToList<string>();
+                return gamesList.ToList<string>();
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -166,7 +173,6 @@ namespace GameAnywhere
             try
             {
                 //Check if game is available on user's web account(S3)
-                //TODO GetGamesFromWeb - change name
                 if (GetGamesFromWeb(email).Contains(gameName))
                 {
                     //Delete game directory in user's account
