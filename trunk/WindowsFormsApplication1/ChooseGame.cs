@@ -669,6 +669,8 @@ namespace GameAnywhere
             if (gameName.Equals(GameLibrary.WOWGameName))
                 SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.worldOfWarcraftIcon1.gif", ImageLayout.Zoom);
 
+            if (gameName.Equals(GameLibrary.AbuseGameName))
+                SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.abuseIcon.jpg", ImageLayout.Zoom);
         }
         #endregion
 

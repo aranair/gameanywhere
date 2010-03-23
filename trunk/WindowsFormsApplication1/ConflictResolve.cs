@@ -126,8 +126,8 @@ namespace GameAnywhere
         {
             System.Windows.Forms.PictureBox arrowPictureBox = new PictureBox();
             arrowPictureBox.Name = gameName + type;
-            arrowPictureBox.Visible = false;
-            SetBackgroundImage(arrowPictureBox, "GameAnywhere.Resources.arrowUpload.gif", ImageLayout.Center);
+            arrowPictureBox.Visible = true;
+            //SetBackgroundImage(arrowPictureBox, "GameAnywhere.Resources.arrowUpload.gif", ImageLayout.Center);
             arrowPictureBox.Font = new System.Drawing.Font("Verdana", 8F);
             arrowPictureBox.Size = new System.Drawing.Size(50, 38);
             arrowPictureBox.Location = new System.Drawing.Point(380, yAxisLocation - 10);
@@ -359,6 +359,9 @@ namespace GameAnywhere
 
             if (gameName.Equals(GameLibrary.WOWGameName))
                 SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.worldOfWarcraftIcon1.gif", ImageLayout.Zoom);
+
+            if (gameName.Equals(GameLibrary.AbuseGameName))
+                SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.abuseIcon.jpg", ImageLayout.Zoom);
 
         }
         #endregion
