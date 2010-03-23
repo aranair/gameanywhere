@@ -57,12 +57,6 @@ namespace GameAnywhere
                         param[i] = param_string[i].Substring(7, param_string.Length - 7);
                     else if (param_string[i].StartsWith("bool")) //eg. bool:true
                         param[i] = Convert.ToBoolean(param_string[i].Substring(5, param_string.Length - 5));
-                    else if (param_string[i].ToLower().StartsWith("user1"))
-                    {
-                        User newUser = new User();
-                        newUser.Email = "TestComToWeb@gmails.com";
-                        param[i] = newUser;
-                    }
                     //add in other primitve data here
                 }
                 //support for other data structure to be added        
@@ -72,12 +66,6 @@ namespace GameAnywhere
 
         private void ReadButton_Click(object sender, EventArgs e)
         {
-
-            Dictionary<string, int> noConflict = new Dictionary<string, int>();
-            noConflict.Add("A", 1);
-            KeyValuePair<string, int> k = new KeyValuePair<string, int>("A", 1);
-            if (noConflict.Contains(k))
-                MessageBox.Show("Yes");
 
             //Move any existing SyncFolder
             if(Directory.Exists(@".\SyncFolder"))

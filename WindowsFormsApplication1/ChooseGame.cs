@@ -671,6 +671,7 @@ namespace GameAnywhere
 
             if (gameName.Equals(GameLibrary.AbuseGameName))
                 SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.abuseIcon.jpg", ImageLayout.Zoom);
+
         }
         #endregion
 

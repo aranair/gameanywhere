@@ -60,16 +60,9 @@ namespace GameAnywhere.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap arrowDownload {
+        internal static System.Drawing.Bitmap abuseIcon {
             get {
-                object obj = ResourceManager.GetObject("arrowDownload", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap arrowUpload {
-            get {
-                object obj = ResourceManager.GetObject("arrowUpload", resourceCulture);
+                object obj = ResourceManager.GetObject("abuseIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -112,13 +105,6 @@ namespace GameAnywhere.Properties {
         internal static System.Drawing.Bitmap bannerConfirmGamesToSync {
             get {
                 object obj = ResourceManager.GetObject("bannerConfirmGamesToSync", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap bannerConflictResolve {
-            get {
-                object obj = ResourceManager.GetObject("bannerConflictResolve", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -228,27 +214,6 @@ namespace GameAnywhere.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap computerToWebButton {
-            get {
-                object obj = ResourceManager.GetObject("computerToWebButton", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap computerToWebButtonMouseDown {
-            get {
-                object obj = ResourceManager.GetObject("computerToWebButtonMouseDown", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap computerToWebButtonMouseOver {
-            get {
-                object obj = ResourceManager.GetObject("computerToWebButtonMouseOver", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap confirmGameChoicePopupButton {
             get {
                 object obj = ResourceManager.GetObject("confirmGameChoicePopupButton", resourceCulture);
@@ -294,20 +259,6 @@ namespace GameAnywhere.Properties {
         internal static System.Drawing.Bitmap doneResultPanelButtonMouseOver {
             get {
                 object obj = ResourceManager.GetObject("doneResultPanelButtonMouseOver", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap download {
-            get {
-                object obj = ResourceManager.GetObject("download", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap downloadArrowed {
-            get {
-                object obj = ResourceManager.GetObject("downloadArrowed", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -424,20 +375,6 @@ namespace GameAnywhere.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap overallbackground3 {
-            get {
-                object obj = ResourceManager.GetObject("overallbackground3", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap overallbackground4 {
-            get {
-                object obj = ResourceManager.GetObject("overallbackground4", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap registerButton {
             get {
                 object obj = ResourceManager.GetObject("registerButton", resourceCulture);
@@ -515,27 +452,6 @@ namespace GameAnywhere.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap thumbdriveAndWebButton {
-            get {
-                object obj = ResourceManager.GetObject("thumbdriveAndWebButton", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap thumbdriveAndWebButtonMouseDown {
-            get {
-                object obj = ResourceManager.GetObject("thumbdriveAndWebButtonMouseDown", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap thumbdriveAndWebButtonMouseOver {
-            get {
-                object obj = ResourceManager.GetObject("thumbdriveAndWebButtonMouseOver", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap thumbdriveToComputerButton {
             get {
                 object obj = ResourceManager.GetObject("thumbdriveToComputerButton", resourceCulture);
@@ -557,44 +473,9 @@ namespace GameAnywhere.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap upload {
-            get {
-                object obj = ResourceManager.GetObject("upload", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap uploadArrowed {
-            get {
-                object obj = ResourceManager.GetObject("uploadArrowed", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap warcraft3 {
             get {
                 object obj = ResourceManager.GetObject("warcraft3", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap webToComputerButton {
-            get {
-                object obj = ResourceManager.GetObject("webToComputerButton", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap webToComputerButtonMouseDown {
-            get {
-                object obj = ResourceManager.GetObject("webToComputerButtonMouseDown", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap webToComputerButtonMouseOver {
-            get {
-                object obj = ResourceManager.GetObject("webToComputerButtonMouseOver", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

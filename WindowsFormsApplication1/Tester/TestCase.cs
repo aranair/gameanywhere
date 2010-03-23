@@ -297,9 +297,6 @@ namespace GameAnywhere
                 case "ResendActivation":
                     result = Verifier.VerifyResendActivation(index, returnType, testClass, exceptionThrown, expectedOutput);
                     break;
-                case "CheckConflicts":
-                    result = Verifier.VerifyCheckConflicts(index, returnType, testClass, exceptionThrown, expectedOutput);
-                    break;
             }
             return result; //return test result
         }
