@@ -200,6 +200,8 @@ namespace GameAnywhere
             //Updates list of unsuccessful sync files
             syncAction.UnsuccessfulSyncFiles.AddRange(saveGameErrorList);
             syncAction.UnsuccessfulSyncFiles.AddRange(configFileErrorList);
+            savePathList = null;
+            configPathList = null;
             saveGameErrorList = null;
             configFileErrorList = null;
         }
