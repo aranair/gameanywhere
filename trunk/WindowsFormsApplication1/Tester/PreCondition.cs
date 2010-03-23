@@ -493,7 +493,7 @@ namespace GameAnywhere
                                 localHash.AddEntry("Game2/savedGame/File 2", "B");
 
                                 localMeta.AddEntry("Game1/savedGame/File 1", "A");
-                                localMeta.AddEntry("Game2/savedGame/", "B");
+                                localMeta.AddEntry("Game2/savedGame/File 2", "B");
 
                                 webHash.AddEntry("Game1/savedGame/File 1", "A");
                                 webHash.AddEntry("Game2/savedGame/File 2", "B");
@@ -698,7 +698,7 @@ namespace GameAnywhere
                                 localMeta.AddEntry("Game1/savedGame/File 1", "A");
                                 localMeta.AddEntry("Game1/savedGame/File 2", "B");
                                 localMeta.AddEntry("Game1/config/File 3", "C");
-                                localMeta.AddEntry("Game1/config/File 4", "D");
+                                localMeta.AddEntry("Game2/config/File 4", "D");
 
                                 webHash.AddEntry("Game1/savedGame/File 1", "Y");
                                 webHash.AddEntry("Game1/savedGame/File 2", "X");
