@@ -574,11 +574,11 @@ namespace GameAnywhere
                     }
                 case 14:
                     {
-                        KeyValuePair<string, int> f1 = new KeyValuePair<string, int>("Game1/savedGame/File 1", 14);
+                        KeyValuePair<string, int> f1 = new KeyValuePair<string, int>("Game1/savedGame/File 1", 24);
                         if (!webThumb.Conflicts.Contains(f1))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! conflict did not contain Game1/savedGame/File 1 and 14");
+                            result.AddRemarks("Failed! conflict did not contain Game1/savedGame/File 1 and 24");
                         }
                         if (webThumb.NoConflict.Count != 0)
                         {
@@ -593,11 +593,11 @@ namespace GameAnywhere
                         if (returnType != null)
                         {
                             Dictionary<string, int> conflictReturn = (Dictionary<string, int>)returnType;
-                            KeyValuePair<string, int> f2 = new KeyValuePair<string, int>("Game1/savedGame/File 1", 14);
+                            KeyValuePair<string, int> f2 = new KeyValuePair<string, int>("Game1/savedGame", 0);
                             if (!conflictReturn.Contains(f2))
                             {
                                 result.Result = false;
-                                result.AddRemarks("Failed! return did not contain Game1/savedGame/File 1 and 14");
+                                result.AddRemarks("Failed! return did not contain Game1/savedGame");
                             }
                         }
                         else
@@ -625,11 +625,11 @@ namespace GameAnywhere
                             result.Result = false;
                             result.AddRemarks("Failed! conflicts did not contain Game1/savedGame/File 1 and 12");
                         }
-                        KeyValuePair<string, int> f2 = new KeyValuePair<string, int>("Game1/savedGame/File 2", 14);
+                        KeyValuePair<string, int> f2 = new KeyValuePair<string, int>("Game1/savedGame/File 2", 24);
                         if (!webThumb.Conflicts.Contains(f2))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! conflicts did not contain Game1/savedGame/File 2 and 14");
+                            result.AddRemarks("Failed! conflicts did not contain Game1/savedGame/File 2 and 24");
                         }
                         //check for return
                         if (returnType != null)
@@ -672,11 +672,11 @@ namespace GameAnywhere
                             result.Result = false;
                             result.AddRemarks("Failed! conflicts expect Game1/savedGame/File 1 and 12");
                         }
-                        KeyValuePair<string, int> f2 = new KeyValuePair<string, int>("Game1/savedGame/File 2", 14);
+                        KeyValuePair<string, int> f2 = new KeyValuePair<string, int>("Game1/savedGame/File 2", 24);
                         if (!webThumb.Conflicts.Contains(f2))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! conflicts expect Game1/savedGame/File 2 and 14");
+                            result.AddRemarks("Failed! conflicts expect Game1/savedGame/File 2 and 24");
                         }
                         KeyValuePair<string, int> f3 = new KeyValuePair<string, int>("Game1/config/File 3", 13);
                         if (!webThumb.Conflicts.Contains(f3))
