@@ -111,8 +111,16 @@ namespace GameAnywhere
             string expected = testCaseComponent[2];
             if(methodName.Equals("SynchronizeGames"))
             {
-                OfflineSync offline = (OfflineSync)testClass;
-                GetExpectedOutput(expected,offline.SyncDirection);
+                if (testClass.GetType().Equals(typeof(OfflineSync)))
+                {
+                    OfflineSync offline = (OfflineSync)testClass;
+                    GetExpectedOutput(expected, offline.SyncDirection);
+                }
+                else if(testClass.GetType().Equals(typeof(OnlineSync)))
+                {
+                    OnlineSync online = (OnlineSync)testClass;
+                    GetExpectedOutput(expected, online.SyncDirection);
+                }
             }
             else
                 GetExpectedOutput(expected, 0);
@@ -200,7 +208,8 @@ namespace GameAnywhere
                         case "SynchronizeGames":
                             if (err.GetBaseException().GetType().Equals(typeof(InvalidSyncDirectionException)) ||
                                 err.GetBaseException().GetType().Equals(typeof(DeleteDirectoryErrorException)) ||
-                                err.GetBaseException().GetType().Equals(typeof(CreateFolderFailedException)))
+                                err.GetBaseException().GetType().Equals(typeof(CreateFolderFailedException))||
+                                err.GetBaseException().GetType().Equals(typeof(ConnectionFailureException)))
                                 returnType = err;
                             else
                             {
@@ -250,7 +259,7 @@ namespace GameAnywhere
                     }
 
                     //clean up / Restore the test file/folders or orginal files/folders
-                    PreCondition.CleanUp(methodName,index);
+                    PreCondition.CleanUp(testClass,methodName,index);
                 }
                 testOutcome = result;
                 return result;
@@ -279,7 +288,10 @@ namespace GameAnywhere
                     break;
                     //add more methods here
                 case "SynchronizeGames":
-                    result = Verifier.VerifySynchronizeGames(index, returnType, testClass, exceptionThrown, expectedOutput);
+                    if(testClass.GetType().Equals(typeof(OfflineSync)))
+                        result = Verifier.VerifySynchronizeGames(index, returnType, testClass, exceptionThrown, expectedOutput);
+                    else
+                        result = Verifier.VerifyOnlineSync(index, returnType, testClass, exceptionThrown, expectedOutput);
                     break;
                 case "Restore":
                     result = Verifier.VerifyRestore(index,input, returnType, testClass, exceptionThrown, expectedOutput, deletedFile);
@@ -402,8 +414,19 @@ namespace GameAnywhere
                     start = param_string[i].IndexOf("<");
                     end = param_string[i].IndexOf(">");
                     string type = param_string[i].Substring(start + 1, end - (start + 1));
-                    OfflineSync offline = (OfflineSync)testClass;
-                    ArrayList temp = PreCondition.GetArrayList(param_string[i], offline.SyncDirection);
+                    ArrayList temp = null;
+                    if (testClass.GetType().Equals(typeof(OfflineSync)))
+                    {
+                        OfflineSync offline = (OfflineSync)testClass;
+                        temp = PreCondition.GetArrayList(param_string[i], offline.SyncDirection);
+                    }
+                    else if (testClass.GetType().Equals(typeof(OnlineSync)))
+                    {
+                        OnlineSync online = (OnlineSync)testClass;
+                        temp = PreCondition.GetArrayList(param_string[i], online.SyncDirection);
+                    }
+                    else
+                        temp = PreCondition.GetArrayList(param_string[i], 0);
                     switch (type)
                     {
                         //convert the arraylist to list
