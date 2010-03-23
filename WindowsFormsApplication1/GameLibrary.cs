@@ -36,6 +36,7 @@ namespace GameAnywhere
         public static readonly string FIFA10GameName = "FIFA 10";
         public static readonly string FM2010GameName = "Football Manager 2010";
         public static readonly string WOWGameName = "World of Warcraft";
+        public static readonly string AbuseGameName = "Abuse";
         #endregion
 
         /// <summary>
@@ -83,6 +84,7 @@ namespace GameAnywhere
         /// </summary>
         private void Initialize()
         {
+            InitializeAbuse();
             InitializeWarcraft3();
             InitializeFIFA2010();
             InitializeWOW();
@@ -277,6 +279,10 @@ namespace GameAnywhere
                 else if (newGame.Name.Equals(FM2010GameName))
                 {
                     InitializeFM2010SavedGameList(ref newGame, savedGamePath);
+                }
+                else if (newGame.Name.Equals(AbuseGameName))
+                {
+                    InitializeAbuseSavedGameList(ref newGame, savedGamePath);
                 }
             }
 
@@ -554,6 +560,81 @@ namespace GameAnywhere
                 newGame.ConfigPathList.Add(configParentPath + @"\Account");
         }
         #endregion
+
+        #region Abuse
+
+        /// <summary>
+        /// Initializes World of Warcraft into list of installed (if present)
+        /// </summary>
+        private void InitializeAbuse()
+        {
+
+            string registryName = "Install_Dir";
+            string key = RegistrySoftwarePath + @"\Abuse";
+
+            try
+            {
+                // Attempts to open registry key to check existence of game.
+                using (RegistryKey rk = Registry.LocalMachine.OpenSubKey(key))
+                {
+                    // Game exists
+                    if (rk != null && rk.GetValue(registryName) != null)
+                    {
+                        // Assigning of specific game information for the creation of the new instance of Game.
+                        List<string> configList = new List<string>();
+                        List<string> saveList = new List<string>();
+                        string installPath = "" + rk.GetValue(registryName);
+                        RemoveTrailingSlash(ref installPath);
+
+                        string configParentPath = "";
+                        string saveParentPath = installPath;
+                        Game newGame = new Game(configList, saveList, AbuseGameName, installPath, configParentPath, saveParentPath);
+
+                        //InitializeAbuseConfigList(ref newGame, configParentPath);
+                        InitializeAbuseSavedGameList(ref newGame, saveParentPath);
+
+                        AddToInstalledGames(newGame);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // Game folders not accessible.
+            }
+        }
+
+        /// <summary>
+        /// Initializes saved game list for Abuse
+        /// </summary>
+        /// <param name="newGame">Game instance to be editted.</param>
+        /// <param name="saveParentPath">Saved game parent path of the game.</param>
+        private void InitializeAbuseSavedGameList(ref Game newGame, string saveParentPath)
+        {
+            newGame.SavePathList = new List<string>();
+
+            if (Directory.Exists(saveParentPath))
+            {
+                // Generic folders
+                foreach (string file in Directory.GetFiles(saveParentPath, "*.spe"))
+                {
+                    newGame.SavePathList.Add(file);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Initializes config files list for Abuse
+        /// </summary>
+        /// <param name="newGame">Game instance to be editted.</param>
+        /// <param name="saveParentPath">Config files parent path of the game.</param>
+        private void InitializeAbuseConfigList(ref Game newGame, string configParentPath)
+        {
+            newGame.ConfigPathList = new List<string>();
+            if (Directory.Exists(configParentPath + @"\Account"))
+                newGame.ConfigPathList.Add(configParentPath + @"\Account");
+        }
+        #endregion
+
 
         #endregion
 
