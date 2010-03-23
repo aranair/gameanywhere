@@ -176,6 +176,18 @@ namespace GameAnywhere
                     else if (param_string[i].StartsWith("bool")) //eg. bool:true
                         param[i] = Convert.ToBoolean(param_string[i].Substring(5, param_string.Length - 5));
                     //add in other primitve data here
+                    else if (param_string[i].ToLower().StartsWith("ComToWebUser"))
+                    {
+                        User newUser = new User();
+                        newUser.Email = "TestComToWeb@gmails.com";
+                        param[i] = newUser;
+                    }
+                    else if (param_string[i].ToLower().StartsWith("WebToComUser"))
+                    {
+                        User newUser = new User();
+                        newUser.Email = "TestWebToCom@gmails.com";
+                        param[i] = newUser;
+                    }
                 }
                 //support for other data structure to be added        
             } //end of for loop, extracting input parameters

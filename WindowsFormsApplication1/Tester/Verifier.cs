@@ -18,10 +18,138 @@ namespace GameAnywhere
     {
 
         private static string externalPath = @".\SyncFolder";
-
+        #region OnlineSync
         private static List<string> supportedGames = new List<string>(new string[] {"Warcraft 3","FIFA 10","Football Manager 2010","World of Warcraft"});
 
+        /// <summary>
+        /// This method verifies the outcome of each test case for OnlineSync class SynchornizeGames method.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="returnType"></param>
+        /// <param name="testClass"></param>
+        /// <param name="exceptionThrown"></param>
+        /// <param name="expectedOutput"></param>
+        /// <returns></returns>
+        public static TestResult VerifyOnlineSync(int index, object returnType, object testClass, string exceptionThrown, object expectedOutput)
+        {
+            TestResult result = new TestResult(true);
+            OnlineSync onlineClass = (OnlineSync)testClass;
+            Storage store = new Storage();
+            List<string> listOfGamesOnWeb = new List<string>();
+            List<string> listOfWebPath = new List<string>();
+
+            switch (index)
+            {
+                case 1: //verify Wow all files
+                    {
+                        listOfGamesOnWeb = store.ListFiles("TestComToWeb@gmails.com");
+                        foreach (string s in listOfGamesOnWeb)
+                        {
+                            if(s.Contains('/'))
+                                listOfWebPath.Add(s.Substring(s.IndexOf('/')));
+                        }
+
+                        Game wow = PreCondition.getGame("World of Warcraft", OnlineSync.ComToWeb);
+
+                        CheckWithGamesOnWeb(ref result, listOfWebPath, wow);
+                        break;
+                    }
+                case 2: //verifies Wow config, FM 2010 save game
+                    {
+                        listOfGamesOnWeb = store.ListFiles("TestComToWeb@gmails.com");
+                        foreach (string s in listOfGamesOnWeb)
+                            listOfWebPath.Add(s.Substring(s.IndexOf('/')));
+
+                        Game wow = PreCondition.getGame("World Of Warcraft", OnlineSync.ComToWeb);
+                        Game fm2010 = PreCondition.getGame("Football Manager 2010",OnlineSync.ComToWeb);
+                        //check wow
+                        CheckWithGamesOnWeb(ref result, listOfWebPath, wow);
+                        //check fm
+                        CheckWithGamesOnWeb(ref result, listOfWebPath, fm2010);
+                        break;
+                    }
+                case 3: // check syncAction list for the list of error
+                    {
+                        Game fifa = PreCondition.getGame("FIFA 10",OnlineSync.ComToWeb);
+                        //check for all the paths to be sync-ed, they are in the sync error list in the sync Action.
+                        List<SyncAction> ret = (List<SyncAction>)returnType;
+                        SyncAction fifaSyncAction = null;
+                        foreach(SyncAction sa in ret)
+                        {
+                            if(sa.MyGame.Name.Equals("FIFA 10"))
+                                fifaSyncAction = sa;
+                        }
+                        List<string> errorPath = new List<string>();
+                        foreach(SyncError se in fifaSyncAction.UnsuccessfulSyncFiles)
+                        {
+                            errorPath.Add(se.FilePath);
+                        }
+                        //check config path
+                        foreach (string path in fifa.ConfigPathList)
+                        {
+                            //if error path do not contain the config file
+                            if (!errorPath.Contains(path))
+                            {
+                                result.Result = false;
+                                result.AddRemarks("Failed! "+path+" is not in Sync Error list.");
+                            }
+                        }
+
+                        //
+                        foreach (string path in fifa.SavePathList)
+                        {
+                            //if error path do not contain the config file
+                            if (!errorPath.Contains(path))
+                            {
+                                result.Result = false;
+                                result.AddRemarks("Failed! " + path + " is not in Sync Error list.");
+                            }
+                        }
+                        break;
+                    }
+                        default : break;
+            }
+            return result;
+        }
+
+        private static void CheckWithGamesOnWeb(ref TestResult result, List<string> listOfWebPath, Game game)
+        {
+            //Check save for Wow
+            foreach (string com in game.SavePathList)
+            {
+                string check = com.Substring(game.SaveParentPath.Length);
+                MessageBox.Show("check : " + check + " com : " + com);
+                if (!listOfWebPath.Contains(check))
+                {
+                    result.Result = false;
+                    result.AddRemarks("Failed! " + com + " is not uploaded to the web");
+                }
+            }
+
+            //Check config for Wow
+            foreach (string com in game.ConfigPathList)
+            {
+                string check = com.Substring(game.ConfigParentPath.Length);
+                MessageBox.Show("check : " + check + " com : " + com);
+                if (!listOfWebPath.Contains(check))
+                {
+                    result.Result = false;
+                    result.AddRemarks("Failed! " + com + " is not uploaded to the web");
+                }
+            }
+        }
+        #endregion
+
         # region WebAndThumbSync
+        /// <summary>
+        /// This method verifies outcome for the check conflict method in the WebAndThumbSync
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="returnType"></param>
+        /// <param name="testClass"></param>
+        /// <param name="exceptionThrown"></param>
+        /// <param name="expectedOutput"></param>
+        /// <returns></returns>
         public static TestResult VerifyCheckConflicts(int index, object returnType, object testClass, string exceptionThrown, object expectedOutput)
         {
             TestResult result = new TestResult(true);
@@ -66,11 +194,11 @@ namespace GameAnywhere
                             result.Result = false;
                             result.AddRemarks("Failed! Expect " + 1 + " items, conflicts contains " + webThumb.NoConflict.Count + " item");
                         }
-                        KeyValuePair<string, int> f1 = new KeyValuePair<string, int>("File 1", 2);
+                        KeyValuePair<string, int> f1 = new KeyValuePair<string, int>("Game1/savedGame/File 1", 2);
                         if(!webThumb.NoConflict.Contains(f1))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! conflicts did not contains File 1 and direction 2");
+                            result.AddRemarks("Failed! conflicts did not contains Game1/savedGame/File 1 and direction 2");
                         }
                         break;
                     }
@@ -91,11 +219,11 @@ namespace GameAnywhere
                             result.Result = false;
                             result.AddRemarks("Failed! Expect " + 1 + " items, conflicts contains " + webThumb.NoConflict.Count + " item");
                         }
-                        KeyValuePair<string, int> f1 = new KeyValuePair<string, int>("File 1", 1);
+                        KeyValuePair<string, int> f1 = new KeyValuePair<string, int>("Game1/savedGame/File 1", 1);
                         if (!webThumb.NoConflict.Contains(f1))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! noConflicts did not contains File 1 and direction 1");
+                            result.AddRemarks("Failed! noConflicts did not contains Game1/savedGame/File 1 and direction 1");
                         }
                         break;
                     }
@@ -116,17 +244,17 @@ namespace GameAnywhere
                             result.Result = false;
                             result.AddRemarks("Failed! Expect " + 2 + " items, conflicts contains " + webThumb.NoConflict.Count + " item");
                         }
-                        KeyValuePair<string, int> f2 = new KeyValuePair<string, int>("File 2", 1);
+                        KeyValuePair<string, int> f2 = new KeyValuePair<string, int>("Game2/savedGame/File 2", 1);
                         if (!webThumb.NoConflict.Contains(f2))                 
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! conflicts did not contains File 2 and direction 1");
+                            result.AddRemarks("Failed! conflicts did not contains Game2/savedGame/File 2 and direction 1");
                         }
-                        KeyValuePair<string, int> f3 = new KeyValuePair<string, int>("File 3", 2);
+                        KeyValuePair<string, int> f3 = new KeyValuePair<string, int>("Game3/savedGame/File 3", 2);
                         if (!webThumb.NoConflict.Contains(f3))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! noConflicts did not contains File 3 and direction 2");
+                            result.AddRemarks("Failed! noConflicts did not contains Game3/savedGame/File 3 and direction 2");
                         }
                         break;
                     }
@@ -142,28 +270,28 @@ namespace GameAnywhere
                             result.Result = false;
                             result.AddRemarks("Failed! Expect " + 1 + " items, conflicts contains " + webThumb.Conflicts.Count + " item");
                         }
-                        KeyValuePair<string, int> f1 = new KeyValuePair<string, int>("File 1", 0);
+                        KeyValuePair<string, int> f1 = new KeyValuePair<string, int>("Game1/savedGame/File 1", 12);
                         if (!webThumb.Conflicts.Contains(f1))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! Conflicts do not contain File 1 and 0!");
+                            result.AddRemarks("Failed! Conflicts do not contain Game1/savedGame/File 1 and 12!");
                         }
                         if (webThumb.NoConflict.Count != 2)
                         {
                             result.Result = false;
                             result.AddRemarks("Failed! Expect " + 2 + " items, conflicts contains " + webThumb.NoConflict.Count + " item");
                         }
-                        KeyValuePair<string, int> f2 = new KeyValuePair<string, int>("File 2", 1);
+                        KeyValuePair<string, int> f2 = new KeyValuePair<string, int>("Game2/savedGame/File 2", 1);
                         if (!webThumb.NoConflict.Contains(f2))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! noConflicts did not contains File 2 and direction 1");
+                            result.AddRemarks("Failed! noConflicts did not contains Game2/savedGame/File 2 and direction 1");
                         }
-                        KeyValuePair<string, int> f3 = new KeyValuePair<string, int>("File 3", 2);
+                        KeyValuePair<string, int> f3 = new KeyValuePair<string, int>("Game3/savedGame/File 3", 2);
                         if (!webThumb.NoConflict.Contains(f3))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! noConflicts did not contains File 3 and direction 2");
+                            result.AddRemarks("Failed! noConflicts did not contains Game3/savedGame/File 3 and direction 2");
                         }
                         break;
                     }
@@ -179,34 +307,34 @@ namespace GameAnywhere
                             result.Result = false;
                             result.AddRemarks("Failed! Expect " + 1 + " items, conflicts contains " + webThumb.Conflicts.Count + " item");
                         }
-                        KeyValuePair<string, int> f1 = new KeyValuePair<string, int>("File 1", 0);
+                        KeyValuePair<string, int> f1 = new KeyValuePair<string, int>("Game1/savedGame/File 1", 12);
                         if (!webThumb.Conflicts.Contains(f1))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! Conflicts do not contain File 1 and 0!");
+                            result.AddRemarks("Failed! Conflicts do not contain Game1/savedGame/File 1 and 12!");
                         }
                         if (webThumb.NoConflict.Count != 3)
                         {
                             result.Result = false;
                             result.AddRemarks("Failed! Expect " + 3 + " items, conflicts contains " + webThumb.NoConflict.Count + " item");
                         }
-                        KeyValuePair<string, int> f2 = new KeyValuePair<string, int>("File 2", 1);
+                        KeyValuePair<string, int> f2 = new KeyValuePair<string, int>("Game2/savedGame/File 2", 1);
                         if (!webThumb.NoConflict.Contains(f2))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! noConflicts did not contains File 2 and direction 1");
+                            result.AddRemarks("Failed! noConflicts did not contains Game2/savedGame/File 2 and direction 1");
                         }
-                        KeyValuePair<string, int> f3 = new KeyValuePair<string, int>("File 3", 2);
+                        KeyValuePair<string, int> f3 = new KeyValuePair<string, int>("Game3/savedGame/File 3", 2);
                         if (!webThumb.NoConflict.Contains(f3))
                         {
                             result.Result = false;
                             result.AddRemarks("Failed! noConflicts did not contains File 3 and direction 2");
                         }
-                        KeyValuePair<string, int> f4 = new KeyValuePair<string, int>("File 4", 3);
+                        KeyValuePair<string, int> f4 = new KeyValuePair<string, int>("Game4/savedGame/File 4", 3);
                         if (!webThumb.NoConflict.Contains(f4))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! noConflicts did not contains File 4 and direction 3");
+                            result.AddRemarks("Failed! noConflicts did not contains Game4/savedGame/File 4 and direction 3");
                         }
                         break;
                     }
@@ -222,34 +350,34 @@ namespace GameAnywhere
                             result.Result = false;
                             result.AddRemarks("Failed! Expect " + 1 + " items, conflicts contains " + webThumb.Conflicts.Count + " item");
                         }
-                        KeyValuePair<string, int> f1 = new KeyValuePair<string, int>("File 1", 0);
+                        KeyValuePair<string, int> f1 = new KeyValuePair<string, int>("Game1/savedGame/File 1", 12);
                         if (!webThumb.Conflicts.Contains(f1))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! Conflicts do not contain File 1 and 0!");
+                            result.AddRemarks("Failed! Conflicts do not contain Game1/savedGame/File 1 and 12!");
                         }
                         if (webThumb.NoConflict.Count != 3)
                         {
                             result.Result = false;
                             result.AddRemarks("Failed! Expect " + 3 + " items, conflicts contains " + webThumb.NoConflict.Count + " item");
                         }
-                        KeyValuePair<string, int> f2 = new KeyValuePair<string, int>("File 2", 1);
+                        KeyValuePair<string, int> f2 = new KeyValuePair<string, int>("Game2/savedGame/File 2", 1);
                         if (!webThumb.NoConflict.Contains(f2))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! noConflicts did not contains File 2 and direction 1");
+                            result.AddRemarks("Failed! noConflicts did not contains Game2/savedGame/File 2 and direction 1");
                         }
-                        KeyValuePair<string, int> f3 = new KeyValuePair<string, int>("File 3", 2);
+                        KeyValuePair<string, int> f3 = new KeyValuePair<string, int>("Game3/savedGame/File 3", 2);
                         if (!webThumb.NoConflict.Contains(f3))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! noConflicts did not contains File 3 and direction 2");
+                            result.AddRemarks("Failed! noConflicts did not contains Game3/savedGame/File 3 and direction 2");
                         }
-                        KeyValuePair<string, int> f4 = new KeyValuePair<string, int>("File 4", 4);
+                        KeyValuePair<string, int> f4 = new KeyValuePair<string, int>("Game4/savedGame/File 4", 4);
                         if (!webThumb.NoConflict.Contains(f4))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! noConflicts did not contains File 4 and direction 4");
+                            result.AddRemarks("Failed! noConflicts did not contains Game4/savedGame/File 4 and direction 4");
                         }
                         break;
                     }
@@ -265,46 +393,46 @@ namespace GameAnywhere
                             result.Result = false;
                             result.AddRemarks("Failed! Expect " + 1 + " items, conflicts contains " + webThumb.Conflicts.Count + " item");
                         }
-                        KeyValuePair<string, int> f1 = new KeyValuePair<string, int>("File 1", 0);
+                        KeyValuePair<string, int> f1 = new KeyValuePair<string, int>("Game1/savedGame/File 1", 12);
                         if (!webThumb.Conflicts.Contains(f1))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! Conflicts do not contain File 1 and 0!");
+                            result.AddRemarks("Failed! Conflicts do not contain Game1/savedGame/File 1 and 12!");
                         }
                         if (webThumb.NoConflict.Count != 5)
                         {
                             result.Result = false;
                             result.AddRemarks("Failed! Expect " + 5 + " items, conflicts contains " + webThumb.NoConflict.Count + " item");
                         }
-                        KeyValuePair<string, int> f2 = new KeyValuePair<string, int>("File 2", 1);
+                        KeyValuePair<string, int> f2 = new KeyValuePair<string, int>("Game2/savedGame/File 2", 1);
                         if (!webThumb.NoConflict.Contains(f2))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! noConflicts did not contains File 2 and direction 1");
+                            result.AddRemarks("Failed! noConflicts did not contains Game2/savedGame/File 2 and direction 1");
                         }
-                        KeyValuePair<string, int> f3 = new KeyValuePair<string, int>("File 3",2);
+                        KeyValuePair<string, int> f3 = new KeyValuePair<string, int>("Game3/savedGame/File 3", 2);
                         if (!webThumb.NoConflict.Contains(f3))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! noConflicts did not contains File 3 and direction 2");
+                            result.AddRemarks("Failed! noConflicts did not contains Game3/savedGame/File 3 and direction 2");
                         }
-                        KeyValuePair<string, int> f4 = new KeyValuePair<string, int>("File 4", 3);
+                        KeyValuePair<string, int> f4 = new KeyValuePair<string, int>("Game4/savedGame/File 4", 3);
                         if (!webThumb.NoConflict.Contains(f4))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! noConflicts did not contains File 4 and direction 3");
+                            result.AddRemarks("Failed! noConflicts did not contains Game4/savedGame/File 4 and direction 3");
                         }
-                        KeyValuePair<string, int> f5 = new KeyValuePair<string, int>("File 5", 4);
+                        KeyValuePair<string, int> f5 = new KeyValuePair<string, int>("Game5/savedGame/File 5", 4);
                         if (!webThumb.NoConflict.Contains(f5))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! noConflicts did not contains File 5 and direction 4");
+                            result.AddRemarks("Failed! noConflicts did not contains Game5/savedGame/File 5 and direction 4");
                         }
-                        KeyValuePair<string, int> f6 = new KeyValuePair<string, int>("File 6", 1);
+                        KeyValuePair<string, int> f6 = new KeyValuePair<string, int>("Game6/savedGame/File 6", 1);
                         if (!webThumb.NoConflict.Contains(f6))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! noConflicts did not contains File 6 and direction 1");
+                            result.AddRemarks("Failed! noConflicts did not contains Game6/savedGame/File 6 and direction 1");
                         }
                         break;
                     }
@@ -320,11 +448,11 @@ namespace GameAnywhere
                             result.Result = false;
                             result.AddRemarks("Failed! Expect " + 1 + " items, conflicts contains " + webThumb.Conflicts.Count + " item");
                         }
-                        KeyValuePair<string, int> f1 = new KeyValuePair<string, int>("File 1", 0);
+                        KeyValuePair<string, int> f1 = new KeyValuePair<string, int>("Game1/savedGame/File 1", 12);
                         if (!webThumb.Conflicts.Contains(f1))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! Conflicts do not contain File 1 and 0!");
+                            result.AddRemarks("Failed! Conflicts do not contain Game1/savedGame/File 1 and 12!");
                         }
                         break;
                     }
@@ -340,22 +468,22 @@ namespace GameAnywhere
                             result.Result = false;
                             result.AddRemarks("Failed! Expect " + 1 + " items, conflicts contains " + webThumb.Conflicts.Count + " item");
                         }
-                        KeyValuePair<string, int> f1 = new KeyValuePair<string, int>("File 1", 0);
+                        KeyValuePair<string, int> f1 = new KeyValuePair<string, int>("Game1/savedGame/File 1", 12);
                         if (!webThumb.Conflicts.Contains(f1))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! Conflicts do not contain File 1 and 0!");
+                            result.AddRemarks("Failed! Conflicts do not contain Game1/savedGame/File 1 and 12!");
                         }
                         if (webThumb.Conflicts.Count != 1)
                         {
                             result.Result = false;
                             result.AddRemarks("Failed! Expect " + 1 + " items, conflicts contains " + webThumb.NoConflict.Count + " item");
                         }
-                        KeyValuePair<string, int> f2 = new KeyValuePair<string, int>("File 2", 2);
+                        KeyValuePair<string, int> f2 = new KeyValuePair<string, int>("Game2/savedGame/File 2", 2);
                         if (!webThumb.NoConflict.Contains(f2))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! Conflicts do not contain File 2 and 2!");
+                            result.AddRemarks("Failed! Conflicts do not contain Game2/savedGame/File 2 and 2!");
                         }
                         break;
                     }
@@ -371,34 +499,34 @@ namespace GameAnywhere
                             result.Result = false;
                             result.AddRemarks("Failed! Expect " + 2 + " items, conflicts contains " + webThumb.Conflicts.Count + " item");
                         }
-                        KeyValuePair<string, int> f1 = new KeyValuePair<string, int>("File 1", 0);
+                        KeyValuePair<string, int> f1 = new KeyValuePair<string, int>("Game1/savedGame/File 1", 12);
                         if (!webThumb.Conflicts.Contains(f1))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! Conflicts do not contain File 1 and 0!");
+                            result.AddRemarks("Failed! Conflicts do not contain Game1/savedGame/File 1 and 0!");
                         }
-                        KeyValuePair<string, int> f4 = new KeyValuePair<string, int>("File 4", 0);
+                        KeyValuePair<string, int> f4 = new KeyValuePair<string, int>("Game4/savedGame/File 4", 12);
                         if (!webThumb.Conflicts.Contains(f4))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! Conflicts do not contain File 4 and 0!");
+                            result.AddRemarks("Failed! Conflicts do not contain Game4/savedGame/File 4 and 0!");
                         }
                         if (webThumb.NoConflict.Count != 2)
                         {
                             result.Result = false;
                             result.AddRemarks("Failed! Expect " + 2 + " items, conflicts contains " + webThumb.NoConflict.Count + " item");
                         }
-                        KeyValuePair<string, int> f2 = new KeyValuePair<string, int>("File 2", 2);
+                        KeyValuePair<string, int> f2 = new KeyValuePair<string, int>("Game2/savedGame/File 2", 2);
                         if (!webThumb.NoConflict.Contains(f2))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! noConflicts do not contain File 2 and 2!");
+                            result.AddRemarks("Failed! noConflicts do not contain Game2/savedGame/File 2 and 2!");
                         }
-                        KeyValuePair<string, int> f3 = new KeyValuePair<string, int>("File 3", 1);
+                        KeyValuePair<string, int> f3 = new KeyValuePair<string, int>("Game3/savedGame/File 3", 1);
                         if (!webThumb.NoConflict.Contains(f3))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! noConflicts do not contain File 3 and 1!");
+                            result.AddRemarks("Failed! noConflicts do not contain Game3/savedGame/File 3 and 1!");
                         }
                         break;
                     }
@@ -415,11 +543,180 @@ namespace GameAnywhere
                             result.Result = false;
                             result.AddRemarks("Failed! conflicts and noConflicts is not 0!");
                         }
-                        if (webThumb.LocalHash.DeleteEntry("File 1") || webThumb.LocalMeta.DeleteEntry("File 1") ||
-                            webThumb.WebHash.DeleteEntry("File 1") || webThumb.WebMeta.DeleteEntry("File 1"))
+                        if (webThumb.LocalHash.DeleteEntry("Game1/savedGame/File 1") || webThumb.LocalMeta.DeleteEntry("Game1/savedGame/File 1") ||
+                            webThumb.WebHash.DeleteEntry("Game1/savedGame/File 1") || webThumb.WebMeta.DeleteEntry("Game1/savedGame/File 1"))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! File 1 should not exist in Meta-Data ");
+                            result.AddRemarks("Failed! Game1/savedGame/File 1 should not exist in Meta-Data ");
+                        }
+                        break;
+                    }
+
+                case 13:
+                    {
+                        if (webThumb.NoConflict.Count != 0)
+                        {
+                            result.Result = false;
+                            result.AddRemarks("Failed! noConflict should contains 0 entry.");
+                        }
+                        if (webThumb.Conflicts.Count != 1)
+                        {
+                            result.Result = false;
+                            result.AddRemarks("Failed! conflict should contain only 1 entry.");
+                        }
+                        KeyValuePair<string, int> f1 = new KeyValuePair<string, int>("Game1/savedGame/File 1", 13);
+                        if (!webThumb.Conflicts.Contains(f1))
+                        {
+                            result.Result = false;
+                            result.AddRemarks("Failed! conflicts did not contain Game1/savedGame/File 1 and 13");
+                        }
+                        break;
+                    }
+                case 14:
+                    {
+                        KeyValuePair<string, int> f1 = new KeyValuePair<string, int>("Game1/savedGame/File 1", 14);
+                        if (!webThumb.Conflicts.Contains(f1))
+                        {
+                            result.Result = false;
+                            result.AddRemarks("Failed! conflict did not contain Game1/savedGame/File 1 and 14");
+                        }
+                        if (webThumb.NoConflict.Count != 0)
+                        {
+                            result.Result = false;
+                            result.AddRemarks("Failed! noConflict should contain 0 entry, current: " + webThumb.NoConflict.Count);
+                        }
+                        if (webThumb.Conflicts.Count != 1)
+                        {
+                            result.Result = false;
+                            result.AddRemarks("Failed! conflicts should contain 1 entry, current : " + webThumb.Conflicts.Count);
+                        }
+                        if (returnType != null)
+                        {
+                            Dictionary<string, int> conflictReturn = (Dictionary<string, int>)returnType;
+                            KeyValuePair<string, int> f2 = new KeyValuePair<string, int>("Game1/savedGame/File 1", 14);
+                            if (!conflictReturn.Contains(f2))
+                            {
+                                result.Result = false;
+                                result.AddRemarks("Failed! return did not contain Game1/savedGame/File 1 and 14");
+                            }
+                        }
+                        else
+                        {
+                            result.Result = false;
+                            result.AddRemarks("Return is null. Unable to verify return value.");
+                        }
+                        break;
+                    }
+                case 15:
+                    {
+                        if (webThumb.NoConflict.Count != 0)
+                        {
+                            result.Result = false;
+                            result.AddRemarks("Failed! noConflict expected " + 0 + " current :" + webThumb.NoConflict.Count);
+                        }
+                        if (webThumb.Conflicts.Count != 2)
+                        {
+                            result.Result = false;
+                            result.AddRemarks("Failed! conflict expect " + 2 + " current :" + webThumb.Conflicts.Count);
+                        }
+                        KeyValuePair<string, int> f1 = new KeyValuePair<string, int>("Game1/savedGame/File 1", 12);
+                        if (!webThumb.Conflicts.Contains(f1))
+                        {
+                            result.Result = false;
+                            result.AddRemarks("Failed! conflicts did not contain Game1/savedGame/File 1 and 12");
+                        }
+                        KeyValuePair<string, int> f2 = new KeyValuePair<string, int>("Game1/savedGame/File 2", 14);
+                        if (!webThumb.Conflicts.Contains(f2))
+                        {
+                            result.Result = false;
+                            result.AddRemarks("Failed! conflicts did not contain Game1/savedGame/File 2 and 14");
+                        }
+                        //check for return
+                        if (returnType != null)
+                        {
+                            Dictionary<string, int> conflictReturn = (Dictionary<string, int>)returnType;
+                            if (conflictReturn.Count != 1)
+                            {
+                                result.Result = false;
+                                result.AddRemarks("Failed! return expects 1, returned :" + conflictReturn.Count);
+                            }
+                            KeyValuePair<string, int> f3 = new KeyValuePair<string, int>("Game1/savedGame", 0);
+                            if (!conflictReturn.Contains(f3))
+                            {
+                                result.Result = false;
+                                result.AddRemarks("Failed! return did not contain Game1/savedGame");
+                            }
+                        }
+                        else
+                        {
+                            result.Result = false;
+                            result.AddRemarks("Return Type null, unable to verify return value");
+                        }
+                    }
+                    break;
+                case 16:
+                    {
+                        if (webThumb.NoConflict.Count != 0)
+                        {
+                            result.Result = false;
+                            result.AddRemarks("Failed! noConflict expect 0, current :" + webThumb.NoConflict.Count);
+                        }
+                        if (webThumb.Conflicts.Count != 4)
+                        {
+                            result.Result = false;
+                            result.AddRemarks("Failed! conflicts expect 4, current:" + webThumb.Conflicts.Count);
+                        }
+                        KeyValuePair<string, int> f1 = new KeyValuePair<string, int>("Game1/savedGame/File 1", 12);
+                        if (!webThumb.Conflicts.Contains(f1))
+                        {
+                            result.Result = false;
+                            result.AddRemarks("Failed! conflicts expect Game1/savedGame/File 1 and 12");
+                        }
+                        KeyValuePair<string, int> f2 = new KeyValuePair<string, int>("Game1/savedGame/File 2", 14);
+                        if (!webThumb.Conflicts.Contains(f2))
+                        {
+                            result.Result = false;
+                            result.AddRemarks("Failed! conflicts expect Game1/savedGame/File 2 and 14");
+                        }
+                        KeyValuePair<string, int> f3 = new KeyValuePair<string, int>("Game1/config/File 3", 13);
+                        if (!webThumb.Conflicts.Contains(f3))
+                        {
+                            result.Result = false;
+                            result.AddRemarks("Failed! conflicts expect Game1/config/File 3 and 13");
+                        }
+                        KeyValuePair<string, int> f4 = new KeyValuePair<string, int>("Game2/config/File 4", 12);
+                        if (!webThumb.Conflicts.Contains(f4))
+                        {
+                            result.Result = false;
+                            result.AddRemarks("Failed! conflicts expect Game2/config/File 4 and 12");
+                        }
+                        //check return
+                        if(returnType != null)
+                        {
+                            Dictionary<string, int> conflictReturn = (Dictionary<string, int>)returnType;
+                            KeyValuePair<string, int> f5 = new KeyValuePair<string, int>("Game1/savedGame", 0);
+                            if (!conflictReturn.Contains(f5))
+                            {
+                                result.Result = false;
+                                result.AddRemarks("Failed! conflict expect Game1/savedGame and 0");
+                            }
+                            KeyValuePair<string, int> f6 = new KeyValuePair<string, int>("Game1/config", 0);
+                            if (!conflictReturn.Contains(f6))
+                            {
+                                result.Result = false;
+                                result.AddRemarks("Failed! conflict expect Game1/config and 0");
+                            }
+                            KeyValuePair<string, int> f7 = new KeyValuePair<string, int>("Game2/config", 0);
+                            if (!conflictReturn.Contains(f7))
+                            {
+                                result.Result = false;
+                                result.AddRemarks("Failed! conflict expect Game2/config and 0");
+                            }
+                        }
+                        else
+                        {
+                            result.Result = false;
+                            result.AddRemarks("Failed! return is null. Unable to verify return value");
                         }
                         break;
                     }
