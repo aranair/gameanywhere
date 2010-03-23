@@ -1,0 +1,36 @@
+C:\Users\Gerald\Documents\CS3215\GameAnywhere\WindowsFormsApplication1\obj\Debug\Interop.Shell32.dll
+C:\Users\Gerald\Documents\CS3215\GameAnywhere\WindowsFormsApplication1\obj\Debug\GameAnywhere.csproj.ResolveComReference.cache
+C:\Users\Gerald\Documents\CS3215\GameAnywhere\WindowsFormsApplication1\bin\Debug\GameAnywhere.exe
+C:\Users\Gerald\Documents\CS3215\GameAnywhere\WindowsFormsApplication1\bin\Debug\GameAnywhere.pdb
+C:\Users\Gerald\Documents\CS3215\GameAnywhere\WindowsFormsApplication1\bin\Debug\Interop.Shell32.dll
+C:\Users\Gerald\Documents\CS3215\GameAnywhere\WindowsFormsApplication1\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Gerald\Documents\CS3215\GameAnywhere\WindowsFormsApplication1\obj\Debug\GameAnywhere.Properties.Resources.resources
+C:\Users\Gerald\Documents\CS3215\GameAnywhere\WindowsFormsApplication1\obj\Debug\GameAnywhere.startPage.resources
+C:\Users\Gerald\Documents\CS3215\GameAnywhere\WindowsFormsApplication1\obj\Debug\GameAnywhere.ChooseGame.resources
+C:\Users\Gerald\Documents\CS3215\GameAnywhere\WindowsFormsApplication1\obj\Debug\GameAnywhere.reconfirmationWarning.resources
+C:\Users\Gerald\Documents\CS3215\GameAnywhere\WindowsFormsApplication1\obj\Debug\GameAnywhere.restoreWarning.resources
+C:\Users\Gerald\Documents\CS3215\GameAnywhere\WindowsFormsApplication1\obj\Debug\GameAnywhere.SyncErrorDisplay.resources
+C:\Users\Gerald\Documents\CS3215\GameAnywhere\WindowsFormsApplication1\obj\Debug\GameAnywhere.Tester.resources
+C:\Users\Gerald\Documents\CS3215\GameAnywhere\WindowsFormsApplication1\obj\Debug\GameAnywhere.csproj.GenerateResource.Cache
+C:\Users\Gerald\Documents\CS3215\GameAnywhere\WindowsFormsApplication1\obj\Debug\GameAnywhere.exe
+C:\Users\Gerald\Documents\CS3215\GameAnywhere\WindowsFormsApplication1\obj\Debug\GameAnywhere.pdb
+C:\Users\homan\Desktop\GameAnywhere V0.9.1\WindowsFormsApplication1\obj\Debug\Interop.Shell32.dll
+C:\Users\homan\Desktop\GameAnywhere V0.9.1\WindowsFormsApplication1\obj\Debug\GameAnywhere.csproj.ResolveComReference.cache
+C:\Users\homan\Desktop\GameAnywhere V0.9.1\WindowsFormsApplication1\obj\Debug\GameAnywhere.exe
+C:\Users\homan\Desktop\GameAnywhere V0.9.1\WindowsFormsApplication1\obj\Debug\GameAnywhere.pdb
+C:\Users\homan\Desktop\GameAnywhere V0.9.1\WindowsFormsApplication1\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\homan\Desktop\GameAnywhere V0.9.1\WindowsFormsApplication1\obj\Debug\GameAnywhere.Properties.Resources.resources
+C:\Users\homan\Desktop\GameAnywhere V0.9.1\WindowsFormsApplication1\obj\Debug\GameAnywhere.startPage.resources
+C:\Users\homan\Desktop\GameAnywhere V0.9.1\WindowsFormsApplication1\obj\Debug\GameAnywhere.ChooseGame.resources
+C:\Users\homan\Desktop\GameAnywhere V0.9.1\WindowsFormsApplication1\obj\Debug\GameAnywhere.reconfirmationWarning.resources
+C:\Users\homan\Desktop\GameAnywhere V0.9.1\WindowsFormsApplication1\obj\Debug\GameAnywhere.restoreWarning.resources
+C:\Users\homan\Desktop\GameAnywhere V0.9.1\WindowsFormsApplication1\obj\Debug\GameAnywhere.SyncErrorDisplay.resources
+C:\Users\homan\Desktop\GameAnywhere V0.9.1\WindowsFormsApplication1\obj\Debug\GameAnywhere.Tester.resources
+C:\Users\homan\Desktop\GameAnywhere V0.9.1\WindowsFormsApplication1\obj\Debug\GameAnywhere.csproj.GenerateResource.Cache
+C:\Users\homan\Desktop\GameAnywhere V0.9.1\WindowsFormsApplication1\bin\Debug\GameAnywhere.exe
+C:\Users\homan\Desktop\GameAnywhere V0.9.1\WindowsFormsApplication1\bin\Debug\GameAnywhere.pdb
+C:\Users\homan\Desktop\GameAnywhere V0.9.1\WindowsFormsApplication1\bin\Debug\Interop.Shell32.dll
+C:\Users\homan\Desktop\0.9.1\WindowsFormsApplication1\obj\Debug\Interop.Shell32.dll
+C:\Users\homan\Desktop\0.9.1\WindowsFormsApplication1\obj\Debug\GameAnywhere.csproj.ResolveComReference.cache
+C:\Users\homan\Desktop\0.9.1\WindowsFormsApplication1\obj\Debug\GameAnywhere.exe
+C:\Users\homan\Desktop\0.9.1\WindowsFormsApplication1\obj\Debug\GameAnywhere.pdb
