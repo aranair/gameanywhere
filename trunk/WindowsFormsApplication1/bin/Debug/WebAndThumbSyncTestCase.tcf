@@ -11,3 +11,7 @@ WebAndThumbSync|void
 10~CheckConflicts|void|int:1|void
 11~CheckConflicts|void|int:2|void
 12~CheckConflicts|void|int:0|void
+13~CheckConflicts|void|int:1|void
+14~CheckConflicts|void|int:1|void
+15~CheckConflicts|void|int:1|void
+16~CheckConflicts|void|int:3|void
