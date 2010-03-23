@@ -167,8 +167,8 @@ namespace GameAnywhere
             List<string> savePathList = syncAction.MyGame.SavePathList;
             List<string> configPathList = syncAction.MyGame.ConfigPathList;
             int action = syncAction.Action;
-            List<SyncError> saveGameErrorList = null;
-            List<SyncError> configFileErrorList = null;
+            List<SyncError> saveGameErrorList = new List<SyncError>();
+            List<SyncError> configFileErrorList = new List<SyncError>();
 
             try
             {
