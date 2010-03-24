@@ -248,7 +248,7 @@ namespace GameAnywhere
                             //Create the target directory if needed
                             //Console.WriteLine(Path.GetDirectoryName(localDirName));
                             if (!Directory.Exists(Path.GetDirectoryName(localPath)))
-                                    CreateDirectory(Path.GetDirectoryName(localPath)));
+                                    CreateDirectory(Path.GetDirectoryName(localPath));
 
                             s3.DownloadFile(localPath, webPath);
                             UpdateMetaData(key, GenerateHash(localPath));
@@ -297,6 +297,10 @@ namespace GameAnywhere
                 int side = resolvedConflicts[GetGamesAndTypes(key)];
                 switch (Conflicts[key])
                 {
+                    case 12:
+                        if (side == 1) NoConflict[key] = 1;
+                        else if (side == 2) NoConflict[key] = 2;
+                        break;
                     case 13:
                         if (side == 1) NoConflict[key] = 1;
                         else if (side == 2) NoConflict[key] = 3;
