@@ -186,13 +186,13 @@ namespace GameAnywhere
             }
 
             //Upload Saved Files - SyncAction
-            if (action == SavedGame || action == AllFiles)
+            if (action == SyncAction.SavedGameFiles|| action == SyncAction.AllFiles)
             {
                 saveGameErrorList = Upload(email, gameName, SyncFolderSavedGameFolderName, saveParentPath, savePathList);
             }
 
             //Upload Config Files - SyncAction
-            if (action == Config || action == AllFiles)
+            if (action == SyncAction.ConfigFiles || action == SyncAction.AllFiles)
             {
                 configFileErrorList = Upload(email, gameName, SyncFolderConfigFolderName, configParentPath, configPathList);
             }
