@@ -192,7 +192,7 @@ namespace GameAnywhere
                 if (!hash1.EntryExist(entry.Key)) //Deleted file
                 {
                     if (!hash2.EntryExist(entry.Key)) //both deleted, delete metadata
-                        Conflicts[entry.Key] = DELETEMETA;
+                        NoConflict[entry.Key] = DELETEMETA;
                     else if (Conflicts.ContainsKey(entry.Key))
                         continue;
                     else if (HashIsDifferent(hash2, meta2, entry.Key))
