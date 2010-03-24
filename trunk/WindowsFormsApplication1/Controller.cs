@@ -156,6 +156,23 @@ namespace GameAnywhere
                 // Call SynchronizeGames of OfflineSync class to process.
                 syncActionList = offlineSync.SynchronizeGames(syncActionList);
             }
+            else if (direction == OnlineSync.ComToWeb || direction == OnlineSync.WebToCom
+                                     || direction == OnlineSync.ExternalAndWeb)
+            {
+                // Initialize an OfflineSync object.
+                OnlineSync onlineSync = new OnlineSync(direction, gameLibrary.GetGameList(OfflineSync.Uninitialize), user);
+
+                try
+                {
+                    // Call SynchronizeGames of OnlineSync class to process.
+                    syncActionList = onlineSync.SynchronizeGames(syncActionList);
+                }
+
+                catch (ConnectionFailureException e)
+                {
+                    throw e;
+                }
+            }
 
             return syncActionList;
         }
@@ -383,63 +400,7 @@ namespace GameAnywhere
 
         #endregion
 
-        #region v2.0
-        /*
-        /// <summary>
-        /// Pre-Condition: syncActionList is not null.
-        /// Post-Condition: Provides GUI class with the same syncActionList with the results updated.
-        /// 
-        /// Calls SynchronizeGames of OfflineSync or OnlineSync class to do the processing.
-        /// 
-        /// Exceptions: ConnectionFailureException - unable to connect to web server.
-        /// </summary>
-        /// <param name="syncActionList">list of games with their synchronization actions</param>
-        /// <returns>list of games with their synchronization actions updated with results</returns>
-        public List<SyncAction> SynchronizeGames(List<SyncAction> syncActionList)
-        {
-            // Assert that syncActionList is not null.
-            Debug.Assert(syncActionList != null, "syncActionList is null.");
-
-            // Offline synchronization.
-            if (direction == OfflineSync.ComToExternal || direction == OfflineSync.ExternalToCom)
-            {
-
-                // Initialize an OfflineSync object.
-                OfflineSync offlineSync = new OfflineSync(direction);
-
-                // Call SynchronizeGames of OfflineSync class to process.
-
-                syncActionList = offlineSync.SynchronizeGames(syncActionList);
-
-                // Original files have been stored as backup.
-                if (direction == OfflineSync.ExternalToCom)
-                    backupExists = true;
-            }
-
-            // Online synchronization.
-            else if (direction == OnlineSync.COM_TO_WEB || direction == OnlineSync.WEB_TO_COM
-                                     || direction == OnlineSync.WEB_AND_EXTERNAL)
-            {
-                // Initialize an OfflineSync object.
-                OnlineSync onlineSync = new OnlineSync(direction);
-
-                try
-                {
-                    // Call SynchronizeGames of OnlineSync class to process.
-                    syncActionList = onlineSync.SynchronizeGames(syncActionList);
-                }
-
-                catch (ConnectionFailureException e)
-                {
-                    throw e;
-                }
-            }
-
-            return syncActionList;
-
-        }
-        */
-        #endregion
+        
 
     }
 }

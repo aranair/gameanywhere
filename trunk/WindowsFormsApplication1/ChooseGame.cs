@@ -120,7 +120,6 @@ namespace GameAnywhere
             // 1 game name label, 1 checkBox if config files are available, 1 checkBox if saved game files are available.
             foreach (Game g in gameList)
             {
-
                 // Creates and edit a new label to display each game name and add it to the display panel
                 CreateLabel(g, showGamePanel);
 
@@ -469,7 +468,15 @@ namespace GameAnywhere
             syncActionListResult = new List<SyncAction>();
             SetupSynchronizationFiles();
 
-            syncActionListResult = controller.SynchronizeGames(syncActionList);
+            try
+            {
+                syncActionListResult = controller.SynchronizeGames(syncActionList);
+            }
+            catch (ConnectionFailureException e)
+            {
+                SetErrorLabel("Unable to connect to server", Color.Red);
+            }
+            
 
             DisplaySyncResult(syncActionListResult);
         }

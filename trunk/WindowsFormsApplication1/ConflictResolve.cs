@@ -100,6 +100,16 @@ namespace GameAnywhere
                 yAxisLocation += 50;
 
             }//end foreach 
+            foreach (CheckBox checkBox in checkBoxList)
+            {
+                string direction = checkBox.Name.Remove(checkBox.Name.IndexOf("/"));
+                if (direction.Equals("upload"))
+                {
+                    checkBox.Checked = true;
+                    SetImageForBackground(checkBox, "GameAnywhere.Resources.uploadArrowed.gif", ContentAlignment.MiddleLeft);
+
+                }
+            }
 
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -130,7 +140,7 @@ namespace GameAnywhere
             //SetBackgroundImage(arrowPictureBox, "GameAnywhere.Resources.arrowUpload.gif", ImageLayout.Center);
             arrowPictureBox.Font = new System.Drawing.Font("Verdana", 8F);
             arrowPictureBox.Size = new System.Drawing.Size(50, 38);
-            arrowPictureBox.Location = new System.Drawing.Point(380, yAxisLocation - 10);
+            arrowPictureBox.Location = new System.Drawing.Point(380, yAxisLocation - 15);
             arrowPictureBoxList.Add(arrowPictureBox);
             showConflictsPanel.Controls.Add(arrowPictureBox);
         }
@@ -157,18 +167,32 @@ namespace GameAnywhere
             System.Windows.Forms.CheckBox uploadCheckBox;
             uploadCheckBox = new CheckBox();
             uploadCheckBox.Name = "upload/" + gameName + type;
-            //uploadCheckBox.Text = "Keep Thumbdrive Version";
-            //SetBackgroundImage(uploadCheckBox, "GameAnywhere.Resources.upload.gif", ImageLayout.Center);
+            SetCheckBoxToButtonStyle(uploadCheckBox);  
             SetImageForBackground(uploadCheckBox, "GameAnywhere.Resources.upload.gif", ContentAlignment.MiddleLeft);
             uploadCheckBox.Font = new System.Drawing.Font("Verdana", 8F);
             uploadCheckBox.Size = new System.Drawing.Size(100, 38);
-            uploadCheckBox.Location = new System.Drawing.Point(270, yAxisLocation-10);
+            uploadCheckBox.Location = new System.Drawing.Point(270, yAxisLocation - 15);
             uploadCheckBox.BackColor = System.Drawing.Color.Transparent;
             uploadCheckBox.Click += new EventHandler(groupCheckBox_Click);
             uploadCheckBox.CheckedChanged += new EventHandler(groupCheckBox_CheckChanged);
 
             showConflictsPanel.Controls.Add(uploadCheckBox);
             checkBoxList.Add(uploadCheckBox);
+        }
+
+        /// <summary>
+        /// Changes a checkbox to look like a button.
+        /// </summary>
+        /// <param name="uploadCheckBox"></param>
+        private void SetCheckBoxToButtonStyle(CheckBox checkBox)
+        {
+            checkBox.Appearance = Appearance.Button;
+            checkBox.FlatStyle = FlatStyle.Flat;
+            checkBox.FlatAppearance.BorderSize = 0;
+            checkBox.FlatAppearance.CheckedBackColor = Color.Black;
+            checkBox.FlatAppearance.MouseDownBackColor = Color.Black;
+            checkBox.FlatAppearance.MouseOverBackColor = Color.Black;
+            checkBox.Cursor = Cursors.Hand;
         }
 
         /// <summary>
@@ -182,14 +206,12 @@ namespace GameAnywhere
             downloadCheckBox = new CheckBox();
             downloadCheckBox.Name = "download/" + gameName + type;
             downloadCheckBox.CheckAlign = ContentAlignment.MiddleRight;
-            //downloadCheckBox.Text = "Keep Web Version";
-
-            //SetBackgroundImage(downloadCheckBox, "GameAnywhere.Resources.download.gif", ImageLayout.Center);
+            SetCheckBoxToButtonStyle(downloadCheckBox);
             SetImageForBackground(downloadCheckBox, "GameAnywhere.Resources.download.gif", ContentAlignment.MiddleRight);
 
             downloadCheckBox.Size = new System.Drawing.Size(100, 38);
             downloadCheckBox.Font = new System.Drawing.Font("Verdana", 8F);
-            downloadCheckBox.Location = new System.Drawing.Point(420, yAxisLocation-10);
+            downloadCheckBox.Location = new System.Drawing.Point(420, yAxisLocation -15);
             downloadCheckBox.BackColor = System.Drawing.Color.Transparent;
             downloadCheckBox.Click += new EventHandler(groupCheckBox_Click);
             downloadCheckBox.CheckedChanged += new EventHandler(groupCheckBox_CheckChanged);
