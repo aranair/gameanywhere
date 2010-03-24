@@ -245,6 +245,11 @@ namespace GameAnywhere
                             UpdateMetaData(key, GenerateHash(localPath));
                             break;
                         case DOWNLOAD:
+                            //Create the target directory if needed
+                            //Console.WriteLine(Path.GetDirectoryName(localDirName));
+                            if (!Directory.Exists(Path.GetDirectoryName(localDirName)))
+                                    CreateDirectory(Path.GetDirectoryName(Path.Combine(targetPath, webDirName)));
+
                             s3.DownloadFile(localPath, webPath);
                             UpdateMetaData(key, GenerateHash(localPath));
                             break;
@@ -266,17 +271,13 @@ namespace GameAnywhere
                     string gameName = key.Substring(0, key.IndexOf('/'));
                     errorList.AddRange(GetSyncError(gameName,processName,ex.Message));
                 }
-                
             }
-
             //Serialize and Upload Metadata
             localHash.Serialize(LocalMetaDataPath);
             webHash.Serialize(WebMetaDataPath);
             s3.UploadFile(WebMetaDataPath,email + "/" + WebMetaDataFileName);
             File.Delete(WebMetaDataPath);
-
             return errorList;
-
         }
 
         public Dictionary<string,int> FilterConflicts()
