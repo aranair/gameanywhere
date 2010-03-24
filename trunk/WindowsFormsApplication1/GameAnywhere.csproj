@@ -134,6 +134,12 @@
     <Compile Include="SyncAction.cs" />
     <Compile Include="SyncFolderFileDiscrepancyException.cs" />
     <Compile Include="User.cs" />
+    <Compile Include="WaitingDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WaitingDialog.designer.cs">
+      <DependentUpon>WaitingDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="WebAndThumbSync.cs" />
     <Compile Include="WebTransferException.cs" />
   </ItemGroup>
@@ -425,6 +431,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\abuseIcon.jpg" />
+    <EmbeddedResource Include="WaitingDialog.resx">
+      <DependentUpon>WaitingDialog.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
