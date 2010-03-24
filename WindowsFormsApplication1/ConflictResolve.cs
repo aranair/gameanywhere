@@ -42,7 +42,7 @@ namespace GameAnywhere
         /// </summary>
         private Dictionary<string, string> allConflictedGamesAndType;
 
-        private Label errorLabel;
+        private startPage parent;
 
         #endregion
 
@@ -51,12 +51,12 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="controller">Controller to do comunicate with the other classes</param>
         /// <param name="conflictsList">List of conflicts to be resolved.</param>
-        public ConflictResolve(Controller controller, Dictionary<string, int> conflictsList, ref Label errorLabel)
+        public ConflictResolve(Controller controller, Dictionary<string, int> conflictsList, startPage parent)
         {
             InitializeComponent();
             this.controller = controller;
             this.conflictsList = conflictsList;
-            this.errorLabel = errorLabel;
+            this.parent = parent;
 
             DisplayConflicts();
         }
@@ -66,7 +66,7 @@ namespace GameAnywhere
             checkBoxList = new List<CheckBox>();
             arrowPictureBoxList = new List<PictureBox>();
 
-            allConflictedGamesAndType = FindConflictedGamesAndType(conflictsList);
+            allConflictedGamesAndType = FindConflictedGamesAndType();
             // 1st string is       : gameName
             // 2nd string is either: config, savedGame, both
 
@@ -187,7 +187,7 @@ namespace GameAnywhere
         /// Changes a checkbox to look like a button.
         /// </summary>
         /// <param name="uploadCheckBox"></param>
-        private void SetCheckBoxToButtonStyle(CheckBox checkBox)
+        private static void SetCheckBoxToButtonStyle(CheckBox checkBox)
         {
             checkBox.Appearance = Appearance.Button;
             checkBox.FlatStyle = FlatStyle.Flat;
@@ -229,7 +229,7 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="conflictsList">Dictionary list to read and sort.</param>
         /// <returns>The grouped dictionary list of games, and their conflict type.</returns>
-        private Dictionary<string, string> FindConflictedGamesAndType (Dictionary<string, int> conflictsList)
+        private Dictionary<string, string> FindConflictedGamesAndType ()
         {
             Dictionary<string, string> conflictedGamesAndType = new Dictionary<string,string>();
             foreach (string key in conflictsList.Keys)
@@ -255,7 +255,7 @@ namespace GameAnywhere
         /// <param name="conflictedGamesAndType">The dictionary list to be editted.</param>
         /// <param name="gameName">The name of the game: also the dictionary key.</param>
         /// <param name="type">The type of file to add into the key.</param>
-        private void AssignDictionaryValue(ref Dictionary<string, string> conflictedGamesAndType, string gameName, string type)
+        private static void AssignDictionaryValue(ref Dictionary<string, string> conflictedGamesAndType, string gameName, string type)
         {
             if (type.Equals("config"))
             {
@@ -280,7 +280,7 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="key">The string to be substringed.</param>
         /// <returns>The resultant string from the substring operation.</returns>
-        private string SubstringFromLeft(ref string key)
+        private static string SubstringFromLeft(ref string key)
         {
             string s = key.Remove(key.IndexOf("/"));
             key = key.Substring(key.IndexOf("/"));
@@ -313,7 +313,7 @@ namespace GameAnywhere
         /// <param name="location">Location to add this label to in the container.</param>
         /// <param name="txt">Text to be displayed.</param>
         /// <param name="container">Container for the label to be added in.</param>
-        private void CreateLabel(Point location, string txt, Control container)
+        private static void CreateLabel(Point location, string txt, Control container)
         {
             Label newLabel = new Label();
             newLabel = new Label();
@@ -343,24 +343,24 @@ namespace GameAnywhere
 
         #region Helper Functions
 
-        public void SetBackgroundImage(System.Windows.Forms.Control o, string resourcePath, ImageLayout imageLayout)
+        public void SetBackgroundImage(System.Windows.Forms.Control control, string resourcePath, ImageLayout imageLayout)
         {
             System.IO.Stream imageStream = this.GetType().Assembly.GetManifestResourceStream(resourcePath);
-            o.BackgroundImage = Image.FromStream(imageStream);
-            o.BackgroundImageLayout = imageLayout;
+            control.BackgroundImage = Image.FromStream(imageStream);
+            control.BackgroundImageLayout = imageLayout;
             imageStream.Close();
         }
 
-        public void SetImageForBackground(CheckBox o, string resourcePath, ContentAlignment contentAlignment)
+        public void SetImageForBackground(CheckBox cb, string resourcePath, ContentAlignment contentAlignment)
         {
 
             System.IO.Stream imageStream = this.GetType().Assembly.GetManifestResourceStream(resourcePath);
-            o.Image = Image.FromStream(imageStream);
-            o.ImageAlign = contentAlignment;
+            cb.Image = Image.FromStream(imageStream);
+            cb.ImageAlign = contentAlignment;
             imageStream.Close();
         }
 
-        private void SetVisibilityAndUsability(System.Windows.Forms.Control c, bool makeVisible, bool makeEnabled)
+        private static void SetVisibilityAndUsability(System.Windows.Forms.Control c, bool makeVisible, bool makeEnabled)
         {
             c.Visible = makeVisible;
             c.Enabled = makeEnabled;
@@ -652,10 +652,9 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="s">String to be dispalyed.</param>
         /// <param name="c">Color to display the string in.</param>
-        public void SetErrorLabel(string s, System.Drawing.Color c)
+        public void SetErrorLabel(string txt, System.Drawing.Color color)
         {
-            errorLabel.Text = s;
-            errorLabel.ForeColor = c;
+            parent.SetErrorLabel(txt, color);
         }
     }
 }
