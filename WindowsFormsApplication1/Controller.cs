@@ -4,6 +4,8 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Collections;
 using System.Diagnostics;
+using System.IO;
+
 
 namespace GameAnywhere
 {
@@ -398,9 +400,35 @@ namespace GameAnywhere
             return direction;
         }
 
+        public bool IsFixedMedia()
+        {
+            DriveInfo[] allDrives = DriveInfo.GetDrives();
+            DriveInfo d = null;
+
+            string driveName = Application.StartupPath.Substring(0, 3);
+
+            foreach (DriveInfo e in allDrives)
+            {
+                if (e.Name.Equals(driveName))
+                {
+                    d = e;
+                    break;
+                }
+            }
+
+            if (d.DriveType.Equals("Fixed"))
+            {
+                return true;
+            }
+
+            return false;
+
+
+        }
+
         #endregion
 
-        
+
 
     }
 }
