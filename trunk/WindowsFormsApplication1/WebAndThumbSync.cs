@@ -247,8 +247,8 @@ namespace GameAnywhere
                         case DOWNLOAD:
                             //Create the target directory if needed
                             //Console.WriteLine(Path.GetDirectoryName(localDirName));
-                            if (!Directory.Exists(Path.GetDirectoryName(localDirName)))
-                                    CreateDirectory(Path.GetDirectoryName(Path.Combine(targetPath, webDirName)));
+                            if (!Directory.Exists(Path.GetDirectoryName(localPath)))
+                                    CreateDirectory(Path.GetDirectoryName(localPath)));
 
                             s3.DownloadFile(localPath, webPath);
                             UpdateMetaData(key, GenerateHash(localPath));
@@ -266,6 +266,7 @@ namespace GameAnywhere
                             break;
                     }
                 }
+                
                 catch (Exception ex)
                 {
                     string gameName = key.Substring(0, key.IndexOf('/'));
@@ -342,6 +343,18 @@ namespace GameAnywhere
             webHash.DeleteEntry(key);
         }
 
+        protected void CreateDirectory(string newFolderPath)
+        {
+            if (!Directory.Exists(newFolderPath))
+                try
+                {
+                    Directory.CreateDirectory(newFolderPath);
+                }
+                catch (Exception ex)
+                {
+                    throw new CreateFolderFailedException("Unable to create new folder: " + newFolderPath, ex);
+                }
+        }
         private List<SyncError> GetSyncError(string errorPath, string processName, string errorMessage)
         {
             List<SyncError> errorList = new List<SyncError>();
