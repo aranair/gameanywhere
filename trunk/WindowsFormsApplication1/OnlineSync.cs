@@ -13,6 +13,7 @@ namespace GameAnywhere
         //Sync directions
         public static readonly int WebToCom = 4;
         public static readonly int ComToWeb = 5;
+        public static readonly int ExternalAndWeb = 6;
 
         /// <summary>
         /// Data Members
@@ -39,6 +40,7 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="list">list of syncactions</param>
         /// <returns>list of syncactions containing the syncerrors if there is any</returns>
+        /// Exceptions: ConnectionFailureException
         public override List<SyncAction> SynchronizeGames(List<SyncAction> list)
         {
             //List of sync action to be carried out
@@ -63,12 +65,26 @@ namespace GameAnywhere
                         AddToUnsuccessfulSyncFiles(sa, syncFolderGamePath, "Unable to backup original game files");
                     else
                         //Synchronize from Web to Computer
-                        WebToComputer(sa, currentUser.Email, backupResult);
+                        try
+                        {
+                            WebToComputer(sa, currentUser.Email, backupResult);
+                        }
+                        catch(ConnectionFailureException)
+                        {
+                            throw;
+                        }
                 }
                 else if (SyncDirection == ComToWeb)
                 {
                     //Synchronize from Computer to Web
-                    ComputerToWeb(currentUser.Email, sa);
+                    try
+                    {
+                        ComputerToWeb(currentUser.Email, sa);
+                    }
+                    catch (ConnectionFailureException)
+                    {
+                        throw;
+                    }
                 }
            
             }
@@ -80,8 +96,13 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="user">email of user</param>
         /// <returns>list of game names on the user's web account</returns>
+        /// Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
         public List<string> GetGamesFromWeb(string user)
         {
+            //Pre-conditions
+            if (user.Trim().Equals("") || user == null)
+                throw new ArgumentException("Parameter cannot be empty/null", "user");
+
             try
             {
                 List<string> games = s3.ListFiles(user);
@@ -102,6 +123,7 @@ namespace GameAnywhere
             }
             catch
             {
+                //Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
                 throw;
             }
         }
@@ -112,15 +134,16 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="user">email of user</param>
         /// <returns>list of game names and types on the user's web account</returns>
+        /// Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
         public static List<string> GetGamesAndTypesFromWeb(string user)
         {
-            Storage s3 = new Storage();
+            //Pre-conditions
+            if (user.Trim().Equals("") || user == null)
+                throw new ArgumentException("Parameter cannot be empty/null", "user");
+
             try
             {
-                //Pre-conditions
-                if (user.Trim().Equals("") || user == null)
-                    throw new ArgumentException("Parameter cannot be empty/null", "user");
-
+                Storage s3 = new Storage();
                 HashSet<string> gameSet = new HashSet<string>();
 
                 //Get game name and type(config/save), and add to gameset
@@ -140,7 +163,7 @@ namespace GameAnywhere
             }
             catch
             {
-                //Exceptions: ArgumentException, ConnectionFailureException, WebTransferException, AmazonS3Exception
+                //Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
                 throw;
             }
         }
@@ -149,6 +172,7 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="email">email of user</param>
         /// <param name="syncAction">SyncAction object</param>
+        /// Exceptions: ConnectionFailureException
         private void ComputerToWeb(string email, SyncAction syncAction)
         {
             //Pre-conditions
@@ -175,22 +199,41 @@ namespace GameAnywhere
                     DeleteGameDirectory(email, gameName);
                 }
             }
+            catch (ConnectionFailureException)
+            {
+                //Exceptions: ConnectionFailureException
+                throw;
+            }
             catch (Exception ex)
             {
-                //Exceptions: ArgumentException, ConnectionFailureException, WebTransferException, AmazonS3Exception
-                syncAction.UnsuccessfulSyncFiles.Add(new SyncError(@"email/gameName", "ComputerToWeb Sync - " + ex.GetType().ToString(), ex.Message));
+                //Exceptions: ArgumentException, WebTransferException
+                syncAction.UnsuccessfulSyncFiles.Add(new SyncError(@"email/gameName", "ComputerToWeb Sync", ex.Message));
             }
 
-            //Upload Saved Files - SyncAction
-            if (action == SyncAction.SavedGameFiles|| action == SyncAction.AllFiles)
+            //Upload Saved Files
+            if (action == SyncAction.SavedGameFiles || action == SyncAction.AllFiles)
             {
-                saveGameErrorList = Upload(email, gameName, SyncFolderSavedGameFolderName, saveParentPath, savePathList);
+                try
+                {
+                    saveGameErrorList = Upload(email, gameName, SyncFolderSavedGameFolderName, saveParentPath, savePathList);
+                }
+                catch (ConnectionFailureException)
+                {
+                    throw;
+                }
             }
 
-            //Upload Config Files - SyncAction
+            //Upload Config Files
             if (action == SyncAction.ConfigFiles || action == SyncAction.AllFiles)
             {
-                configFileErrorList = Upload(email, gameName, SyncFolderConfigFolderName, configParentPath, configPathList);
+                try
+                {
+                    configFileErrorList = Upload(email, gameName, SyncFolderConfigFolderName, configParentPath, configPathList);
+                }
+                catch (ConnectionFailureException)
+                {
+                    throw;
+                }
             }
 
             //Updates list of unsuccessful sync files
@@ -213,6 +256,7 @@ namespace GameAnywhere
         /// <returns>
         /// List of SyncError objects which contains errors during uploading
         /// </returns>
+        /// Exceptions: ConnectionFailureException
         private List<SyncError> Upload(string email, string gameName, string webSaveFolder, string parentPath, List<string> pathList)
         {
             string gamePath = email + "/" + gameName + "/" + webSaveFolder;
@@ -224,7 +268,14 @@ namespace GameAnywhere
                 if (Directory.Exists(path))
                 {
                     //Upload directory
-                    UploadDirectory(gamePath, parentPath, path, ref errorList);
+                    try
+                    {
+                        UploadDirectory(gamePath, parentPath, path, ref errorList);
+                    }
+                    catch (ConnectionFailureException)
+                    {
+                        throw;
+                    }
                 }
                 else if (File.Exists(path))
                 {
@@ -234,17 +285,21 @@ namespace GameAnywhere
                         //Upload file
                         s3.UploadFile(path, keyName);
                     }
+                    catch (ConnectionFailureException)
+                    {
+                        throw;
+                    }
                     catch (Exception ex)
                     {
                         //Fail to upload file - add to error list
-                        //Exceptions: ArgumentException, ConnectionFailureException, WebTransferException, AmazonS3Exception
-                        errorList.AddRange(GetSyncError(path, "ComputerToWeb Sync - Upload->UploadFile", ex.Message));
+                        //Exceptions: ArgumentException, WebTransferException
+                        errorList.AddRange(GetSyncError(path, "ComputerToWeb Sync", ex.Message));
                     }
                 }
                 else
                 {
                     //File/Dir does not exists - add to error list
-                    errorList.AddRange(GetSyncError(path, "ComputerToWeb Sync - Upload", "File/Directory does not exist."));
+                    errorList.AddRange(GetSyncError(path, "ComputerToWeb Sync", "File/Directory does not exist."));
                 }
             }
 
@@ -258,6 +313,7 @@ namespace GameAnywhere
         /// <param name="parent">Config/Save parent path</param>
         /// <param name="dir">directory to upload</param>
         /// <param name="errorList">reference to errorList</param>
+        /// Exceptions: ConnectionFailureException
         private void UploadDirectory(string key, string parent, string dir, ref List<SyncError> errorList)
         {
             //Upload every file in current directory
@@ -269,17 +325,28 @@ namespace GameAnywhere
                     //Upload a single file
                     s3.UploadFile(filePath, keyName);
                 }
+                catch (ConnectionFailureException)
+                {
+                    throw;
+                }
                 catch (Exception ex)
                 {
                     //Adds error due to file upload
-                    //Exceptions: ArgumentException, ConnectionFailureException, WebTransferException, AmazonS3Exception
+                    //Exceptions: ArgumentException, WebTransferException
                     errorList.Add(new SyncError(filePath, "UploadDirectory", ex.Message));
                 }
             }
             //Upload every sub-directory in current directory
             foreach (string subdir in Directory.GetDirectories(dir))
             {
-                UploadDirectory(key, parent, subdir, ref errorList);
+                try
+                {
+                    UploadDirectory(key, parent, subdir, ref errorList);
+                }
+                catch (ConnectionFailureException)
+                {
+                    throw;
+                }
             }
         }
 
@@ -292,26 +359,26 @@ namespace GameAnywhere
         /// true - Deletes game directory successfully on S3
         /// false - Fail to delete game directory on S3
         /// </returns>
-        /// Exceptions: ArgumentException, ConnectionFailureException, WebTransferException, AmazonS3Exception
+        /// Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
         private void DeleteGameDirectory(string email, string gameName)
         {
+            //Pre-conditions
+            Debug.Assert(GetGamesFromWeb(email).Contains(gameName));
+
+            //Checks user and gamename validity
+            if (email.Equals("") && email == null && !email.Equals(currentUser.Email))
+                throw new ArgumentException("Parameter cannot be empty/null. Invalid user/User not logged in", email);
+            if (gameName.Equals("") && gameName == null)
+                throw new ArgumentException("Parameter cannot be empty/null. Invalid game directory.", gameName);
+
             try
             {
-                //Pre-conditions
-                Debug.Assert(GetGamesFromWeb(email).Contains(gameName));
-
-                //Checks user and gamename validity
-                if (email.Equals("") && email == null && !email.Equals(currentUser.Email))
-                    throw new ArgumentException("Parameter cannot be empty/null. Invalid user/User not logged in", email);
-                if (gameName.Equals("") && gameName == null)
-                    throw new ArgumentException("Parameter cannot be empty/null. Invalid game directory.", gameName);
-
                 //Delete game directory
                 s3.DeleteDirectory(email + "/" + gameName);
             }
             catch
             {
-                //Exceptions: ArgumentException, ConnectionFailureException, WebTransferException, AmazonS3Exception
+                //Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
                 throw;
             }
         }
@@ -322,6 +389,7 @@ namespace GameAnywhere
         /// <param name="sa">SyncAction object</param>
         /// <param name="user">email of user</param>
         /// <param name="backupItem">Backup-type of files: AllFiles / SavedGame / Config</param>
+        /// Exceptions: ConnectionFailureException
         private void WebToComputer(SyncAction sa, string user, int backupItem)
         {
             //Check for valid option
@@ -337,9 +405,15 @@ namespace GameAnywhere
                 string webFolderGamePath = user + "/" + sa.MyGame.Name;
                 string webGameConfigPath = webFolderGamePath + "/" + SyncFolderConfigFolderName;
 
-                //Copy over and add the error encounted into the error list
-                errorList = DownloadToParent(webGameConfigPath, sa.MyGame.ConfigParentPath, processName);
-
+                try
+                {
+                    //Copy over and add the error encounted into the error list
+                    errorList = DownloadToParent(webGameConfigPath, sa.MyGame.ConfigParentPath, processName);
+                }
+                catch (ConnectionFailureException)
+                {
+                    throw;
+                }
                 //Update the error list of the game
                 sa.UnsuccessfulSyncFiles.AddRange(errorList);
 
@@ -354,8 +428,15 @@ namespace GameAnywhere
                 string webGameSavedGamePath = webFolderGamePath + "/" + SyncFolderSavedGameFolderName;
                 //Debug.Assert(Directory.Exists(webFolderGameSavedGamePath));
 
-                //Copy over and add the error encounted into the error list
-                errorList = DownloadToParent(webGameSavedGamePath, sa.MyGame.SaveParentPath, processName);
+                try
+                {
+                    //Copy over and add the error encounted into the error list
+                    errorList = DownloadToParent(webGameSavedGamePath, sa.MyGame.SaveParentPath, processName);
+                }
+                catch (ConnectionFailureException)
+                {
+                    throw;
+                }
 
                 //Update the error list of the game
                 sa.UnsuccessfulSyncFiles.AddRange(errorList);
@@ -371,46 +452,40 @@ namespace GameAnywhere
         /// <param name="targetPath">path to download to on computer</param>
         /// <param name="processName">name of sync action</param>
         /// <returns>list of SyncError objects</returns>
+        /// //Exceptions: ConnectionFailureException
         private List<SyncError> DownloadToParent(string s3Path, string targetPath, string processName)
         {
             //Pre-conditions
             Debug.Assert(targetPath != null);
 
             List<SyncError> errorList = new List<SyncError>();
-            List<string> files = s3.ListFiles(s3Path);
             string localDirName, webDirName;
+            List<string> files = s3.ListFiles(s3Path);
 
             foreach (string file in files)
             {
-                //Console.WriteLine(file);
-                //Path of file - <folder>/<file> from <user>/<game>/<config or save folder>/<folder>/<file>
-                webDirName = GetWebFolderName(file);
-
-                //Path of file on computer
-                localDirName = Path.Combine(targetPath, webDirName);
-                //Console.WriteLine(localDirName);
-
                 try
                 {
+                    //Path of file - <folder>/<file> from <user>/<game>/<config or save folder>/<folder>/<file>
+                    webDirName = GetWebFolderName(file);
+
+                    //Path of file on computer
+                    localDirName = Path.Combine(targetPath, webDirName);
+
                     //Create the target directory if needed
-                    //Console.WriteLine(Path.GetDirectoryName(localDirName));
                     if (!Directory.Exists(Path.GetDirectoryName(localDirName)))
                         CreateDirectory(Path.GetDirectoryName(Path.Combine(targetPath, webDirName)));
-                }
-                catch (CreateFolderFailedException ex)
-                {
-                    //Add to error list -  fail to create folder
-                    errorList.AddRange(GetSyncError(file, processName, ex.Message));
-                }
 
-                try
-                {
                     //Download file from S3 to computer
                     s3.DownloadFile(Path.Combine(targetPath, webDirName), file);
                 }
+                catch (ConnectionFailureException)
+                {
+                    throw;
+                }
                 catch (Exception ex)
                 {
-                    //Exceptions: ArgumentException, ConnectionFailureException, WebTransferException, AmazonS3Exception
+                    //Exceptions: ArgumentException, WebTransferException, CreateFolderFailedException
                     //Add to error list
                     errorList.AddRange(GetSyncError(file, processName, ex.Message));
                 }
