@@ -45,9 +45,26 @@ namespace GameAnywhere
             this.controller = controller;
             ChildActive = false;
             ResetErrorLabels();
+            if (controller.IsFixedMedia())
+            {
+                DisableThumbdriveFunctions();
+            }
 
             SetPanelList();
+            controller.Login("lego_jdwx@hotmail.com", "666666");
 
+        }
+
+        /// <summary>
+        /// Disables all buttons related to external thumbdrive
+        /// </summary>
+        private void DisableThumbdriveFunctions()
+        {
+            SetBackgroundImage(computerToThumbdriveButton, "GameAnywhere.Resources.computerToThumbdriveButtonMouseDown.gif", ImageLayout.Zoom);
+            SetVisibilityAndUsability(computerToThumbdriveButton, true, false);
+
+            SetBackgroundImage(thumbdriveToComputerButton, "GameAnywhere.Resources.thumbdriveToComputerButtonMouseDown.gif", ImageLayout.Zoom);
+            SetVisibilityAndUsability(thumbdriveToComputerButton, true, false);
         }
 
         /// <summary>
@@ -259,23 +276,27 @@ namespace GameAnywhere
         {
             // This resets all the error labels that are in this form.
             ResetErrorLabels();
-
-            controller.SetSyncDirection(OnlineSync.ComToWeb);
-
-            // Get the list of compatible games to be displayed to user.
-            List<Game> gameList = controller.GetGameList();
-
-            // If there are no games.
-            if (gameList.Count > 0)
+            if (controller.IsLoggedIn())
             {
-                errorLabel.Text = "";
+                controller.SetSyncDirection(OnlineSync.ComToWeb);
 
-                // Show the ChooseGame form for user to choose the files.
-                ChooseGame chooseGameForm = new ChooseGame(controller, gameList, ref this.errorLabel);
-                chooseGameForm.ShowDialog();
+                // Get the list of compatible games to be displayed to user.
+                List<Game> gameList = controller.GetGameList();
+
+                // If there are no games.
+                if (gameList.Count > 0)
+                {
+                    errorLabel.Text = "";
+
+                    // Show the ChooseGame form for user to choose the files.
+                    ChooseGame chooseGameForm = new ChooseGame(controller, gameList, ref this.errorLabel);
+                    chooseGameForm.ShowDialog();
+                }
+                else
+                    SetErrorLabel("No compatible games found.", Color.Red);
             }
             else
-                errorLabel.Text = "No compatible games found.";
+                SetErrorLabel("Please login first.", Color.Red);
         }
 
         private void computerToWebButton_MouseDown(object sender, MouseEventArgs e)
@@ -305,22 +326,28 @@ namespace GameAnywhere
             // This resets all the error labels that are in this form.
             ResetErrorLabels();
 
-            controller.SetSyncDirection(OnlineSync.WebToCom);
-
-            // Get the list of compatible games to be displayed to user.
-            List<Game> gameList = controller.GetGameList();
-
-            // If there are no games.
-            if (gameList.Count > 0)
+            if (controller.IsLoggedIn())
             {
-                errorLabel.Text = "";
 
-                // Show the ChooseGame form for user to choose the files.
-                ChooseGame chooseGameForm = new ChooseGame(controller, gameList, ref this.errorLabel);
-                chooseGameForm.ShowDialog();
+                controller.SetSyncDirection(OnlineSync.WebToCom);
+
+                // Get the list of compatible games to be displayed to user.
+                List<Game> gameList = controller.GetGameList();
+
+                // If there are no games.
+                if (gameList.Count > 0)
+                {
+                    errorLabel.Text = "";
+
+                    // Show the ChooseGame form for user to choose the files.
+                    ChooseGame chooseGameForm = new ChooseGame(controller, gameList, ref this.errorLabel);
+                    chooseGameForm.ShowDialog();
+                }
+                else
+                    SetErrorLabel("No compatible games found.", Color.Red);
             }
             else
-                errorLabel.Text = "No compatible games found.";
+                SetErrorLabel("Please login first.", Color.Red);
         }
 
         private void webToComputerButton_MouseDown(object sender, MouseEventArgs e)
@@ -347,6 +374,51 @@ namespace GameAnywhere
         #region thumbdriveAndWebButton
         private void thumbdriveAndWebButton_MouseClick(object sender, MouseEventArgs e)
         {
+            ResetErrorLabels();
+            if (controller.IsLoggedIn())
+            {
+                Dictionary<string, int> conflictsList = new Dictionary<string, int>();
+                try
+                {
+                    WaitingDialog wd = new WaitingDialog();
+                    wd.ShowDialog();
+                    conflictsList = controller.CheckConflicts();
+                    wd.Close();
+                }
+                catch (ConnectionFailureException)
+                {
+                    MessageBox.Show("Unable to connect to Web server.");
+                }
+
+                if (conflictsList.Count != 0)
+                {
+                    ConflictResolve conflictsResolve = new ConflictResolve(controller, conflictsList, ref errorLabel);
+                    conflictsResolve.ShowDialog();
+                }
+                else
+                {
+                    List<SyncError> syncErrorList = new List<SyncError>();
+                    try
+                    {
+                        syncErrorList = controller.SynchronizeWebAndThumb(conflictsList);
+                    }
+                    catch (ConnectionFailureException)
+                    {
+                        MessageBox.Show("Unable to connect to Web server.");
+                    }
+
+                    if (syncErrorList.Count == 0)
+                        SetErrorLabel("Successfully synchronized", Color.DeepSkyBlue);
+                    else
+                    {
+                        SyncErrorDisplay syncErrorDisplay = new SyncErrorDisplay(syncErrorList);
+                        syncErrorDisplay.ShowDialog();
+                    }
+                    
+                }
+            }
+            else
+                SetErrorLabel("Please login first.", Color.Red);
 
         }
 

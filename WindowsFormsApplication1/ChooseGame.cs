@@ -81,8 +81,9 @@ namespace GameAnywhere
 
             // Displays the game list for user to choose files.
             DisplayGameList();
-            
+
         }
+
         #endregion
 
         #region Game Files Display Pages
@@ -472,12 +473,11 @@ namespace GameAnywhere
             {
                 syncActionListResult = controller.SynchronizeGames(syncActionList);
             }
-            catch (ConnectionFailureException e)
+            catch (ConnectionFailureException)
             {
                 SetErrorLabel("Unable to connect to server", Color.Red);
             }
             
-
             DisplaySyncResult(syncActionListResult);
         }
 

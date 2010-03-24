@@ -42,6 +42,8 @@ namespace GameAnywhere
         /// </summary>
         private Dictionary<string, string> allConflictedGamesAndType;
 
+        private Label errorLabel;
+
         #endregion
 
         /// <summary>
@@ -49,11 +51,12 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="controller">Controller to do comunicate with the other classes</param>
         /// <param name="conflictsList">List of conflicts to be resolved.</param>
-        public ConflictResolve (Controller controller, Dictionary<string,int> conflictsList)
+        public ConflictResolve(Controller controller, Dictionary<string, int> conflictsList, ref Label errorLabel)
         {
             InitializeComponent();
             this.controller = controller;
             this.conflictsList = conflictsList;
+            this.errorLabel = errorLabel;
 
             DisplayConflicts();
         }
@@ -585,7 +588,7 @@ namespace GameAnywhere
         #region confirmButton mouse events
         private void confirmButton_MouseClick(object sender, MouseEventArgs e)
         {
-            Dictionary<string, int> newDictionary = new Dictionary<string, int>();
+            Dictionary<string, int> resolvedConflictsList = new Dictionary<string, int>();
 
             foreach (string key in conflictsList.Keys)
             {
@@ -597,9 +600,31 @@ namespace GameAnywhere
                 CheckBox downloadCheckBox = FindCheckBox("download/" +gameName + fileType);
 
                 if (uploadCheckBox.Checked)
-                    newDictionary.Add(key, 1);
+                    resolvedConflictsList.Add(key, 1);
                 else if (downloadCheckBox.Checked)
-                    newDictionary.Add(key, 2);
+                    resolvedConflictsList.Add(key, 2);
+            }
+
+            List<SyncError> syncErrorList = new List<SyncError>();
+            try
+            {
+
+                syncErrorList = controller.SynchronizeWebAndThumb(resolvedConflictsList);
+            }
+            catch (ConnectionFailureException)
+            {
+                MessageBox.Show("Unable to connect to Web server.");
+            }
+
+            if (syncErrorList.Count == 0)
+            {
+                SetErrorLabel("Successfully synchronized", Color.DeepSkyBlue);
+                this.Close();
+            }
+            else
+            {
+                SyncErrorDisplay syncErrorDisplay = new SyncErrorDisplay(syncErrorList, this);
+                syncErrorDisplay.ShowDialog();
             }
         }
 
@@ -621,5 +646,16 @@ namespace GameAnywhere
             SetBackgroundImage(confirmButton, "GameAnywhere.Resources.confirmGameChoicePopupButtonMouseOver.gif", ImageLayout.Zoom);
         }
         #endregion
+
+        /// <summary>
+        /// Sets the error label of the start page.
+        /// </summary>
+        /// <param name="s">String to be dispalyed.</param>
+        /// <param name="c">Color to display the string in.</param>
+        public void SetErrorLabel(string s, System.Drawing.Color c)
+        {
+            errorLabel.Text = s;
+            errorLabel.ForeColor = c;
+        }
     }
 }

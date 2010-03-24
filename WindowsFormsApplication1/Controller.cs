@@ -28,6 +28,8 @@ namespace GameAnywhere
         /// </summary>
         private User user;
 
+        private WebAndThumbSync wats;
+
         #endregion
 
         #region Constructors
@@ -79,7 +81,8 @@ namespace GameAnywhere
         public void SetSyncDirection(int direction)
         {
             // Assert that direction is valid.
-            Debug.Assert(direction == OfflineSync.ComToExternal || direction == OfflineSync.ExternalToCom
+            Debug.Assert(direction == OfflineSync.ComToExternal || direction == OfflineSync.ExternalToCom 
+                || direction == OnlineSync.WebToCom || direction == OnlineSync.ComToWeb
                 , "Direction is not valid.");
 
             // Set direction.
@@ -118,13 +121,23 @@ namespace GameAnywhere
         {
             // Assert that direction is valid.
             Debug.Assert(direction == OfflineSync.ComToExternal || direction == OfflineSync.ExternalToCom
+                || direction == OnlineSync.WebToCom || direction == OnlineSync.ComToWeb
                 , "Direction is not valid.");
 
             // Declare a list.
-            List<Game> gameList;
-     
-            // Call GetGameList and set the list.
-            gameList = gameLibrary.GetGameList(direction);
+            List<Game> gameList = null;
+
+            if (direction == OfflineSync.ComToExternal || direction == OfflineSync.ExternalToCom || direction == OnlineSync.ComToWeb)
+            {
+                // Call GetGameList and set the list.
+                gameList = gameLibrary.GetGameList(direction);
+            }
+            else if (direction == OnlineSync.WebToCom)
+            {
+                List<string> webGamesList = OnlineSync.GetGamesAndTypesFromWeb(user.Email);
+                gameList = gameLibrary.GetGameList(direction, webGamesList);
+            }
+
 
             // Assert that list is not null.
             Debug.Assert(gameList != null, "Game list is null.");
@@ -158,8 +171,7 @@ namespace GameAnywhere
                 // Call SynchronizeGames of OfflineSync class to process.
                 syncActionList = offlineSync.SynchronizeGames(syncActionList);
             }
-            else if (direction == OnlineSync.ComToWeb || direction == OnlineSync.WebToCom
-                                     || direction == OnlineSync.ExternalAndWeb)
+            else if (direction == OnlineSync.ComToWeb || direction == OnlineSync.WebToCom)
             {
                 // Initialize an OfflineSync object.
                 OnlineSync onlineSync = new OnlineSync(direction, gameLibrary.GetGameList(OfflineSync.Uninitialize), user);
@@ -170,9 +182,9 @@ namespace GameAnywhere
                     syncActionList = onlineSync.SynchronizeGames(syncActionList);
                 }
 
-                catch (ConnectionFailureException e)
+                catch (Exception)
                 {
-                    throw e;
+                    throw new ConnectionFailureException();
                 }
             }
 
@@ -248,9 +260,9 @@ namespace GameAnywhere
                  code = user.Register(email, password);
             }
 
-            catch (ConnectionFailureException e)
+            catch (Exception)
             {
-                throw e;
+                throw new ConnectionFailureException();
             }
 
             return code;
@@ -276,9 +288,9 @@ namespace GameAnywhere
                 return user.Login(email, password);
             }
 
-            catch (ConnectionFailureException e)
+            catch (Exception)
             {
-                throw e;
+                throw new ConnectionFailureException();
             }
 
         }
@@ -298,9 +310,9 @@ namespace GameAnywhere
                 user.Logout();
             }
 
-            catch (ConnectionFailureException e)
+            catch (Exception)
             {
-                throw e;
+                throw new ConnectionFailureException();
             }
 
         }
@@ -325,9 +337,9 @@ namespace GameAnywhere
                 return user.ResendActivation(email, inputPassword);
             }
 
-            catch (ConnectionFailureException e)
+            catch (Exception)
             {
-                throw e;
+                throw new ConnectionFailureException();
             }
 
         }
@@ -351,11 +363,10 @@ namespace GameAnywhere
                 return user.RetrievePassword(email);
             }
 
-            catch (ConnectionFailureException e)
+            catch (Exception)
             {
-                throw e;
+                throw new ConnectionFailureException();
             }
-
         }
 
         /// <summary>
@@ -379,11 +390,10 @@ namespace GameAnywhere
                 return user.ChangePassword(email, oldPassword, newPassword);
             }
 
-            catch (ConnectionFailureException e)
+            catch (Exception)
             {
-                throw e;
+                throw new ConnectionFailureException();
             }
-
         }
 
         /// <summary>
@@ -416,19 +426,50 @@ namespace GameAnywhere
                 }
             }
 
-            if (d.DriveType.Equals("Fixed"))
-            {
+            if (d.DriveType.ToString().Equals("Fixed"))
                 return true;
-            }
 
             return false;
 
-
         }
 
+        public bool IsLoggedIn()
+        {
+            return user.IsLoggedIn();             
+        }
+
+
+        public List<SyncError> SynchronizeWebAndThumb(Dictionary<string, int> conflictsList)
+        {
+            try
+            {
+                
+                List <SyncError> syncErrorList = wats.SynchronizeGames(conflictsList);
+                return syncErrorList;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                throw new ConnectionFailureException();
+            }
+            
+        }
+
+        public Dictionary<string, int> CheckConflicts()
+        {
+            wats = new WebAndThumbSync(user);
+            try
+            {
+                Dictionary<string, int> conflictsList = wats.CheckConflicts();
+                return conflictsList;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                throw new ConnectionFailureException();
+            }
+        }
         #endregion
-
-
 
     }
 }
