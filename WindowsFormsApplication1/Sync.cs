@@ -41,19 +41,19 @@ namespace GameAnywhere
         public const int Uninitialize = 0; //Default
 
         /// <summary>
-        /// Backup Status: No files.
+        /// Backup Status: No files. Do not confuse with SyncAction.
         /// </summary>
         protected const int None = 0;
         /// <summary>
-        /// Backup Status: Game configuration files.
+        /// Backup Status: Game configuration files. Do not confuse with SyncAction.
         /// </summary>
         protected const int Config = 1;
         /// <summary>
-        /// Backup Status: Saved game files.
+        /// Backup Status: Saved game files. Do not confuse with SyncAction.
         /// </summary>
         protected const int SavedGame = 2;
         /// <summary>
-        /// Backup Status: All game files.
+        /// Backup Status: All game files. Do not confuse with SyncAction.
         /// </summary>
         protected const int AllFiles = 3;
 
