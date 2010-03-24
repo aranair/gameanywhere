@@ -50,6 +50,8 @@ namespace GameAnywhere
         /// </summary>
         private Label errorLabel;
 
+        private WaitingDialog waitDialog;
+
         #endregion
 
         #region Constructors
@@ -61,6 +63,7 @@ namespace GameAnywhere
             InitializeComponent();
             gameList = new List<Game>();
             this.controller = controller;
+            this.waitDialog = new WaitingDialog();
         }
 
         /// <summary>
@@ -75,6 +78,7 @@ namespace GameAnywhere
         {
             this.controller = controller;
             this.errorLabel = errorLabel;
+            this.waitDialog = new WaitingDialog();
             gameList = gList;
 
             InitializeComponent();
@@ -471,7 +475,9 @@ namespace GameAnywhere
 
             try
             {
+                OpenWaitDialog();
                 syncActionListResult = controller.SynchronizeGames(syncActionList);
+                CloseWaitDialog();
             }
             catch (ConnectionFailureException)
             {
@@ -629,6 +635,21 @@ namespace GameAnywhere
         #endregion
 
         #region Helper Functions
+
+        private void OpenWaitDialog()
+        {
+            waitDialog = new WaitingDialog();
+            waitDialog.Show();
+            waitDialog.Refresh();
+            this.Enabled = false;
+        }
+
+        private void CloseWaitDialog()
+        {
+            waitDialog.Close();
+            this.Enabled = true;
+            this.Focus();
+        }
 
         public void SetBackgroundImage(System.Windows.Forms.Control o, string resourcePath, ImageLayout imageLayout)
         {

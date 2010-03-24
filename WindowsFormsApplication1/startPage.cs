@@ -35,7 +35,10 @@ namespace GameAnywhere
         /// </summary>
         private List<Panel> panelList;
 
-        
+        /// <summary>
+        /// Form to ask user to wait in patience.
+        /// </summary>
+        private WaitingDialog waitDialog;
 
         /// <summary>
         /// Overloaded Constructor
@@ -45,6 +48,7 @@ namespace GameAnywhere
         {
             InitializeComponent();
             this.controller = controller;
+            waitDialog = new WaitingDialog();
             ChildActive = false;
             ResetErrorLabels();
             if (controller.IsFixedMedia())
@@ -54,6 +58,7 @@ namespace GameAnywhere
 
             SetPanelList();
             controller.Login("lego_jdwx@hotmail.com", "666666");
+            
 
         }
 
@@ -177,7 +182,7 @@ namespace GameAnywhere
             }
             else
             {
-                errorLabel.Text = "No compatible games found.";
+                SetErrorLabel("No compatible games.", Color.Red);
                 errorLabel.Visible = true;
             }
         }
@@ -382,12 +387,9 @@ namespace GameAnywhere
                 Dictionary<string, int> conflictsList = new Dictionary<string, int>();
                 try
                 {
-                    WaitingDialog frm = new WaitingDialog();
-                    frm.Show();
-
+                    SetErrorLabel("    Checking Conflicts", Color.Lime);
                     conflictsList = controller.CheckConflicts();
-                    
-                    frm.Close();
+                    SetErrorLabel("", Color.Black);
                 }
                 catch (ConnectionFailureException)
                 {
@@ -428,12 +430,7 @@ namespace GameAnywhere
 
         }
 
-        private void OpenWaitDialog()
-        {
-             = new WaitingDialog();
-            frm.Show();
-            frm.Refresh();
-        }
+       
 
         private void thumbdriveAndWebButton_MouseDown(object sender, MouseEventArgs e)
         {
@@ -620,7 +617,7 @@ namespace GameAnywhere
                 {
                     // Go back to first page and display success text.
                     InitiateStartPanel();
-                    SetErrorLabel("User Logged in.", System.Drawing.Color.DeepSkyBlue);
+                    SetErrorLabel("     User Logged In", System.Drawing.Color.DeepSkyBlue);
                 }
                 // Login fails
                 else 
@@ -1512,6 +1509,21 @@ namespace GameAnywhere
         {
             c.Visible = makeVisible;
             c.Enabled = makeEnabled;
+        }
+
+        private void OpenWaitDialog()
+        {
+            waitDialog = new WaitingDialog();
+            waitDialog.Show();
+            waitDialog.Refresh();
+            this.Enabled = false;
+        }
+
+        private void CloseWaitDialog()
+        {
+            waitDialog.Close();
+            this.Enabled = true;
+            this.Focus();
         }
 
         #endregion
