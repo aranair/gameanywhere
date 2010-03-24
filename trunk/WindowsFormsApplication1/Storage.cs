@@ -151,19 +151,15 @@ namespace GameAnywhere
                     throw new WebTransferException("Failure in downloading file.");
                 }
             }
-            catch (UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException)
             {
                 throw new CreateFolderFailedException("Denied permission to create folder.");
             }
-            catch (IOException ex)
+            catch (IOException)
             {
                 throw new CreateFolderFailedException("Unable to create file.");
             }
-            catch (DirectoryNotFoundException ex)
-            {
-                throw new CreateFolderFailedException("Directory not found.");
-            }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
