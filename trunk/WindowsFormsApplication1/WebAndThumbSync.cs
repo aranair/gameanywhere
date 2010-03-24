@@ -61,9 +61,9 @@ namespace GameAnywhere
             Conflicts = new Dictionary<string,int>();
         }
         
-        public WebAndThumbSync(string e)
+        public WebAndThumbSync(User u)
         {
-            email = e;
+            email = u.Email;
             CreateMetaData(email);
             NoConflict = new Dictionary<string,int>();
             Conflicts = new Dictionary<string, int>();
@@ -222,7 +222,7 @@ namespace GameAnywhere
             }
         }
 
-        public void SynchronizeGames(Dictionary<string, int> resolvedConflicts)
+        public List<SyncError> SynchronizeGames(Dictionary<string, int> resolvedConflicts)
         {
             string processName = "Sync files from Web and Thumb";
             List<SyncError> errorList = new List<SyncError>();
@@ -274,6 +274,8 @@ namespace GameAnywhere
             webHash.Serialize(WebMetaDataPath);
             s3.UploadFile(WebMetaDataPath,email + "/" + WebMetaDataFileName);
             File.Delete(WebMetaDataPath);
+
+            return errorList;
 
         }
 
