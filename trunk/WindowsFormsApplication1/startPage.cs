@@ -51,13 +51,13 @@ namespace GameAnywhere
             waitDialog = new WaitingDialog();
             ChildActive = false;
             ResetErrorLabels();
-            if (controller.IsFixedMedia())
+            /*if (controller.IsFixedMedia())
             {
                 DisableThumbdriveFunctions();
-            }
+            }*/
 
             SetPanelList();
-            controller.Login("lego_jdwx@hotmail.com", "666666");
+            //controller.Login("lego_jdwx@hotmail.com", "666666");
             
 
         }
@@ -138,7 +138,7 @@ namespace GameAnywhere
                 errorLabel.Text = "";
 
                 // Show the ChooseGame form for user to choose the files.
-                ChooseGame chooseGameForm = new ChooseGame(controller, gameList, ref this.errorLabel);
+                ChooseGame chooseGameForm = new ChooseGame(controller, gameList, this);
                 chooseGameForm.ShowDialog();
             }
             else
@@ -177,7 +177,7 @@ namespace GameAnywhere
             if (gList.Count > 0)
             {
                 errorLabel.Visible = false;
-                ChooseGame cg = new ChooseGame(controller, gList, ref this.errorLabel);
+                ChooseGame cg = new ChooseGame(controller, gList, this);
                 cg.ShowDialog();
             }
             else
@@ -296,7 +296,7 @@ namespace GameAnywhere
                     errorLabel.Text = "";
 
                     // Show the ChooseGame form for user to choose the files.
-                    ChooseGame chooseGameForm = new ChooseGame(controller, gameList, ref this.errorLabel);
+                    ChooseGame chooseGameForm = new ChooseGame(controller, gameList, this);
                     chooseGameForm.ShowDialog();
                 }
                 else
@@ -347,7 +347,7 @@ namespace GameAnywhere
                     errorLabel.Text = "";
 
                     // Show the ChooseGame form for user to choose the files.
-                    ChooseGame chooseGameForm = new ChooseGame(controller, gameList, ref this.errorLabel);
+                    ChooseGame chooseGameForm = new ChooseGame(controller, gameList, this);
                     chooseGameForm.ShowDialog();
                 }
                 else
@@ -398,7 +398,7 @@ namespace GameAnywhere
 
                 if (conflictsList.Count != 0)
                 {
-                    ConflictResolve conflictsResolve = new ConflictResolve(controller, conflictsList, ref errorLabel);
+                    ConflictResolve conflictsResolve = new ConflictResolve(controller, conflictsList, this);
                     conflictsResolve.ShowDialog();
                 }
                 else
@@ -1418,9 +1418,9 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="password">Password string to be checked.</param>
         /// <returns>Feedback message for validity of the password passed in.</returns>
-        private string IsValidPassword(string password)
+        private static string IsValidPassword(string password)
         {
-            if (password.Equals(""))
+            if (String.IsNullOrEmpty(password))
                 return "Password field cannot be empty.";
             if (password.Length < 6)
                 return "Password length must be 6 or more characters";
@@ -1434,9 +1434,9 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="password">Email string to be checked.</param>
         /// <returns>Feedback message for validity of the password passed in</returns>
-        public string IsValidEmail(string email)
+        public static string IsValidEmail(string email)
         {
-            if (email == null || email.Equals(""))
+            if (String.IsNullOrEmpty(email))
                 return "Email field cannot be empty. ";
 
             // address is ok regarding the single @ sign
@@ -1456,10 +1456,10 @@ namespace GameAnywhere
         }
 
         // Sets the front page error label's text to the desired string and color.
-        public void SetErrorLabel(string s, System.Drawing.Color c)
+        public void SetErrorLabel(string txt, System.Drawing.Color color)
         {
-            errorLabel.Text = s;
-            errorLabel.ForeColor = c;
+            this.errorLabel.Text = txt;
+            this.errorLabel.ForeColor = color;
         }
 
         // Function disables all other panels other than the one passed in.
@@ -1505,10 +1505,10 @@ namespace GameAnywhere
         }
 
         // Sets control to be visible or enabled and vice versa.
-        private void SetVisibilityAndUsability(System.Windows.Forms.Control c, bool makeVisible, bool makeEnabled)
+        private static void SetVisibilityAndUsability(System.Windows.Forms.Control control, bool makeVisible, bool makeEnabled)
         {
-            c.Visible = makeVisible;
-            c.Enabled = makeEnabled;
+            control.Visible = makeVisible;
+            control.Enabled = makeEnabled;
         }
 
         private void OpenWaitDialog()
