@@ -380,10 +380,10 @@ namespace GameAnywhere
                 Dictionary<string, int> conflictsList = new Dictionary<string, int>();
                 try
                 {
-                    WaitingDialog wd = new WaitingDialog();
-                    wd.ShowDialog();
+                    //WaitingDialog wd = new WaitingDialog();
+                    //wd.ShowDialog();
                     conflictsList = controller.CheckConflicts();
-                    wd.Close();
+                    //wd.Close();
                 }
                 catch (ConnectionFailureException)
                 {
