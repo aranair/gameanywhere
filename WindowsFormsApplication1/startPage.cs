@@ -35,6 +35,8 @@ namespace GameAnywhere
         /// </summary>
         private List<Panel> panelList;
 
+        
+
         /// <summary>
         /// Overloaded Constructor
         /// </summary>
@@ -380,10 +382,12 @@ namespace GameAnywhere
                 Dictionary<string, int> conflictsList = new Dictionary<string, int>();
                 try
                 {
-                    //WaitingDialog wd = new WaitingDialog();
-                    //wd.ShowDialog();
+                    WaitingDialog frm = new WaitingDialog();
+                    frm.Show();
+
                     conflictsList = controller.CheckConflicts();
-                    //wd.Close();
+                    
+                    frm.Close();
                 }
                 catch (ConnectionFailureException)
                 {
@@ -400,7 +404,9 @@ namespace GameAnywhere
                     List<SyncError> syncErrorList = new List<SyncError>();
                     try
                     {
+                        OpenWaitDialog();      
                         syncErrorList = controller.SynchronizeWebAndThumb(conflictsList);
+                        CloseWaitDialog();
                     }
                     catch (ConnectionFailureException)
                     {
@@ -420,6 +426,13 @@ namespace GameAnywhere
             else
                 SetErrorLabel("Please login first.", Color.Red);
 
+        }
+
+        private void OpenWaitDialog()
+        {
+             = new WaitingDialog();
+            frm.Show();
+            frm.Refresh();
         }
 
         private void thumbdriveAndWebButton_MouseDown(object sender, MouseEventArgs e)
