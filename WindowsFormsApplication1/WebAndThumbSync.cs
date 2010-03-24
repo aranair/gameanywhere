@@ -20,6 +20,7 @@ namespace GameAnywhere
         private const int DOWNLOAD = 2;
         private const int DELETELOCAL = 3;
         private const int DELETEWEB = 4;
+        private const int DELETEMETA = 5;
         private const int UPDOWNCONFLICT = 12;
         private const int DELETELOCALCONFLICT = 13;
         private const int DELETEWEBCONFLICT = 24;
@@ -190,9 +191,21 @@ namespace GameAnywhere
             {
                 if (!hash1.EntryExist(entry.Key)) //Deleted file
                 {
-                    if (Conflicts.ContainsKey(entry.Key) || HashIsDifferent(hash2,meta2,entry.Key)) continue;
                     if (!hash2.EntryExist(entry.Key)) //both deleted, delete metadata
-                        DeleteMetaData(entry.Key);
+                        Conflicts[entry.Key] = DELETEMETA;
+                    else if (Conflicts.ContainsKey(entry.Key))
+                        continue;
+                    else if (HashIsDifferent(hash2, meta2, entry.Key))
+                    {
+                        if (direction == UPLOAD)
+                        {
+                            Conflicts[entry.Key] = DELETEWEBCONFLICT;
+                        }
+                        if (direction == DOWNLOAD)
+                        {
+                            Conflicts[entry.Key] = DOWNLOAD;
+                        }
+                    }
                     else
                     {
                         if (direction == UPLOAD) //Delete from web
@@ -211,6 +224,9 @@ namespace GameAnywhere
 
         public void SynchronizeGames(Dictionary<string, int> resolvedConflicts)
         {
+            string processName = "Sync files from Web and Thumb";
+            List<SyncError> errorList = new List<SyncError>();
+
             //Merge the resolved conflicts
             MergeConflicts(resolvedConflicts);
 
@@ -219,25 +235,38 @@ namespace GameAnywhere
             {
                 string localPath = Path.Combine(syncFolderPath, key);
                 string webPath = email + "/" + key;
-                switch (NoConflict[key])
+
+                try
                 {
-                    case UPLOAD:
-                        s3.UploadFile(localPath, webPath);
-                        UpdateMetaData(key, GenerateHash(localPath));
-                        break;
-                    case DOWNLOAD:
-                        s3.DownloadFile(localPath, webPath);
-                        UpdateMetaData(key, GenerateHash(localPath));
-                        break;
-                    case DELETELOCAL:
-                        File.Delete(localPath);
-                        DeleteMetaData(key);
-                        break;
-                    case DELETEWEB:
-                        s3.DeleteDirectory(webPath);
-                        DeleteMetaData(key);
-                        break;
+                    switch (NoConflict[key])
+                    {
+                        case UPLOAD:
+                            s3.UploadFile(localPath, webPath);
+                            UpdateMetaData(key, GenerateHash(localPath));
+                            break;
+                        case DOWNLOAD:
+                            s3.DownloadFile(localPath, webPath);
+                            UpdateMetaData(key, GenerateHash(localPath));
+                            break;
+                        case DELETELOCAL:
+                            File.Delete(localPath);
+                            DeleteMetaData(key);
+                            break;
+                        case DELETEWEB:
+                            s3.DeleteDirectory(webPath);
+                            DeleteMetaData(key);
+                            break;
+                        case DELETEMETA:
+                            DeleteMetaData(key);
+                            break;
+                    }
                 }
+                catch (Exception ex)
+                {
+                    string gameName = key.Substring(0, key.IndexOf('/'));
+                    errorList.AddRange(GetSyncError(gameName,processName,ex.Message));
+                }
+                
             }
 
             //Serialize and Upload Metadata
@@ -308,6 +337,33 @@ namespace GameAnywhere
             localHash.DeleteEntry(key);
             webMeta.DeleteEntry(key);
             webHash.DeleteEntry(key);
+        }
+
+        private List<SyncError> GetSyncError(string errorPath, string processName, string errorMessage)
+        {
+            List<SyncError> errorList = new List<SyncError>();
+            //Debug.WriteLine(errorMessage);
+
+            if (File.Exists(errorPath)) //Path is a file
+                errorList.Add(new SyncError(errorPath, processName, errorMessage));
+            else //Path is a folder
+            {
+                if (Directory.Exists(errorPath))
+                {
+                    /*//Add all files in the folder
+                    foreach (string errorFile in Directory.GetFiles(errorPath))
+                        errorList.Add(new SyncError(errorPath, processName, errorMessage));
+                    //Add all subfolders in the folder
+                    foreach (string subFolder in Directory.GetDirectories(errorPath))
+                        errorList.AddRange(GetSyncError(subFolder, processName, errorMessage));*/
+
+                    errorList.Add(new SyncError(errorPath, processName, errorMessage));
+                }
+                else
+                    errorList.Add(new SyncError(errorPath, processName, errorMessage));
+
+            }
+            return errorList;
         }
     }
 }
