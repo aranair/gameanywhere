@@ -16,14 +16,15 @@ namespace GameAnywhere
         /// Sync action, do nothing.
         /// </summary>
         public static readonly int DoNothing = 0; //default
-        /// <summary>
-        /// Sync action, saved game files.
-        /// </summary>
-        public static readonly int SavedGameFiles = 1;
+
         /// <summary>
         /// Sync action, game configuration files.
         /// </summary>
-        public static readonly int ConfigFiles = 2;
+        public static readonly int ConfigFiles = 1;
+        /// <summary>
+        /// Sync action, saved game files.
+        /// </summary>
+        public static readonly int SavedGameFiles = 2;
         /// <summary>
         /// Sync action, all game files.
         /// </summary>
