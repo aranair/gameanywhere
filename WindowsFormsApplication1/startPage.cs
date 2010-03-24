@@ -257,7 +257,25 @@ namespace GameAnywhere
         #region computerToWebButton
         private void computerToWebButton_MouseClick(object sender, MouseEventArgs e)
         {
+            // This resets all the error labels that are in this form.
+            ResetErrorLabels();
 
+            controller.SetSyncDirection(OnlineSync.ComToWeb);
+
+            // Get the list of compatible games to be displayed to user.
+            List<Game> gameList = controller.GetGameList();
+
+            // If there are no games.
+            if (gameList.Count > 0)
+            {
+                errorLabel.Text = "";
+
+                // Show the ChooseGame form for user to choose the files.
+                ChooseGame chooseGameForm = new ChooseGame(controller, gameList, ref this.errorLabel);
+                chooseGameForm.ShowDialog();
+            }
+            else
+                errorLabel.Text = "No compatible games found.";
         }
 
         private void computerToWebButton_MouseDown(object sender, MouseEventArgs e)
@@ -284,7 +302,25 @@ namespace GameAnywhere
         #region webToComputerButton
         private void webToComputerButton_MouseClick(object sender, MouseEventArgs e)
         {
+            // This resets all the error labels that are in this form.
+            ResetErrorLabels();
 
+            controller.SetSyncDirection(OnlineSync.WebToCom);
+
+            // Get the list of compatible games to be displayed to user.
+            List<Game> gameList = controller.GetGameList();
+
+            // If there are no games.
+            if (gameList.Count > 0)
+            {
+                errorLabel.Text = "";
+
+                // Show the ChooseGame form for user to choose the files.
+                ChooseGame chooseGameForm = new ChooseGame(controller, gameList, ref this.errorLabel);
+                chooseGameForm.ShowDialog();
+            }
+            else
+                errorLabel.Text = "No compatible games found.";
         }
 
         private void webToComputerButton_MouseDown(object sender, MouseEventArgs e)
@@ -334,6 +370,7 @@ namespace GameAnywhere
             SetBackgroundImage(thumbdriveAndWebButton, "GameAnywhere.Resources.thumbdriveAndWebButton.gif", ImageLayout.Zoom);
         }
         #endregion
+
         #endregion
 
         #region Login Panel ( and all it's content )
