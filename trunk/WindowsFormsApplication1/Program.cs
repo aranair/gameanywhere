@@ -28,6 +28,7 @@ namespace GameAnywhere
             */
             
             Controller c = new Controller();
+            /*
             Dictionary<string, int> cList = new Dictionary<string, int>();
             cList.Add("Warcraft 3/savedGame", 0);
             cList.Add("Warcraft 3/config", 0);
@@ -36,7 +37,7 @@ namespace GameAnywhere
             cList.Add("Football Manager 2010/savedGame", 0);
             cList.Add("FIFA 10/savedGame", 0);
             ConflictResolve cr = new ConflictResolve(c, cList);
-            cr.ShowDialog();
+            cr.ShowDialog();*/
         }
     }
 }

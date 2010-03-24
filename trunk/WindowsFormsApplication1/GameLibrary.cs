@@ -105,7 +105,8 @@ namespace GameAnywhere
         /// <returns>List of installed games that are compatible with the direction</returns>
         public List<Game> GetGameList(int direction) 
         {
-            Debug.Assert(direction == OfflineSync.ExternalToCom || direction == OfflineSync.ComToExternal || direction == OfflineSync.Uninitialize);
+            Debug.Assert(direction == OfflineSync.ExternalToCom || direction == OfflineSync.ComToExternal 
+                || direction == OfflineSync.Uninitialize || direction == OnlineSync.ComToWeb);
             RefreshList();
 
             if (direction == OfflineSync.ExternalToCom)
@@ -127,20 +128,16 @@ namespace GameAnywhere
         /// <param name="direction">Direction of sync.</param>
         /// <param name="user">Email of current logged in user.</param>
         /// <returns>List of installed games that are compatible with the direction</returns>
-        public List<Game> GetGameList(int direction, string user)
+        public List<Game> GetGameList(int direction, List<string> webGamesList)
         {
-            Debug.Assert(direction == OnlineSync.WebToCom || direction == OnlineSync.ComToWeb || direction == OnlineSync.ExternalAndWeb);
+            Debug.Assert(direction == OnlineSync.WebToCom || direction == OnlineSync.ComToWeb);
             RefreshList();
             List<Game> newList = new List<Game>();
 
             if (direction == OnlineSync.WebToCom)
             {
-                AddGamesSupportedByWeb(ref newList, user);
+                AddGamesSupportedByWeb(ref newList, webGamesList);
                 return newList;
-            }
-            else if (direction == OnlineSync.ExternalAndWeb)
-            {
-                return null;
             }
             else // ComToWeb,
                 return this.InstalledGameList;
@@ -151,16 +148,12 @@ namespace GameAnywhere
         /// to see if there are config or saved game files available for them.
         /// </summary>
         /// <param name="newList">List to add the games supported by web</param>
-        private void AddGamesSupportedByWeb(ref List<Game> newList, string user)
+        private void AddGamesSupportedByWeb(ref List<Game> newList, List<string> webGamesList)
         {     
-            // Get the list of web game list from web.
-            List<string> webGameList = new List<string>();
-            //controller.GetGamesFromWeb(user);
-
             //takes the current installedGameList. checks each game with web's and return all the games that is available.
             foreach (Game installedGame in installedGameList)
             {
-                MatchWebGameAndFiles(installedGame, webGameList, ref newList);
+                MatchWebGameAndFiles(installedGame, webGamesList, ref newList);
             }//end foreach
         }
 
@@ -184,7 +177,8 @@ namespace GameAnywhere
             {
                 // line = e.g "Warcraft 3/Config"
                 string gameName = line.Remove(line.IndexOf('/'));
-                string gameFileType = line.Substring(line.IndexOf("/"));
+                string gameFileType = line.Substring(line.IndexOf("/") + 1);
+                
                 // Game name matches.
                 if (gameName.Equals(installedGame.Name))
                 {
