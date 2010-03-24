@@ -53,7 +53,7 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="path">path of local file</param>
         /// <param name="key">key of file on S3</param>
-        /// Exceptions: ArgumentException, WebTransferException, ConnectionFailureException, AmazonS3Exception
+        /// Exceptions: ArgumentException, WebTransferException, ConnectionFailureException
         public void UploadFile(string path, string key)
         {
             //Pre-conditions
@@ -80,7 +80,7 @@ namespace GameAnywhere
                 //Compare file's hashcode with response's hashcode to confirm file correctly uploaded
                 if (!fileHash.Equals(responseFileHash))
                 {
-                    throw new WebTransferException("Upload file failure.");
+                    throw new WebTransferException("Uploaded file corrupted.");
                 }
 
                 response.Dispose();
@@ -93,8 +93,7 @@ namespace GameAnywhere
                 }
                 else
                 {
-                    //Console.WriteLine("ErrorCode=" + ex.ErrorCode);
-                    throw;
+                    throw new WebTransferException("Failure to upload file.");
                 }
             }
         }
@@ -104,7 +103,7 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="path">path of download location on computer</param>
         /// <param name="key">key of file on S3</param>
-        /// Exceptions: ArgumentException, ConnectionFailureException, AmazonS3Exception
+        /// Exceptions: ArgumentException, ConnectionFailureException, WebTransferException, CreateFolderFailedException
         public void DownloadFile(string path, string key)
         {
             //Pre-conditions
@@ -117,11 +116,11 @@ namespace GameAnywhere
             {
                 //Setup request
                 GetObjectRequest request = new GetObjectRequest().WithBucketName(bucketName).WithKey(key);
-                
+
                 //Send request
                 S3Response response = client.GetObject(request);
 
-                //TODO exceptions here?
+                //Creating file on computer
                 using (FileStream fs = File.Create(path))
                 {
                     const int BUFSIZE = 4096;
@@ -149,8 +148,24 @@ namespace GameAnywhere
                 else
                 {
                     //Console.WriteLine("ErrorCode=" + ex.ErrorCode);
-                    throw;
+                    throw new WebTransferException("Failure in downloading file.");
                 }
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                throw new CreateFolderFailedException("Denied permission to create folder.");
+            }
+            catch (IOException ex)
+            {
+                throw new CreateFolderFailedException("Unable to create file.");
+            }
+            catch (DirectoryNotFoundException ex)
+            {
+                throw new CreateFolderFailedException("Directory not found.");
+            }
+            catch (Exception ex)
+            {
+                throw;
             }
         }
 
@@ -158,7 +173,7 @@ namespace GameAnywhere
         /// Delete a file from web(S3)
         /// </summary>
         /// <param name="key">key of file on S3</param>
-        /// Exceptions: ArgumentException, ConnectionFailureException, AmazonS3Exception
+        /// Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
         public void DeleteFile(string key)
         {
             //Pre-conditions
@@ -185,7 +200,7 @@ namespace GameAnywhere
                 else
                 {
                     //Console.WriteLine("ErrorCode=" + ex.ErrorCode);
-                    throw;
+                    throw new WebTransferException("Failure to delete file on Web.");
                 }
             }
         }
@@ -195,7 +210,7 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="key">key of file on S3</param>
         /// <returns>list of files on web(S3)</returns>
-        /// Exceptions: ArgumentException, ConnectionFailureException, AmazonS3Exception
+        /// Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
         public List<string> ListFiles(string key)
         {
             //Pre-conditions
@@ -230,7 +245,7 @@ namespace GameAnywhere
                 else
                 {
                     //Console.WriteLine("ErrorCode=" + ex.ErrorCode);
-                    throw;
+                    throw new WebTransferException("Failure to transfer files from Web");
                 }
             }
         }
@@ -239,7 +254,7 @@ namespace GameAnywhere
         /// Delete directory in web(S3) base on the key
         /// </summary>
         /// <param name="key">key of file on S3</param>
-        /// Exceptions: ArgumentException, ConnectionFailureException, AmazonS3Exception
+        /// Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
         public void DeleteDirectory(string key)
         {
             try
@@ -261,7 +276,7 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="key">key of file on S3</param>
         /// <returns>hashcode of file</returns>
-        /// Exceptions: ArgumentException, ConnectionFailureException, AmazonS3Exception
+        /// Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
         public string GetHash(string key)
         {
             //Pre-conditions
@@ -291,7 +306,7 @@ namespace GameAnywhere
                 else
                 {
                     //Console.WriteLine("ErrorCode=" + ex.ErrorCode);
-                    throw;
+                    throw new WebTransferException("Failure to get file hashcode.");
                 }
             }
         }
@@ -301,7 +316,7 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="key">key of file on S3</param>
         /// <returns>Dictionary of files with its hashcode</returns>
-        /// Exceptions: ArgumentException, ConnectionFailureException, AmazonS3Exception
+        /// Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
         public Dictionary<string,string> GetHashDictionary(string key)
         {
             //Pre-conditions
