@@ -13,7 +13,6 @@ namespace GameAnywhere
         //Sync directions
         public static readonly int WebToCom = 4;
         public static readonly int ComToWeb = 5;
-        public static readonly int ExternalAndWeb = 6;
 
         /// <summary>
         /// Data Members
@@ -71,11 +70,7 @@ namespace GameAnywhere
                     //Synchronize from Computer to Web
                     ComputerToWeb(currentUser.Email, sa);
                 }
-                else if (SyncDirection == ExternalAndWeb)
-                {
-                    //Synchronize between Web and External (thumbdrive)
-                    //TODO
-                }
+           
             }
             return syncActionList;
         }
@@ -117,8 +112,9 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="user">email of user</param>
         /// <returns>list of game names and types on the user's web account</returns>
-        public List<string> GetGamesAndTypesFromWeb(string user)
+        public static List<string> GetGamesAndTypesFromWeb(string user)
         {
+            Storage s3 = new Storage();
             try
             {
                 //Pre-conditions
