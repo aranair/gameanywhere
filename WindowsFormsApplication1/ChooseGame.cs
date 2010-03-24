@@ -254,13 +254,18 @@ namespace GameAnywhere
         {
             if (s.Equals("Config"))
             {
-                if (syncAction.Action == 0)
-                    syncAction.Action = 2;
-                else if (syncAction.Action == 1)
-                    syncAction.Action = 3;
+                if (syncAction.Action == SyncAction.DoNothing)
+                    syncAction.Action = SyncAction.ConfigFiles;
+                else if (syncAction.Action == SyncAction.SavedGameFiles)
+                    syncAction.Action = SyncAction.AllFiles;
             }
             else if (s.Equals("SavedGame"))
-                syncAction.Action++;
+            {
+                if (syncAction.Action == SyncAction.DoNothing)
+                    syncAction.Action = SyncAction.SavedGameFiles;
+                else if (syncAction.Action == SyncAction.ConfigFiles)
+                    syncAction.Action = SyncAction.AllFiles;
+            }
         }
 
         /// <summary>
