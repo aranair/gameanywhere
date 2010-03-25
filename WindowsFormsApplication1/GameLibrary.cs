@@ -134,11 +134,10 @@ namespace GameAnywhere
             RefreshList();
             List<Game> newList = new List<Game>();
 
-            if (direction == OnlineSync.WebToCom)
-            {
-                AddGamesSupportedByWeb(ref newList, webGamesList);
-                return newList;
-            }
+            AddGamesSupportedByWeb(ref newList, webGamesList);
+
+            return newList;
+            
         }
   
         /// <summary>
