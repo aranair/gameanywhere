@@ -56,6 +56,7 @@
             this.passwordTextBox = new System.Windows.Forms.MaskedTextBox();
             this.loginFailedLabel = new System.Windows.Forms.Label();
             this.startNavPanel = new System.Windows.Forms.Panel();
+            this.restoreButton = new System.Windows.Forms.Button();
             this.registerPanel = new System.Windows.Forms.Panel();
             this.passwordMismatchLabel = new System.Windows.Forms.Label();
             this.registerNavPanel = new System.Windows.Forms.Panel();
@@ -105,7 +106,7 @@
             this.loginButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.loginButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.loginButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.loginButton.Location = new System.Drawing.Point(89, 10);
+            this.loginButton.Location = new System.Drawing.Point(120, 10);
             this.loginButton.Name = "loginButton";
             this.loginButton.Size = new System.Drawing.Size(90, 25);
             this.loginButton.TabIndex = 10;
@@ -125,7 +126,7 @@
             this.registerButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.registerButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.registerButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.registerButton.Location = new System.Drawing.Point(201, 10);
+            this.registerButton.Location = new System.Drawing.Point(216, 10);
             this.registerButton.Name = "registerButton";
             this.registerButton.Size = new System.Drawing.Size(90, 25);
             this.registerButton.TabIndex = 11;
@@ -496,6 +497,7 @@
             // startNavPanel
             // 
             this.startNavPanel.BackColor = System.Drawing.Color.Black;
+            this.startNavPanel.Controls.Add(this.restoreButton);
             this.startNavPanel.Controls.Add(this.loginButton);
             this.startNavPanel.Controls.Add(this.registerButton);
             this.startNavPanel.Controls.Add(this.exitButton);
@@ -503,6 +505,23 @@
             this.startNavPanel.Name = "startNavPanel";
             this.startNavPanel.Size = new System.Drawing.Size(386, 47);
             this.startNavPanel.TabIndex = 19;
+            // 
+            // restoreButton
+            // 
+            this.restoreButton.BackgroundImage = global::GameAnywhere.Properties.Resources.buttonRestore;
+            this.restoreButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.restoreButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.restoreButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.restoreButton.Location = new System.Drawing.Point(24, 10);
+            this.restoreButton.Name = "restoreButton";
+            this.restoreButton.Size = new System.Drawing.Size(90, 25);
+            this.restoreButton.TabIndex = 13;
+            this.restoreButton.UseVisualStyleBackColor = true;
+            this.restoreButton.MouseLeave += new System.EventHandler(this.restoreButton_MouseLeave);
+            this.restoreButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.restoreButton_MouseClick);
+            this.restoreButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.restoreButton_MouseDown);
+            this.restoreButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.restoreButton_MouseUp);
+            this.restoreButton.MouseEnter += new System.EventHandler(this.restoreButton_MouseEnter);
             // 
             // registerPanel
             // 
@@ -1022,6 +1041,7 @@
         private System.Windows.Forms.Label userDetailsInvalidResendActivationPanelLabel;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button restoreButton;
 
 
 

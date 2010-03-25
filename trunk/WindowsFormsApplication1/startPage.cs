@@ -1566,8 +1566,36 @@ namespace GameAnywhere
         }
         #endregion
 
+        #region restoreButton
+        private void restoreButton_MouseClick(object sender, MouseEventArgs e)
+        {
 
-        
+        }
+
+        private void restoreButton_MouseDown(object sender, MouseEventArgs e)
+        {
+            SetBackgroundImage(restoreButton, "GameAnywhere.Resources.buttonRestoreMouseDown.gif", ImageLayout.Zoom);
+        }
+
+        private void restoreButton_MouseEnter(object sender, EventArgs e)
+        {
+            SetBackgroundImage(restoreButton, "GameAnywhere.Resources.buttonRestoreMouseOver.gif", ImageLayout.Zoom);
+        }
+
+        private void restoreButton_MouseLeave(object sender, EventArgs e)
+        {
+            SetBackgroundImage(restoreButton, "GameAnywhere.Resources.buttonRestore.gif", ImageLayout.Zoom);
+        }
+
+        private void restoreButton_MouseUp(object sender, MouseEventArgs e)
+        {
+            SetBackgroundImage(restoreButton, "GameAnywhere.Resources.buttonRestore.gif", ImageLayout.Zoom);
+        }
+
+        #endregion
+
+
+
 
 
     }
