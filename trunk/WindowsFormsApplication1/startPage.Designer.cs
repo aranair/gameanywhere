@@ -205,7 +205,7 @@
             this.thumbdriveAndWebButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.thumbdriveAndWebButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.thumbdriveAndWebButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.thumbdriveAndWebButton.Location = new System.Drawing.Point(246, 66);
+            this.thumbdriveAndWebButton.Location = new System.Drawing.Point(246, 57);
             this.thumbdriveAndWebButton.Name = "thumbdriveAndWebButton";
             this.thumbdriveAndWebButton.Size = new System.Drawing.Size(250, 100);
             this.thumbdriveAndWebButton.TabIndex = 15;
@@ -299,7 +299,7 @@
             this.errorLabel.AutoSize = true;
             this.errorLabel.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.errorLabel.ForeColor = System.Drawing.Color.Red;
-            this.errorLabel.Location = new System.Drawing.Point(280, 180);
+            this.errorLabel.Location = new System.Drawing.Point(280, 166);
             this.errorLabel.Name = "errorLabel";
             this.errorLabel.Size = new System.Drawing.Size(38, 16);
             this.errorLabel.TabIndex = 18;
