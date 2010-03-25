@@ -121,16 +121,16 @@ namespace GameAnywhere
         }
         /// <summary>
         /// Returns a game list according to the direction passed in.
-        /// This is the overloaded GetGameList function that handles only ONLINE synchronizations.
+        /// This is the overloaded GetGameList function that handles only WEB TO COM direction synchronizations.
         /// Pre-condition: Direction passed in must be valid: either WebToCom, ComToWeb or ExternalAndWeb.
         /// Post-condition: A new list of installed games that are compatible with the direction will be returned.
         /// </summary>
         /// <param name="direction">Direction of sync.</param>
-        /// <param name="user">Email of current logged in user.</param>
+        /// <param name="webGamesList">List of web games.</param>
         /// <returns>List of installed games that are compatible with the direction</returns>
         public List<Game> GetGameList(int direction, List<string> webGamesList)
         {
-            Debug.Assert(direction == OnlineSync.WebToCom || direction == OnlineSync.ComToWeb);
+            Debug.Assert(direction == OnlineSync.WebToCom);
             RefreshList();
             List<Game> newList = new List<Game>();
 
@@ -139,8 +139,6 @@ namespace GameAnywhere
                 AddGamesSupportedByWeb(ref newList, webGamesList);
                 return newList;
             }
-            else // ComToWeb,
-                return this.InstalledGameList;
         }
   
         /// <summary>
@@ -513,7 +511,7 @@ namespace GameAnywhere
                         List<string> saveList = new List<string>();
                         string installPath = "" + rk.GetValue(registryName);
                         RemoveTrailingSlash(ref installPath);
-                        string configParentPath = installPath + @"WTF";
+                        string configParentPath = installPath + @"\WTF";
                         string saveParentPath = installPath;
                         Game newGame = new Game(configList, saveList, WOWGameName, installPath, configParentPath, saveParentPath);
 
