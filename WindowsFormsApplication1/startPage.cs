@@ -176,14 +176,12 @@ namespace GameAnywhere
 
             if (gList.Count > 0)
             {
-                errorLabel.Visible = false;
                 ChooseGame cg = new ChooseGame(controller, gList, this);
                 cg.ShowDialog();
             }
             else
             {
                 SetErrorLabel("No compatible games.", Color.Red);
-                errorLabel.Visible = true;
             }
         }
         #endregion
