@@ -40,7 +40,7 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="list">list of syncactions</param>
         /// <returns>list of syncactions containing the syncerrors if there is any</returns>
-        /// Exceptions: ConnectionFailureException
+        /// <exception cref="ConnectionFailureException"></exception>
         public override List<SyncAction> SynchronizeGames(List<SyncAction> list)
         {
             //List of sync action to be carried out
@@ -96,7 +96,9 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="user">email of user</param>
         /// <returns>list of game names on the user's web account</returns>
-        /// Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ConnectionFailureException"></exception>
+        /// <exception cref="WebTransferException"></exception>
         public List<string> GetGamesFromWeb(string user)
         {
             //Pre-conditions
@@ -123,7 +125,7 @@ namespace GameAnywhere
             }
             catch
             {
-                //Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
+                //Exceptions: ConnectionFailureException, WebTransferException
                 throw;
             }
         }
@@ -134,7 +136,9 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="user">email of user</param>
         /// <returns>list of game names and types on the user's web account</returns>
-        /// Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ConnectionFailureException"></exception>
+        /// <exception cref="WebTransferException"></exception>
         public static List<string> GetGamesAndTypesFromWeb(string user)
         {
             //Pre-conditions
@@ -164,7 +168,7 @@ namespace GameAnywhere
             }
             catch
             {
-                //Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
+                //Exceptions: ConnectionFailureException, WebTransferException
                 throw;
             }
         }
@@ -173,7 +177,7 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="email">email of user</param>
         /// <param name="syncAction">SyncAction object</param>
-        /// Exceptions: ConnectionFailureException
+        /// <exception cref="ConnectionFailureException"></exception>
         private void ComputerToWeb(string email, SyncAction syncAction)
         {
             //Pre-conditions
@@ -256,7 +260,7 @@ namespace GameAnywhere
         /// <returns>
         /// List of SyncError objects which contains errors during uploading
         /// </returns>
-        /// Exceptions: ConnectionFailureException
+        /// <exception cref="ConnectionFailureException"></exception>
         private List<SyncError> Upload(string email, string gameName, string webSaveFolder, string parentPath, List<string> pathList)
         {
             string gamePath = email + "/" + gameName + "/" + webSaveFolder;
@@ -327,7 +331,7 @@ namespace GameAnywhere
         /// <param name="parent">Config/Save parent path</param>
         /// <param name="dir">directory to upload</param>
         /// <param name="errorList">reference to errorList</param>
-        /// Exceptions: ConnectionFailureException
+        /// <exception cref="ConnectionFailureException"></exception>
         private void UploadDirectory(string key, string parent, string dir, ref List<SyncError> errorList)
         {
             //Upload every file in current directory
@@ -380,7 +384,9 @@ namespace GameAnywhere
         /// true - Deletes game directory successfully on S3
         /// false - Fail to delete game directory on S3
         /// </returns>
-        /// Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ConnectionFailureException"></exception>
+        /// <exception cref="WebTransferException"></exception>
         private void DeleteGameDirectory(string email, string gameName)
         {
             //Pre-conditions
@@ -410,7 +416,7 @@ namespace GameAnywhere
         /// <param name="sa">SyncAction object</param>
         /// <param name="user">email of user</param>
         /// <param name="backupItem">Backup-type of files: AllFiles / SavedGame / Config</param>
-        /// Exceptions: ConnectionFailureException
+        /// <exception cref="ConnectionFailureException"></exception>
         private void WebToComputer(SyncAction sa, string user, int backupItem)
         {
             //Check for valid option
@@ -473,7 +479,7 @@ namespace GameAnywhere
         /// <param name="targetPath">path to download to on computer</param>
         /// <param name="processName">name of sync action</param>
         /// <returns>list of SyncError objects</returns>
-        /// //Exceptions: ConnectionFailureException
+        /// <exception cref="ConnectionFailureException"></exception>
         private List<SyncError> DownloadToParent(string s3Path, string targetPath, string processName)
         {
             //Pre-conditions
