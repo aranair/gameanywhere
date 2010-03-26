@@ -34,18 +34,69 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Generate the MD5 hashcode of a file
+        /// Generate the hashcode of a file
         /// </summary>
         /// <param name="path">path to file</param>
-        /// <returns>MD5 hashcode of file</returns>
-        private string generateMD5(string path)
+        /// <returns>hashcode of file</returns>
+        private string GenerateMD5(string path)
         {
-            FileStream fs = File.Open(path, FileMode.Open);
-            MD5 md5 = MD5.Create();
-            string hash = BitConverter.ToString(md5.ComputeHash(fs)).Replace(@"-", @"").ToLower();
-            fs.Close();
+            FileStream fs = null;
+            string hash = "";
+
+            try
+            {
+                fs = File.Open(path, FileMode.Open, FileAccess.Read);
+                MD5 md5 = MD5.Create();
+                hash = BitConverter.ToString(md5.ComputeHash(fs)).Replace(@"-", @"").ToLower();
+            }
+            catch
+            {
+            }
+            finally
+            {
+                if(fs != null)
+                    fs.Close();
+            }
 
             return hash;
+        }
+
+        /// <summary>
+        /// Check if file access is denied
+        /// </summary>
+        /// <param name="filePath">path to file</param>
+        /// <returns>
+        /// true - file is not read only
+        /// false - file is read only
+        /// </returns>
+        private bool IsLocked(string filePath)
+        {
+            FileStream stream = null;
+
+            try
+            {
+                stream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.None);
+            }
+            catch (IOException)
+            {
+                //the file is unavailable because it is:
+                //still being written to
+                //or being processed by another thread
+                //or does not exist (has already been processed)
+                return true;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return true;
+            }
+            finally
+            {
+                if (stream != null)
+                    stream.Close();
+            }
+
+            //file is not locked
+            return false;
         }
 
         /// <summary>
@@ -63,6 +114,8 @@ namespace GameAnywhere
                 throw new ArgumentException("Parameter cannot be empty/null", "key");
             if (!File.Exists(path))
                 throw new ArgumentException("Path to file does not exist", "path");
+            if(IsLocked(path))
+                throw new ArgumentException("Access denied to file", "path");
 
             try
             {
@@ -75,7 +128,7 @@ namespace GameAnywhere
 
                 //Get hashcode of uploaded file
                 string responseFileHash = response.Headers["ETag"].Replace("\"", "");
-                string fileHash = generateMD5(path);
+                string fileHash = GenerateMD5(path);
 
                 //Compare file's hashcode with response's hashcode to confirm file correctly uploaded
                 if (!fileHash.Equals(responseFileHash))
@@ -103,7 +156,7 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="path">path of download location on computer</param>
         /// <param name="key">key of file on S3</param>
-        /// Exceptions: ArgumentException, ConnectionFailureException, WebTransferException, CreateFolderFailedException
+        /// Exceptions: ArgumentException, ConnectionFailureException, WebTransferException, IOException, UnauthorizedAccessException
         public void DownloadFile(string path, string key)
         {
             //Pre-conditions
@@ -153,15 +206,14 @@ namespace GameAnywhere
             }
             catch (UnauthorizedAccessException)
             {
-                throw new CreateFolderFailedException("Denied permission to create folder.");
+                throw;
             }
             catch (IOException)
             {
-                throw new CreateFolderFailedException("Unable to create file.");
+                throw;
             }
             catch (Exception)
             {
-                throw;
             }
         }
 
