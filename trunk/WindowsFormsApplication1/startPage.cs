@@ -1569,7 +1569,49 @@ namespace GameAnywhere
         #region restoreButton
         private void restoreButton_MouseClick(object sender, MouseEventArgs e)
         {
+            ResetErrorLabels();
+            // There is backup -> run warning dialog
+            if (controller.EndProgram())
+            {
+                restoreOriginalFiles();
+            }
+            else
+            {
+                MessageBox.Show("There are no backup files.");
+            }
+            
+        }
 
+        private void restoreOriginalFiles()
+        {
+            // User has chosen to restore.
+            List<SyncAction> syncActionList = new List<SyncAction>();
+            List<string> gameListNotRestored = new List<string>();
+            syncActionList = controller.Restore();
+
+            foreach (SyncAction sa in syncActionList)
+            {
+                if (sa.UnsuccessfulSyncFiles.Count > 0)
+                {
+                    gameListNotRestored.Add(sa.MyGame.Name);
+                }
+            }
+
+            if (gameListNotRestored.Count > 0)
+            {
+                string gameList = "";
+
+                foreach (string s in gameListNotRestored)
+                {
+                    gameList = gameList + "- " + s + "\n";
+                }
+
+                MessageBox.Show("The following games were not restored successfully. It is advised that you manually restore these games by "
+                    + "going to the game directory, copying out the original files in the backup folders and deleting the backup folders before the next usage of GameAnywhere.\n\n" + gameList,
+                    "Warning");
+            }
+            else
+                SetErrorLabel("Successfully Restored", Color.DeepSkyBlue);
         }
 
         private void restoreButton_MouseDown(object sender, MouseEventArgs e)
