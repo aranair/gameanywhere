@@ -225,7 +225,9 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="fileName">path of metadata file</param>
         /// <returns>MetaData object</returns>
-        /// Exceptions???
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="IOException"></exception>
+        /// <exception cref="UnauthorizedAccessException"></exception>
         public MetaData DeSerialize(string fileName)
         {
             //Pre-conditions
@@ -239,7 +241,6 @@ namespace GameAnywhere
                 MetaData obj = (MetaData)formatter.Deserialize(stream);
                 stream.Close();
                 this.fileTable = obj.fileTable;
-                return this;
             }
             catch (IOException)
             {
@@ -252,6 +253,8 @@ namespace GameAnywhere
             catch (Exception)
             {
             }
+
+            return this;
         }
     }
 }
