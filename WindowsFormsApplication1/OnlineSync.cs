@@ -147,7 +147,8 @@ namespace GameAnywhere
                 HashSet<string> gameSet = new HashSet<string>();
 
                 //Get game name and type(config/save), and add to gameset
-                foreach (string file in s3.ListFiles(user))
+                List<string> files = s3.ListFiles(user);
+                foreach (string file in files)
                 {
                     string f = file.Substring(file.IndexOf('/') + 1);
                     string game, type;
@@ -201,7 +202,6 @@ namespace GameAnywhere
             }
             catch (ConnectionFailureException)
             {
-                //Exceptions: ConnectionFailureException
                 throw;
             }
             catch (Exception ex)
@@ -267,39 +267,53 @@ namespace GameAnywhere
             {
                 if (Directory.Exists(path))
                 {
-                    //Upload directory
-                    try
+                    if (!IsLocked(path))
                     {
-                        UploadDirectory(gamePath, parentPath, path, ref errorList);
+                        //Upload directory
+                        try
+                        {
+                            UploadDirectory(gamePath, parentPath, path, ref errorList);
+                        }
+                        catch (ConnectionFailureException)
+                        {
+                            throw;
+                        }
                     }
-                    catch (ConnectionFailureException)
+                    else
                     {
-                        throw;
+                        errorList.Add(new SyncError(path, "Upload directory", "Access denied."));
                     }
                 }
                 else if (File.Exists(path))
                 {
                     string keyName = gamePath + path.Replace(parentPath, "").Replace(@"\", "/");
-                    try
+                    if (!IsLocked(path))
                     {
-                        //Upload file
-                        s3.UploadFile(path, keyName);
+                        try
+                        {
+                            //Upload file
+                            s3.UploadFile(path, keyName);
+                        }
+                        catch (ConnectionFailureException)
+                        {
+                            throw;
+                        }
+                        catch (Exception ex)
+                        {
+                            //Fail to upload file
+                            //Exceptions: ArgumentException, WebTransferException
+                            errorList.Add(new SyncError(path, "ComputerToWeb Sync - Upload file", ex.Message));
+                        }
                     }
-                    catch (ConnectionFailureException)
+                    else
                     {
-                        throw;
-                    }
-                    catch (Exception ex)
-                    {
-                        //Fail to upload file - add to error list
-                        //Exceptions: ArgumentException, WebTransferException
-                        errorList.AddRange(GetSyncError(path, "ComputerToWeb Sync", ex.Message));
+                        errorList.Add(new SyncError(path, "ComputerToWeb Sync - Upload file", "Access denied."));
                     }
                 }
                 else
                 {
                     //File/Dir does not exists - add to error list
-                    errorList.AddRange(GetSyncError(path, "ComputerToWeb Sync", "File/Directory does not exist."));
+                    errorList.Add(new SyncError(path, "ComputerToWeb Sync", "File/Directory does not exist."));
                 }
             }
 
@@ -322,8 +336,15 @@ namespace GameAnywhere
                 string keyName = key + filePath.Replace(parent, "").Replace(@"\", "/");
                 try
                 {
-                    //Upload a single file
-                    s3.UploadFile(filePath, keyName);
+                    if(!IsLocked(filePath))
+                    {
+                        //Upload a single file
+                        s3.UploadFile(filePath, keyName);
+                    }
+                    else
+                    {
+                        errorList.Add(new SyncError(filePath, "UploadDirectory", "Access denied."));
+                    }
                 }
                 catch (ConnectionFailureException)
                 {
@@ -458,9 +479,23 @@ namespace GameAnywhere
             //Pre-conditions
             Debug.Assert(targetPath != null);
 
+            List<string> files = new List<string>();
             List<SyncError> errorList = new List<SyncError>();
             string localDirName, webDirName;
-            List<string> files = s3.ListFiles(s3Path);
+
+            try
+            {
+                files = s3.ListFiles(s3Path);
+            }
+            catch (ConnectionFailureException)
+            {
+                throw;
+            }
+            catch(Exception ex)
+            {
+                //Exceptions: ArgumentException, WebTransferException
+                errorList.Add(new SyncError(s3Path, processName, ex.Message));
+            }
 
             foreach (string file in files)
             {
@@ -487,7 +522,7 @@ namespace GameAnywhere
                 {
                     //Exceptions: ArgumentException, WebTransferException, CreateFolderFailedException
                     //Add to error list
-                    errorList.AddRange(GetSyncError(file, processName, ex.Message));
+                    errorList.Add(new SyncError(file, processName, ex.Message));
                 }
             }
 
@@ -510,6 +545,44 @@ namespace GameAnywhere
             filter = filter.Substring(filter.IndexOf('/') + 1);
 
             return filter;
+        }
+
+        /// <summary>
+        /// Check if file access is denied
+        /// </summary>
+        /// <param name="filePath">path to file</param>
+        /// <returns>
+        /// true - file is not read only
+        /// false - file is read only
+        /// </returns>
+        private bool IsLocked(string filePath)
+        {
+            FileStream stream = null;
+
+            try
+            {
+                stream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.None);
+            }
+            catch (IOException)
+            {
+                //the file is unavailable because it is:
+                //still being written to
+                //or being processed by another thread
+                //or does not exist (has already been processed)
+                return true;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return true;
+            }
+            finally
+            {
+                if (stream != null)
+                    stream.Close();
+            }
+
+            //file is not locked
+            return false;
         }
     }
 }
