@@ -72,6 +72,8 @@ namespace GameAnywhere
             //Pre-conditions
             if (fileName.Equals("") || fileName == null)
                 throw new ArgumentException("Parameter cannot be empty/null", "fileName");
+            if (hashCode == null)
+                throw new ArgumentException("Parameter cannot be null", "hashCode");
 
             //Add entry to fileTable
             if (!fileTable.ContainsKey(fileName))
@@ -110,11 +112,14 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="fileName">path of file/directory</param>
         /// <param name="newValue">new value of entry</param>
+        /// Exceptions: ArgumentException
         public void UpdateEntryValue(string fileName, string newValue)
         {
             //Pre-conditions
             if (fileName.Equals("") || fileName == null)
                 throw new ArgumentException("Parameter cannot be empty/null", "fileName");
+            if (newValue == null)
+                throw new ArgumentException("Parameter cannot be null", "newValue");
 
             //Adds new entry if fileName not found in table, and update entry if fileName found in table
             fileTable[fileName] = newValue;
@@ -186,13 +191,33 @@ namespace GameAnywhere
         /// Serialize this MetaData object to a file
         /// </summary>
         /// <param name="fileName">path of metadata file</param>
-        /// Exceptions???
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="IOException"></exception>
+        /// <exception cref="UnauthorizedAccessException"></exception>
         public void Serialize(string fileName)
         {
-            Stream stream = File.Open(fileName, FileMode.Create);
-            IFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(stream, this);
-            stream.Close();
+            //Pre-conditions
+            if (fileName.Equals("") || fileName == null)
+                throw new ArgumentException("Parameter cannot be empty/null", "fileName");
+
+            try
+            {
+                Stream stream = File.Open(fileName, FileMode.Create);
+                IFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(stream, this);
+                stream.Close();
+            }
+            catch (IOException)
+            {
+                throw;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                throw;
+            }
+            catch(Exception)
+            {
+            }
         }
 
         /// <summary>
@@ -203,12 +228,30 @@ namespace GameAnywhere
         /// Exceptions???
         public MetaData DeSerialize(string fileName)
         {
-            IFormatter formatter = new BinaryFormatter();
-            Stream stream = new FileStream(fileName, FileMode.Open);
-            MetaData obj = (MetaData)formatter.Deserialize(stream);
-            stream.Close();
-            this.fileTable = obj.fileTable;
-            return this;
+            //Pre-conditions
+            if (fileName.Equals("") || fileName == null)
+                throw new ArgumentException("Parameter cannot be empty/null", "fileName");
+
+            try
+            {
+                IFormatter formatter = new BinaryFormatter();
+                Stream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+                MetaData obj = (MetaData)formatter.Deserialize(stream);
+                stream.Close();
+                this.fileTable = obj.fileTable;
+                return this;
+            }
+            catch (IOException)
+            {
+                throw;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 }
