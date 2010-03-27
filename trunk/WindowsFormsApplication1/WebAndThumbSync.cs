@@ -7,13 +7,28 @@ using System.Security.Cryptography;
 
 namespace GameAnywhere
 {
+    /// <summary>
+    /// This class contains all the required methods to synchronize game files store on the external drive and S3.
+    /// CheckConflicts() has to always be called first so that conflicting files can be automatically resolved.
+    /// Conflicts that has to be resolved would be then passed back to the other layers to be resolved.
+    /// SynchronizeGames() takes in the resolved conflicts and does the actual synchronization.
+    /// </summary>
     class WebAndThumbSync
     {
         /// <summary>
-        /// Data Members
+        /// noConflict stores the list of files that can be automatically resolved.
+        /// Conflicts stores the list of files that require external resolution.
+        /// The integer values represent the direction or conflict of the resolution result.
         /// </summary>
         public Dictionary<string, int> NoConflict, Conflicts;
+
+        /// <summary>
+        /// Metadata objects stored as class data members.
+        /// localHash and localMeta are current and stored Metadata objects of local files.
+        /// webHash and webMeta are current and stored Metadata objects of files stored on the web.
+        /// </summary>
         private MetaData localHash, localMeta, webHash, webMeta;
+
         private string email;
         private Storage s3 = new Storage();
 
@@ -23,6 +38,9 @@ namespace GameAnywhere
         private string LocalMetaDataPath = Path.Combine(syncFolderPath, LocalMetaDataFileName);
         private string WebMetaDataPath = Path.Combine(syncFolderPath, WebMetaDataFileName);
 
+        /// <summary>
+        /// The list of integer values used for conflict resolution.
+        /// </summary>
         private const int UPLOAD = 1;
         private const int DOWNLOAD = 2;
         private const int DELETELOCAL = 3;
@@ -82,10 +100,10 @@ namespace GameAnywhere
         }
        
         /// <summary>
-        /// Generate the hashcode of a file
+        /// Generate the hashcode of a local file
         /// </summary>
         /// <param name="path">path to file</param>
-        /// <returns>hashcode of file</returns>
+        /// <returns>hashcode of file in a string, dashes removed.</returns>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="IOException"></exception>
         /// <exception cref="UnauthorizedAccessException"></exception>
@@ -125,10 +143,10 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Add all files with its hashcode from a given directory into a dictionary
+        /// Generates the hashcode of all the files in the SyncFolder directory and its subdirectories.
         /// </summary>
-        /// <param name="dir">directory</param>
-        /// <param name="dict">dictionary</param>
+        /// <param name="dir">path to the game directory in SyncFolder.</param>
+        /// <param name="dict">Dictionary object to store the key-values.</param>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="IOException"></exception>
         /// <exception cref="UnauthorizedAccessException"></exception>
@@ -216,17 +234,17 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Compares the hashcode of the entry in two metadata
+        /// Checks if the hashcode of a file stored in two Metadata files are different.
         /// </summary>
-        /// <param name="data1">metadata</param>
-        /// <param name="data2">metadata</param>
-        /// <param name="key">key in metadata</param>
+        /// <param name="data1">First Metadata object</param>
+        /// <param name="data2">Second Metadata object</param>
+        /// <param name="key">Key of the filename to compare the hashcode.</param>
         /// <returns>
-        /// true - hashcode is the same in both metadata
-        /// false - hashcode is different in both metadata
+        /// true - hashcode is the same in both Metadata objects
+        /// false - hashcode is different in both Metadata objects
         /// </returns>
         /// <exception cref="ArgumentException"></exception>
-        private bool HashIsDifferent(MetaData data1, MetaData data2, string key)
+        private bool HashIsDifferent(MetaData meta1, MetaData meta2, string key)
         {
             //Pre-conditions
             if (key.Equals("") || key == null)
@@ -244,13 +262,14 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Checks for file deletion using two metadata 
+        /// Checks if a file is deleted by comparing two Metadata objects.
+        /// If the key is found in the stored Metadata but not found in the current Metadata, the file is deleted.
         /// </summary>
-        /// <param name="hash">metadata</param>
-        /// <param name="meta">metadata</param>
+        /// <param name="hash">Current Metadata</param>
+        /// <param name="meta">Stored Metadata</param>
         /// <param name="key">path of file</param>
         /// <returns>
-        /// true - file has been deleted in hash metadata but not in meta metadata
+        /// true - file has been deleted
         /// false - file has not been deleted
         /// </returns>
         /// <exception cref="ArgumentException"></exception>
@@ -271,9 +290,11 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// 
+        /// Checks for synchronization conflicts between two locations.
+        /// Files that can be resolved automatically will be stored in the class data member, noConflict.
+        /// Files that must be resolved externally will be stored in the class data member, Conflicts.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The Conflicts that has been filtered by FilterConflicts().</returns>
         public Dictionary<string,int> CheckConflicts()
         {
             CheckConflictsHelper(localHash, localMeta, webHash, webMeta, UPLOAD);
@@ -283,13 +304,22 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// 
+        /// Helper method for CheckConflicts().
+        /// This method has to be called twice with two permutations to fully check the conflicts between two locations.
+        /// Call 1:
+        ///         First location - Local files
+        ///         Second location - Web files
+        ///         Direction - UPLOAD
+        /// Call 2:
+        ///         First location - Web files
+        ///         Second location - Local files
+        ///         Direction - DOWNLOAD
         /// </summary>
-        /// <param name="hash1"></param>
-        /// <param name="meta1"></param>
-        /// <param name="hash2"></param>
-        /// <param name="meta2"></param>
-        /// <param name="direction"></param>
+        /// <param name="hash1">Current Metadata object of the first location.</param>
+        /// <param name="meta1">Stored Metadata object of the first location.</param>
+        /// <param name="hash2">Current Metadata object of the second location.</param>
+        /// <param name="meta2">Stored Metadata object of the second location.</param>
+        /// <param name="direction">Direction of synchronization for resolution.</param>
         private void CheckConflictsHelper(MetaData hash1, MetaData meta1, MetaData hash2, MetaData meta2, int direction)
         {
             foreach (KeyValuePair<string, string> entry in hash1.FileTable)
@@ -455,7 +485,9 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// 
+        /// Filters the Conflicts Dictionary so that only one type of each game is returned.
+        /// This list is passed to other layers for the conflicts to be resolved.
+        /// The default value for each key is 0.
         /// </summary>
         /// <returns></returns>
         public Dictionary<string,int> FilterConflicts()
@@ -471,7 +503,12 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// 
+        /// Merges the filtered Dictionary that has been resolved by other layers into the noConflict Dictionary.
+        /// The only values of resolvedConflicts are 1 and 2, which determine the direction of all files of that type.
+        /// The conflicts will be merged as follows:
+        /// UPDOWNCONFLICT      - 1:UPLOAD,   2:DOWNLOAD
+        /// DELETELOCALCONFLICT - 1:UPLOAD,   2:DELETELOCAL
+        /// DELETEWEBCONFLICT   - 1:DOWNLOAD, 2:DELETEWEB
         /// </summary>
         /// <param name="resolvedConflicts"></param>
         public void MergeConflicts(Dictionary<string, int> resolvedConflicts)
@@ -502,10 +539,10 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Gets the game name and type of save (config/save)
+        /// Gets the game name and type of save (config/save) from a key.
         /// </summary>
-        /// <param name="key">path to file</param>
-        /// <returns>game and type of save</returns>
+        /// <param name="key">key of filename</param>
+        /// <returns>game and type of save in the form "[game]/[type]".</game></returns>
         private string GetGamesAndTypes(string key)
         {
             string game = key.Substring(0, key.IndexOf('/'));
@@ -515,7 +552,7 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Update all metadatas
+        /// Update all Metadata objects
         /// </summary>
         /// <param name="key">path to file</param>
         /// <param name="value">hashcode of file</param>
@@ -536,9 +573,9 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Add new entry in all metadatas
+        /// Add new entry in all Metadata objects
         /// </summary>
-        /// <param name="key">path to file</param>
+        /// <param name="key">key of filename</param>
         /// <param name="value">hashcode of file</param>
         /// <exception cref="ArgumentException"></exception>
         private void AddMetaData(string key, string value)
@@ -557,7 +594,7 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Delete an entry from all metadatas
+        /// Delete an entry from all Metadata objects
         /// </summary>
         /// <param name="key">path to file</param>
         /// <exception cref="ArgumentException"></exception>
