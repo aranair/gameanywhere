@@ -1,0 +1,89 @@
+#summary Under Construction.
+
+= Getting Started =
+
+//Add your content here.
+
+== Intended Users ==
+
+//For those with higher intelligence.
+
+== Purpose of this Guide ==
+
+//Explain how things are done in GameAnywhere.
+
+== Tools and Libraries Used ==
+
+//External tool and library used.
+
+= Main Building Blocks =
+
+== Class Diagram ==
+
+//Insert Class diagram here.
+
+== Class Description ==
+
+//Everyone please add in your class description.
+
+= Setting Up =
+
+//Setting up the online stuff.
+
+== aws appconfig ==
+
+//Ask nick & wilson.
+
+== smtp gmail ==
+
+//Ask nick & wilson.
+
+= Game Detection =
+
+//Homan, explain how you detect game.
+
+= Adding Game =
+
+= Login System =
+
+== Simpledb ==
+
+== s3 ==
+
+= Offline Sync =
+
+//include seq diagram
+
+== Computer to External Drive==
+
+== External Drive to Computer ==
+
+= Online Sync =
+
+//include seq diagram
+
+== Computer to Web ==
+
+== Web to Computer ==
+
+= Web and External Drive Sync =
+
+= Restore Computer to original Game state =
+
+//How this is done.
+
+= Automated Tester =
+
+== Building Blocks ==
+
+== Adding New Test Cases ==
+
+= API Reference =
+
+= Glossary = 
+
+= FAQ = 
+
+= Where to get help =
+
+//From our forum, issue tracker, or email us.
