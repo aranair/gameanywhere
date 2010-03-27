@@ -26,8 +26,8 @@ namespace GameAnywhere
         /// </summary>
         public Storage()
         {
-            accessKeyID = "*";
-            secretAccessKeyID = "*";
+            accessKeyID = "AKIAIF3ZSAPQXNF6ZIOQ";
+            secretAccessKeyID = "P7a+fn9UVxR0MXBn+u83hTAKbeskcsfJ80TGCiln";
             bucketName = "GameAnywhere";
             client = new AmazonS3Client(accessKeyID, secretAccessKeyID, new AmazonS3Config().WithCommunicationProtocol(Protocol.HTTP));
             //AmazonS3 client = Amazon.AWSClientFactory.CreateAmazonS3Client(accessKeyID, secretAccessKeyID);
@@ -40,6 +40,10 @@ namespace GameAnywhere
         /// <returns>hashcode of file</returns>
         private string GenerateHash(string path)
         {
+            //Pre-conditions
+            if (path.Equals("") || path == null)
+                throw new ArgumentException("Parameter cannot be empty/null", "path");
+
             FileStream fs = null;
             string hash = "";
 
@@ -49,12 +53,20 @@ namespace GameAnywhere
                 MD5 md5 = MD5.Create();
                 hash = BitConverter.ToString(md5.ComputeHash(fs)).Replace(@"-", @"").ToLower();
             }
-            catch
+            catch (IOException)
+            {
+                throw;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                throw;
+            }
+            catch (Exception)
             {
             }
             finally
             {
-                if(fs != null)
+                if (fs != null)
                     fs.Close();
             }
 
