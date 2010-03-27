@@ -10,6 +10,7 @@ using System.Collections;
 using System.IO;
 using Microsoft.Win32;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace GameAnywhere
 {
@@ -84,11 +85,14 @@ namespace GameAnywhere
         /// </summary>
         private void Initialize()
         {
+            /*
             InitializeAbuse();
             InitializeWarcraft3();
             InitializeFIFA2010();
             InitializeWOW();
-            InitializeFM2010();
+            InitializeFM2010();*/
+            
+            InitGamesFromFile("gamev3.txt");
 
             //InitializeCODModernWarfare();
             //InitializeDragonAge();       
@@ -233,12 +237,43 @@ namespace GameAnywhere
             Game newGame = new Game(installedGame.ConfigPathList, installedGame.SavePathList, installedGame.Name, installedGame.InstallPath, installedGame.ConfigParentPath, installedGame.SaveParentPath);
 
             // Checks if config/saved game files are available on the thumbdrive and sets list accordingly.
-            EditConfigAndSavedGameLists(ref newGame);
+            EditGenericConfigAndSavedGameLists(ref newGame);
 
             // add it to list to be returned;
             newList.Add(newGame);           
         }
 
+        /// <summary>
+        /// Edits the ConfigList and SaveGameList of the game passed in.(generic)
+        /// </summary>
+        /// <param name="newGame">The game to be editted.</param>
+        public void EditGenericConfigAndSavedGameLists(ref Game newGame)
+        {
+
+            List<string> newConfigPathList = new List<string>();
+            foreach (string s in newGame.ConfigPathList)
+            {
+                string externalGameFolderPath = Directory.GetCurrentDirectory() + @"\SyncFolder\" + newGame.Name;
+                //if any of savedgame/config folder does not exist, make the fields blank
+                string configPath = externalGameFolderPath + @"\Config";
+
+                string n = s.Replace(newGame.ConfigParentPath, configPath);
+                newConfigPathList.Add(n);
+            }
+            newGame.ConfigPathList = newConfigPathList;
+
+            List<string> newSavePathList = new List<string>();
+            foreach (string s in newGame.SavePathList)
+            {
+                string externalGameFolderPath = Directory.GetCurrentDirectory() + @"\SyncFolder\" + newGame.Name;
+                //if any of savedgame/config folder does not exist, make the fields blank
+                string savedGamePath = externalGameFolderPath + @"\SavedGame";
+
+                string n = s.Replace(newGame.SaveParentPath, savedGamePath);
+                newSavePathList.Add(n);
+            }
+            newGame.SavePathList = newSavePathList;
+        }
 
         /// <summary>
         /// Edits the config and saved game lists of the new game for the direction: External To Computer.
@@ -890,6 +925,252 @@ namespace GameAnywhere
             if (s.LastIndexOf("\\") == s.Length - 1)
                 s = s.Remove(s.LastIndexOf("\\"));
         }
+        #endregion
+
+        #region Text File Initialization
+        private void InitializeGameFromTextFile(Dictionary<string, string> vListPassed)
+        {
+            string gameName = "";
+            string regKey = "";
+            string regValue = "";
+            string saveParentPath = "";
+            string configParentPath = "";
+
+            bool currentUser = false;
+            bool localMachine = false;
+
+            Dictionary<string, string> vList = new Dictionary<string, string>();
+            foreach (string key in vListPassed.Keys)
+            {
+                string s = ReplaceStrings(vListPassed[key]);
+                vList.Add(key, s);
+
+            }
+            gameName = vList["Game"];
+            regKey = vList["RegKey"];
+            regValue = vList["RegValue"];
+
+            if (vList["RegType"].Equals("HKCU"))
+                currentUser = true;
+            else if (vList["RegType"].Equals("HKLM"))
+                localMachine = true;
+
+            try
+            {
+                // Attempts to open the registry key to check existence of game.
+                RegistryKey rk;
+                if (currentUser)
+                    rk = Registry.CurrentUser.OpenSubKey(regKey);
+                else if (localMachine)
+                    rk = Registry.LocalMachine.OpenSubKey(regKey);
+                else
+                    return;
+
+                using (rk)
+                {
+                    // If game exists ( key is not null and value of InstallPath is not null )
+                    if (rk != null && rk.GetValue(regValue) != null)
+                    {
+                        List<string> configList = new List<string>();
+                        List<string> saveList = new List<string>();
+                        string installPath = "" + rk.GetValue(regValue);
+                        RemoveTrailingSlash(ref installPath);
+
+
+                        Dictionary<string, string> vListFinal = new Dictionary<string, string>();
+
+                        foreach (string key in vList.Keys)
+                        {
+                            string s = ReplaceInstallPath(vList[key], installPath);
+                            vListFinal.Add(key, s);
+                        }
+
+                        if (vListFinal.ContainsKey("ConfigParentPath"))
+                            configParentPath = vListFinal["ConfigParentPath"];
+
+                        if (vListFinal.ContainsKey("SaveParentPath"))
+                            saveParentPath = vListFinal["SaveParentPath"];
+
+                        if (vListFinal.ContainsKey("SavePathList"))
+                            AddSaveFiles(ref saveList, vListFinal);
+
+                        if (vListFinal.ContainsKey("ConfigPathList"))
+                            AddConfigFiles(ref configList, vListFinal);
+
+                        if (vListFinal.ContainsKey("SearchSaveParent"))
+                            AddVariableSaveFiles(ref saveList, vListFinal);
+
+                        if (vListFinal.ContainsKey("SearchConfigParent"))
+                            AddVariableConfigFiles(ref configList, vListFinal);
+
+
+                        Game newGame = new Game(configList, saveList, gameName, installPath, configParentPath, saveParentPath);
+
+                        installedGameList.Add(newGame);
+                    }
+                }
+            }// end try
+            catch (Exception)
+            {
+                // Game folders not accessible.
+            }
+
+        }
+
+        /// <summary>
+        /// Adds saved games files from a regex key given in value of key "SearchSaveParent" in the given dictionary.
+        /// </summary>
+        /// <param name="saveList">The List of saved games file to add the files to.</param>
+        /// <param name="vListFinal">The dictionary list of all data from text file.</param>
+        private static void AddVariableSaveFiles(ref List<string> saveList, Dictionary<string, string> vListFinal)
+        {
+            List<string> listOfVariableSaveList = SeperatePathsByDelimiter(vListFinal["SearchSaveParent"]);
+
+            foreach (string regex in listOfVariableSaveList)
+            {
+                if (Directory.Exists(vListFinal["SaveParentPath"]))
+                    AddFoldersAndFiles(ref saveList, vListFinal["SaveParentPath"], regex);
+            }
+        }
+
+        /// <summary>
+        /// Searches a given regex, at the path provided, and add all files and folders that matches the regex to the list.
+        /// </summary>
+        /// <param name="list">The List for files and folders to be added to.</param>
+        /// <param name="path">Path to search regex at.</param>
+        /// <param name="regex">Regex string to search.</param>
+        private static void AddFoldersAndFiles(ref List<string> list, string path, string regex)
+        {
+            foreach (string folder in Directory.GetDirectories(path, regex))
+            {
+                list.Add(folder);
+            }
+            foreach (string file in Directory.GetFiles(path, regex))
+            {
+                list.Add(file);
+            }
+        }
+
+        /// <summary>
+        /// Adds config files from a regex key given in value of key "SearchConfigParent" in the given dictionary.
+        /// </summary>
+        /// <param name="saveList">The List of config files to add the files  to.</param>
+        /// <param name="vListFinal">The dictionary list of all data from text file.</param>
+        private static void AddVariableConfigFiles(ref List<string> configList, Dictionary<string, string> vListFinal)
+        {
+            List<string> listOfVariableConfigList = SeperatePathsByDelimiter(vListFinal["SearchConfigParent"]);
+
+            foreach (string regex in listOfVariableConfigList)
+            {
+                if (Directory.Exists(vListFinal["ConfigParentPath"]))
+                    AddFoldersAndFiles(ref configList, vListFinal["ConfigParentPath"], regex);
+            }
+        }
+
+        /// <summary>
+        /// Adds Saved game files from the dictionary list, reading from the SavePathList key.
+        /// </summary>
+        /// <param name="saveList">The List of saved game files to add the files to.</param>
+        /// <param name="vListFinal">The dictionary list of all data from text file.</param>
+        private static void AddSaveFiles(ref List<string> saveList, Dictionary<string, string> vListFinal)
+        {
+            List<string> delimitedConfigPaths = SeperatePathsByDelimiter(vListFinal["SavePathList"]);
+            foreach (string path in delimitedConfigPaths)
+            {
+                saveList.Add(path);
+            }
+        }
+
+        /// <summary>
+        /// Adds config files from the dictionary list, reading from the ConfigPathList key.
+        /// </summary>
+        /// <param name="configList">The List of config files to add the files to.</param>
+        /// <param name="vListFinal">The dictionary list of all data from text file.</param>
+        private static void AddConfigFiles(ref List<string> configList, Dictionary<string, string> vListFinal)
+        {
+            List<string> delimitedConfigPaths = SeperatePathsByDelimiter(vListFinal["ConfigPathList"]);
+            foreach (string path in delimitedConfigPaths)
+            {
+                configList.Add(path);
+            }
+        }
+
+        /// <summary>
+        /// Seperates a line into delimited paths to a character, and returns a list of strings.
+        /// </summary>
+        /// <param name="longPath">The string to delimit</param>
+        /// <returns>List of strings delimited by ,</returns>
+        private static List<string> SeperatePathsByDelimiter(string longPath)
+        {
+            List<string> delimitedPaths = new List<string>();
+
+            while (longPath.IndexOf(",") != -1)
+            {
+                delimitedPaths.Add(longPath.Remove(longPath.IndexOf(",")));
+                longPath = longPath.Substring(longPath.IndexOf(",") + 1);
+            }
+            delimitedPaths.Add(longPath);
+
+            return delimitedPaths;
+        }
+
+        /// <summary>
+        /// Replaces a list of strings, with a variable value, in the string passed in.
+        /// </summary>
+        /// <param name="s">String to edit.</param>
+        /// <returns>Editted string</returns>
+        public string ReplaceStrings(string s)
+        {
+            s = Regex.Replace(s, "DocumentsPath", DocumentsPath);
+            s = Regex.Replace(s, "RegistrySoftwarePath", RegistrySoftwarePath);
+            return s;
+        }
+
+        /// <summary>
+        /// Replaces InstallPath variable in the given string with the actual install path passed in.
+        /// </summary>
+        /// <param name="s">String to edit.</param>
+        /// <returns>Editted string</returns>
+        public string ReplaceInstallPath(string s, string installPath)
+        {
+            s = Regex.Replace(s, "InstallPath", installPath);
+            return s;
+        }
+
+        /// <summary>
+        /// File parser for the game init text file.
+        /// </summary>
+        /// <param name="filename">File path/name to be parsed.</param>
+        public void InitGamesFromFile(string filename)
+        {
+            System.IO.Stream fileStream = this.GetType().Assembly.GetManifestResourceStream("GameAnywhere.gamev3.txt");
+            StreamReader r = new StreamReader(fileStream);
+            
+            Dictionary<string, string> game = new Dictionary<string, string>();
+            string line;
+            while (r.Peek() >= 0)
+            {
+                line = r.ReadLine();
+                if (line.IndexOf("#") == 0)
+                    continue;
+
+                if (line.Equals("[ENDGAME]"))
+                {
+                    InitializeGameFromTextFile(game);
+                    game.Clear();
+                    continue;
+                }
+                if (line.Equals(""))
+                    continue;
+
+
+                string[] kv = line.Split('=');
+                game[kv[0].Trim()] = kv[1].Trim();
+            }
+
+        }
+
+        
         #endregion
     }
 }

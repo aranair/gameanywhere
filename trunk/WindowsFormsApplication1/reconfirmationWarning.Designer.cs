@@ -76,7 +76,7 @@
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(110, 25);
             this.buttonOk.TabIndex = 1;
-            this.buttonOk.Text = "Ok";
+            this.buttonOk.Text = "Exit Program";
             this.buttonOk.UseVisualStyleBackColor = true;
             this.buttonOk.MouseClick += new System.Windows.Forms.MouseEventHandler(this.buttonOk_MouseClick);
             // 
