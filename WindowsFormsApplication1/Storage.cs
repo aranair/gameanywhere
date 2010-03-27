@@ -38,7 +38,7 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="path">path to file</param>
         /// <returns>hashcode of file</returns>
-        private string GenerateHash(string path)
+        public string GenerateHash(string path)
         {
             //Pre-conditions
             if (path.Equals("") || path == null)
