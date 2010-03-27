@@ -681,17 +681,21 @@ namespace GameAnywhere
             if (gameName.Equals(GameLibrary.FIFA10GameName))
                 SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.fifa2010.png", ImageLayout.Zoom);
 
-            if (gameName.Equals(GameLibrary.Warcraft3GameName))
+            else if (gameName.Equals(GameLibrary.Warcraft3GameName))
                 SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.warcraft3.png", ImageLayout.Zoom);
 
-            if (gameName.Equals(GameLibrary.FM2010GameName))
+            else if (gameName.Equals(GameLibrary.FM2010GameName))
                 SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.footballManagerIcon1.gif", ImageLayout.Zoom);
 
-            if (gameName.Equals(GameLibrary.WOWGameName))
+            else if (gameName.Equals(GameLibrary.WOWGameName))
                 SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.worldOfWarcraftIcon1.gif", ImageLayout.Zoom);
 
-            if (gameName.Equals(GameLibrary.AbuseGameName))
+            else if (gameName.Equals(GameLibrary.AbuseGameName))
                 SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.abuseIcon.jpg", ImageLayout.Zoom);
+
+            else
+                SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.defaultIcon.png", ImageLayout.Zoom);
+
         }
         #endregion
 
