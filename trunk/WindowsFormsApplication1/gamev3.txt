@@ -1,0 +1,43 @@
+Game=Warcraft 3
+RegValue=InstallPath
+RegKey=SOFTWARE\Blizzard Entertainment\Warcraft III
+RegType=HKCU
+ConfigPathList=InstallPath\CustomKeys.txt
+ConfigParentPath=InstallPath
+SavePathList=InstallPath\Save
+SaveParentPath=InstallPath\Save
+[ENDGAME]
+#Comments
+Game=Football Manager 2010
+RegValue=Path
+RegKey=RegistrySoftwarePath\Sports Interactive Ltd\Installs\FM2010
+RegType=HKLM
+SaveParentPath=DocumentsPath\Sports Interactive\Football Manager 2010
+SavePathList=DocumentsPath\Sports Interactive\Football Manager 2010\games
+[ENDGAME]
+Game=World of Warcraft
+RegValue=InstallPath
+RegKey=RegistrySoftwarePath\Blizzard Entertainment\World of Warcraft
+RegType=HKLM
+ConfigPathList=InstallPath\WTF\Account
+ConfigParentPath=InstallPath\WTF
+SavePathList=InstallPath\Interface
+SaveParentPath=InstallPath
+[ENDGAME]
+Game=FIFA 10
+RegValue=Install Dir
+RegKey=RegistrySoftwarePath\EA Sports\FIFA 10
+RegType=HKLM
+ConfigPathList=DocumentsPath\FIFA 10\user
+ConfigParentPath=DocumentsPath\FIFA 10
+SavePathList=DocumentsPath\FIFA 10\A. Profiles
+SaveParentPath=DocumentsPath\FIFA 10
+SearchSaveParent=I. Be A Pro - *
+[ENDGAME]
+Game=   Abuse
+RegValue=   Install_Dir
+RegKey=RegistrySoftwarePath\Abuse
+RegType=HKLM
+SaveParentPath=InstallPath
+SearchSaveParent=    *.spe
+[ENDGAME]

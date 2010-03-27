@@ -56,12 +56,13 @@
             // 
             // errorDisplayPanel
             // 
+            this.errorDisplayPanel.AutoScroll = true;
             this.errorDisplayPanel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.errorDisplayPanel.ForeColor = System.Drawing.Color.White;
             this.errorDisplayPanel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.errorDisplayPanel.Location = new System.Drawing.Point(30, 103);
+            this.errorDisplayPanel.Location = new System.Drawing.Point(30, 107);
             this.errorDisplayPanel.Name = "errorDisplayPanel";
-            this.errorDisplayPanel.Size = new System.Drawing.Size(680, 420);
+            this.errorDisplayPanel.Size = new System.Drawing.Size(679, 406);
             this.errorDisplayPanel.TabIndex = 10;
             // 
             // pictureBox1
