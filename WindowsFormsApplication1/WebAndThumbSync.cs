@@ -98,50 +98,7 @@ namespace GameAnywhere
                 throw;
             }
         }
-       
-        /// <summary>
-        /// Generate the hashcode of a local file
-        /// </summary>
-        /// <param name="path">path to file</param>
-        /// <returns>hashcode of file in a string, dashes removed.</returns>
-        /// <exception cref="ArgumentException"></exception>
-        /// <exception cref="IOException"></exception>
-        /// <exception cref="UnauthorizedAccessException"></exception>
-        private string GenerateHash(string path)
-        {
-            //Pre-conditions
-            if (path.Equals("") || path == null)
-                throw new ArgumentException("Parameter cannot be empty/null", "path");
-
-            FileStream fs = null;
-            string hash = "";
-
-            try
-            {
-                fs = File.Open(path, FileMode.Open, FileAccess.Read);
-                MD5 md5 = MD5.Create();
-                hash = BitConverter.ToString(md5.ComputeHash(fs)).Replace(@"-", @"").ToLower();
-            }
-            catch (IOException)
-            {
-                throw;
-            }
-            catch (UnauthorizedAccessException)
-            {
-                throw;
-            }
-            catch(Exception)
-            {
-            }
-            finally
-            {
-                if (fs != null)
-                    fs.Close();
-            }
-
-            return hash;
-        }
-
+      
         /// <summary>
         /// Generates the hashcode of all the files in the SyncFolder directory and its subdirectories.
         /// </summary>
@@ -161,7 +118,7 @@ namespace GameAnywhere
                 foreach (string file in Directory.GetFiles(dir))
                 {
                     if (Path.GetFileName(file).Equals(WebMetaDataFileName) || Path.GetFileName(file).Equals(LocalMetaDataFileName)) continue;
-                    dict[file.Replace(syncFolderPath + @"\", "").Replace(@"\", "/")] = GenerateHash(file);
+                    dict[file.Replace(syncFolderPath + @"\", "").Replace(@"\", "/")] = s3.GenerateHash(file);
                 }
                 foreach (string subdir in Directory.GetDirectories(dir))
                 {
@@ -251,7 +208,7 @@ namespace GameAnywhere
                 throw new ArgumentException("Parameter cannot be empty/null", "key");
             
             //Get and compare hashcodes base on key given
-            if (data1.GetEntryValue(key).Equals(data2.GetEntryValue(key)))
+            if (meta1.GetEntryValue(key).Equals(meta2.GetEntryValue(key)))
             {
                 return false;
             }
@@ -429,7 +386,7 @@ namespace GameAnywhere
                     {
                         case UPLOAD:
                             s3.UploadFile(localPath, webPath);
-                            UpdateMetaData(key, GenerateHash(localPath));
+                            UpdateMetaData(key, s3.GenerateHash(localPath));
                             break;
                         case DOWNLOAD:
                             //Create the target directory if needed
@@ -438,7 +395,7 @@ namespace GameAnywhere
                                 CreateDirectory(Path.GetDirectoryName(localPath));
 
                             s3.DownloadFile(localPath, webPath);
-                            UpdateMetaData(key, GenerateHash(localPath));
+                            UpdateMetaData(key, s3.GenerateHash(localPath));
                             break;
                         case DELETELOCAL:
                             File.Delete(localPath);
