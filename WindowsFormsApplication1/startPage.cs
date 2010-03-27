@@ -753,7 +753,7 @@ namespace GameAnywhere
                     case 1:
                         {
                             InitiateStartPanel();
-                            SetErrorLabel("Registration Complete", System.Drawing.Color.DeepSkyBlue);
+                            SetErrorLabel("   Registration Complete", System.Drawing.Color.DeepSkyBlue);
                             break;
                         }// Successfully Registered.
                     case 2:
@@ -1573,11 +1573,13 @@ namespace GameAnywhere
             // There is backup -> run warning dialog
             if (controller.EndProgram())
             {
+                OpenWaitDialog();
                 restoreOriginalFiles();
+                CloseWaitDialog();
             }
             else
             {
-                MessageBox.Show("There are no backup files.");
+                SetErrorLabel("There are no backup files.", Color.Red);
             }
             
         }

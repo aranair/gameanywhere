@@ -277,7 +277,8 @@ namespace GameAnywhere
                 enoughSpace = CheckForEnoughSpace(gameItemList);
             }
             //Exception will be handled later in CopyDirectory()
-            catch (DirectoryNotFoundException) { }
+            catch (DirectoryNotFoundException) { //TODO: 
+            }
             catch (UnauthorizedAccessException) { }
 
             if (enoughSpace)//Enough space, contine copy.
