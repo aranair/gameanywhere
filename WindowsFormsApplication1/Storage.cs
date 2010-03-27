@@ -34,10 +34,13 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Generate the hashcode of a file
+        /// Generate the hashcode of a local file
         /// </summary>
         /// <param name="path">path to file</param>
-        /// <returns>hashcode of file</returns>
+        /// <returns>hashcode of file in a string, dashes removed.</returns>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="IOException"></exception>
+        /// <exception cref="UnauthorizedAccessException"></exception>
         public string GenerateHash(string path)
         {
             //Pre-conditions
