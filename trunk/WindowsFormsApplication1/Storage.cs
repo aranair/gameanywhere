@@ -38,7 +38,7 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="path">path to file</param>
         /// <returns>hashcode of file</returns>
-        private string GenerateMD5(string path)
+        private string GenerateHash(string path)
         {
             FileStream fs = null;
             string hash = "";
@@ -128,7 +128,7 @@ namespace GameAnywhere
 
                 //Get hashcode of uploaded file
                 string responseFileHash = response.Headers["ETag"].Replace("\"", "");
-                string fileHash = GenerateMD5(path);
+                string fileHash = GenerateHash(path);
 
                 //Compare file's hashcode with response's hashcode to confirm file correctly uploaded
                 if (!fileHash.Equals(responseFileHash))
