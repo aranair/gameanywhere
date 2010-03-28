@@ -928,7 +928,11 @@ namespace GameAnywhere
         #endregion
 
         #region Text File Initialization
-        private void InitializeGameFromTextFile(Dictionary<string, string> vListPassed)
+        /// <summary>
+        /// Initializes a single game from one set of dictionary text file entries.
+        /// </summary>
+        /// <param name="variableListPassed">The set of dictionary values for one game entry.</param>
+        private void InitializeGameFromTextFile(Dictionary<string, string> variableListPassed)
         {
             string gameName = "";
             string regKey = "";
@@ -939,20 +943,20 @@ namespace GameAnywhere
             bool currentUser = false;
             bool localMachine = false;
 
-            Dictionary<string, string> vList = new Dictionary<string, string>();
-            foreach (string key in vListPassed.Keys)
+            Dictionary<string, string> variableList = new Dictionary<string, string>();
+            foreach (string key in variableListPassed.Keys)
             {
-                string s = ReplaceStrings(vListPassed[key]);
-                vList.Add(key, s);
+                string s = ReplaceStrings(variableListPassed[key]);
+                variableList.Add(key, s);
 
             }
-            gameName = vList["Game"];
-            regKey = vList["RegKey"];
-            regValue = vList["RegValue"];
+            gameName = variableList["Game"];
+            regKey = variableList["RegKey"];
+            regValue = variableList["RegValue"];
 
-            if (vList["RegType"].Equals("HKCU"))
+            if (variableList["RegType"].Equals("HKCU"))
                 currentUser = true;
-            else if (vList["RegType"].Equals("HKLM"))
+            else if (variableList["RegType"].Equals("HKLM"))
                 localMachine = true;
 
             try
@@ -977,31 +981,31 @@ namespace GameAnywhere
                         RemoveTrailingSlash(ref installPath);
 
 
-                        Dictionary<string, string> vListFinal = new Dictionary<string, string>();
+                        Dictionary<string, string> variableListFinal = new Dictionary<string, string>();
 
-                        foreach (string key in vList.Keys)
+                        foreach (string key in variableList.Keys)
                         {
-                            string s = ReplaceInstallPath(vList[key], installPath);
-                            vListFinal.Add(key, s);
+                            string s = ReplaceInstallPath(variableList[key], installPath);
+                            variableListFinal.Add(key, s);
                         }
 
-                        if (vListFinal.ContainsKey("ConfigParentPath"))
-                            configParentPath = vListFinal["ConfigParentPath"];
+                        if (variableListFinal.ContainsKey("ConfigParentPath"))
+                            configParentPath = variableListFinal["ConfigParentPath"];
 
-                        if (vListFinal.ContainsKey("SaveParentPath"))
-                            saveParentPath = vListFinal["SaveParentPath"];
+                        if (variableListFinal.ContainsKey("SaveParentPath"))
+                            saveParentPath = variableListFinal["SaveParentPath"];
 
-                        if (vListFinal.ContainsKey("SavePathList"))
-                            AddSaveFiles(ref saveList, vListFinal);
+                        if (variableListFinal.ContainsKey("SavePathList"))
+                            AddSaveFiles(ref saveList, variableListFinal);
 
-                        if (vListFinal.ContainsKey("ConfigPathList"))
-                            AddConfigFiles(ref configList, vListFinal);
+                        if (variableListFinal.ContainsKey("ConfigPathList"))
+                            AddConfigFiles(ref configList, variableListFinal);
 
-                        if (vListFinal.ContainsKey("SearchSaveParent"))
-                            AddVariableSaveFiles(ref saveList, vListFinal);
+                        if (variableListFinal.ContainsKey("SearchSaveParent"))
+                            AddVariableSaveFiles(ref saveList, variableListFinal);
 
-                        if (vListFinal.ContainsKey("SearchConfigParent"))
-                            AddVariableConfigFiles(ref configList, vListFinal);
+                        if (variableListFinal.ContainsKey("SearchConfigParent"))
+                            AddVariableConfigFiles(ref configList, variableListFinal);
 
 
                         Game newGame = new Game(configList, saveList, gameName, installPath, configParentPath, saveParentPath);
@@ -1021,15 +1025,15 @@ namespace GameAnywhere
         /// Adds saved games files from a regex key given in value of key "SearchSaveParent" in the given dictionary.
         /// </summary>
         /// <param name="saveList">The List of saved games file to add the files to.</param>
-        /// <param name="vListFinal">The dictionary list of all data from text file.</param>
-        private static void AddVariableSaveFiles(ref List<string> saveList, Dictionary<string, string> vListFinal)
+        /// <param name="variableListFinal">The dictionary list of all data from text file.</param>
+        private static void AddVariableSaveFiles(ref List<string> saveList, Dictionary<string, string> variableListFinal)
         {
-            List<string> listOfVariableSaveList = SeperatePathsByDelimiter(vListFinal["SearchSaveParent"]);
+            List<string> listOfVariableSaveList = SeperatePathsByDelimiter(variableListFinal["SearchSaveParent"]);
 
             foreach (string regex in listOfVariableSaveList)
             {
-                if (Directory.Exists(vListFinal["SaveParentPath"]))
-                    AddFoldersAndFiles(ref saveList, vListFinal["SaveParentPath"], regex);
+                if (Directory.Exists(variableListFinal["SaveParentPath"]))
+                    AddFoldersAndFiles(ref saveList, variableListFinal["SaveParentPath"], regex);
             }
         }
 
@@ -1055,15 +1059,15 @@ namespace GameAnywhere
         /// Adds config files from a regex key given in value of key "SearchConfigParent" in the given dictionary.
         /// </summary>
         /// <param name="saveList">The List of config files to add the files  to.</param>
-        /// <param name="vListFinal">The dictionary list of all data from text file.</param>
-        private static void AddVariableConfigFiles(ref List<string> configList, Dictionary<string, string> vListFinal)
+        /// <param name="variableListFinal">The dictionary list of all data from text file.</param>
+        private static void AddVariableConfigFiles(ref List<string> configList, Dictionary<string, string> variableListFinal)
         {
-            List<string> listOfVariableConfigList = SeperatePathsByDelimiter(vListFinal["SearchConfigParent"]);
+            List<string> listOfVariableConfigList = SeperatePathsByDelimiter(variableListFinal["SearchConfigParent"]);
 
             foreach (string regex in listOfVariableConfigList)
             {
-                if (Directory.Exists(vListFinal["ConfigParentPath"]))
-                    AddFoldersAndFiles(ref configList, vListFinal["ConfigParentPath"], regex);
+                if (Directory.Exists(variableListFinal["ConfigParentPath"]))
+                    AddFoldersAndFiles(ref configList, variableListFinal["ConfigParentPath"], regex);
             }
         }
 
@@ -1071,10 +1075,10 @@ namespace GameAnywhere
         /// Adds Saved game files from the dictionary list, reading from the SavePathList key.
         /// </summary>
         /// <param name="saveList">The List of saved game files to add the files to.</param>
-        /// <param name="vListFinal">The dictionary list of all data from text file.</param>
-        private static void AddSaveFiles(ref List<string> saveList, Dictionary<string, string> vListFinal)
+        /// <param name="variableListFinal">The dictionary list of all data from text file.</param>
+        private static void AddSaveFiles(ref List<string> saveList, Dictionary<string, string> variableListFinal)
         {
-            List<string> delimitedConfigPaths = SeperatePathsByDelimiter(vListFinal["SavePathList"]);
+            List<string> delimitedConfigPaths = SeperatePathsByDelimiter(variableListFinal["SavePathList"]);
             foreach (string path in delimitedConfigPaths)
             {
                 saveList.Add(path);
@@ -1085,10 +1089,10 @@ namespace GameAnywhere
         /// Adds config files from the dictionary list, reading from the ConfigPathList key.
         /// </summary>
         /// <param name="configList">The List of config files to add the files to.</param>
-        /// <param name="vListFinal">The dictionary list of all data from text file.</param>
-        private static void AddConfigFiles(ref List<string> configList, Dictionary<string, string> vListFinal)
+        /// <param name="variableListFinal">The dictionary list of all data from text file.</param>
+        private static void AddConfigFiles(ref List<string> configList, Dictionary<string, string> variableListFinal)
         {
-            List<string> delimitedConfigPaths = SeperatePathsByDelimiter(vListFinal["ConfigPathList"]);
+            List<string> delimitedConfigPaths = SeperatePathsByDelimiter(variableListFinal["ConfigPathList"]);
             foreach (string path in delimitedConfigPaths)
             {
                 configList.Add(path);
@@ -1151,9 +1155,11 @@ namespace GameAnywhere
             while (r.Peek() >= 0)
             {
                 line = r.ReadLine();
+                // # designated for comments
                 if (line.IndexOf("#") == 0)
                     continue;
 
+                // [ENDGAME] in file determines end of this game's information.
                 if (line.Equals("[ENDGAME]"))
                 {
                     InitializeGameFromTextFile(game);
@@ -1165,6 +1171,7 @@ namespace GameAnywhere
 
 
                 string[] kv = line.Split('=');
+                //this trims white spaces from the entries in the text file.
                 game[kv[0].Trim()] = kv[1].Trim();
             }
 
