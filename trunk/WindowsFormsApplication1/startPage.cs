@@ -127,7 +127,7 @@ namespace GameAnywhere
             // This resets all the error labels that are in this form.
             ResetErrorLabels();
 
-            controller.SetSyncDirection(OfflineSync.ComToExternal);
+            controller.direction = OfflineSync.ComToExternal;
 
             // Get the list of compatible games to be displayed to user.
             List<Game> gameList = controller.GetGameList();
@@ -170,7 +170,7 @@ namespace GameAnywhere
         private void thumbdriveToComputerButton_MouseClick(object sender, MouseEventArgs e)
         {
             ResetErrorLabels();
-            controller.SetSyncDirection(OfflineSync.ExternalToCom);
+            controller.direction = OfflineSync.ExternalToCom;
 
             List<Game> gList = controller.GetGameList();
 
@@ -283,7 +283,7 @@ namespace GameAnywhere
             ResetErrorLabels();
             if (controller.IsLoggedIn())
             {
-                controller.SetSyncDirection(OnlineSync.ComToWeb);
+                controller.direction = OnlineSync.ComToWeb;
 
                 // Get the list of compatible games to be displayed to user.
                 List<Game> gameList = controller.GetGameList();
@@ -334,7 +334,7 @@ namespace GameAnywhere
             if (controller.IsLoggedIn())
             {
 
-                controller.SetSyncDirection(OnlineSync.WebToCom);
+                controller.direction = OnlineSync.WebToCom;
 
                 // Get the list of compatible games to be displayed to user.
                 List<Game> gameList = controller.GetGameList();
