@@ -9,38 +9,35 @@ using System.IO;
 
 namespace GameAnywhere
 {
+    /// <summary>
+    /// This class is the middle-man between the GUI class and the other classes. It determines which
+    /// methods to call at the appropriate moment.
+    /// </summary>
     public class Controller
     {
         #region Data Members
 
         /// <summary>
-        /// GameLibrary object that stores all the game objects and their information.
+        /// These data members help to mediate processing between GUI class and the other classes.
         /// </summary>
         private GameLibrary gameLibrary;
-
-        /// <summary>
-        /// Stores the direction of the latest synchronization job.
-        /// </summary>
-        private int direction;
-
-        /// <summary>
-        /// To manage the user's online account.
-        /// </summary>
         private User user;
-
         private WebAndThumbSync wats;
+
+        /// <summary>
+        /// These values need to be set and get by GUI for the correct flow of the program.
+        /// </summary>
+        /// <value>
+        /// Synchronization direction.
+        /// </value>
+        public int direction { get; set; }
 
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Pre-Conditions: None.
-        /// Post-Conditions: Data members initialized and GUI started.
-        /// 
-        /// Description: Default constructor.
-        /// 
-        /// Exceptions: None.
+        /// Initializes data members and calls a function to start up GUI.
         /// </summary>
         public Controller()
         {
@@ -52,15 +49,10 @@ namespace GameAnywhere
 
         #endregion
 
-        #region Methods
+        #region Synchronization Methods
 
         /// <summary>
-        /// Pre-Conditions: None.
-        /// Post-Conditions: startPage GUI is running.
-        /// 
-        /// Description: Runs graphical user interface.
-        /// 
-        /// Exceptions: None.
+        /// Loads the GUI start page.
         /// </summary>
         private void StartGUI()
         {
@@ -70,346 +62,9 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Pre-Conditions: direction is OfflineSync.ComToExternal or OfflineSync.ExternalToCom.
-        /// Post-Conditions: direction is set.
-        /// 
-        /// Description: Sets synchronization direction.
-        /// 
-        /// Exceptions: None.
+        /// Determines if the executable is running on the computer or an external drive.
         /// </summary>
-        /// <param name="direction">synchronization direction</param>
-        public void SetSyncDirection(int direction)
-        {
-            // Assert that direction is valid.
-            Debug.Assert(direction == OfflineSync.ComToExternal || direction == OfflineSync.ExternalToCom 
-                || direction == OnlineSync.WebToCom || direction == OnlineSync.ComToWeb
-                , "Direction is not valid.");
-
-            // Set direction.
-            this.direction = direction;
-        }
-
-        /// <summary>
-        /// Pre-Conditions: None.
-        /// Post-Conditions: Available backup files are restored and a SyncAction list is returned.
-        /// 
-        /// Description: Calls Restore() of OfflineSync class.
-        /// 
-        /// Exceptions: None.
-        /// </summary>
-        /// <returns>list of SyncAction objects that includes results of restoration</returns>
-        public List<SyncAction> Restore()
-        {
-            OfflineSync offlineSync 
-                = new OfflineSync(OfflineSync.Uninitialize, gameLibrary.GetGameList(OfflineSync.Uninitialize));
-            
-            return offlineSync.Restore();
-
-        }
-     
-
-        /// <summary>
-        /// Pre-Conditions: direction is OfflineSync.ExternalToCom or OfflineSync.ComToExternal.
-        /// Post-Conditions: List of games is successfully returned to GUI class.
-        /// 
-        /// Description: Calls GetGameList of GameLibrary.
-        /// 
-        /// Exceptions: None.
-        /// </summary>
-        /// <returns>list of games available to be synchronized</returns>
-        public List<Game> GetGameList()
-        {
-            // Assert that direction is valid.
-            Debug.Assert(direction == OfflineSync.ComToExternal || direction == OfflineSync.ExternalToCom
-                || direction == OnlineSync.WebToCom || direction == OnlineSync.ComToWeb
-                , "Direction is not valid.");
-
-            // Declare a list.
-            List<Game> gameList = null;
-
-            if (direction == OfflineSync.ComToExternal || direction == OfflineSync.ExternalToCom || direction == OnlineSync.ComToWeb)
-            {
-                // Call GetGameList and set the list.
-                gameList = gameLibrary.GetGameList(direction);
-            }
-            else if (direction == OnlineSync.WebToCom)
-            {
-                List<string> webGamesList = OnlineSync.GetGamesAndTypesFromWeb(user.Email);
-                gameList = gameLibrary.GetGameList(direction, webGamesList);
-            }
-
-
-            // Assert that list is not null.
-            Debug.Assert(gameList != null, "Game list is null.");
-
-            // Return list to GUI class.
-            return gameList;
-        }
-
-
-        /// <summary>
-        /// Pre-Conditions: syncActionList is not null.
-        /// Post-Conditions: Provides GUI class with updated List<SyncAction>
-        /// 
-        /// Description: Calls SynchronizeGames of OfflineSync.
-        /// 
-        /// Exceptions: None.
-        /// </summary>
-        /// <param name="syncActionList">list of games with their synchronization actions</param>
-        /// <returns>list of games with their synchronization actions updated with results</returns>
-        public List<SyncAction> SynchronizeGames (List<SyncAction> syncActionList)
-        {
-            // Assert that syncActionList is not null.
-            Debug.Assert(syncActionList != null, "syncActionList is null.");
-
-            // Offline synchronization.
-            if (direction == OfflineSync.ComToExternal || direction == OfflineSync.ExternalToCom)
-            {
-                // Initialize an OfflineSync object.
-                OfflineSync offlineSync = new OfflineSync(direction, gameLibrary.GetGameList(OfflineSync.Uninitialize));
-
-                // Call SynchronizeGames of OfflineSync class to process.
-                syncActionList = offlineSync.SynchronizeGames(syncActionList);
-            }
-            else if (direction == OnlineSync.ComToWeb || direction == OnlineSync.WebToCom)
-            {
-                // Initialize an OfflineSync object.
-                OnlineSync onlineSync = new OnlineSync(direction, gameLibrary.GetGameList(OfflineSync.Uninitialize), user);
-
-                try
-                {
-                    // Call SynchronizeGames of OnlineSync class to process.
-                    syncActionList = onlineSync.SynchronizeGames(syncActionList);
-                }
-
-                catch (Exception)
-                {
-                    throw new ConnectionFailureException();
-                }
-            }
-
-            return syncActionList;
-        }
-
-
-        /// <summary>
-        /// Pre-Conditions: None.
-        /// Post-Conditions: Returns true if backup exists, false if backup does not exist.
-        /// 
-        /// Description: Informs caller if backup exists or not when the program is ended. Calls
-        ///              CheckBackupExists of OfflineSync.
-        /// 
-        /// Exceptions: None.
-        /// </summary>
-        /// <returns>true if backup exists, false if backup does not exist</returns>
-        public bool EndProgram()
-        {
-            OfflineSync offlinesync = new OfflineSync();
-            
-            foreach(Game game in gameLibrary.InstalledGameList)
-            {
-                if (offlinesync.CheckBackupExists(game.ConfigParentPath, OfflineSync.BackupConfigFolderName))
-                {
-                    return true;
-                }
-
-                if (offlinesync.CheckBackupExists(game.SaveParentPath, OfflineSync.BackupSavedGameFolderName))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Pre-Conditions: None.
-        /// Post-Conditions: A non-null SyncError list is returned.
-        /// 
-        /// Description: Calls RemoveAllBackup of OfflineSync.
-        /// 
-        /// Exceptions: None.
-        /// </summary>
-        /// <returns></returns>
-        public List<SyncError> RemoveAllBackup()
-        {
-            OfflineSync offlinesync = new OfflineSync(OfflineSync.Uninitialize, gameLibrary.InstalledGameList);
-            return offlinesync.RemoveAllBackup();
-        }
-  
-        
-        /// <summary>
-        /// Pre-Conditions: email and password are not null.
-        /// Post-Conditions: Provides confirmation if user has been registered successfully.
-        /// 
-        /// Description: Calls Register of User class to process.
-        /// 
-        /// Exceptions: ConnectionFailureException - unable to connect to web server.
-        /// </summary>
-        /// <param name="email">e-mail</param>
-        /// <param name="password">password</param>
-        /// <returns>a code indicating if registration is successful or not</returns>
-        public int Register(string email, string password)
-        {
-            Debug.Assert(email != null && password != null, "Parameters cannot be null.");
-
-            int code = 0;
-
-            try
-            {
-                 code = user.Register(email, password);
-            }
-
-            catch (Exception)
-            {
-                throw new ConnectionFailureException();
-            }
-
-            return code;
-        }
-        
-        /// <summary>
-        /// Pre-Conditions: email and password are not null.
-        /// Post-Conditions: Provides confirmation if user is logged in.
-        /// 
-        /// Description: Calls Login of User class to process.
-        /// 
-        /// Exceptions: ConnectionFailureException - unable to connect to web server.
-        /// </summary>
-        /// <param name="email">email</param>
-        /// <param name="password">password</param>
-        /// <returns>true if login successful, false if not</returns>
-        public bool Login(string email, string password)
-        {
-            Debug.Assert(email != null && password != null, "Parameters cannot be null.");
-
-            try
-            {
-                return user.Login(email, password);
-            }
-
-            catch (Exception)
-            {
-                throw new ConnectionFailureException();
-            }
-
-        }
-
-        /// <summary>
-        /// Pre-Conditions: None.
-        /// Post-Conditions: User is logged out.
-        /// 
-        /// Description: Calls Logout of User class.
-        /// 
-        /// Exceptions: ConnectionFailureException - unable to connect to web server.
-        /// </summary>
-        public void Logout()
-        {
-            try
-            {
-                user.Logout();
-            }
-
-            catch (Exception)
-            {
-                throw new ConnectionFailureException();
-            }
-
-        }
-
-        /// <summary>
-        /// Pre-Conditions: None.
-        /// Post-Conditions: Activation email is resent.
-        /// 
-        /// Description: Calls ResendActivation of User class.
-        /// 
-        /// Exceptions: ConnectionFailureException - unable to connect to web server.
-        /// </summary>
-        /// <param name="email">email</param>
-        /// <param name="inputPassword">password</param>
-        /// <returns>code to indicate results</returns>
-        public int ResendActivation(string email, string inputPassword)
-        {
-            Debug.Assert(email != null && inputPassword != null, "Parameters cannot be null.");
-
-            try
-            {
-                return user.ResendActivation(email, inputPassword);
-            }
-
-            catch (Exception)
-            {
-                throw new ConnectionFailureException();
-            }
-
-        }
-
-        /// <summary>
-        /// Pre-Conditions: email is not null.
-        /// Post-Conditions: Password is retrieved.
-        /// 
-        /// Description: Calls RetrievePassword of User class.
-        /// 
-        /// Exceptions: ConnectionFailureException - unable to connect to web server.
-        /// </summary>
-        /// <param name="email">email</param>
-        /// <returns>code to indicate results</returns>
-        public int RetrievePassword (string email)
-        {
-            Debug.Assert(email != null, "Email cannot be null.");
-
-            try
-            {
-                return user.RetrievePassword(email);
-            }
-
-            catch (Exception)
-            {
-                throw new ConnectionFailureException();
-            }
-        }
-
-        /// <summary>
-        /// Pre-Conditions: email, oldPassword, newPassword are not null.
-        /// Post-Conditions: Password is changed.
-        /// 
-        /// Description: Calls ChangePassword of User class.
-        /// 
-        /// Exceptions: ConnectionFailureException - unable to connect to web server.
-        /// </summary>
-        /// <param name="email">email</param>
-        /// <param name="oldPassword">previous password</param>
-        /// <param name="newPassword">new password</param>
-        /// <returns>code to indicate results</returns>
-        public int ChangePassword(string email, string oldPassword, string newPassword)
-        {
-            Debug.Assert(email != null && oldPassword != null && newPassword != null, "Parameters cannot be null.");
-
-            try
-            {
-                return user.ChangePassword(email, oldPassword, newPassword);
-            }
-
-            catch (Exception)
-            {
-                throw new ConnectionFailureException();
-            }
-        }
-
-        /// <summary>
-        /// Pre-Conditions: None.
-        /// Post-Conditions: direction is returned.
-        /// 
-        /// Description: Returns synchronization direction.
-        /// 
-        /// Exceptions: None.
-        /// </summary>
-        /// <returns>direction</returns>
-        public int GetDirection()
-        {
-            return direction;
-        }
-
+        /// <returns>True if it is running on the computer, false otherwise.</returns>
         public bool IsFixedMedia()
         {
             DriveInfo[] allDrives = DriveInfo.GetDrives();
@@ -433,18 +88,133 @@ namespace GameAnywhere
 
         }
 
-        public bool IsLoggedIn()
+        /// <summary>
+        /// Calls the appropriate GetGameList method of GameLibrary class depending on the direction
+        /// of the synchronization.
+        /// </summary>
+        /// <returns>List of games available to be synchronized for the specific direction.</returns>
+        public List<Game> GetGameList()
         {
-            return user.IsLoggedIn();             
+            Debug.Assert(direction == OfflineSync.ComToExternal || direction == OfflineSync.ExternalToCom
+                || direction == OnlineSync.WebToCom || direction == OnlineSync.ComToWeb
+                , "Direction is not valid.");
+
+            List<Game> gameList = null;
+
+            if (direction == OfflineSync.ComToExternal || direction == OfflineSync.ExternalToCom || direction == OnlineSync.ComToWeb)
+            {
+                gameList = gameLibrary.GetGameList(direction);
+            }
+
+            else if (direction == OnlineSync.WebToCom)
+            {
+                // Obtain games' information from the web first then pass to GameLibrary to process
+                List<string> webGamesList = OnlineSync.GetGamesAndTypesFromWeb(user.Email);
+                gameList = gameLibrary.GetGameList(direction, webGamesList);
+            }
+
+            Debug.Assert(gameList != null, "Game list is null.");
+
+            return gameList;
         }
 
 
+        /// <summary>
+        /// Declares either an OnlineSync or OfflineSync object and calls SynchronizeGames of that object
+        /// depending on the direction of the synchronization.
+        /// </summary>
+        /// <param name="syncActionList">List of games with their synchronization actions.</param>
+        /// <returns>List of games with their synchronization actions updated with synchronization results.</returns>
+        /// <exception cref="ConnectionFailureException">Unable to connect to web server.</exception>
+        public List<SyncAction> SynchronizeGames (List<SyncAction> syncActionList)
+        {
+            Debug.Assert(syncActionList != null, "syncActionList is null.");
+
+            if (direction == OfflineSync.ComToExternal || direction == OfflineSync.ExternalToCom)
+            {
+                OfflineSync offlineSync = new OfflineSync(direction, gameLibrary.GetGameList(OfflineSync.Uninitialize));
+                
+                syncActionList = offlineSync.SynchronizeGames(syncActionList);
+            }
+            else if (direction == OnlineSync.ComToWeb || direction == OnlineSync.WebToCom)
+            {
+                OnlineSync onlineSync = new OnlineSync(direction, gameLibrary.GetGameList(OfflineSync.Uninitialize), user);
+
+                try
+                {
+                    syncActionList = onlineSync.SynchronizeGames(syncActionList);
+                }
+
+                catch (Exception)
+                {
+                    throw new ConnectionFailureException();
+                }
+            }
+
+            return syncActionList;
+        }
+
+
+        /// <summary>
+        /// Calls CheckBackupExists of OfflineSync to see if backup files exist for any game.
+        /// </summary>
+        /// <returns>True if backup exists, false if backup does not exist.</returns>
+        public bool EndProgram()
+        {
+            OfflineSync offlinesync = new OfflineSync();
+            
+            foreach(Game game in gameLibrary.InstalledGameList)
+            {
+                if (offlinesync.CheckBackupExists(game.ConfigParentPath, OfflineSync.BackupConfigFolderName))
+                {
+                    return true;
+                }
+
+                if (offlinesync.CheckBackupExists(game.SaveParentPath, OfflineSync.BackupSavedGameFolderName))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Restores available backup files for the games by declaring an OfflineSync object and calling
+        /// its Restore method.
+        /// </summary>
+        /// <returns>List of SyncAction objects that includes results of restoration.</returns>
+        public List<SyncAction> Restore()
+        {
+            OfflineSync offlineSync
+                = new OfflineSync(OfflineSync.Uninitialize, gameLibrary.GetGameList(OfflineSync.Uninitialize));
+
+            return offlineSync.Restore();
+
+        }
+
+        /// <summary>
+        /// Removes backup files by calling RemoveAllBackup method of OfflineSync.
+        /// </summary>
+        /// <returns>List of errors when removing backup files.</returns>
+        public List<SyncError> RemoveAllBackup()
+        {
+            OfflineSync offlinesync = new OfflineSync(OfflineSync.Uninitialize, gameLibrary.InstalledGameList);
+            return offlinesync.RemoveAllBackup();
+        }
+
+        /// <summary>
+        /// Calls SynchronizeGames method of WebAndThumbSync class.
+        /// </summary>
+        /// <param name="conflictsList">A list of conflicts.</param>
+        /// <returns>List of errors that occurred during synchronization.</returns>
+        /// <exception cref="ConnectionFailureException">Unable to connect to web server.</exception>
         public List<SyncError> SynchronizeWebAndThumb(Dictionary<string, int> conflictsList)
         {
             try
             {
-                
-                List <SyncError> syncErrorList = wats.SynchronizeGames(conflictsList);
+
+                List<SyncError> syncErrorList = wats.SynchronizeGames(conflictsList);
                 return syncErrorList;
             }
             catch (Exception e)
@@ -452,9 +222,14 @@ namespace GameAnywhere
                 MessageBox.Show(e.Message);
                 throw new ConnectionFailureException();
             }
-            
+
         }
 
+        /// <summary>
+        /// Calls CheckConflicts of WebAndThumbSync class.
+        /// </summary>
+        /// <returns>A list of conflicts.</returns>
+        /// <exception cref="ConnectionFailureException">Unable to connect to web server.</exception>
         public Dictionary<string, int> CheckConflicts()
         {
             wats = new WebAndThumbSync(user);
@@ -469,6 +244,151 @@ namespace GameAnywhere
                 throw new ConnectionFailureException();
             }
         }
+
+        #endregion
+
+        #region User Account Methods
+
+        /// <summary>
+        /// Calls Register method of User class.
+        /// </summary>
+        /// <param name="email">User's e-mail.</param>
+        /// <param name="password">User's password.</param>
+        /// <returns>Code indicating if registration is successful or the errors that have occurred.</returns>
+        /// <exception cref="ConnectionFailureException">Unable to connect to web server.</exception>
+        public int Register(string email, string password)
+        {
+            Debug.Assert(email != null && password != null, "Parameters cannot be null.");
+
+            try
+            {
+                 return user.Register(email, password);
+            }
+
+            catch (Exception)
+            {
+                throw new ConnectionFailureException();
+            }
+        }
+        
+        /// <summary>
+        /// Calls Login method of User class.
+        /// </summary>
+        /// <param name="email">User's e-mail.</param>
+        /// <param name="password">User's password.</param>
+        /// <returns>True if login successful, false otherwise.</returns>
+        /// <exception cref="ConnectionFailureException">Unable to connect to web server.</exception>
+        public bool Login(string email, string password)
+        {
+            Debug.Assert(email != null && password != null, "Parameters cannot be null.");
+
+            try
+            {
+                return user.Login(email, password);
+            }
+
+            catch (Exception)
+            {
+                throw new ConnectionFailureException();
+            }
+
+        }
+
+        /// <summary>
+        /// Calls Logout method of User class.
+        /// </summary>
+        /// <exception cref="ConnectionFailureException">Unable to connect to web server.</exception>
+        public void Logout()
+        {
+            try
+            {
+                user.Logout();
+            }
+
+            catch (Exception)
+            {
+                throw new ConnectionFailureException();
+            }
+
+        }
+
+        /// <summary>
+        /// Calls ResendActivation method of User class.
+        /// </summary>
+        /// <param name="email">User's e-mail.</param>
+        /// <param name="inputPassword">User's password.</param>
+        /// <returns>Code to indicate result.</returns>
+        /// <exception cref="ConnectionFailureException">Unable to connect to web server.</exception>
+        public int ResendActivation(string email, string inputPassword)
+        {
+            Debug.Assert(email != null && inputPassword != null, "Parameters cannot be null.");
+
+            try
+            {
+                return user.ResendActivation(email, inputPassword);
+            }
+
+            catch (Exception)
+            {
+                throw new ConnectionFailureException();
+            }
+
+        }
+
+        /// <summary>
+        /// Calls RetrievePassword method of User class.
+        /// </summary>
+        /// <param name="email">User's e-mail.</param>
+        /// <returns>Code to indicate result.</returns>
+        /// <exception cref="ConnectionFailureException">Unable to connect to web server.</exception>
+        public int RetrievePassword (string email)
+        {
+            Debug.Assert(email != null, "Email cannot be null.");
+
+            try
+            {
+                return user.RetrievePassword(email);
+            }
+
+            catch (Exception)
+            {
+                throw new ConnectionFailureException();
+            }
+        }
+
+        /// <summary>
+        /// Calls ChangePassword of User class.
+        /// </summary>
+        /// <param name="email">User's e-mail.</param>
+        /// <param name="oldPassword">User's previous password.</param>
+        /// <param name="newPassword">User's new password.</param>
+        /// <returns>Code to indicate result.</returns>
+        /// <exception cref="ConnectionFailureException">Unable to connect to web server.</exception>
+        public int ChangePassword(string email, string oldPassword, string newPassword)
+        {
+            Debug.Assert(email != null && oldPassword != null && newPassword != null, "Parameters cannot be null.");
+
+            try
+            {
+                return user.ChangePassword(email, oldPassword, newPassword);
+            }
+
+            catch (Exception)
+            {
+                throw new ConnectionFailureException();
+            }
+        }
+
+        /// <summary>
+        /// Calls IsLoggedIn method of User class.
+        /// </summary>
+        /// <returns>True if user is logged in, false otherwise.</returns>
+        public bool IsLoggedIn()
+        {
+            return user.IsLoggedIn();             
+        }
+
+        
         #endregion
 
     }
