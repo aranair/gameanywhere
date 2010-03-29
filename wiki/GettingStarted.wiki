@@ -41,4 +41,4 @@ http://lh3.ggpht.com/_-Xzk-2Bdr-I/S5znfKsCPmI/AAAAAAAAAJU/lBsQmtZn6xw/choosegame
 
 = Understanding GameAnywhere =
 
-Continue to [Architecture GameAnywhere Architecture] got a high level overview of the components in GameAnywhere. 
+Continue to GameAnywhere Architecture got a high level overview of the components in GameAnywhere. 
