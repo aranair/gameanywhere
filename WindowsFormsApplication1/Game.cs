@@ -7,6 +7,7 @@ namespace GameAnywhere
 {
     public class Game
     {
+        #region Properties
         /// <summary>
         /// List of config files or folders for the game.
         /// </summary>
@@ -36,6 +37,37 @@ namespace GameAnywhere
         /// The parent folder where the list of saved game files or folders of the game are located.
         /// </summary>
         private string saveParentPath;
+        public string Name
+        {
+            get { return name; }
+            set { name = value; }
+        }
+        public List<string> ConfigPathList
+        {
+            get { return configPathList; }
+            set { configPathList = value; }
+        }
+        public List<string> SavePathList
+        {
+            get { return savePathList; }
+            set { savePathList = value; }
+        }
+        public string InstallPath
+        {
+            get { return installPath; }
+            set { installPath = value; }
+        }
+        public string ConfigParentPath
+        {
+            get { return configParentPath; }
+            set { configParentPath = value; }
+        }
+        public string SaveParentPath
+        {
+            get { return saveParentPath; }
+            set { saveParentPath = value; }
+        }
+        #endregion
 
         #region Constructor
         /// <summary>
@@ -72,37 +104,6 @@ namespace GameAnywhere
         }
         #endregion
 
-        #region Properties
-        public string Name
-        {
-            get { return name; }
-            set { name = value;}
-        }
-        public List<string> ConfigPathList
-        {
-            get { return configPathList; }
-            set { configPathList = value;}
-        }
-        public List<string> SavePathList
-        {
-            get { return savePathList; }
-            set { savePathList = value;}
-        }
-        public string InstallPath
-        {
-            get { return installPath; }
-            set { installPath = value;}
-        }
-        public string ConfigParentPath
-        {
-            get { return configParentPath; }
-            set { configParentPath = value; }
-        }
-        public string SaveParentPath
-        {
-            get { return saveParentPath; }
-            set { saveParentPath = value; }
-        }
-        #endregion
+        
     }
 }

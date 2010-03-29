@@ -32,11 +32,19 @@ namespace GameAnywhere
         /// </summary>
         private Controller controller;
 
+        /// <summary>
+        /// List of all currently supposed game names for use with GUI and other classes.
+        /// </summary>
         #region static game names
+        ///<value>Warcraft 3 game name.</value>
         public static readonly string Warcraft3GameName = "Warcraft 3";
+        ///<value>FIFA10 game name.</value>
         public static readonly string FIFA10GameName = "FIFA 10";
+        ///<value>Football Manager 2010 game name.</value>
         public static readonly string FM2010GameName = "Football Manager 2010";
+        ///<value>World of Warcraft game name.</value>
         public static readonly string WOWGameName = "World of Warcraft";
+        ///<value>Abuse game name.</value>
         public static readonly string AbuseGameName = "Abuse";
         #endregion
 
@@ -85,18 +93,9 @@ namespace GameAnywhere
         /// </summary>
         private void Initialize()
         {
-            /*
-            InitializeAbuse();
-            InitializeWarcraft3();
-            InitializeFIFA2010();
-            InitializeWOW();
-            InitializeFM2010();*/
-            
-            InitGamesFromFile("gamev3.txt");
-
-            //InitializeCODModernWarfare();
-            //InitializeDragonAge();       
-            //InitializeL4D2();
+            System.IO.Stream fileStream = this.GetType().Assembly.GetManifestResourceStream("GameAnywhere.gamev3.txt");
+            StreamReader r = new StreamReader(fileStream);
+            InitGamesFromFile(r);
         }
 
         /// <summary>
@@ -353,7 +352,7 @@ namespace GameAnywhere
                         InitializeFIFAConfigList(ref newGame, configParentPath);
                         InitializeFIFASavedGameList(ref newGame, saveParentPath);
 
-                        AddToInstalledGames(newGame);
+                        installedGameList.Add(newGame);
                     }
 
                 }
@@ -433,7 +432,7 @@ namespace GameAnywhere
                         InitializeWarcraft3ConfigList(ref newGame, configParentPath);
                         InitializeWarcraft3SavedGameList(ref newGame, saveParentPath);
 
-                        AddToInstalledGames(newGame);
+                        installedGameList.Add(newGame);
                     }
                 }
             }
@@ -497,7 +496,7 @@ namespace GameAnywhere
 
                         InitializeFM2010SavedGameList(ref newGame, saveParentPath);
 
-                        AddToInstalledGames(newGame);
+                        installedGameList.Add(newGame);
                     }
                 }
             }
@@ -552,7 +551,7 @@ namespace GameAnywhere
                         InitializeWOWConfigList(ref newGame, configParentPath);
                         InitializeWOWSavedGameList(ref newGame, saveParentPath);
 
-                        AddToInstalledGames(newGame);
+                        installedGameList.Add(newGame);
                     }
                 }
             }
@@ -594,7 +593,6 @@ namespace GameAnywhere
         /// </summary>
         private void InitializeAbuse()
         {
-
             string registryName = "Install_Dir";
             string key = RegistrySoftwarePath + @"\Abuse";
 
@@ -616,10 +614,9 @@ namespace GameAnywhere
                         string saveParentPath = installPath;
                         Game newGame = new Game(configList, saveList, AbuseGameName, installPath, configParentPath, saveParentPath);
 
-                        //InitializeAbuseConfigList(ref newGame, configParentPath);
                         InitializeAbuseSavedGameList(ref newGame, saveParentPath);
 
-                        AddToInstalledGames(newGame);
+                        installedGameList.Add(newGame);
                     }
                 }
             }
@@ -788,15 +785,6 @@ namespace GameAnywhere
         #region Propeties and Helper functions
 
         /// <summary>
-        /// Adds a game into the installedGameList;
-        /// </summary>
-        /// <param name="game"></param>
-        private void AddToInstalledGames(Game game)
-        {
-            installedGameList.Add(game);
-        }
-
-        /// <summary>
         /// Returns full list of installed games on current machine.
         /// </summary>
         public List<Game> InstalledGameList
@@ -940,10 +928,9 @@ namespace GameAnywhere
             string saveParentPath = "";
             string configParentPath = "";
 
-            bool currentUser = false;
-            bool localMachine = false;
-
+            
             Dictionary<string, string> variableList = new Dictionary<string, string>();
+
             foreach (string key in variableListPassed.Keys)
             {
                 string s = ReplaceStrings(variableListPassed[key]);
@@ -954,18 +941,13 @@ namespace GameAnywhere
             regKey = variableList["RegKey"];
             regValue = variableList["RegValue"];
 
-            if (variableList["RegType"].Equals("HKCU"))
-                currentUser = true;
-            else if (variableList["RegType"].Equals("HKLM"))
-                localMachine = true;
-
             try
             {
                 // Attempts to open the registry key to check existence of game.
                 RegistryKey rk;
-                if (currentUser)
+                if (variableList["RegType"].Equals("HKCU"))
                     rk = Registry.CurrentUser.OpenSubKey(regKey);
-                else if (localMachine)
+                else if (variableList["RegType"].Equals("HKLM"))
                     rk = Registry.LocalMachine.OpenSubKey(regKey);
                 else
                     return;
@@ -980,9 +962,9 @@ namespace GameAnywhere
                         string installPath = "" + rk.GetValue(regValue);
                         RemoveTrailingSlash(ref installPath);
 
-
                         Dictionary<string, string> variableListFinal = new Dictionary<string, string>();
 
+                        // This portion replaces all "InstallPath" variable with the correct install path of the game.
                         foreach (string key in variableList.Keys)
                         {
                             string s = ReplaceInstallPath(variableList[key], installPath);
@@ -995,18 +977,9 @@ namespace GameAnywhere
                         if (variableListFinal.ContainsKey("SaveParentPath"))
                             saveParentPath = variableListFinal["SaveParentPath"];
 
-                        if (variableListFinal.ContainsKey("SavePathList"))
-                            AddSaveFiles(ref saveList, variableListFinal);
+                        AddAllSavedGameFiles(ref saveList, variableListFinal);
 
-                        if (variableListFinal.ContainsKey("ConfigPathList"))
-                            AddConfigFiles(ref configList, variableListFinal);
-
-                        if (variableListFinal.ContainsKey("SearchSaveParent"))
-                            AddVariableSaveFiles(ref saveList, variableListFinal);
-
-                        if (variableListFinal.ContainsKey("SearchConfigParent"))
-                            AddVariableConfigFiles(ref configList, variableListFinal);
-
+                        FindAllConfigFiles(ref configList, variableListFinal);
 
                         Game newGame = new Game(configList, saveList, gameName, installPath, configParentPath, saveParentPath);
 
@@ -1019,6 +992,34 @@ namespace GameAnywhere
                 // Game folders not accessible.
             }
 
+        }
+        
+        /// <summary>
+        /// Adds both variable saved game files and the fixed ones given in "SavePathList" variable.
+        /// </summary>
+        /// <param name="saveList">The saved game list to add the files to.</param>
+        /// <param name="variableListFinal">The final variable list, of which certain variables have been replaced with actual paths on the PC.</param>
+        private static void AddAllSavedGameFiles(ref List<string> saveList, Dictionary<string, string> variableListFinal)
+        {
+            if (variableListFinal.ContainsKey("SavePathList"))
+                AddSaveFiles(ref saveList, variableListFinal);
+
+            if (variableListFinal.ContainsKey("SearchSaveParent"))
+                AddVariableSaveFiles(ref saveList, variableListFinal);
+        }
+
+        /// <summary>
+        /// Adds both variable config files and the fixed ones given in "ConfigPathList" variable.
+        /// </summary>
+        /// <param name="configList">The config file list to add the files to.</param>
+        /// <param name="variableListFinal">The final variable list, of which certain variables have been replaced with actual paths on the PC.</param>
+        private static void FindAllConfigFiles(ref List<string> configList, Dictionary<string, string> variableListFinal)
+        {
+            if (variableListFinal.ContainsKey("ConfigPathList"))
+                AddConfigFiles(ref configList, variableListFinal);
+
+            if (variableListFinal.ContainsKey("SearchConfigParent"))
+                AddVariableConfigFiles(ref configList, variableListFinal);
         }
 
         /// <summary>
@@ -1102,7 +1103,7 @@ namespace GameAnywhere
         /// <summary>
         /// Seperates a line into delimited paths to a character, and returns a list of strings.
         /// </summary>
-        /// <param name="longPath">The string to delimit</param>
+        /// <param name="longPath">The string to delimit.</param>
         /// <returns>List of strings delimited by ,</returns>
         private static List<string> SeperatePathsByDelimiter(string longPath)
         {
@@ -1145,16 +1146,15 @@ namespace GameAnywhere
         /// File parser for the game init text file.
         /// </summary>
         /// <param name="filename">File path/name to be parsed.</param>
-        public void InitGamesFromFile(string filename)
+        public void InitGamesFromFile(StreamReader streamReader)
         {
-            System.IO.Stream fileStream = this.GetType().Assembly.GetManifestResourceStream("GameAnywhere.gamev3.txt");
-            StreamReader r = new StreamReader(fileStream);
-            
             Dictionary<string, string> game = new Dictionary<string, string>();
+            // One single line in the text file
             string line;
-            while (r.Peek() >= 0)
+
+            while (streamReader.Peek() >= 0)
             {
-                line = r.ReadLine();
+                line = streamReader.ReadLine();
                 // # designated for comments
                 if (line.IndexOf("#") == 0)
                     continue;
@@ -1166,9 +1166,10 @@ namespace GameAnywhere
                     game.Clear();
                     continue;
                 }
+                
+                // Empty line
                 if (line.Equals(""))
                     continue;
-
 
                 string[] kv = line.Split('=');
                 //this trims white spaces from the entries in the text file.
