@@ -1,0 +1,36 @@
+#summary The first step to understanding GameAnywhere.
+
+<wiki:toc max_depth="2" />
+
+Welcome to GameAnywhere.
+
+GameAnywhere is a file synchronization software that enables gamers to bypass the hassle on reconfiguring game settings and easily have their saved game data with them anywhere, anytime.
+
+= Introduction =
+
+In this section, we would introduce the basic features of GameAnywhere and what you will need to develop GameAnywhere.
+
+= Software Requirements = 
+  * Windows operating system, XP and above.
+  * .Net 3.5 framework installed.
+
+
+= Features =
+
+ * Synchronize game files between thumb drive and computer or vice versa with just a few clicks with our intuitive graphical user interface.
+
+
+ * Automatically detect the games installed on the computer and offer you the appropriate synchronization options.
+
+
+ * Restore the computer to its original state after you're done playing on the computer with the files you have synchronized.
+
+
+ * Supports World of Warcraft, Warcraft 3, FIFA 10 and Football Manager 2010. 
+
+
+==Screenshots==
+
+http://lh5.ggpht.com/_-Xzk-2Bdr-I/S5zmo-_xu0I/AAAAAAAAAJA/u5L7m0Aqyqw/startscreen.JPG
+
+http://lh3.ggpht.com/_-Xzk-2Bdr-I/S5znfKsCPmI/AAAAAAAAAJU/lBsQmtZn6xw/choosegamescreen.JPG
