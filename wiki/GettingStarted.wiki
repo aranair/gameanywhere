@@ -1,4 +1,5 @@
 #summary The first step to understanding GameAnywhere.
+#labels Phase-Requirements
 
 <wiki:toc max_depth="2" />
 
