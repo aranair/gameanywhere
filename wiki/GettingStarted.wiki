@@ -28,6 +28,7 @@ In this section, we would introduce the basic features of GameAnywhere and what 
 
  * Supports World of Warcraft, Warcraft 3, FIFA 10 and Football Manager 2010. 
 
+ * No installation needed.
 
 ==Screenshots==
 
