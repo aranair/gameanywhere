@@ -1,0 +1,14 @@
+#summary Class descriptions and functions.
+
+= <Class Name Here> =
+
+<Class Diagram>
+
+= Class Description =
+
+//Describe the function or features of your class, Non-technical stuff!!!
+
+
+= See Aslo =
+
+//Reference to other class that calls/uses your class, or other class that your class uses.
