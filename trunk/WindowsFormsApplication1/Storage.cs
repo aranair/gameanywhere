@@ -4,18 +4,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Security.Cryptography;
 
 using Amazon.S3;
 using Amazon.S3.Model;
-using System.Security.Cryptography;
+
 
 namespace GameAnywhere
 {
+    /// <summary>
+    /// This class handles all the uploads and downloads to and from the Amazon S3 service.
+    /// </summary>
+    /// <remarks>This class requires the AWSSDK DLL.</remarks>
     class Storage
     {
-        /// <summary>
-        /// Data Members
-        /// </summary>
+
         private string accessKeyID;
         private string secretAccessKeyID;
         private string bucketName;
@@ -26,8 +29,8 @@ namespace GameAnywhere
         /// </summary>
         public Storage()
         {
-            accessKeyID = "AKIAIF3ZSAPQXNF6ZIOQ";
-            secretAccessKeyID = "P7a+fn9UVxR0MXBn+u83hTAKbeskcsfJ80TGCiln";
+            accessKeyID = "*";
+            secretAccessKeyID = "*";
             bucketName = "GameAnywhere";
             client = new AmazonS3Client(accessKeyID, secretAccessKeyID, new AmazonS3Config().WithCommunicationProtocol(Protocol.HTTP));
             //AmazonS3 client = Amazon.AWSClientFactory.CreateAmazonS3Client(accessKeyID, secretAccessKeyID);
@@ -36,8 +39,8 @@ namespace GameAnywhere
         /// <summary>
         /// Generate the hashcode of a local file
         /// </summary>
-        /// <param name="path">path to file</param>
-        /// <returns>hashcode of file in a string, dashes removed.</returns>
+        /// <param name="path">Path of local file</param>
+        /// <returns>Hashcode of file in a string in lowercase, with dashes removed.</returns>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="IOException"></exception>
         /// <exception cref="UnauthorizedAccessException"></exception>
@@ -77,12 +80,12 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Check if file access is denied
+        /// Checks if a file's access is denied.
         /// </summary>
-        /// <param name="filePath">path to file</param>
+        /// <param name="filePath">Path of local file</param>
         /// <returns>
-        /// true - file is not read only
-        /// false - file is read only
+        /// true - file is not read only.
+        /// false - file is read only.
         /// </returns>
         private bool IsLocked(string filePath)
         {
@@ -117,8 +120,8 @@ namespace GameAnywhere
         /// <summary>
         /// Upload file to S3
         /// </summary>
-        /// <param name="path">path of local file</param>
-        /// <param name="key">key of file on S3</param>
+        /// <param name="path">Path of local file</param>
+        /// <param name="key">Key of file on S3</param>
         /// Exceptions: ArgumentException, WebTransferException, ConnectionFailureException
         public void UploadFile(string path, string key)
         {
@@ -169,9 +172,13 @@ namespace GameAnywhere
         /// <summary>
         /// Download file from S3 to computer
         /// </summary>
-        /// <param name="path">path of download location on computer</param>
-        /// <param name="key">key of file on S3</param>
-        /// Exceptions: ArgumentException, ConnectionFailureException, WebTransferException, IOException, UnauthorizedAccessException
+        /// <param name="path">Path of download location on computer</param>
+        /// <param name="key">Key of file on S3</param>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ConnectionFailureException"></exception>
+        /// <exception cref="WebTransferException"></exception>
+        /// <exception cref="IOException"></exception>
+        /// <exception cref="UnauthorizedAccessException"></exception>
         public void DownloadFile(string path, string key)
         {
             //Pre-conditions
@@ -235,8 +242,12 @@ namespace GameAnywhere
         /// <summary>
         /// Delete a file from web(S3)
         /// </summary>
-        /// <param name="key">key of file on S3</param>
-        /// Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
+        /// <param name="key">Key of file on S3</param>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ConnectionFailureException"></exception>
+        /// <exception cref="WebTransferException"></exception>
+        /// <exception cref="IOException"></exception>
+        /// <exception cref="UnauthorizedAccessException"></exception>
         public void DeleteFile(string key)
         {
             //Pre-conditions
@@ -269,11 +280,13 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// List all files on web(S3) base on the key
+        /// List the files stored on S3 that has specified key as prefix.
         /// </summary>
-        /// <param name="key">key of file on S3</param>
-        /// <returns>list of files on web(S3)</returns>
-        /// Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
+        /// <param name="key">Prefix of files to list</param>
+        /// <returns>List of files stored on S3 that has key as prefix.</returns>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ConnectionFailureException"></exception>
+        /// <exception cref="WebTransferException"></exception>
         public List<string> ListFiles(string key)
         {
             //Pre-conditions
@@ -314,10 +327,13 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Delete directory in web(S3) base on the key
+        /// Delete all files that has specified key as prefix.
         /// </summary>
-        /// <param name="key">key of file on S3</param>
-        /// Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
+        /// <param name="key">Prefix of files to delete</param>
+        /// <seealso cref="DeleteFile"/>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ConnectionFailureException"></exception>
+        /// <exception cref="WebTransferException"></exception>
         public void DeleteDirectory(string key)
         {
             try
@@ -335,11 +351,13 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Get the hashcode of a file on the web(S3) base on the key
+        /// Get the hashcode of a file stored on S3.
         /// </summary>
-        /// <param name="key">key of file on S3</param>
-        /// <returns>hashcode of file</returns>
-        /// Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
+        /// <param name="key">Key of file on S3</param>
+        /// <returns>Hashcode of file</returns>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ConnectionFailureException"></exception>
+        /// <exception cref="WebTransferException"></exception>
         public string GetHash(string key)
         {
             //Pre-conditions
@@ -375,28 +393,35 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Gets the hashcode of all files on web(S3) base on the key
+        /// Gets the hashcodes of all files stored on S3 that has belongs to a user.
         /// </summary>
-        /// <param name="key">key of file on S3</param>
+        /// <remarks>
+        /// The key of the returned Dictionary will remove the email and will be be of format: [game]/[type]/...
+        /// The values of the returned Dictionary will contain the hashcode of the file.
+        /// </remarks>
+        /// <seealso cref="GetHash"/>
+        /// <param name="key">Email of user</param>
         /// <returns>Dictionary of files with its hashcode</returns>
-        /// Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
-        public Dictionary<string,string> GetHashDictionary(string key)
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ConnectionFailureException"></exception>
+        /// <exception cref="WebTransferException"></exception>
+        public Dictionary<string,string> GetHashDictionary(string email)
         {
             //Pre-conditions
-            if (key.Trim().Equals("") || key == null)
+            if (email.Trim().Equals("") || email == null)
                 throw new ArgumentException("Parameter cannot be empty/null", "key");
 
             try
             {
                 //Get all files on web(S3)
-                List<string> files = ListFiles(key);
+                List<string> files = ListFiles(email);
                 
                 //Add to Dictionary the filepath and hashcode of file
                 Dictionary<string, string> dict = new Dictionary<string, string>();
                 foreach (string file in files)
                 {
                     if (Path.GetFileName(file).Equals("metadata.web")) continue;
-                    dict[file.Replace(key + '/', "")] = GetHash(file);
+                    dict[file.Replace(email + '/', "")] = GetHash(file);
                 }
 
                 return dict;
