@@ -9,24 +9,30 @@ namespace GameAnywhere
 {
     /// <summary>
     /// This class contains all the required methods to synchronize game files store on the external drive and S3.
-    /// CheckConflicts() has to always be called first so that conflicting files can be automatically resolved.
-    /// Conflicts that has to be resolved would be then passed back to the other layers to be resolved.
-    /// SynchronizeGames() takes in the resolved conflicts and does the actual synchronization.
     /// </summary>
+    /// <remarks>
+    /// CheckConflicts() has to always be called first so that conflicting files can be automatically resolved.
+    /// The conflicts that has to be resolved would be then returned to caller to be resolved.
+    /// SynchronizeGames() takes in the resolved conflicts and does the actual synchronization.
+    /// </remarks>
     class WebAndThumbSync
     {
         /// <summary>
         /// noConflict stores the list of files that can be automatically resolved.
         /// Conflicts stores the list of files that require external resolution.
-        /// The integer values represent the direction or conflict of the resolution result.
         /// </summary>
+        /// <remarks>
+        /// The integer values represent the direction or conflict of the resolution result.
+        /// </remarks>
         public Dictionary<string, int> NoConflict, Conflicts;
 
         /// <summary>
         /// Metadata objects stored as class data members.
+        /// </summary>
+        /// <remarks>
         /// localHash and localMeta are current and stored Metadata objects of local files.
         /// webHash and webMeta are current and stored Metadata objects of files stored on the web.
-        /// </summary>
+        /// </remarks>
         private MetaData localHash, localMeta, webHash, webMeta;
 
         private string email;
@@ -39,7 +45,7 @@ namespace GameAnywhere
         private string WebMetaDataPath = Path.Combine(syncFolderPath, WebMetaDataFileName);
 
         /// <summary>
-        /// The list of integer values used for conflict resolution.
+        /// The list of integer values that represents the direction for conflict resolution.
         /// </summary>
         private const int UPLOAD = 1;
         private const int DOWNLOAD = 2;
@@ -51,23 +57,35 @@ namespace GameAnywhere
         private const int DELETEWEBCONFLICT = 24;
         
         /// <summary>
-        /// Accessors & Mutators
+        /// Stored Metadata object of files stored on the web.
         /// </summary>
         internal MetaData WebMeta
         {
             get { return webMeta; }
             set { webMeta = value; }
         }
+
+        /// <summary>
+        /// Current Metadata object of files stored on the web.
+        /// </summary>
         internal MetaData WebHash
         {
             get { return webHash; }
             set { webHash = value; }
         }
+
+        /// <summary>
+        /// Stored Metadata object of local files.
+        /// </summary>
         internal MetaData LocalMeta
         {
             get { return localMeta; }
             set { localMeta = value; }
         }
+
+        /// <summary>
+        /// Current Metadata object of local files.
+        /// </summary>
         internal MetaData LocalHash
         {
             get { return localHash; }
@@ -75,17 +93,17 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Constructors
+        /// Constructor for WebAndThumbSync
         /// </summary>
-        public WebAndThumbSync()
+        /// <param name="u">User object</param>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ConnectionFailureException"></exception>
+        /// <exception cref="WebTransferException"></exception>
+        /// <exception cref="IOException"></exception>
+        /// <exception cref="UnauthorizedAccessException"></exception>
+        public WebAndThumbSync(User user)
         {
-            NoConflict = new Dictionary<string,int>();
-            Conflicts = new Dictionary<string,int>();
-        }
-        
-        public WebAndThumbSync(User u)
-        {
-            email = u.Email;
+            email = user.Email;
             NoConflict = new Dictionary<string,int>();
             Conflicts = new Dictionary<string, int>();
             try
@@ -102,7 +120,7 @@ namespace GameAnywhere
         /// <summary>
         /// Generates the hashcode of all the files in the SyncFolder directory and its subdirectories.
         /// </summary>
-        /// <param name="dir">path to the game directory in SyncFolder.</param>
+        /// <param name="dir">Path of the game directory in SyncFolder.</param>
         /// <param name="dict">Dictionary object to store the key-values.</param>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="IOException"></exception>
@@ -139,8 +157,12 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Creates metadata object from thumbdrive, thumbdrive's metadata file, web, web's metadatafile
+        /// Create Metadata objects.
         /// </summary>
+        /// <remarks>
+        /// Creates the stored Metadata objects by deserializing the stored metadata file on the thumbdrive and web.
+        /// Crates the current Metadata objects from the hashcodes of the current state of local files and files on the web.
+        /// </remarks>
         /// <param name="email">user's email</param>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ConnectionFailureException"></exception>
@@ -166,15 +188,15 @@ namespace GameAnywhere
 
                 if (s3.ListFiles(email + '/' + WebMetaDataFileName).Count == 1)
                 {
-                    //Create Web Metadata - download from web then deserialize
+                    //Create Web Metadata - download from web and deserialize
                     s3.DownloadFile(WebMetaDataPath, email + '/' + WebMetaDataFileName);
                     webMeta.DeSerialize(WebMetaDataPath);
                 }
 
-                //Generate hash from web and create Metadata object
+                //Generate hash from files stored on web and create Metadata object
                 webHash = new MetaData(s3.GetHashDictionary(email));
 
-                //Generate hash from local and create Metadata object
+                //Generate hash from local files and create Metadata object
                 Dictionary<string, string> localDict = new Dictionary<string, string>();
                 GenerateHashDictionary(syncFolderPath, localDict);
                 localHash = new MetaData(localDict);
@@ -219,9 +241,12 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Checks if a file is deleted by comparing two Metadata objects.
-        /// If the key is found in the stored Metadata but not found in the current Metadata, the file is deleted.
+        /// Checks if a file is deleted.
         /// </summary>
+        /// <remarks>
+        /// Compares two Metadata objects. 
+        /// If the key is found in the stored Metadata but not found in the current Metadata, the file was deleted.
+        /// </remarks>
         /// <param name="hash">Current Metadata</param>
         /// <param name="meta">Stored Metadata</param>
         /// <param name="key">path of file</param>
@@ -248,9 +273,11 @@ namespace GameAnywhere
 
         /// <summary>
         /// Checks for synchronization conflicts between two locations.
+        /// </summary>
+        /// <remarks>
         /// Files that can be resolved automatically will be stored in the class data member, noConflict.
         /// Files that must be resolved externally will be stored in the class data member, Conflicts.
-        /// </summary>
+        /// </remarks>
         /// <returns>The Conflicts that has been filtered by FilterConflicts().</returns>
         public Dictionary<string,int> CheckConflicts()
         {
@@ -262,6 +289,8 @@ namespace GameAnywhere
 
         /// <summary>
         /// Helper method for CheckConflicts().
+        /// </summary>
+        /// <remarks>
         /// This method has to be called twice with two permutations to fully check the conflicts between two locations.
         /// Call 1:
         ///         First location - Local files
@@ -271,7 +300,7 @@ namespace GameAnywhere
         ///         First location - Web files
         ///         Second location - Local files
         ///         Direction - DOWNLOAD
-        /// </summary>
+        /// </remarks>
         /// <param name="hash1">Current Metadata object of the first location.</param>
         /// <param name="meta1">Stored Metadata object of the first location.</param>
         /// <param name="hash2">Current Metadata object of the second location.</param>
@@ -366,6 +395,12 @@ namespace GameAnywhere
             }
         }
 
+        /// <summary>
+        /// Synchronize the local files with the files on the web.
+        /// </summary>
+        /// <param name="resolvedConflicts">Conflicts that have been resolved.</param>
+        /// <returns>The list of SyncErrors of files that have failed to be synchronized.</returns>
+        /// <exception cref="ConnectionFailureException"></exception>
         public List<SyncError> SynchronizeGames(Dictionary<string, int> resolvedConflicts)
         {
             string processName = "Sync files from Web and Thumb";
@@ -385,27 +420,30 @@ namespace GameAnywhere
                     switch (NoConflict[key])
                     {
                         case UPLOAD:
+                            //Upload file to S3
                             s3.UploadFile(localPath, webPath);
                             UpdateMetaData(key, s3.GenerateHash(localPath));
                             break;
                         case DOWNLOAD:
                             //Create the target directory if needed
-                            //Console.WriteLine(Path.GetDirectoryName(localDirName));
                             if (!Directory.Exists(Path.GetDirectoryName(localPath)))
                                 CreateDirectory(Path.GetDirectoryName(localPath));
-
+                            //Download file from S3
                             s3.DownloadFile(localPath, webPath);
                             UpdateMetaData(key, s3.GenerateHash(localPath));
                             break;
                         case DELETELOCAL:
+                            //Delete file from thumbdrive
                             File.Delete(localPath);
                             DeleteMetaData(key);
                             break;
                         case DELETEWEB:
+                            //Delete file from S3
                             s3.DeleteDirectory(webPath);
                             DeleteMetaData(key);
                             break;
                         case DELETEMETA:
+                            //Delete metadata entry
                             DeleteMetaData(key);
                             break;
                     }
@@ -435,7 +473,7 @@ namespace GameAnywhere
             }
             catch (Exception ex)
             {
-                errorList.Add(new SyncError("Local and Web Metadata Files", processName, ex.Message));
+                errorList.Add(new SyncError(gameName, processName, ex.Message));
             }
 
             return errorList;
@@ -443,9 +481,11 @@ namespace GameAnywhere
 
         /// <summary>
         /// Filters the Conflicts Dictionary so that only one type of each game is returned.
-        /// This list is passed to other layers for the conflicts to be resolved.
-        /// The default value for each key is 0.
         /// </summary>
+        /// <remarks>
+        /// This list is returned to the caller for the conflicts to be resolved.
+        /// The default value for each key is 0, and has to be changed to reflect the correct direction.
+        /// </remarks>
         /// <returns></returns>
         public Dictionary<string,int> FilterConflicts()
         {
@@ -460,13 +500,15 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Merges the filtered Dictionary that has been resolved by other layers into the noConflict Dictionary.
+        /// Merges the filtered Dictionary that has been resolved by the caller into the noConflict Dictionary.
+        /// </summary>
+        /// <remarks>
         /// The only values of resolvedConflicts are 1 and 2, which determine the direction of all files of that type.
         /// The conflicts will be merged as follows:
         /// UPDOWNCONFLICT      - 1:UPLOAD,   2:DOWNLOAD
         /// DELETELOCALCONFLICT - 1:UPLOAD,   2:DELETELOCAL
         /// DELETEWEBCONFLICT   - 1:DOWNLOAD, 2:DELETEWEB
-        /// </summary>
+        /// </remarks>
         /// <param name="resolvedConflicts"></param>
         public void MergeConflicts(Dictionary<string, int> resolvedConflicts)
         {
@@ -496,10 +538,14 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Gets the game name and type of save (config/save) from a key.
+        /// Gets the game name and type (config or savedGame) from a key.
         /// </summary>
-        /// <param name="key">key of filename</param>
-        /// <returns>game and type of save in the form "[game]/[type]".</game></returns>
+        /// <remarks>
+        /// Key is assumed to be of format [email]/[game]/[type]/[folder or file]/..
+        /// This method returns [game]/[type].
+        /// </remarks>
+        /// <param name="key">Key of filename</param>
+        /// <returns>A string of the game name and type.</game></returns>
         private string GetGamesAndTypes(string key)
         {
             string game = key.Substring(0, key.IndexOf('/'));
@@ -511,8 +557,11 @@ namespace GameAnywhere
         /// <summary>
         /// Update all Metadata objects
         /// </summary>
-        /// <param name="key">path to file</param>
-        /// <param name="value">hashcode of file</param>
+        /// <remarks>
+        /// Creates a new key if it doesn't exist.
+        /// </remarks>
+        /// <param name="key">Key of file</param>
+        /// <param name="value">Hashcode of file</param>
         /// <exception cref="ArgumentException"></exception>
         private void UpdateMetaData(string key, string value)
         {
@@ -530,30 +579,9 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Add new entry in all Metadata objects
-        /// </summary>
-        /// <param name="key">key of filename</param>
-        /// <param name="value">hashcode of file</param>
-        /// <exception cref="ArgumentException"></exception>
-        private void AddMetaData(string key, string value)
-        {
-            //Pre-conditions
-            if (key.Equals("") || key == null)
-                throw new ArgumentException("Parameter cannot be empty/null", "key");
-            if (value == null)
-                throw new ArgumentException("Parameter cannot be null", "value");
-
-            //Update metadata
-            localMeta.AddEntry(key, value);
-            localHash.AddEntry(key, value);
-            webMeta.AddEntry(key, value);
-            webHash.AddEntry(key, value);
-        }
-
-        /// <summary>
         /// Delete an entry from all Metadata objects
         /// </summary>
-        /// <param name="key">path to file</param>
+        /// <param name="key">Key of file</param>
         /// <exception cref="ArgumentException"></exception>
         private void DeleteMetaData(string key)
         {
@@ -571,8 +599,8 @@ namespace GameAnywhere
         /// <summary>
         /// Create a new directory
         /// </summary>
-        /// <param name="newFolderPath">path to folder</param>
-        /// <exception cref="CreateFolderFailedException">unable to create folder</exception>
+        /// <param name="newFolderPath">Path to folder</param>
+        /// <exception cref="CreateFolderFailedException">Unable to create folder</exception>
         protected void CreateDirectory(string newFolderPath)
         {
             if (!Directory.Exists(newFolderPath))
