@@ -977,7 +977,7 @@ namespace GameAnywhere
                         if (variableListFinal.ContainsKey("SaveParentPath"))
                             saveParentPath = variableListFinal["SaveParentPath"];
 
-                        AddAllSavedGameFiles(ref saveList, variableListFinal);
+                        FindAllSavedGameFiles(ref saveList, variableListFinal);
 
                         FindAllConfigFiles(ref configList, variableListFinal);
 
@@ -999,7 +999,7 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="saveList">The saved game list to add the files to.</param>
         /// <param name="variableListFinal">The final variable list, of which certain variables have been replaced with actual paths on the PC.</param>
-        private static void AddAllSavedGameFiles(ref List<string> saveList, Dictionary<string, string> variableListFinal)
+        private static void FindAllSavedGameFiles(ref List<string> saveList, Dictionary<string, string> variableListFinal)
         {
             if (variableListFinal.ContainsKey("SavePathList"))
                 AddSaveFiles(ref saveList, variableListFinal);
@@ -1082,7 +1082,8 @@ namespace GameAnywhere
             List<string> delimitedConfigPaths = SeperatePathsByDelimiter(variableListFinal["SavePathList"]);
             foreach (string path in delimitedConfigPaths)
             {
-                saveList.Add(path);
+               if (Directory.Exists(path)) 
+                    saveList.Add(path);
             }
         }
 
@@ -1096,7 +1097,8 @@ namespace GameAnywhere
             List<string> delimitedConfigPaths = SeperatePathsByDelimiter(variableListFinal["ConfigPathList"]);
             foreach (string path in delimitedConfigPaths)
             {
-                configList.Add(path);
+                if(Directory.Exists(path))
+                    configList.Add(path);
             }
         }
 
