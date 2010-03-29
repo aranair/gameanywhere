@@ -35,3 +35,7 @@ In this section, we would introduce the basic features of GameAnywhere and what 
 http://lh5.ggpht.com/_-Xzk-2Bdr-I/S5zmo-_xu0I/AAAAAAAAAJA/u5L7m0Aqyqw/startscreen.JPG
 
 http://lh3.ggpht.com/_-Xzk-2Bdr-I/S5znfKsCPmI/AAAAAAAAAJU/lBsQmtZn6xw/choosegamescreen.JPG
+
+= Understanding GameAnywhere =
+
+Continue to GameAnywhere Architecture got a high level overview of the components in GameAnywhere. 
