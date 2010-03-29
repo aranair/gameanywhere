@@ -1,14 +1,90 @@
 #summary Class descriptions and functions.
-
+{{{
 = <Class Name Here> =
 
 <Class Diagram>
 
-= Class Description =
+== Class Description ==
 
 //Describe the function or features of your class, Non-technical stuff!!!
 
 
-= See Aslo =
+== See Aslo ==
 
 //Reference to other class that calls/uses your class, or other class that your class uses.
+Use Wiki-link to join the ref class.
+}}}
+------
+
+
+= GameLibrary =
+
+{{{
+<Class Diagram>
+}}}
+
+== GameLibrary Description ==
+
+The GameLibrary class, contains all the methods and information to initialize installed games into a list of games, that will contain all the appropriate paths to the config files and saved game files of each individual game.
+
+It will also resolve and return the common set of games that are found in both the source and target paths according to the synchronization direction
+chosen by the user, through the method GetGameList(direction). The direction of synchronization must be properly defined with this method.
+
+
+*Steps to follow to add more game support:*
+ # Create method to use registry entry to check existence of the new game.
+ # Create a new instance of Game object.
+ # Edit the appropriate information for the Game to work:
+{{{
+- configList = The list of paths to the configuration folders or files of the game.
+- saveList   = The list of paths to the saved game folders or files of the game.
+- configParentPath = the folder in which all the config files/folders are in.
+- gameName = The name of the game.
+- install path = The install path of the game ( found in the registry )
+
+- Private helper methods have been made to find the documents path, the type of OS of user, registry software path, program files path to aid in finding generic paths for all 3 OS:
+  windows xp, windows vista, and windows 7.
+- Methods to edit the configList and savedGameList are preferably seperated because of step 4.
+}}}
+ # For the sync direction of external to computer, EditConfigAndSavedGameLists() function is to be editted to support the new game as well. Each new game instance in the common list between the external and the computer, upon finding that the thumbdrive has the appropriate folders for the synchronization, MUST be initialized with config/savedList containing the paths to the files in the external thumbdrive instead of paths to the computer's files. 
+ # You're set to synchronize. If you would like to add icons to your game in the program, you would have to edit the GUI class to load your icons as well.
+
+
+== See Aslo ==
+
+Data Structure
+
+-----
+
+= OfflineSync =
+
+{{{
+<Class Diagram>
+}}}
+
+
+== OfflineSync Description ==
+This class handles the file/folder manipulation on the computer and the external storage device. The sync direction can only be set once, so as to prevent accidental re-assignment and affecting other methods. This method would create a folder call "syncFolder". This folder would contain the game files that is assume to be in the external storage device.
+
+The folder structure in "syncFolder" is that its subfolders are the game folder(s). Each would game folder is named after the game. In each game folder, it would contain subfolder(s) of name "config" and/or "savedGame". These folder would save the game files as its name suggests.
+
+*Steps for synchronizing from External storage device to Computer:*
+ # Create a backup folder in the game file parent directory
+ # Move original game files in the computer into the backup folder
+ # Copy the game files in the external storage device into the computer
+
+*Steps for synchronizing from Computer to External storage device:*
+ # Remove existing game files in external storage device
+ # Create the necessary game folder structure in the external storage device
+ # Copy game files from computer into the new directory
+
+*Steps for restore:*
+ # Remove existing game files
+ # Move game files from backup folder into it's original directory
+ # Remove backup folder
+
+== See Also ==
+
+Data Structure
+
+------
