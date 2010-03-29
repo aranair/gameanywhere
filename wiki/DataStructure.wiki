@@ -16,7 +16,7 @@
 
 }}}
 
-= SyncError =
+= Sync Error =
 
 {{{
 <Class diagram>
@@ -29,7 +29,7 @@ SyncError stores all the information for an synchronization error. It would cont
 
 ----
 
-= SyncAction =
+= Sync Action =
 
 {{{
 <Class diagram>
