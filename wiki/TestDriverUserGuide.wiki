@@ -89,4 +89,4 @@ To test the GameLibrary and OfflineSync, the games (which are supported) are req
 
 = See Also =
 
-Refer to the !GameAnywhere [DevelopersGuide2#API_Reference Library (API)] for more information.
+Refer to the !GameAnywhere [DevelopersGuide2#API_Reference Library (API)] for more information on the Test Driver.
