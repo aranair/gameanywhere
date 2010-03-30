@@ -143,13 +143,11 @@ In !GameAnywhere, we are concern about two types of game files. They are *Config
 
 Games files on the computer are detected automatically (see [DevelopersGuide2#Games_Detection Games Detection]). 
 
-_Here we assume that !GameAnywhere is launched from a External Device._ 
-
 This is how game files stored on the external device:
 
 A general structure looks like this:
   * !GameAnywhere.exe
-  * syncFolder
+  * SyncFolder
     * Game 1
       * config
       * savedGame
@@ -162,9 +160,9 @@ A general structure looks like this:
 
 http://lh3.ggpht.com/_SHs8HAxHUn8/S7F72aDQyFI/AAAAAAAADdc/gk5z_q7FO6E/Folder%20structure.JPG
 
-Use camel case for folder names i.e. "syncFolder", "savedGame". 
+Use camel case for folder names i.e. "savedGame". 
 
-== syncFolder ==
+== SyncFolder ==
 
 !GameAnywhere would create a folder to store all the games files that you would want to save. This folder is called *syncFolder*. It would be located at the same directory as !GameAnywhere.exe.
 
@@ -209,9 +207,7 @@ This is how to extend the list of supported games.
 
 = Offline Synchronization =
 
-Offline synchronization includes synchronizing between the computer and the [DevelopersGuide2#syncFolder syncFolder].
-
-_Assumption: syncFolder is located on an external device_
+Offline synchronization includes synchronizing between the computer and the [DevelopersGuide2#SyncFolder SyncFolder]. [DevelopersGuide2#SyncFolder SyncFolder] is located on an external device.
 
 == External Device to Computer Sync == 
 
