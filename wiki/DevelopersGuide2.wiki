@@ -58,7 +58,7 @@ After the user selects the games to synchronize, GUI will then create a list of 
 ----
 
 
-= Data Structure = 
+= Software Data Structure = 
 
 This section describes the various classes that were used to store information.
 
@@ -130,4 +130,15 @@ chosen by the user, through the method GetGameList(direction). The direction of 
 
 
 == !OfflineSync Class ==
-This class handles the file/folder manipulation on the computer and the external storage device. The sync direction can only be set once, so as to prevent accidental re-assignment and affecting other methods. This method would create a folder call "syncFolder". This folder would contain the game files that is assume to be in the external storage device.
+This class handles the file/folder manipulation on the computer as well as on the external storage device. The sync direction determine how the game files are transferred. 
+
+=== See Aslo ===
+   * [DevelopersGuide2#Game_Files_Storage_Structure Game Files Storage Structure]
+
+----
+
+= Game Files Storage Structure =
+
+This method would create a folder name "syncFolder" that would . This folder would contain the game files that is assume to be in the external storage device.
+
+The folder structure in "syncFolder" is that its subfolders are the game folder(s). Each would game folder is named after the game. In each game folder, it would contain subfolder(s) of name "config" and/or "savedGame". These folder would save the game files as its name suggests.
