@@ -1,13 +1,15 @@
 #summary Table of Content.
 
   * [http://code.google.com/p/gameanywhere/ Home]
-  * [DevelopersGuide Developer's Guide]
-    * [GettingStarted Getting Started]
-    * [Architecture Software Architecture]
-    * [ClassInformation Class Information]
-    * [DataStructure Data Structure ]
-    * [AddingGame Adding Game]
-    * [High-Level_Architecture]
+  * [DevelopersGuide2 Developer's Guide]
+    * [DevelopersGuide2#Getting_Started Getting Started]
+    * [DevelopersGuide2#Software_Architecture Software Architecture]
+    * [DevelopersGuide2#Software_Data_Structure Software Data Structure]
+    * [DevelopersGuide2#Class_Summary Class Summary]
+    * [DevelopersGuide2#Game_Files_Storage_Structure Game Files Storage Structure]
+    * [DevelopersGuide2#Games_Detection Games Detection]
+    * [DevelopersGuide2#Adding_Games Adding Games]
+    * [DevelopersGuide2#Offline_Synchronization Offline Synchronization]
 <wiki:comment>
     * [GameDetection Game Detection]
     * [OfflineSync Offline Synchronization]
