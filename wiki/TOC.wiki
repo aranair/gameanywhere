@@ -4,6 +4,7 @@
     * [Architecture Software Architecture]
     * [ClassInformation Class Information]
     * [GameDetection Game Detection]
+<wiki:comment>
     * [AddingGame Adding Game]
     * [OfflineSync Offline Synchronization]
     * [OnlineSync Online Synchronization]
@@ -11,4 +12,5 @@
     * [Restore Restore Computer to original Game state]
     * [AutomatedTester Automated Tester]
     * [API GameAnywhere API]  
+</wiki:comment>
   * [UserGuide User Guide]
