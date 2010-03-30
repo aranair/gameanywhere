@@ -1,13 +1,57 @@
 #summary One-sentence summary of this page.
 
+
+Welcome to GameAnywhere.
+
+GameAnywhere is a file synchronization software that enables gamers to bypass the hassle on reconfiguring game settings and easily have their saved game data with them anywhere, anytime.
+
+
 = Introduction =
 
-Add your content here.
+In this section, we would introduce the basic features of GameAnywhere and what you will need to develop GameAnywhere.
+
+= Software Requirements = 
+  * Windows operating system, XP and above.
+  * .Net 3.5 framework installed.
 
 
-= Details =
+= Features =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+ * Synchronize game files between thumb drive and computer or vice versa with just a few clicks with our intuitive graphical user interface.
+
+
+ * Automatically detect the games installed on the computer and offer you the appropriate synchronization options.
+
+
+ * Restore the computer to its original state after you're done playing on the computer with the files you have synchronized.
+
+
+ * Supports World of Warcraft, Warcraft 3, FIFA 10 and Football Manager 2010. 
+
+ * No installation needed.
+
+
+==Screenshots==
+
+http://lh5.ggpht.com/_-Xzk-2Bdr-I/S5zmo-_xu0I/AAAAAAAAAJA/u5L7m0Aqyqw/startscreen.JPG
+
+http://lh3.ggpht.com/_-Xzk-2Bdr-I/S5znfKsCPmI/AAAAAAAAAJU/lBsQmtZn6xw/choosegamescreen.JPG
+
+
+= Understand GameAnywhere Works=
+
+Continue to GameAnywhere Architecture got a high level overview of the components in GameAnywhere. 
+
+
+#summary Software architecture of GameAnywhere.
+
+= High-Level Architecture =
+
+http://lh4.ggpht.com/_-Xzk-2Bdr-I/S5-iBOIsmBI/AAAAAAAAAKg/pl0IsI3zVG8/highleveldiagram.JPG
+This diagram depicts what happens in the program. 
+
+The Controller is declared and the Controller starts up the GUI. The GUI interacts with the user. 
+
+In a typical synchronization scenario, the user indicates the direction of the synchronization first. The GUI will request information regarding the games from Controller, which in turn calls GameLibrary for the information to return to GUI. 
+
+After the user selects the games to synchronize, GUI will then create a list of SyncAction with the games' information and send it to Controller for synchronization. Controller will then provide the information to OfflineSync class to process.
