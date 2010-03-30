@@ -234,6 +234,7 @@ Offline synchronization includes synchronizing between the computer and the [Dev
  # Move game files from backup folder into it's original directory.
  # Remove backup folder.
 
+----
 
 = API Reference =
 
