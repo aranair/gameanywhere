@@ -1,4 +1,5 @@
 #summary User Guide  for GameAnywhere Test Driver.
+#sidebar TOC
 
 <wiki:toc max_depth="2" />
 
