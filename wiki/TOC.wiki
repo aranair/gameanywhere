@@ -1,7 +1,7 @@
 #summary Table of Content.
 
   * [Welcome Home]
-  * [Developer's Guide]
+  * [DevelopersGuide Developer's Guide]
     * [GettingStarted Getting Started]
     * [Architecture Software Architecture]
     * [ClassInformation Class Information]
