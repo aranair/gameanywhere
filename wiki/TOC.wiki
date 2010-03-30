@@ -2,9 +2,9 @@
   * [DevelopersGuide Developer's Guide]
     * [GettingStarted Getting Started]
     * [Architecture Software Architecture]
-    * [AddingGame Adding Game]
     * [ClassInformation Class Information]
-    
+    * [DataStructure Data Structure ]
+    * [AddingGame Adding Game]
 <wiki:comment>
     * [GameDetection Game Detection]
     * [OfflineSync Offline Synchronization]
