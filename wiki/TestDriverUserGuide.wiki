@@ -82,7 +82,7 @@ Note: There is no spaces used for the test file. The test driver will not check 
 Each method with the test case index will be shown. A true indicate it passes all verification otherwise, a false will be shown. Remarks on the problem will be following below it.
 
  
-= How to test GameLibrary and OfflineSync =
+= How to test !GameLibrary and !OfflineSync =
 
 To test the GameLibrary and OfflineSync, the games (which are supported) are required to be present in the testing computer. The Games save and configuration settings must be clean (ie. no changes has been made). The sample “SyncFolder” folder used for testing must be present.
 
