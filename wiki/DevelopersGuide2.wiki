@@ -1,5 +1,5 @@
 #summary For developers only.
-#labels Phase-Requirements,Phase-Design,Phase-Implementation
+#labels Phase-Requirements,Phase-Design,Phase-Implementation,Featured
 #sidebar TOC
 
 *Welcome to !GameAnywhere.*
