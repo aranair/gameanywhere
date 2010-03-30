@@ -1,0 +1,84 @@
+#summary User Guide  for GameAnywhere Test Driver.
+
+<wiki:toc max_depth="2" />
+
+The purpose of the test driver is to allow automated testing to be done after changes has been made, instead of manually testing each of the test cases.
+
+The test driver requires the following classes: TestDriver, TestCase, PreCondition, Verifier, FolderDiff, FolderOperation and TestResult.
+
+The test driver is also required to read in test file before it can start testing.
+
+= Test File =
+
+Test file are saved as .tcf format. The test case are required to follow a certain format.
+
+A sample of the test file: UserTestCases.tcf
+
+User|void
+
+1~Login|string:evilnicksg@gmail.com,string:hello|bool:true|void
+
+2~Login|string:james@gmail.com,string:helloworld1234|bool:false|void
+
+3~Login|string:non-existance@gmails.com,string:blablabla|bool:false|void
+
+4~Login|string:void,string:void|void|ArgumentException
+
+5~Login|string:evilnicksg@gmail.com,string:hello|void|WebException
+
+ 
+
+The first line of the test file specifies the Class and it’s constructor parameters, separated by “|”.
+
+The above example is a User class with no parameters, specifies by “void”.
+
+If there are constructor parameters required, we can specify them in the following manner.
+
+ 
+
+[Class Name]|[Constructor parameter]
+
+OfflineSync|int:0,List<Game>:{Warcraft 3+FIFA 10}
+
+ 
+
+Here, we have a OfflineSync class with constructor taking in ‘int’ and a List of Game.
+
+Parameters are separated by “,”. The different objects in the List are separated by “+”.
+
+To specify an primitive data type, we specify them by using “:”. Example, int:0 will mean an integer with value 0.
+
+To specify a List of objects, List<Object>:{Obj1+Obj2+Obj3}
+
+ 
+
+To specify a Test Case,
+
+We index each of a test case for a method with a number in increasing order.
+
+ 
+
+[index]~[Method Name]|[Method Parameter]|[Return type or Expected output]|[Exception to be thrown]
+
+
+Note: There is no spaces used for the test file. The test driver will not check or format test cases from the test file.
+
+
+= How to use the Test Driver =
+
+ 
+
+1. To read in a test file, click the browse button to choose or manually type in the path to the file.
+
+2. To execute the test cases, click on the execute button.
+
+3. After executing, the results will be shown in the Test Result text box.
+
+ 
+
+Each method with the test case index will be shown. A true indicate it passes all verification otherwise, a false will be shown. Remarks on the problem will be following below it.
+
+ 
+= How to test GameLibrary and OfflineSync =
+
+To test the GameLibrary and OfflineSync, the games (which are supported) are required to be present in the testing computer. The Games save and configuration settings must be clean (ie. no changes has been made). The sample “SyncFolder” folder used for testing must be present.
