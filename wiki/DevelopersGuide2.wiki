@@ -1,7 +1,7 @@
 #summary For developers only.
 
 
-*Welcome to GameAnywhere.* [DevelopersGuide2#_Getting_Started_ test]
+*Welcome to GameAnywhere.*
 
 GameAnywhere is a file synchronization software that enables gamers to bypass the hassle on reconfiguring game settings and easily have their saved game data with them anywhere, anytime.
 
@@ -84,7 +84,7 @@ This section describes the various classes that were used to store information.
 SyncError stores all the information for an synchronization error. It would contain the unsuccessful sync file/folder path, the process that encountered this error and lastly, the error message.
 
 === See Also ===
-  * !OfflineSync Class
+  * [DevelopersGuide2#OfflineSync_Class]
 
 
 
