@@ -1,6 +1,6 @@
 #summary Table of Content.
 
-  * [Welcome Home]
+  * [http://code.google.com/p/gameanywhere/ Home]
   * [DevelopersGuide Developer's Guide]
     * [GettingStarted Getting Started]
     * [Architecture Software Architecture]
