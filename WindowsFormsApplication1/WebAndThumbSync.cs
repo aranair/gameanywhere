@@ -473,7 +473,7 @@ namespace GameAnywhere
             }
             catch (Exception ex)
             {
-                errorList.Add(new SyncError(gameName, processName, ex.Message));
+                errorList.Add(new SyncError("Metadata serialization failed.", processName, ex.Message)); //TODO:handle all exceptions here
             }
 
             return errorList;
