@@ -160,13 +160,13 @@ A general structure looks like this:
 
 http://lh3.ggpht.com/_SHs8HAxHUn8/S7F72aDQyFI/AAAAAAAADdc/gk5z_q7FO6E/Folder%20structure.JPG
 
-Use camel case for folder names i.e. "savedGame". 
+Use camel case for subfolder names i.e. "savedGame". 
 
 == !SyncFolder ==
 
-!GameAnywhere would create a folder to store all the games files that you would want to save. This folder is called *syncFolder*. It would be located at the same directory as !GameAnywhere.exe.
+!GameAnywhere would create a folder to store all the games files that you would want to save. This folder is called *SyncFolder*. It would be located at the same directory as !GameAnywhere.exe.
 
-The subfolders in *syncFolder* are the game folder(s). Each of the game folder is named after a game. 
+The subfolders in SyncFolder are the game folder(s). Each of the game folder is named after a game. 
 
 Configuration and Saved game files are store in their respective folder under a game folder. 
 
