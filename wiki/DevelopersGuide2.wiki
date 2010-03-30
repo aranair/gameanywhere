@@ -210,7 +210,9 @@ This is how to extend the list of supported games.
 
 = Offline Synchronization =
 
-Offline synchronization includes synchronizing between the computer and the [DevelopersGuide2#syncFolder syncFolder^].
+Offline synchronization includes synchronizing between the computer and the [DevelopersGuide2#syncFolder syncFolder].
+
+_Assumption: syncFolder is located on an external device_
 
 == External Device to Computer Sync == 
 
@@ -237,5 +239,3 @@ Offline synchronization includes synchronizing between the computer and the [Dev
  # Move game files from backup folder into it's original directory.
  # Remove backup folder.
 
-
-_^ Assumption: syncFolder is located on an external device_
