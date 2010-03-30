@@ -2,10 +2,11 @@
   * [DevelopersGuide Developer's Guide]
     * [GettingStarted Getting Started]
     * [Architecture Software Architecture]
-    * [ClassInformation Class Information]
-    * [GameDetection Game Detection]
-<wiki:comment>
     * [AddingGame Adding Game]
+    * [ClassInformation Class Information]
+    
+<wiki:comment>
+    * [GameDetection Game Detection]
     * [OfflineSync Offline Synchronization]
     * [OnlineSync Online Synchronization]
     * [WebAndExternal Web and External Drive Synchronization]
