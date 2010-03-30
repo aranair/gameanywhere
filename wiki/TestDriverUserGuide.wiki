@@ -87,6 +87,6 @@ Each method with the test case index will be shown. A true indicate it passes al
 To test the GameLibrary and OfflineSync, the games (which are supported) are required to be present in the testing computer. The Games save and configuration settings must be clean (ie. no changes has been made). The sample “SyncFolder” folder used for testing must be present.
 
 
-= API Reference =
+= See Also =
 
-Click here for !GameAnywhere [http://docs.google.com/Doc?docid=0AaWx7AIMLnNSZGNqY3JiMmdfNWcycDI1N2Zi&hl=en library].
+Refer to the !GameAnywhere [DevelopersGuide2#API_Reference Library (API)] for more information.
