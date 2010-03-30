@@ -1,6 +1,6 @@
 #summary To provide assistance to people using the software.
 #labels Featured
-
+#sidebar TOC
 <wiki:toc max_depth="2" />
 
 Please take note that you should unzip the GameAnywhere folder to your thumb drive and run GameAnywhere.exe from your thumb drive. Do not tamper with the folder. To uninstall, simply delete the GameAnywhere folder from your thumb drive.
