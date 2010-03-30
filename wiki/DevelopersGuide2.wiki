@@ -76,6 +76,19 @@ This section describes the various classes that were used to store information.
 
 }}}
 
+== Game ==
+
+{{{
+<Class diagram>
+}}}
+
+Game is a class to store the information regarding a Game. 
+
+=== See Also === 
+  * [DevelopersGuide2#GameLibrary_Class GameLibrary Class]
+
+
+
 == Sync Error ==
 
 {{{
@@ -102,20 +115,6 @@ There are basically two types of games files that can be sync, saved games files
 === See Also ===
   * [DevelopersGuide2#OfflineSync_Class OfflineSync Class]
   * [DevelopersGuide2#GameLibrary_Class GameLibrary Class]
-
-
-
-== Game ==
-
-{{{
-<Class diagram>
-}}}
-
-Game is a class to store the information regarding a Game. 
-
-=== See Also === 
-  * [DevelopersGuide2#GameLibrary_Class GameLibrary Class]
-
 
 
 ----
