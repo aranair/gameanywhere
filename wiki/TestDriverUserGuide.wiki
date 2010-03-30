@@ -13,7 +13,7 @@ The test driver is also required to read in test file before it can start testin
 Test file are saved as .tcf format. The test case are required to follow a certain format.
 
 A sample of the test file: UserTestCases.tcf
-
+{{{
 User|void
 
 1~Login|string:evilnicksg@gmail.com,string:hello|bool:true|void
@@ -25,7 +25,7 @@ User|void
 4~Login|string:void,string:void|void|ArgumentException
 
 5~Login|string:evilnicksg@gmail.com,string:hello|void|WebException
-
+}}}
  
 
 The first line of the test file specifies the Class and it’s constructor parameters, separated by “|”.
@@ -35,11 +35,11 @@ The above example is a User class with no parameters, specifies by “void”.
 If there are constructor parameters required, we can specify them in the following manner.
 
  
-
+{{{
 [Class Name]|[Constructor parameter]
 
 OfflineSync|int:0,List<Game>:{Warcraft 3+FIFA 10}
-
+}}}
  
 
 Here, we have a OfflineSync class with constructor taking in ‘int’ and a List of Game.
@@ -48,7 +48,10 @@ Parameters are separated by “,”. The different objects in the List are separ
 
 To specify an primitive data type, we specify them by using “:”. Example, int:0 will mean an integer with value 0.
 
-To specify a List of objects, List<Object>:{Obj1+Obj2+Obj3}
+To specify a List of objects, 
+{{{ 
+List<Object>:{Obj1+Obj2+Obj3}
+}}}
 
  
 
@@ -56,10 +59,9 @@ To specify a Test Case,
 
 We index each of a test case for a method with a number in increasing order.
 
- 
-
+{{{
 [index]~[Method Name]|[Method Parameter]|[Return type or Expected output]|[Exception to be thrown]
-
+}}}
 
 Note: There is no spaces used for the test file. The test driver will not check or format test cases from the test file.
 
