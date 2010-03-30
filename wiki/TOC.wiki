@@ -15,7 +15,7 @@
     * [TestDriverUserGuide#Test_File Test Case File]
     * [TestDriverUserGuide#How_to_use_the_Test_Driver Test Driver]
     * [TestDriverUserGuide#How_to_test_GameLibrary_and_OfflineSync Testing]
-    * [TestDriverUserGuide#API_Reference Test Driver API]
+    * [TestDriverUserGuide#See_Also Test Driver API]
   * [UserGuide GameAnywhere User Guide]
     * [UserGuide#Synchronize_Game_Files_Between_Computer_And_Thumb_Drive Synchronize Game Files]
     * [UserGuide#Exit_Program_And_Restore_Computer_To_Original_State Restore and Exit]
