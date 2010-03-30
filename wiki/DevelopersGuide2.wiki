@@ -47,7 +47,7 @@ http://lh3.ggpht.com/_-Xzk-2Bdr-I/S5znfKsCPmI/AAAAAAAAAJU/lBsQmtZn6xw/choosegame
 
 In this section, we would give you a high level overview of the components in !GameAnywhere.
 
-http://lh4.ggpht.com/_-Xzk-2Bdr-I/S5-iBOIsmBI/AAAAAAAAAKg/pl0IsI3zVG8/highleveldiagram.JPG
+http://lh6.ggpht.com/_-Xzk-2Bdr-I/S7HEsTA3TgI/AAAAAAAAALA/wPhf7Ql4slM/s128/highleveldiagram.JPG
 
 This diagram depicts what happens in the program. 
 
