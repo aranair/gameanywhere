@@ -2,9 +2,9 @@
 #labels Phase-Implementation,Phase-Requirements,Deprecated
 
 
-*Welcome to GameAnywhere.*
+*Welcome to !GameAnywhere.*
 
-GameAnywhere is a file synchronization software that enables gamers to bypass the hassle on reconfiguring game settings and easily have their saved game data with them anywhere, anytime.
+!GameAnywhere is a file synchronization software that enables gamers to bypass the hassle on reconfiguring game settings and easily have their saved game data with them anywhere, anytime.
 
 <wiki:toc max_depth="2" />
 
@@ -12,7 +12,7 @@ GameAnywhere is a file synchronization software that enables gamers to bypass th
 
 = Getting Started =
 
-In this section, we would introduce the basic features of GameAnywhere and what you will need to develop GameAnywhere.
+In this section, we would introduce the basic features of !GameAnywhere and what you will need to develop !GameAnywhere.
 
 == Software Requirements ==
   * Windows operating system, XP and above.
@@ -45,7 +45,7 @@ http://lh3.ggpht.com/_-Xzk-2Bdr-I/S5znfKsCPmI/AAAAAAAAAJU/lBsQmtZn6xw/choosegame
 
 = Software Architecture =
 
-In this section, we would give you a high level overview of the components in GameAnywhere.
+In this section, we would give you a high level overview of the components in !GameAnywhere.
 
 http://lh4.ggpht.com/_-Xzk-2Bdr-I/S5-iBOIsmBI/AAAAAAAAAKg/pl0IsI3zVG8/highleveldiagram.JPG
 This diagram depicts what happens in the program. 
@@ -149,7 +149,7 @@ _Here we assume that !GameAnywhere is launched from a External Device._
 This is how game files stored on the external device:
 
 A general structure looks like this:
-  * GameAnywhere.exe
+  * !GameAnywhere.exe
   * syncFolder
     * Game 1
       * config
