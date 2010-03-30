@@ -242,4 +242,4 @@ _Assumption: syncFolder is located on an external device_
 
 = API Reference =
 
-[http://docs.google.com/Doc?docid=0AaWx7AIMLnNSZGNqY3JiMmdfNWcycDI1N2Zi&hl=en API]
+Click here for !GameAnywhere [http://docs.google.com/Doc?docid=0AaWx7AIMLnNSZGNqY3JiMmdfNWcycDI1N2Zi&hl=en library].
