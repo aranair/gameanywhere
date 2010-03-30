@@ -204,15 +204,11 @@ namespace GameAnywhere
                     DeleteGameDirectory(email, gameName);
                 }
             }
-            catch (ConnectionFailureException)
+            catch (Exception)
             {
-                throw;
+                throw new ConnectionFailureException();
             }
-            catch (Exception ex)
-            {
-                //Exceptions: ArgumentException, WebTransferException
-                syncAction.UnsuccessfulSyncFiles.Add(new SyncError(@"email/gameName", "ComputerToWeb Sync", ex.Message));
-            }
+
 
             //Upload Saved Files
             if (action == SyncAction.SavedGameFiles || action == SyncAction.AllFiles)
@@ -298,26 +294,20 @@ namespace GameAnywhere
                             //Upload file
                             s3.UploadFile(path, keyName);
                         }
-                        catch (ConnectionFailureException)
+                        catch (Exception)
                         {
-                            throw;
-                        }
-                        catch (Exception ex)
-                        {
-                            //Fail to upload file
-                            //Exceptions: ArgumentException, WebTransferException
-                            errorList.Add(new SyncError(path, "ComputerToWeb Sync - Upload file", ex.Message));
+                            throw new ConnectionFailureException();
                         }
                     }
                     else
                     {
-                        errorList.Add(new SyncError(path, "ComputerToWeb Sync - Upload file", "Access denied."));
+                        errorList.Add(new SyncError(path, "ComputerToWeb Sync - Upload file", "Access is denied to " + path + "."));
                     }
                 }
                 else
                 {
                     //File/Dir does not exists - add to error list
-                    errorList.Add(new SyncError(path, "ComputerToWeb Sync", "File/Directory does not exist."));
+                    errorList.Add(new SyncError(path, "ComputerToWeb Sync", "File/Directory does not exist - " + path + "."));
                 }
             }
 
@@ -347,19 +337,14 @@ namespace GameAnywhere
                     }
                     else
                     {
-                        errorList.Add(new SyncError(filePath, "UploadDirectory", "Access denied."));
+                        errorList.Add(new SyncError(filePath, "UploadDirectory", "Access is denied to " + filePath + "."));
                     }
                 }
-                catch (ConnectionFailureException)
+                catch (Exception)
                 {
-                    throw;
+                    throw new ConnectionFailureException();
                 }
-                catch (Exception ex)
-                {
-                    //Adds error due to file upload
-                    //Exceptions: ArgumentException, WebTransferException
-                    errorList.Add(new SyncError(filePath, "UploadDirectory", ex.Message));
-                }
+                
             }
             //Upload every sub-directory in current directory
             foreach (string subdir in Directory.GetDirectories(dir))
@@ -389,21 +374,18 @@ namespace GameAnywhere
         /// <exception cref="WebTransferException"></exception>
         private void DeleteGameDirectory(string email, string gameName)
         {
-            //Pre-conditions
-            Debug.Assert(GetGamesFromWeb(email).Contains(gameName));
-
-            //Checks user and gamename validity
-            if (email.Equals("") && email == null && !email.Equals(currentUser.Email))
-                throw new ArgumentException("Parameter cannot be empty/null. Invalid user/User not logged in", email);
-            if (gameName.Equals("") && gameName == null)
-                throw new ArgumentException("Parameter cannot be empty/null. Invalid game directory.", gameName);
-
             try
             {
+                //Checks user and gamename validity
+                if (email.Equals("") && email == null && !email.Equals(currentUser.Email))
+                    throw new ArgumentException("Parameter cannot be empty/null. Invalid user/User not logged in", email);
+                if (gameName.Equals("") && gameName == null)
+                    throw new ArgumentException("Parameter cannot be empty/null. Invalid game directory.", gameName);
+
                 //Delete game directory
                 s3.DeleteDirectory(email + "/" + gameName);
             }
-            catch
+            catch(Exception)
             {
                 //Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
                 throw;
@@ -493,15 +475,11 @@ namespace GameAnywhere
             {
                 files = s3.ListFiles(s3Path);
             }
-            catch (ConnectionFailureException)
+            catch (Exception)
             {
-                throw;
+                throw new ConnectionFailureException();
             }
-            catch(Exception ex)
-            {
-                //Exceptions: ArgumentException, WebTransferException
-                errorList.Add(new SyncError(s3Path, processName, ex.Message));
-            }
+            
 
             foreach (string file in files)
             {
@@ -520,16 +498,23 @@ namespace GameAnywhere
                     //Download file from S3 to computer
                     s3.DownloadFile(Path.Combine(targetPath, webDirName), file);
                 }
+                catch (IOException ex)
+                {
+                    errorList.Add(new SyncError(file, processName, ex.Message));
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+                    errorList.Add(new SyncError(file, processName, ex.Message));
+                }
+                catch (CreateFolderFailedException ex)
+                {
+                    errorList.Add(new SyncError(file, processName, ex.errorMessage));
+                }
                 catch (ConnectionFailureException)
                 {
                     throw;
                 }
-                catch (Exception ex)
-                {
-                    //Exceptions: ArgumentException, WebTransferException, CreateFolderFailedException
-                    //Add to error list
-                    errorList.Add(new SyncError(file, processName, ex.Message));
-                }
+                
             }
 
             return errorList;
