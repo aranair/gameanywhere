@@ -181,7 +181,7 @@ For version 1.0, game detection is hard coded, by reading a registry key for eac
 
 By first checking the existence of the registry key, then checking the existence of the game folder at the install path, we can determine if a particular game exists on the system running the application. The paths to files and folders for each game are hard coded, and these paths will be initialized into the corresponding config list, and saved game list of a Game Object. Other information about a game will also be found and loaded into the Game Object which serves primarily as a data encapsulation.
 
-<wiki: comment> For version 2.0, there will be a new implementation that involves parsing some variables from textfiles to initialize the games. </wiki: comment>
+_For version 2.0, there will be a new implementation that involves parsing some variables from textfiles to initialize the games._
 
 ----
 
