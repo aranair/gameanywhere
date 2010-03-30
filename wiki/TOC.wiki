@@ -7,6 +7,7 @@
     * [ClassInformation Class Information]
     * [DataStructure Data Structure ]
     * [AddingGame Adding Game]
+    * [High-Level_Architecture]
 <wiki:comment>
     * [GameDetection Game Detection]
     * [OfflineSync Offline Synchronization]
