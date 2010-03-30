@@ -1,5 +1,5 @@
-* [Welcome Home]
- * [DevelopersGuide Developer's Guide]
+  * [Welcome Home]
+  * [DevelopersGuide Developer's Guide]
     * [GettingStarted Getting Started]
     * [Architecture Software Architecture]
     * [ClassInformation Class Information]
@@ -11,4 +11,4 @@
     * [Restore Restore Computer to original Game state]
     * [AutomatedTester Automated Tester]
     * [API GameAnywhere API]  
- * [UserGuide User Guide]
+  * [UserGuide User Guide]
