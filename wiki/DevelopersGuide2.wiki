@@ -210,7 +210,7 @@ This is how to extend the list of supported games.
 
 = Offline Synchronization =
 
-Offline synchronization includes synchronizing between the computer and the syncFolder^.
+Offline synchronization includes synchronizing between the computer and the [DevelopersGuide2#syncFolder syncFolder^].
 
 == External Device to Computer Sync == 
 
