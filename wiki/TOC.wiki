@@ -20,6 +20,8 @@
     * [API GameAnywhere API]  
 </wiki:comment>
   * [UserGuide User Guide]
-    * [UserGuide#Synchronize_Game_Files_Between_Computer_And_Thumb_Drive Synchronize Game Files]
-    * [UserGuide#Exit_Program_And_Restore_Computer_To_Original_State Restore&Exit]
     * [UserGuide#Frequently_Asked_Questions FAQ]
+<wiki:comment>
+    * [UserGuide#Synchronize_Game_Files_Between_Computer_And_Thumb_Drive Synchronize Game Files]
+    * [UserGuide#Exit_Program_And_Restore_Computer_To_Original_State Restore and Exit]
+</wiki:comment> 
