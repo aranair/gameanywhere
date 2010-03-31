@@ -8,25 +8,46 @@ using System.Security.Cryptography;
 
 namespace GameAnywhere
 {
+    /// <summary>
+    /// Online synchronization contains one way sync methods over the web.
+    /// Game files can be synchronized from Computer to Web / Web to Computer.
+    /// </summary>
     class OnlineSync : Sync
     {
-        //Sync directions
+        #region Data Members
+        /// <summary>
+        /// Sync direction, from Web to Computer.
+        /// </summary>
         public static readonly int WebToCom = 4;
+
+        /// <summary>
+        /// Sync direction, from Computer to Web.
+        /// </summary>
         public static readonly int ComToWeb = 5;
+
+        /// <summary>
+        /// Sync direction, two way sync between External storage and Web.
+        /// </summary>
         public static readonly int ExternalAndWeb = 6;
 
         /// <summary>
-        /// Data Members
+        /// Stores the current information of information.
         /// </summary>
         private User currentUser;
-        private Storage s3;
 
         /// <summary>
-        /// Constructor
+        /// To access Amazon Web Services S3.
         /// </summary>
-        /// <param name="direction">direction of online sync</param>
-        /// <param name="gameList">list of games</param>
-        /// <param name="user">user object</param>
+        private Storage s3;
+        #endregion
+
+        #region Constructors
+        /// <summary>
+        /// Initializes data members.
+        /// </summary>
+        /// <param name="direction">Synchronization direction.</param>
+        /// <param name="gameList">A list of installed games on the computer.</param>
+        /// <param name="user">User account.</param>
         public OnlineSync(int direction, List<Game> gameList, User user)
         {
             SyncDirection = direction;
@@ -34,22 +55,24 @@ namespace GameAnywhere
             currentUser = user;
             s3 = new Storage();
         }
+        #endregion
 
+        #region Public Methods
         /// <summary>
-        /// Synchronize games from web to computer / computer to web
+        /// Synchronize all games in the sync action list, from Web to Computer / Computer to Web.
         /// </summary>
-        /// <param name="list">list of syncactions</param>
-        /// <returns>list of syncactions containing the syncerrors if there is any</returns>
-        /// <exception cref="ConnectionFailureException"></exception>
+        /// <param name="list">List of games which are to be synchronized.</param>
+        /// <returns>List of games and their sync results.</returns>
+        /// <exception cref="ConnectionFailureException">Unable to connect to web server.</exception>
         public override List<SyncAction> SynchronizeGames(List<SyncAction> list)
         {
-            //List of sync action to be carried out
+            //List of sync action to be carried out.
             syncActionList = list;
 
             if (syncActionList.Count == 0)
                 return syncActionList;
 
-            //Carry out each sync action
+            //Carry out each sync action.
             foreach (SyncAction sa in syncActionList)
             {
                 Debug.Assert(sa.MyGame != null);
@@ -58,13 +81,13 @@ namespace GameAnywhere
 
                 if (SyncDirection == WebToCom)
                 {
-                    //Backup files on computer
+                    //Backup files on computer.
                     int backupResult = Backup(sa);
                     if (backupResult == None)
-                        //Backup was not successful - Add all game files to error list
+                        //Backup was not successful - Add all game files to error list.
                         AddToUnsuccessfulSyncFiles(sa, syncFolderGamePath, "Unable to backup original game files");
                     else
-                        //Synchronize from Web to Computer
+                        //Synchronize from Web to Computer.
                         try
                         {
                             WebToComputer(sa, currentUser.Email, backupResult);
@@ -76,7 +99,7 @@ namespace GameAnywhere
                 }
                 else if (SyncDirection == ComToWeb)
                 {
-                    //Synchronize from Computer to Web
+                    //Synchronize from Computer to Web.
                     try
                     {
                         ComputerToWeb(currentUser.Email, sa);
@@ -92,23 +115,24 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Get the list of game names that are synced on the user's web account (S3)
+        /// Get the list of game names that are synced on the user's web account.
         /// </summary>
-        /// <param name="user">email of user</param>
-        /// <returns>list of game names on the user's web account</returns>
+        /// <param name="user">Email of user's account.</param>
+        /// <returns>List of game names on the user's web account.</returns>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ConnectionFailureException"></exception>
         /// <exception cref="WebTransferException"></exception>
         public List<string> GetGamesFromWeb(string user)
         {
             //Pre-conditions
-            if (user.Trim().Equals("") || user == null)
+            if (String.IsNullOrEmpty(user.Trim()))
                 throw new ArgumentException("Parameter cannot be empty/null", "user");
 
             try
             {
                 List<string> games = s3.ListFiles(user);
                 HashSet<string> gamesList = new HashSet<string>();
+
                 foreach (string game in games)
                 {
                     string gameName = game.Replace(user + "/", "");
@@ -131,18 +155,18 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Get the list of game names and types that are synced on the user's web account (S3)
-        /// e.g. Warcraft3/config
+        /// Get the list of game names and types that are synced on the user's web account.
         /// </summary>
-        /// <param name="user">email of user</param>
-        /// <returns>list of game names and types on the user's web account</returns>
+        /// <remarks>A sample of the game name with the type "Warcraft 3/config".</remarks>
+        /// <param name="user">Email of user's account.</param>
+        /// <returns>List of game names and types on the user's web account.</returns>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ConnectionFailureException"></exception>
         /// <exception cref="WebTransferException"></exception>
         public static List<string> GetGamesAndTypesFromWeb(string user)
         {
             //Pre-conditions
-            if (user.Trim().Equals("") || user == null)
+            if (String.IsNullOrEmpty(user))
                 throw new ArgumentException("Parameter cannot be empty/null", "user");
 
             try
@@ -172,11 +196,14 @@ namespace GameAnywhere
                 throw;
             }
         }
+        #endregion
+
+        #region Private Methods
         /// <summary>
-        /// Upload files from computer to the web(S3)
+        /// Upload game files from computer to the web.
         /// </summary>
-        /// <param name="email">email of user</param>
-        /// <param name="syncAction">SyncAction object</param>
+        /// <param name="email">Email of user's account.</param>
+        /// <param name="syncAction">SyncAction that contains a game and it's synchronizing information.</param>
         /// <exception cref="ConnectionFailureException"></exception>
         private void ComputerToWeb(string email, SyncAction syncAction)
         {
@@ -206,7 +233,7 @@ namespace GameAnywhere
             }
             catch (Exception)
             {
-                throw new ConnectionFailureException();
+                throw new ConnectionFailureException("Unable to connect to web server.");
             }
 
 
@@ -246,15 +273,15 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Upload config/save files to web(user's S3 account)
+        /// Upload config/save files to user's web account.
         /// </summary>
-        /// <param name="email">email of user</param>
-        /// <param name="gameName">name of game</param>
-        /// <param name="webSaveFolder">SyncSavedGameFolderName or SyncConfigFolderName</param>
-        /// <param name="parentPath">Config/Save parent path</param>
-        /// <param name="pathList">List of Config/Save game files & directories</param>
+        /// <param name="email">Email of user's account.</param>
+        /// <param name="gameName">Name of a game.</param>
+        /// <param name="webSaveFolder">SyncSavedGameFolderName or SyncConfigFolderName.</param>
+        /// <param name="parentPath">Config/Save parent path.</param>
+        /// <param name="pathList">List of Config/Save game files & directories.</param>
         /// <returns>
-        /// List of SyncError objects which contains errors during uploading
+        /// List of SyncError which contains errors during uploading.
         /// </returns>
         /// <exception cref="ConnectionFailureException"></exception>
         private List<SyncError> Upload(string email, string gameName, string webSaveFolder, string parentPath, List<string> pathList)
@@ -281,7 +308,7 @@ namespace GameAnywhere
                     }
                     else
                     {
-                        errorList.Add(new SyncError(path, "Upload directory", "Access denied."));
+                        errorList.Add(new SyncError(path, "Upload directory", "Access is denied to " + path + "."));
                     }
                 }
                 else if (File.Exists(path))
@@ -296,7 +323,7 @@ namespace GameAnywhere
                         }
                         catch (Exception)
                         {
-                            throw new ConnectionFailureException();
+                            throw new ConnectionFailureException("Unable to connect to web server.");
                         }
                     }
                     else
@@ -315,12 +342,12 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Upload a directory to web(S3)
+        /// Upload a directory to user's web account.
         /// </summary>
-        /// <param name="key">key of user's save/config web directory</param>
-        /// <param name="parent">Config/Save parent path</param>
-        /// <param name="dir">directory to upload</param>
-        /// <param name="errorList">reference to errorList</param>
+        /// <param name="key">Key of user's save/config web directory.</param>
+        /// <param name="parent">Config/Save parent path.</param>
+        /// <param name="dir">Directory to be uploaded.</param>
+        /// <param name="errorList">List of errors.</param>
         /// <exception cref="ConnectionFailureException"></exception>
         private void UploadDirectory(string key, string parent, string dir, ref List<SyncError> errorList)
         {
@@ -342,7 +369,7 @@ namespace GameAnywhere
                 }
                 catch (Exception)
                 {
-                    throw new ConnectionFailureException();
+                    throw new ConnectionFailureException("Unable to connect to web server.");
                 }
                 
             }
@@ -361,13 +388,13 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Delete a game directory in S3
+        /// Delete a game directory in S3.
         /// </summary>
-        /// <param name="email">email of user</param>
-        /// <param name="gameName">name of game</param>
+        /// <param name="email">Email of user's account.</param>
+        /// <param name="gameName">Name of a game.</param>
         /// <returns>
-        /// true - Deletes game directory successfully on S3
-        /// false - Fail to delete game directory on S3
+        /// True - Deletes game directory successfully on S3.
+        /// False - Fail to delete game directory on S3.
         /// </returns>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ConnectionFailureException"></exception>
@@ -393,11 +420,11 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Download files/dirs to computer
+        /// Download game files and directories to computer.
         /// </summary>
-        /// <param name="sa">SyncAction object</param>
-        /// <param name="user">email of user</param>
-        /// <param name="backupItem">Backup-type of files: AllFiles / SavedGame / Config</param>
+        /// <param name="sa">SyncAction that contains a game and it's synchronizing information.</param>
+        /// <param name="user">Email of user's account.</param>
+        /// <param name="backupItem">Backup-type of files: AllFiles / SavedGame / Config.</param>
         /// <exception cref="ConnectionFailureException"></exception>
         private void WebToComputer(SyncAction sa, string user, int backupItem)
         {
@@ -455,12 +482,12 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Download files from S3 to computer
+        /// Download files from user's web account to computer.
         /// </summary>
-        /// <param name="s3Path">path of file</param>
-        /// <param name="targetPath">path to download to on computer</param>
-        /// <param name="processName">name of sync action</param>
-        /// <returns>list of SyncError objects</returns>
+        /// <param name="s3Path">Path of file in S3.</param>
+        /// <param name="targetPath">Path to download to on computer.</param>
+        /// <param name="processName">Name of sync action.</param>
+        /// <returns>List of errors during download.</returns>
         /// <exception cref="ConnectionFailureException"></exception>
         private List<SyncError> DownloadToParent(string s3Path, string targetPath, string processName)
         {
@@ -477,7 +504,7 @@ namespace GameAnywhere
             }
             catch (Exception)
             {
-                throw new ConnectionFailureException();
+                throw new ConnectionFailureException("Unable to connect to web server.");
             }
             
 
@@ -521,10 +548,10 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Gets the <folder>/<file> from <user>/<game>/<config or save folder>/<folder>/<file> on S3
+        /// Gets the "<folder>/<file>" from "<user>/<game>/<config or save folder>/<folder>/<file>".
         /// </summary>
-        /// <param name="key">path of file/folder</param>
-        /// <returns>file path without user/game/config or save folder</returns>
+        /// <param name="key">Path to a file or folder.</param>
+        /// <returns>File path to a file or folder.</returns>
         private string GetWebFolderName(string key)
         {
             //Pre-conditions
@@ -539,12 +566,12 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Check if file access is denied
+        /// Check if file access is denied.
         /// </summary>
-        /// <param name="filePath">path to file</param>
+        /// <param name="filePath">Path to a file.</param>
         /// <returns>
-        /// true - file is not read only
-        /// false - file is read only
+        /// True - file is not read only.
+        /// False - file is read only.
         /// </returns>
         private bool IsLocked(string filePath)
         {
@@ -575,5 +602,6 @@ namespace GameAnywhere
             //file is not locked
             return false;
         }
+        #endregion
     }
 }

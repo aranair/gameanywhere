@@ -10,27 +10,56 @@ using Amazon.SimpleDB.Model;
 
 namespace GameAnywhere
 {
+    /// <summary>
+    /// Provides methods to access and update Amazon Web Services (AWS) SimpleDB.
+    /// </summary>
+    /// <remarks>This class requires the AWSSDK DLL.</remarks>
     class SimpleDB
     {
-        private AmazonSimpleDBClient sdb;
-        private string domain;
+        #region Data Members
+        /// <summary>
+        /// AWS Access Key.
+        /// </summary>
+        private string accessKey;
 
         /// <summary>
-        /// Constructor
+        /// AWS Secret Access Key.
+        /// </summary>
+        private string secretAccessKey;
+
+        /// <summary>
+        /// AWS SimpleDB client.
+        /// </summary>
+        private AmazonSimpleDBClient sdb;
+
+        /// <summary>
+        /// Domain in AWS SimpleDB.
+        /// </summary>
+        private string domain;
+        #endregion
+
+        #region Constructors
+        /// <summary>
+        /// Initialize the data members.
         /// </summary>
         public SimpleDB()
         {
-            sdb = new AmazonSimpleDBClient("*", "*");
-            domain = "UserAccounts";
+            this.accessKey = "*";
+            this.secretAccessKey = "*";
+            this.sdb = new AmazonSimpleDBClient(accessKey, secretAccessKey);
+            this.domain = "UserAccounts";
         }
+        #endregion
 
+        #region Public Methods
         /// <summary>
-        /// Inserts item into simpleDB
+        /// Inserts an item into DB.
         /// </summary>
-        /// <param name="itemId">item id</param>
-        /// <param name="password">user's password</param>
-        /// <param name="activationKey">activation key created by md5hash using email+password</param>
-        /// Exceptions: ConnectionFailureException, AmazonSimpleDBException
+        /// <param name="itemId">Item id.</param>
+        /// <param name="password">User password.</param>
+        /// <param name="activationKey">Activation key.</param>
+        /// <exception cref="AmazonSimpleDBException"></exception>
+        /// <exception cref="ConnectionFailureException"></exception>
         public void InsertItem(string itemId, string password, string activationKey)
         {
             //Pre-conditions
@@ -38,11 +67,18 @@ namespace GameAnywhere
             Debug.Assert(!password.Equals("") && password != null);
             Debug.Assert(!activationKey.Equals("") && activationKey != null);
 
+            if(String.IsNullOrEmpty(itemId))
+                throw new ArgumentException("Parameter cannot be empty/null", "itemId");
+            if (String.IsNullOrEmpty(password))
+                throw new ArgumentException("Parameter cannot be empty/null", "password");
+            if (String.IsNullOrEmpty(activationKey))
+                throw new ArgumentException("Parameter cannot be empty/null", "activationKey");
+
             //Setup request
             PutAttributesRequest putAttributesActionOne = new PutAttributesRequest().WithDomainName(domain).WithItemName(itemId);
             List<ReplaceableAttribute> attributesOne = putAttributesActionOne.Attribute;
             attributesOne.Add(new ReplaceableAttribute().WithName("Password").WithValue(password.Trim()));
-            attributesOne.Add(new ReplaceableAttribute().WithName("ActivationStatus").WithValue(0.ToString()));
+            attributesOne.Add(new ReplaceableAttribute().WithName("ActivationStatus").WithValue("0"));
             attributesOne.Add(new ReplaceableAttribute().WithName("ActivationKey").WithValue(activationKey.Trim()));
             try
             {
@@ -54,7 +90,7 @@ namespace GameAnywhere
                 if (ex.InnerException != null && ex.InnerException.GetType().Equals(typeof(System.Net.WebException)))
                 {
                     //ConnectionFailureException thrown
-                    throw new ConnectionFailureException("Internet connection failure.");
+                    throw new ConnectionFailureException("Unable to connect to web server.");
                 }
                 else
                 {
@@ -69,18 +105,26 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Updates item's attribute value
+        /// Updates an item's attribute value.
         /// </summary>
-        /// <param name="itemId">item id</param>
-        /// <param name="attribute">attribute to update</param>
-        /// <param name="newAttributeValue">new attribute value to replace</param>
-        /// Exceptions: ConnectionFailureException, AmazonSimpleDBException
+        /// <param name="itemId">Item id.</param>
+        /// <param name="attribute">Attribute name.</param>
+        /// <param name="newAttributeValue">Attribute value.</param>
+        /// <exception cref="AmazonSimpleDBException"></exception>
+        /// <exception cref="ConnectionFailureException"></exception>
         public void UpdateAttributeValue(string itemId, string attribute, string newAttributeValue)
         {
             //Pre-conditions
             Debug.Assert(!itemId.Equals("") && itemId != null);
             Debug.Assert(!attribute.Equals("") && attribute != null);
             Debug.Assert(!newAttributeValue.Equals("") && newAttributeValue != null);
+
+            if (String.IsNullOrEmpty(itemId))
+                throw new ArgumentException("Parameter cannot be empty/null", "itemId");
+            if (String.IsNullOrEmpty(attribute))
+                throw new ArgumentException("Parameter cannot be empty/null", "attribute");
+            if (String.IsNullOrEmpty(newAttributeValue))
+                throw new ArgumentException("Parameter cannot be empty/null", "newAttributeValue");
 
             //Setup request
             ReplaceableAttribute replaceableAttribute = new ReplaceableAttribute().WithName(attribute).WithValue(newAttributeValue).WithReplace(true);
@@ -95,7 +139,7 @@ namespace GameAnywhere
                 if (ex.InnerException != null && ex.InnerException.GetType().Equals(typeof(System.Net.WebException)))
                 {
                     //ConnectionFailureException thrown
-                    throw new ConnectionFailureException("Internet connection failure.");
+                    throw new ConnectionFailureException("Unable to connect to web server.");
                 }
                 else
                 {
@@ -109,18 +153,21 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Checks if item exists in simpleDB
+        /// Checks if item exists in DB.
         /// </summary>
-        /// <param name="itemId">item id</param>
+        /// <param name="itemId">Item id.</param>
         /// <returns>
-        /// true - item exists in simpleDB
-        /// false - item does not exists in simpleDB
+        /// True - Item exists in DB.
+        /// false - Item does not exists in DB.
         /// </returns>
-        /// Exceptions: ConnectionFailureException
+        /// <exception cref="ConnectionFailureException"></exception>
         public bool ItemExists(string itemId)
         {
             //Pre-conditions
             Debug.Assert(!itemId.Equals("") && itemId != null);
+
+            if (String.IsNullOrEmpty(itemId))
+                throw new ArgumentException("Parameter cannot be empty/null", "itemId");
 
             //Setup request - using select statement
             SelectRequest request = new SelectRequest();
@@ -144,22 +191,27 @@ namespace GameAnywhere
             catch (AmazonSimpleDBException)
             {
                 //ConnectionFailureException thrown
-                throw new ConnectionFailureException("Internet connection failure.");
+                throw new ConnectionFailureException("Unable to connect to web server.");
             }
         }
 
         /// <summary>
-        /// Gets the attribute's value from given item
+        /// Gets the attribute's value from an item.
         /// </summary>
-        /// <param name="itemId">item id</param>
-        /// <param name="attribute">attribute</param>
-        /// <returns>attribute's value</returns>
-        /// Exceptions: ConnectionFailureException
+        /// <param name="itemId">Item id.</param>
+        /// <param name="attribute">Attribute name.</param>
+        /// <returns>Attribute's value.</returns>
+        /// <exception cref="ConnectionFailureException"></exception>
         public string GetAttribute(string itemId, string attribute)
         {
             //Pre-conditions
             Debug.Assert(!itemId.Equals("") && itemId != null);
             Debug.Assert(!attribute.Equals("") && attribute != null);
+
+            if (String.IsNullOrEmpty(itemId))
+                throw new ArgumentException("Parameter cannot be empty/null", "itemId");
+            if (String.IsNullOrEmpty(attribute))
+                throw new ArgumentException("Parameter cannot be empty/null", "attribute");
 
             //Setup request
             GetAttributesRequest request = new GetAttributesRequest().WithDomainName(domain).WithItemName(itemId).WithAttributeName(attribute);
@@ -189,8 +241,9 @@ namespace GameAnywhere
             catch (AmazonSimpleDBException)
             {
                 //ConnectionFailureException thrown
-                throw new ConnectionFailureException("Internet connection failure.");
+                throw new ConnectionFailureException("Unable to connect to web server.");
             }
         }
+        #endregion
     }
 }

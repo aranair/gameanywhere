@@ -18,14 +18,31 @@ namespace GameAnywhere
     /// <remarks>This class requires the AWSSDK DLL.</remarks>
     class Storage
     {
-
+        #region Data Members
+        /// <summary>
+        /// AWS Access Key.
+        /// </summary>
         private string accessKeyID;
-        private string secretAccessKeyID;
-        private string bucketName;
-        private AmazonS3Client client;
 
         /// <summary>
-        /// Constructor
+        /// AWS Secret Access Key.
+        /// </summary>
+        private string secretAccessKeyID;
+
+        /// <summary>
+        /// AWS Bucket.
+        /// </summary>
+        private string bucketName;
+
+        /// <summary>
+        /// AWS S3 Client.
+        /// </summary>
+        private AmazonS3Client client;
+        #endregion
+
+        #region Constructors
+        /// <summary>
+        /// Initialize the data members.
         /// </summary>
         public Storage()
         {
@@ -33,13 +50,13 @@ namespace GameAnywhere
             secretAccessKeyID = "*";
             bucketName = "GameAnywhere";
             client = new AmazonS3Client(accessKeyID, secretAccessKeyID, new AmazonS3Config().WithCommunicationProtocol(Protocol.HTTP));
-            //AmazonS3 client = Amazon.AWSClientFactory.CreateAmazonS3Client(accessKeyID, secretAccessKeyID);
         }
+        #endregion
 
         /// <summary>
-        /// Generate the hashcode of a local file
+        /// Generate the hashcode of a local file.
         /// </summary>
-        /// <param name="path">Path of local file</param>
+        /// <param name="path">Path of local file.</param>
         /// <returns>Hashcode of file in a string in lowercase, with dashes removed.</returns>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="IOException"></exception>
@@ -47,8 +64,8 @@ namespace GameAnywhere
         public string GenerateHash(string path)
         {
             //Pre-conditions
-            if (path.Equals("") || path == null)
-                throw new ArgumentException("Parameter cannot be empty/null", "path");
+            if (String.IsNullOrEmpty(path))
+                throw new ArgumentException("Parameter cannot be empty/null.", "path");
 
             FileStream fs = null;
             string hash = "";
@@ -80,15 +97,20 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Checks if a file's access is denied.
+        /// Checks if a file access is denied.
         /// </summary>
         /// <param name="filePath">Path of local file</param>
         /// <returns>
-        /// true - file is not read only.
-        /// false - file is read only.
+        /// True - file is not read only.
+        /// False - file is read only.
         /// </returns>
+        /// <exception cref="ArgumentException"></exception>
         private bool IsLocked(string filePath)
         {
+            //Pre-conditions
+            if (String.IsNullOrEmpty(filePath))
+                throw new ArgumentException("Parameter cannot be empty/null.", "filePath");
+
             FileStream stream = null;
 
             try
@@ -118,22 +140,27 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Upload file to S3
+        /// Upload file to S3.
         /// </summary>
-        /// <param name="path">Path of local file</param>
-        /// <param name="key">Key of file on S3</param>
-        /// Exceptions: ArgumentException, WebTransferException, ConnectionFailureException
+        /// <param name="path">Path of local file.</param>
+        /// <param name="key">Key of file on S3.</param>
+        /// <exception cref="AmazonS3Exception"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ConnectionFailureException"></exception>
+        /// <exception cref="FileNotFoundException"></exception>
+        /// <exception cref="UnauthorizedAccessException"></exception>
+        /// <exception cref="WebTransferException"></exception>
         public void UploadFile(string path, string key)
         {
             //Pre-conditions
-            if (path.Trim().Equals("") || path == null)
-                throw new ArgumentException("Parameter cannot be empty/null", "path");
-            if (key.Trim().Equals("") || key == null)
-                throw new ArgumentException("Parameter cannot be empty/null", "key");
+            if (String.IsNullOrEmpty(path))
+                throw new ArgumentException("Parameter cannot be empty/null.", "path");
+            if (String.IsNullOrEmpty(key))
+                throw new ArgumentException("Parameter cannot be empty/null.", "key");
             if (!File.Exists(path))
-                throw new ArgumentException("Path to file does not exist", "path");
+                throw new FileNotFoundException("The specified file does not exist - " + path + ".", "path");
             if(IsLocked(path))
-                throw new ArgumentException("Access denied to file", "path");
+                throw new UnauthorizedAccessException("Access denied to path '" + path + "'.");
 
             try
             {
@@ -151,41 +178,38 @@ namespace GameAnywhere
                 //Compare file's hashcode with response's hashcode to confirm file correctly uploaded
                 if (!fileHash.Equals(responseFileHash))
                 {
-                    throw new WebTransferException("Uploaded file corrupted.");
+                    throw new WebTransferException("Uploaded file is corrupted - " + path + ".");
                 }
 
                 response.Dispose();
             }
-            catch (AmazonS3Exception ex)
+            catch (System.Net.WebException)
             {
-                if (ex.InnerException != null && ex.InnerException.GetType().Equals(typeof(System.Net.WebException)))
-                {
-                    throw new ConnectionFailureException("Internet connection failure.");
-                }
-                else
-                {
-                    throw new WebTransferException("Failure to upload file.");
-                }
+                throw new ConnectionFailureException("Unable to connect to web server.");
+            }
+            catch (AmazonS3Exception)
+            {
+                throw;
             }
         }
 
         /// <summary>
-        /// Download file from S3 to computer
+        /// Download file from S3 to computer.
         /// </summary>
-        /// <param name="path">Path of download location on computer</param>
-        /// <param name="key">Key of file on S3</param>
+        /// <param name="path">Path of download location on computer.</param>
+        /// <param name="key">Key of file on S3.</param>
+        /// <exception cref="AmazonS3Exception"></exception>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ConnectionFailureException"></exception>
-        /// <exception cref="WebTransferException"></exception>
         /// <exception cref="IOException"></exception>
         /// <exception cref="UnauthorizedAccessException"></exception>
         public void DownloadFile(string path, string key)
         {
             //Pre-conditions
-            if (path.Trim().Equals("") || path == null)
-                throw new ArgumentException("Parameter cannot be empty/null", "path");
-            if (key.Trim().Equals("") || key == null)
-                throw new ArgumentException("Parameter cannot be empty/null", "key");
+            if (String.IsNullOrEmpty(path))
+                throw new ArgumentException("Parameter cannot be empty/null.", "path");
+            if (String.IsNullOrEmpty(key))
+                throw new ArgumentException("Parameter cannot be empty/null.", "key");
 
             try
             {
@@ -214,19 +238,11 @@ namespace GameAnywhere
 
                 response.Dispose();
             }
-            catch (AmazonS3Exception ex)
+            catch (System.Net.WebException)
             {
-                if (ex.InnerException != null && ex.InnerException.GetType().Equals(typeof(System.Net.WebException)))
-                {
-                    throw new ConnectionFailureException("Internet connection failure.");
-                }
-                else
-                {
-                    //Console.WriteLine("ErrorCode=" + ex.ErrorCode);
-                    throw new WebTransferException("Failure in downloading file.");
-                }
+                throw new ConnectionFailureException("Unable to connect to web server.");
             }
-            catch (UnauthorizedAccessException)
+            catch (AmazonS3Exception)
             {
                 throw;
             }
@@ -234,25 +250,24 @@ namespace GameAnywhere
             {
                 throw;
             }
-            catch (Exception)
+            catch (UnauthorizedAccessException)
             {
+                throw;
             }
         }
 
         /// <summary>
-        /// Delete a file from web(S3)
+        /// Delete a file from S3.
         /// </summary>
-        /// <param name="key">Key of file on S3</param>
+        /// <param name="key">Key of file on S3.</param>
+        /// <exception cref="AmazonS3Exception"></exception>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ConnectionFailureException"></exception>
-        /// <exception cref="WebTransferException"></exception>
-        /// <exception cref="IOException"></exception>
-        /// <exception cref="UnauthorizedAccessException"></exception>
         public void DeleteFile(string key)
         {
             //Pre-conditions
-            if (key.Trim().Equals("") || key == null)
-                throw new ArgumentException("Parameter cannot be empty/null", "key");
+            if (String.IsNullOrEmpty(key))
+                throw new ArgumentException("Parameter cannot be empty/null.", "key");
 
             try
             {
@@ -265,17 +280,13 @@ namespace GameAnywhere
 
                 response.Dispose();
             }
-            catch (AmazonS3Exception ex)
+            catch (System.Net.WebException)
             {
-                if (ex.InnerException != null && ex.InnerException.GetType().Equals(typeof(System.Net.WebException)))
-                {
-                    throw new ConnectionFailureException("Internet connection failure.");
-                }
-                else
-                {
-                    //Console.WriteLine("ErrorCode=" + ex.ErrorCode);
-                    throw new WebTransferException("Failure to delete file on Web.");
-                }
+                throw new ConnectionFailureException("Unable to connect to web server.");
+            }
+            catch (AmazonS3Exception)
+            {
+                throw;
             }
         }
 
@@ -284,14 +295,14 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="key">Prefix of files to list</param>
         /// <returns>List of files stored on S3 that has key as prefix.</returns>
+        /// <exception cref="AmazonS3Exception"></exception>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ConnectionFailureException"></exception>
-        /// <exception cref="WebTransferException"></exception>
         public List<string> ListFiles(string key)
         {
             //Pre-conditions
-            if (key.Trim().Equals("") || key == null)
-                throw new ArgumentException("Parameter cannot be empty/null", "key");
+            if (String.IsNullOrEmpty(key))
+                throw new ArgumentException("Parameter cannot be empty/null.", "key");
 
             try
             {
@@ -300,29 +311,24 @@ namespace GameAnywhere
                 request.WithBucketName(bucketName).WithPrefix(key);
 
                 //Send request
-                ListObjectsResponse response = client.ListObjects(request);
-
-                List<string> fileList = new List<string>();
-                foreach (S3Object entry in response.S3Objects)
+                using (ListObjectsResponse response = client.ListObjects(request))
                 {
-                    fileList.Add(entry.Key);
+                    List<string> fileList = new List<string>();
+                    foreach (S3Object entry in response.S3Objects)
+                    {
+                        fileList.Add(entry.Key);
+                    }
+
+                    return fileList;
                 }
-
-                response.Dispose();
-
-                return fileList;
             }
-            catch (AmazonS3Exception ex)
+            catch (System.Net.WebException)
             {
-                if (ex.InnerException != null && ex.InnerException.GetType().Equals(typeof(System.Net.WebException)))
-                {
-                    throw new ConnectionFailureException("Internet connection failure.");
-                }
-                else
-                {
-                    //Console.WriteLine("ErrorCode=" + ex.ErrorCode);
-                    throw new WebTransferException("Failure to transfer files from Web");
-                }
+                throw new ConnectionFailureException("Unable to connect to web server.");
+            }
+            catch (AmazonS3Exception)
+            {
+                throw;
             }
         }
 
@@ -331,11 +337,15 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="key">Prefix of files to delete</param>
         /// <seealso cref="DeleteFile"/>
+        /// <exception cref="AmazonS3Exception"></exception>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ConnectionFailureException"></exception>
-        /// <exception cref="WebTransferException"></exception>
         public void DeleteDirectory(string key)
         {
+            //Pre-conditions
+            if (String.IsNullOrEmpty(key))
+                throw new ArgumentException("Parameter cannot be empty/null.", "key");
+
             try
             {
                 List<string> files = ListFiles(key);
@@ -353,16 +363,16 @@ namespace GameAnywhere
         /// <summary>
         /// Get the hashcode of a file stored on S3.
         /// </summary>
-        /// <param name="key">Key of file on S3</param>
-        /// <returns>Hashcode of file</returns>
+        /// <param name="key">Key of file on S3.</param>
+        /// <returns>Hashcode of file.</returns>
+        /// <exception cref="AmazonS3Exception"></exception>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ConnectionFailureException"></exception>
-        /// <exception cref="WebTransferException"></exception>
         public string GetHash(string key)
         {
             //Pre-conditions
-            if (key.Trim().Equals("") || key == null)
-                throw new ArgumentException("Parameter cannot be empty/null", "key");
+            if (String.IsNullOrEmpty(key))
+                throw new ArgumentException("Parameter cannot be empty/null.", "key");
 
             try
             {
@@ -378,17 +388,13 @@ namespace GameAnywhere
 
                 return hash;
             }
-            catch (AmazonS3Exception ex)
+            catch (System.Net.WebException)
             {
-                if (ex.InnerException != null && ex.InnerException.GetType().Equals(typeof(System.Net.WebException)))
-                {
-                    throw new ConnectionFailureException("Internet connection failure.");
-                }
-                else
-                {
-                    //Console.WriteLine("ErrorCode=" + ex.ErrorCode);
-                    throw new WebTransferException("Failure to get file hashcode.");
-                }
+                throw new ConnectionFailureException("Unable to connect to web server.");
+            }
+            catch (AmazonS3Exception)
+            {
+                throw;
             }
         }
 
@@ -400,16 +406,16 @@ namespace GameAnywhere
         /// The values of the returned Dictionary will contain the hashcode of the file.
         /// </remarks>
         /// <seealso cref="GetHash"/>
-        /// <param name="key">Email of user</param>
-        /// <returns>Dictionary of files with its hashcode</returns>
+        /// <param name="key">Email of user.</param>
+        /// <returns>Dictionary of files with its hashcode.</returns>
+        /// <exception cref="AmazonS3Exception"></exception>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ConnectionFailureException"></exception>
-        /// <exception cref="WebTransferException"></exception>
         public Dictionary<string,string> GetHashDictionary(string email)
         {
             //Pre-conditions
-            if (email.Trim().Equals("") || email == null)
-                throw new ArgumentException("Parameter cannot be empty/null", "key");
+            if (String.IsNullOrEmpty(email))
+                throw new ArgumentException("Parameter cannot be empty/null.", "email");
 
             try
             {

@@ -11,19 +11,37 @@ using System.Diagnostics;
 
 namespace GameAnywhere
 {
+    /// <summary>
+    /// User account information and its related methods.
+    /// </summary>
     class User
     {
+        #region Data Members
         /// <summary>
-        /// Data Members
+        /// User's Email which will be use as a username for login.
         /// </summary>
         private string email;
-        private string password;
-        private SimpleDB db;
-        UserState state;
-        enum UserState { UserLoggedIn, Guest };
 
         /// <summary>
-        /// Constructor
+        /// User's password.
+        /// </summary>
+        private string password;
+
+        /// <summary>
+        /// To access Amazon Web Services SimpleDB.
+        /// </summary>
+        private SimpleDB db;
+
+        /// <summary>
+        /// State of user, either UserLoggedIn or Guest.
+        /// </summary>
+        UserState state;
+        enum UserState { UserLoggedIn, Guest };
+        #endregion
+
+        #region Constructors
+        /// <summary>
+        /// Initialize the data members.
         /// </summary>
         public User()
         {
@@ -32,30 +50,35 @@ namespace GameAnywhere
             db = new SimpleDB();
             state = UserState.Guest;
         }
+        #endregion
 
+        #region Properties
         /// <summary>
-        /// Accessors & Mutators
+        /// Properties for Email and Password.
         /// </summary>
+        /// <value>Get and Set user's email.</value>
         public string Email
         {
             get { return email; }
             set { email = value; }
         }
-
+        /// <value>Get and Set user's password.</value>
         public string Password
         {
             get { return password; }
             set { password = value; }
         }
+        #endregion
 
+        #region Public Methods
         /// <summary>
-        /// Login user
+        /// Login user.
         /// </summary>
-        /// <param name="email">user email</param>
-        /// <param name="password">user password</param>
+        /// <param name="email">User email.</param>
+        /// <param name="password">User password.</param>
         /// <returns>
-        /// true - User exists and State changes to UserLoggedIn
-        /// false - Wrong password / User does not exist / User exists but not activated
+        /// True - User exists and State changes to UserLoggedIn.
+        /// False - Wrong password / User does not exist / User exists but not activated.
         /// </returns>
         /// Exceptions: ArgumentException, ConnectionFailureException
         public bool Login(string email, string password)
@@ -101,7 +124,7 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Logout user
+        /// Logout user.
         /// </summary>
         public void Logout()
         {
@@ -109,14 +132,14 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Registers a new account with GameAnywhere
+        /// Registers a new account.
         /// </summary>
-        /// <param name="email">user email</param>
-        /// <param name="password">user password</param>
+        /// <param name="email">User email.</param>
+        /// <param name="password">User password.</param>
         /// <returns>
-        /// 1 - Registration complete
-        /// 2 - Duplicate account
-        /// 3 - Unactivated account
+        /// 1 - Registration complete.
+        /// 2 - Duplicate account.
+        /// 3 - Unactivated account.
         /// </returns>
         /// Exceptions: ArgumentException, SmtpException, ConnectionFailureException, AmazonSimpleDBException
         public int Register(string email, string password)
@@ -164,11 +187,11 @@ namespace GameAnywhere
         /// Retrieve user’s password.
         /// An email will be sent to the user’s email with the password.
         /// </summary>
-        /// <param name="email">user email</param>
+        /// <param name="email">User email.</param>
         /// <returns>
-        /// 1 - Retrieve Complete – Emailed user’s password successfully
-        /// 2 - Unactivated account - user registered but account not activated yet
-        /// 3 - Invalid User – User does not exist in GameAnywhere DB
+        /// 1 - Retrieve Complete – Emailed user’s password successfully.
+        /// 2 - Unactivated account - user registered but account not activated yet.
+        /// 3 - Invalid User – User does not exist in GameAnywhere DB.
         /// </returns>
         /// Exceptions: ArgumentException, SmtpException, ConnectionFailureException
         public int RetrievePassword(string email)
@@ -208,15 +231,15 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Change user's password
+        /// Change user's password.
         /// </summary>
-        /// <param name="email">user email</param>
-        /// <param name="oldPassword">user old password</param>
-        /// <param name="newPassword">user new password</param>
+        /// <param name="email">User email.</param>
+        /// <param name="oldPassword">User old password.</param>
+        /// <param name="newPassword">User new password.</param>
         /// <returns>
-        /// 1 - Password changed
-        /// 2 - Invalid old password
-        /// 3 - Invalid user
+        /// 1 - Password changed.
+        /// 2 - Invalid old password.
+        /// 3 - Invalid user.
         /// </returns>
         /// Exceptions: ArgumentException, SmtpException, ConnectionFailureException, AmazonSimpleDBException
         public int ChangePassword(string email, string oldPassword, string newPassword)
@@ -262,13 +285,13 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Resends activation email to user to activate account
+        /// Resends activation email to user to activate account.
         /// </summary>
-        /// <param name="email">user email</param>
+        /// <param name="email">User email.</param>
         /// <returns>
-        /// 1 - Activation email sent. Successfully emailed user a link to activate his/her account
-        /// 2 - Account already activated
-        /// 3 - Invalid user. User does not exist in GameAnywhere DB
+        /// 1 - Activation email sent. Successfully emailed user a link to activate his/her account.
+        /// 2 - Account already activated.
+        /// 3 - Invalid user. User does not exist in GameAnywhere DB.
         /// </returns>
         /// Exceptions: ArgumentException, ConnectionFailureException, SmtpException
         public int ResendActivation(string email, string inputPassword)
@@ -320,11 +343,11 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Checks if user is logged in to GameAnywhere
+        /// Checks if user is logged in.
         /// </summary>
         /// <returns>
-        /// true - User is logged in, UserState is UserLoggedIn
-        /// false - User is not logged in, UserState is Guest
+        /// True - User is logged in, UserState is UserLoggedIn.
+        /// False - User is not logged in, UserState is Guest.
         /// </returns>
         public bool IsLoggedIn()
         {
@@ -337,14 +360,16 @@ namespace GameAnywhere
                 return false;
             }
         }
+        #endregion
 
+        #region Private Methods
         /// <summary>
-        /// Checks if user exists in GameAnywhere DB
+        /// Checks if user exists in DB.
         /// </summary>
-        /// <param name="email">user email</param>
+        /// <param name="email">User email.</param>
         /// <returns>
-        /// true - User exists in DB
-        /// false - User not found in DB
+        /// True - User exists in DB.
+        /// False - User not found in DB.
         /// </returns>
         /// Exceptions: ArgumentException, ConnectionFailureException
         private bool UserExists(string email)
@@ -372,12 +397,12 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Checks if user’s account has been activated in DB
+        /// Checks if user’s account has been activated in DB.
         /// </summary>
-        /// <param name="email">user email</param>
+        /// <param name="email">User email.</param>
         /// <returns>
-        /// true - User is already activated
-        /// false - User is not activated
+        /// True - User is already activated.
+        /// False - User is not activated.
         /// </returns>
         /// Exceptions: ArgumentException, ConnectionFailureException
         private bool IsAccountActivated(string email)
@@ -407,11 +432,11 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Sends activation email to user
+        /// Sends activation email to user.
         /// </summary>
-        /// <param name="email">user email</param>
-        /// <param name="password">user password</param>
-        /// <param name="activationKey">activation key</param>
+        /// <param name="email">User email.</param>
+        /// <param name="password">User password.</param>
+        /// <param name="activationKey">Activation key.</param>
         /// Exceptions: ArgumentException, SmtpException
         private void SendActivationEmail(string email, string password, string activationKey)
         {
@@ -467,10 +492,10 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Sends user's password by email
+        /// Sends user's password by email.
         /// </summary>
-        /// <param name="email">user email</param>
-        /// <param name="password">user password</param>
+        /// <param name="email">User email.</param>
+        /// <param name="password">User password.</param>
         /// Exceptions: ArgumentException, SmtpException
         private void SendPasswordEmail(string email, string password)
         {
@@ -519,10 +544,10 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Used to generate the activation key
+        /// Used to generate the activation key.
         /// </summary>
-        /// <param name="input"></param>
-        /// <returns>A unique string of uppercase characters</returns>
+        /// <param name="input">Any string.</param>
+        /// <returns>A unique string of uppercase characters.</returns>
         /// Exceptions: ArgumentException
         private string CreateMD5Hash(string input)
         {
@@ -546,5 +571,6 @@ namespace GameAnywhere
             }
             return sb.ToString();
         }
+        #endregion
     }
 }
