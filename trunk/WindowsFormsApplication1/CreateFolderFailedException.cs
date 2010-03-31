@@ -5,6 +5,9 @@ using System.Text;
 
 namespace GameAnywhere
 {
+    /// <summary>
+    /// The exception that is thrown when an error occurred while creating a folder.
+    /// </summary>
     class CreateFolderFailedException : System.ApplicationException
     {
         public string errorMessage = "Unable to create folder in directory.";
