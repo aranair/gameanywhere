@@ -190,7 +190,7 @@ This is how to extend the list of supported games.
 
 Offline synchronization includes synchronizing between the computer and the [DevelopersGuide2#SyncFolder SyncFolder]. [DevelopersGuide2#SyncFolder SyncFolder] is located on an external device.
 
-http://lh6.ggpht.com/_-Xzk-2Bdr-I/S7Iq2aMa2cI/AAAAAAAAALI/pZ3qHURBYTk/s512/seqdiagram.jpg
+http://farm3.static.flickr.com/2776/4478572596_fc9a553fca_o.jpg
 
 == External Device to Computer Sync == 
 
