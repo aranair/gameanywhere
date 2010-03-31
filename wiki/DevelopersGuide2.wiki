@@ -116,7 +116,7 @@ This class handles the file/folder manipulation on the computer as well as on th
 
 = Game Files Storage Structure =
 
-In !GameAnywhere, we are concern about two types of game files. They are *Configuration* files and *Saved Game* files. 
+In !GameAnywhere, we are concerned with the two types of game files. They are *Configuration* files and *Saved Game* files. 
 
 Games files on the computer are detected automatically (see [DevelopersGuide2#Games_Detection Games Detection]). 
 
