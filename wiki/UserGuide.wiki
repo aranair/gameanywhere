@@ -19,7 +19,7 @@ http://lh3.ggpht.com/_-Xzk-2Bdr-I/S5znfKsCPmI/AAAAAAAAAJU/lBsQmtZn6xw/choosegame
 
 3. If synchronization is successful, you will be returned to the startup screen. If synchronization has failed, you can choose to look at the details of the errors by clicking "Errors" or start another synchronization task by clicking "Done".
 
-http://lh5.ggpht.com/_-Xzk-2Bdr-I/S5z2nujaFLI/AAAAAAAAAJ0/YuOTaFCs3aM/step3.JPG
+http://lh6.ggpht.com/_-Xzk-2Bdr-I/S7MSo__nurI/AAAAAAAAAL4/UiaCUPEolzg/successfullysynced.JPG
 
 http://lh5.ggpht.com/_-Xzk-2Bdr-I/S5z4NdZzp3I/AAAAAAAAAKA/QJRdPz7UUOQ/step3.1.JPG
 
@@ -33,7 +33,7 @@ http://lh4.ggpht.com/_-Xzk-2Bdr-I/S5z56Ybmc9I/AAAAAAAAAKI/pON34-C6Xus/step4.JPG
 
 1. Click "Exit" on the bottom right hand corner of the screen
 
-http://lh5.ggpht.com/_-Xzk-2Bdr-I/S5z2nujaFLI/AAAAAAAAAJ0/YuOTaFCs3aM/step3.JPG
+http://lh6.ggpht.com/_-Xzk-2Bdr-I/S7MSo__nurI/AAAAAAAAAL4/UiaCUPEolzg/successfullysynced.JPG
 
 2. You will be prompted whether to restore the computer to its original settings. Click "Yes" to restore.
 
