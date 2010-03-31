@@ -135,7 +135,7 @@ A general structure looks like this:
 
 *Example:* 
 
-http://lh3.ggpht.com/_SHs8HAxHUn8/S7F72aDQyFI/AAAAAAAADdc/gk5z_q7FO6E/Folder%20structure.JPG
+http://game-anywhere.com/images/folder_structure.jpg
 
 Use camel case for subfolder names i.e. "savedGame". 
 
