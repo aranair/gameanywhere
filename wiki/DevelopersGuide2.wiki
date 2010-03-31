@@ -21,13 +21,13 @@ In this section, we would introduce the basic features of !GameAnywhere and what
 
 == Features of !GameAnywhere==
 
- * Synchronize game files between thumb drive and computer or vice versa with just a few clicks with our intuitive graphical user interface.
+ * Synchronizes game files between thumb drive and computer or vice versa with just a few clicks with our intuitive graphical user interface.
 
 
- * Automatically detect the games installed on the computer and offer you the appropriate synchronization options.
+ * Automatically detects the games installed on the computer and offer you the appropriate synchronization options.
 
 
- * Restore the computer to its original state after you're done playing on the computer with the files you have synchronized.
+ * Restores the computer to its original state after you're done playing on the computer with the files you have synchronized.
 
 
  * Supports World of Warcraft, Warcraft 3: The Frozen Throne, FIFA 10 and Football Manager 2010. 
