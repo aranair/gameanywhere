@@ -5,6 +5,9 @@ using System.Text;
 
 namespace GameAnywhere
 {
+    /// <summary>
+    /// The exception that is thrown when an error occurred while deleting directory.
+    /// </summary>
     class DeleteDirectoryErrorException : System.ApplicationException
     {
         public string errorMessage;
