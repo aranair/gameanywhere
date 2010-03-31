@@ -155,7 +155,6 @@ For version 1.0, game detection is hard coded, by reading a registry key for eac
 
 By first checking the existence of the registry key, then checking the existence of the game folder at the install path, we can determine if a particular game exists on the system running the application. The paths to files and folders for each game are hard coded, and these paths will be initialized into the corresponding config list, and saved game list of a Game Object. Other information about a game will also be found and loaded into the Game Object which serves primarily as a data encapsulation.
 
-_For the upcoming version (v2.0), there will be a new implementation that involves parsing some variables from text files to initialize the games._
 
 ----
 
@@ -181,6 +180,8 @@ This is how to extend the list of supported games.
 }}}
  # For the sync direction of external to computer, EditConfigAndSavedGameLists() function is to be editted to support the new game as well. Each new game instance in the common list between the external and the computer, upon finding that the thumbdrive has the appropriate folders for the synchronization, MUST be initialized with config/savedList containing the paths to the files in the external thumbdrive instead of paths to the computer's files. 
  # You're set to synchronize. If you would like to add icons to your game in the program, you would have to edit the GUI class to load your icons as well.
+
+_For the upcoming version (v2.0), there will be a new implementation that involves parsing some variables from text files to initialize the games._
 
 -----
 
