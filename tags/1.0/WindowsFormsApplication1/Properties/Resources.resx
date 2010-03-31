@@ -1,0 +1,313 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="backGameChoicePopupButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\backGameChoicePopupButton.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="backGameChoicePopupButtonMouseDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\backGameChoicePopupButtonMouseDown.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="backGameChoicePopupButtonMouseOver" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\backGameChoicePopupButtonMouseOver.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bannerChooseGamesToSync" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\bannerChooseGamesToSync.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bannerConfirmGamesToSync" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\bannerConfirmGamesToSync.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonThumbdriveToComputer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\buttonThumbdriveToComputer.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonThumbdriveToComputerMouseOver" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\buttonThumbdriveToComputerMouseOver.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="cancelLoginPanelButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\cancelLoginPanelButton.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="cancelLoginPanelButtonMouseDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\cancelLoginPanelButtonMouseDown.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="cancelLoginPanelButtonMouseOver" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\cancelLoginPanelButtonMouseOver.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="computerToThumbdriveButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\computerToThumbdriveButton.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="computerToThumbdriveButtonMouseDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\computerToThumbdriveButtonMouseDown.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="computerToThumbdriveButtonMouseOver" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\computerToThumbdriveButtonMouseOver.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="confirmGameChoicePopupButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\confirmGameChoicePopupButton.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="confirmGameChoicePopupButtonMouseDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\confirmGameChoicePopupButtonMouseDown.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="confirmGameChoicePopupButtonMouseOver" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\confirmGameChoicePopupButtonMouseOver.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="doneResultPanelButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\doneResultPanelButton.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="doneResultPanelButtonMouseDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\doneResultPanelButtonMouseDown.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="doneResultPanelButtonMouseOver" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\doneResultPanelButtonMouseOver.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="exitButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\exitButton.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="exitButtonMouseDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\exitButtonMouseDown.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="exitButtonMouseOver" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\exitButtonMouseOver.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="GameChoicePopupBackground" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\GameChoicePopupBackground.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="imageWarning" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\imageWarning.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="loginButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\loginButton.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="loginButtonMouseDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\loginButtonMouseDown.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="loginButtonMouseOver" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\loginButtonMouseOver.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="loginPanelBackground" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\loginPanelBackground.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="overallbackground2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\overallbackground2.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="registerButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\registerButton.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="registerButtonMouseDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\registerButtonMouseDown.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="registerButtonMouseOver" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\registerButtonMouseOver.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="registerPanelBackground" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\registerPanelBackground.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="thumbdriveToComputerButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\thumbdriveToComputerButton.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="thumbdriveToComputerButtonMouseDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\thumbdriveToComputerButtonMouseDown.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="thumbdriveToComputerButtonMouseOver" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\thumbdriveToComputerButtonMouseOver.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bannerSyncResults" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\bannerSyncResults.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="fifa2010" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\fifa2010.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="warcraft3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\warcraft3.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="confirmGameChoicePopupButtonDulled" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\confirmGameChoicePopupButtonDulled.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bannerSyncErrors" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\bannerSyncErrors.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="errorsButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\errorsButton.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="errorsButtonMouseDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\errorsButtonMouseDown.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="errorsButtonMouseOver" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\errorsButtonMouseOver.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bannerChangePasswordPanel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\bannerChangePasswordPanel.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bannerForgetPasswordPanel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\bannerForgetPasswordPanel.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bannerLoginPanel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\bannerLoginPanel.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bannerRegisterPanel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\bannerRegisterPanel.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bannerResendActivationPanel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\bannerResendActivationPanel.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="resendButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\resendButton.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="resendButtonMouseDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\resendButtonMouseDown.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="resendButtonMouseOver" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\resendButtonMouseOver.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sendButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\sendButton.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sendButtonMouseDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\sendButtonMouseDown.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sendButtonMouseOver" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\sendButtonMouseOver.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="changePasswordPanelBackground" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\changePasswordPanelBackground.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="forgetPasswordPanelBackground" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\forgetPasswordPanelBackground.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="resendActivationPanelBackground" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\resendActivationPanelBackground.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="footballManagerIcon1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\footballManagerIcon1.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="worldOfWarcraftIcon1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\worldOfWarcraftIcon1.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="abuseIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\abuseIcon.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonRestore" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\buttonRestore.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonRestoreMouseDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\buttonRestoreMouseDown.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonRestoreMouseOver" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\buttonRestoreMouseOver.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+</root>
