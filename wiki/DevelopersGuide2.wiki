@@ -120,7 +120,7 @@ In !GameAnywhere, we are concerned with the two types of game files. They are *C
 
 Games files on the computer are detected automatically (see [DevelopersGuide2#Games_Detection Games Detection]). 
 
-This is how game files stored on the external device:
+This is how game files are stored on the external device:
 
 A general structure looks like this:
   * !GameAnywhere.exe
