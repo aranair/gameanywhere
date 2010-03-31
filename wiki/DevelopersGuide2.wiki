@@ -45,7 +45,7 @@ http://lh3.ggpht.com/_-Xzk-2Bdr-I/S5znfKsCPmI/AAAAAAAAAJU/lBsQmtZn6xw/choosegame
 
 = Software Architecture =
 
-In this section, we would give you a high level overview of the components in !GameAnywhere.
+In this section, we will give you a high level overview of the components in !GameAnywhere.
 
 http://lh6.ggpht.com/_-Xzk-2Bdr-I/S7HEsTA3TgI/AAAAAAAAALA/wPhf7Ql4slM/highleveldiagram.JPG
 
