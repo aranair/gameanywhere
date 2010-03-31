@@ -762,8 +762,7 @@ namespace GameAnywhere
         private List<SyncError> Delete(string parentPath, string backupFolderName)
         {
             List<SyncError> errorList = new List<SyncError>();
-            //foreach (string path in backupFolderParentPathList)
-            {
+
                 string backupFolderPath = Path.Combine(parentPath, backupFolderName);
                 try
                 {
@@ -773,9 +772,9 @@ namespace GameAnywhere
                 catch (DeleteDirectoryErrorException ex)
                 {
                     string processName = "Remove backup file";
-                    errorList.AddRange(GetSyncError(parentPath + backupFolderName, processName, ex.errorMessage));
+                    errorList.AddRange(GetSyncError(backupFolderPath, processName, ex.errorMessage));
                 }
-            }
+            
             return errorList;
         }
 

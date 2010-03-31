@@ -49,4 +49,3 @@ C:\Documents and Settings\Wilmer\Desktop\gameanywhere\WindowsFormsApplication1\o
 C:\Documents and Settings\Wilmer\Desktop\gameanywhere\WindowsFormsApplication1\bin\Debug\GameAnywhere.exe
 C:\Documents and Settings\Wilmer\Desktop\gameanywhere\WindowsFormsApplication1\bin\Debug\GameAnywhere.pdb
 C:\Documents and Settings\Wilmer\Desktop\gameanywhere\WindowsFormsApplication1\bin\Debug\Interop.Shell32.dll
-C:\Documents and Settings\Wilmer\Desktop\gameanywhere\WindowsFormsApplication1\bin\Debug\GameAnywhere.XML
