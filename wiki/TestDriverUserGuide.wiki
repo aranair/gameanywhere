@@ -69,7 +69,7 @@ Note: There is no spaces used for the test file. The test driver will not check 
 
 = How to use the Test Driver =
 
- 
+http://game-anywhere.com/images/test_driver.png
 
 1. To read in a test file, click the browse button to choose or manually type in the path to the file.
 
