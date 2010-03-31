@@ -145,7 +145,7 @@ Use camel case for subfolder names i.e. "savedGame".
 
 The subfolders in SyncFolder are the game folder(s). Each of the game folder is named after a game. 
 
-Configuration and Saved game files are store in their respective folder under a game folder. 
+Configuration and Saved game files are stored in their respective folder under a game folder. 
 
 ----
 
