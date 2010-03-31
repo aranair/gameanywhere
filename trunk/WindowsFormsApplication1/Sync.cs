@@ -40,6 +40,8 @@ namespace GameAnywhere
         /// </summary>
         public const int Uninitialize = 0; //Default
 
+
+
         /// <summary>
         /// Backup Status: No files. Do not confuse with SyncAction.
         /// </summary>
@@ -59,7 +61,7 @@ namespace GameAnywhere
 
         /// <summary>
         /// For matching game name.
-        /// Used by find
+        /// Used by MatchWantedGameName(().
         /// </summary>
         private Game wantedGame;
 
@@ -106,14 +108,13 @@ namespace GameAnywhere
 
 
         /// <summary>
+        /// Goes through config path list and saved past list and delete the files that were copied over.
+        /// </summary>
+        /// <remarks>
         /// Pre-Condition: None.
         /// Post-Condition: Files that were copied over are erased.
-        /// 
-        /// Description: Goes through config path list and saved past list and delete the files that were copied over.
-        /// 
-        /// Exceptions: None.
-        /// </summary>
-        /// <param name="sa">SyncAction object</param>
+        /// </remarks>
+        /// <param name="sa">SyncAction object.</param>
         protected void DeleteCopiedFiles(SyncAction sa)
         {
             List<string> configPathList = new List<string>();
@@ -167,9 +168,9 @@ namespace GameAnywhere
         /// <summary>
         /// Check if a given path exists in the unsuccessful sync file list.
         /// </summary>
-        /// <param name="errorList">The list of unsuccessfuk sync file</param>
-        /// <param name="path">The path in question</param>
-        /// <returns>True if path found in error list</returns>
+        /// <param name="errorList">The list of unsuccessfuk sync file.</param>
+        /// <param name="path">The path in question.</param>
+        /// <returns>True if path found in error list.</returns>
         private static bool CheckIfExistInErrorList(List<SyncError> errorList, string path)
         {
             foreach (SyncError syncError in errorList)
@@ -186,9 +187,10 @@ namespace GameAnywhere
         /// <summary>
         /// Takes in a game object and look for a game in installedGameList that has the same game name.
         /// Method fails if game does not belong in the list of installed game.
-        ///  
-        /// Pre-condition: Game must be in the list of installed game. 
         /// </summary>
+        /// <remarks>
+        /// Pre-condition: Game must be in the list of installed game. 
+        /// </remarks>
         /// <param name="externalGame">The game to match for.</param>
         /// <returns>Return the first matched game in installedGameList based on matched game name.</returns>
         protected Game FindInstalledGame(Game externalGame)
@@ -202,7 +204,7 @@ namespace GameAnywhere
 
         /// <summary>
         /// A search predicate for the wanted game.
-        /// Used by List.Find.
+        /// Used by List.Find().
         /// </summary>
         /// <param name="game">Game object.</param>
         /// <returns>Returns true if game name matches the name of wantedGame.</returns>
@@ -217,8 +219,8 @@ namespace GameAnywhere
         /// <summary>
         /// Add all targeted sync files into error list.
         /// </summary>
-        /// <param name="sa">The SyncAction which its game files (depending on it's sync action) will be added to the unsuccessful sync files list</param>
-        /// <param name="gamePath">The game directory in the external device</param>
+        /// <param name="sa">The SyncAction which its game files (depending on it's sync action) will be added to the unsuccessful sync files list.</param>
+        /// <param name="gamePath">The game directory in the external device.</param>
         /// <param name="errorMessage">The reason for call this method.</param>
         protected void AddToUnsuccessfulSyncFiles(SyncAction sa, string gamePath, string errorMessage)
         {
@@ -536,9 +538,10 @@ namespace GameAnywhere
 
         /// <summary>
         /// Creates a directory if it does not exists.
-        /// 
-        /// CreateFolderFailedException thrown whenever unsuccessful.
         /// </summary>
+        /// <exception cref="CreateFolderFailedException">
+        /// CreateFolderFailedException thrown whenever create directory is unsuccessful.
+        /// </exception>
         /// <param name="newFolderPath">Path of the new directory.</param>
         protected void CreateDirectory(string newFolderPath)
         {
@@ -566,11 +569,15 @@ namespace GameAnywhere
 
         /// <summary>
         /// Deletes a directory to Recycle bin.
-        /// 
-        /// NOTE: Referencing to Microsoft.VisualBasic assembly is needed for this method to work.
         /// </summary>
+        /// <remarks>
+        /// NOTE: Referencing to Microsoft.VisualBasic assembly is needed for this method to work.
+        /// </remarks>
+        ///  <exception cref="DeleteDirectoryErrorException">
+        ///  Thrown when unable to remove folder.
+        ///  </exception>
         /// <param name="directory">Path of the directory to be deleted.</param>
-        private void DeleteDirectory(string directory)
+        protected void DeleteDirectory(string directory)
         {
             try
             {
@@ -583,7 +590,7 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Make the given path into a list of SyncError
+        /// Return the given path as a list of SyncError.
         /// </summary>
         /// <param name="errorPath">The file path that failed in a process.</param>
         /// <param name="processName">A process description.</param>
@@ -617,7 +624,7 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Make the given list of path into a list of SyncError
+        /// Make the given list of path into a list of SyncError.
         /// </summary>
         /// <param name="errorPathList">The list of file path that failed in a process.</param>
         /// <param name="processName">A process description.</param>
@@ -713,7 +720,7 @@ namespace GameAnywhere
         /// For each installed game, go through their directories to find backup folders.
         /// </summary>
         /// <param name="gameList">List of installed games.</param>
-        /// <returns>List of SyncActions that contains each game, and their corresponding status: 0,1,2,3.</returns>
+        /// <returns>List of SyncActions that contains each game, and their corresponding actions.</returns>
         private List<SyncAction> DetermineGamesWithBackup(List<Game> gameList)
         {
             List<SyncAction> syncActionList = new List<SyncAction>();
@@ -748,8 +755,6 @@ namespace GameAnywhere
 
         /// <summary>
         /// Delete the list of path that may contain backup folders into Recycle bin.
-        /// 
-        /// Exception: DeleteDirectoryErrorException() - Unable to remove backup folder.
         /// </summary>
         /// <param name="parentPath">The list of path that contains backup folder</param>
         /// <param name="backupFolderName">The backup folder name</param>
@@ -803,15 +808,13 @@ namespace GameAnywhere
             return errorList;
         }
 
-
         /// <summary>
+        /// Description: Determines which games have backup and remove the backup of the games.
+        /// </summary>
+        /// <remarks>
         /// Pre-Condition: None.
         /// Post-Condition: Backup are removed and a SyncError list is returned.
-        /// 
-        /// Description: Determines which games have backup and remove the backup of the games.
-        /// 
-        /// Exceptions: None.
-        /// </summary>
+        /// </remarks>
         /// <returns>A list of sync error of the given path list.</returns>
         public List<SyncError> RemoveAllBackup()
         {
@@ -822,12 +825,10 @@ namespace GameAnywhere
 
         /// <summary>
         /// Deletes all backup folder created by GameAnywhere after syncing.
-        /// 
-        /// Exception: DeleteDirectoryErrorException() - Unable to remove backup folder.
-        /// </summary>
+        ///  </summary>
         /// <param name="syncActionList">The list of SyncAction</param>
         /// <returns>A list of sync error of the given path list.</returns>
-        private List<SyncError> RemoveAllBackup(List<SyncAction> syncActionList)
+        protected List<SyncError> RemoveAllBackup(List<SyncAction> syncActionList)
         {
             List<SyncError> errorList = new List<SyncError>();
             foreach (SyncAction sa in syncActionList)
