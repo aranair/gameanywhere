@@ -9,11 +9,9 @@ namespace GameAnywhere
 {
     /// <summary>
     /// Method to synchronize Game files between computer and external storage device. 
-    /// 
     /// </summary>
     class OfflineSync : Sync
     {
-        //Sync direction
         /// <summary>
         /// Sync direction, from external storage to computer.
         /// </summary>
@@ -26,10 +24,10 @@ namespace GameAnywhere
 
         /// <summary>
         /// Constructor.
-        /// 
-        /// Exception:
-        /// CreateFolderFailedException() throw when unable to create a syncFolder in the current GameAnywhere.exe directory.
         /// </summary>
+        /// <exception cref="CreateFolderFailedException">
+        /// Thrown when unable to create a syncFolder in the current GameAnywhere.exe directory.
+        /// </exception>
         public OfflineSync()
         {
             //Make a default storage directory on the external storage device
@@ -40,10 +38,10 @@ namespace GameAnywhere
 
         /// <summary>
         /// Overloaded Constructor.
-        ///      
-        /// Exception:
-        /// CreateFolderFailedException() throw when unable to create a syncFolder in the current GameAnywhere.exe directory.
         /// </summary>
+        /// <exception cref="CreateFolderFailedException">
+        /// Thrown when unable to create a syncFolder in the current GameAnywhere.exe directory.
+        /// </exception>
         /// <param name="direction">Synchronization direction</param>
         /// <param name="gameList">A list of installed games on the computer</param>
         public OfflineSync(int direction, List<Game> gameList)
@@ -58,12 +56,16 @@ namespace GameAnywhere
 
         /// <summary>
         /// Execute the synchronization for all the games in the sync action list.
-        /// 
-        /// Given the direction of synchronization, SynchronizeGames will copy saved game files and/or game configuration files between computer and external storage device. 
-        /// Original game files on computer will be backup into a GA-Backup folder in the same directory as the game file before overwriting.
-        /// 
-        /// syncActionList.unsuccessfulSyncFiles would contain the list of game files that could not be synced.
         /// </summary>
+        /// <remarks>
+        /// Given the direction of synchronization, SynchronizeGames will copy saved game files and/or game configuration files between computer and external storage device. 
+        /// <para>
+        /// Original game files on computer will be backup into a GA-Backup folder in the same directory as the game file before overwriting.
+        /// </para>
+        /// <para>
+        /// syncActionList.unsuccessfulSyncFiles would contain the list of game files that could not be synced.
+        /// </para>
+        /// </remarks>
         /// <param name="list">List of games which are to be synchronized.</param>
         /// <returns>List of games and their sync results.</returns>
         public override List<SyncAction> SynchronizeGames(List<SyncAction> list)
@@ -451,73 +453,7 @@ namespace GameAnywhere
             return errorList;
         }
 
-        /// <summary>
-        /// Deletes a directory to Recycle bin.
-        /// 
-        /// NOTE: Reference to Microsoft.VisualBasic assembly is needed for this method to work.
-        /// </summary>
-        /// <param name="directory">Path of the directory to be deleted.</param>
-        private void DeleteDirectory(string directory)
-        {
-            try
-            {
-                Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(directory, Microsoft.VisualBasic.FileIO.DeleteDirectoryOption.DeleteAllContents);
-            }
-            catch (Exception)
-            {
-                throw new DeleteDirectoryErrorException("Access to directory is denied.");
-            }
-        }
 
-        /// <summary>
-        /// Deletes all backup folder created by GameAnywhere after syncing.
-        /// 
-        /// Exception: DeleteDirectoryErrorException() - Unable to remove backup folder.
-        /// </summary>
-        /// <param name="syncActionList">The list of SyncAction</param>
-        /// <returns>A list of SyncError of the given path.</returns>
-        private List<SyncError> RemoveAllBackup(List<SyncAction> syncActionList)
-        {
-            List<SyncError> errorList = new List<SyncError>();
-            foreach (SyncAction sa in syncActionList)
-            {
-                if (sa.Action > 0)
-                {
-                    errorList.AddRange(DeleteDirectory(sa.MyGame.ConfigParentPath, BackupConfigFolderName));
-                    errorList.AddRange(DeleteDirectory(sa.MyGame.SaveParentPath, BackupSavedGameFolderName));
-                }
-            }
-            return errorList;
-        }
-
-
-        /// <summary>
-        /// Delete the list of path that may contain backup folders into Recycle bin.
-        /// 
-        /// Exception: DeleteDirectoryErrorException() - Unable to remove backup folder.
-        /// </summary>
-        /// <param name="backupFolderParentPath">The list of path that contains backup folder</param>
-        /// <param name="backupFolderName">The backup folder name</param>
-        /// <returns>A list of SyncError of the given path list.</returns>
-        private List<SyncError> DeleteDirectory(string backupFolderParentPath, string backupFolderName)
-        {
-            List<SyncError> errorList = new List<SyncError>();
-            //foreach (string path in backupFolderParentPathList)
-            {
-                string backupFolderPath = Path.Combine(backupFolderParentPath, backupFolderName);
-                try
-                {
-                    if (Directory.Exists(backupFolderPath))
-                        DeleteDirectory(backupFolderPath);
-                }
-                catch (DeleteDirectoryErrorException ex)
-                {
-                    string processName = "Remove backup file";
-                    errorList.AddRange(GetSyncError(backupFolderParentPath + backupFolderName, processName, ex.errorMessage));
-                }
-            }
-            return errorList;
-        }
 
         /// <summary>
         /// Pre-Condition: direction is valid and pathList is not null.
@@ -570,15 +506,14 @@ namespace GameAnywhere
         }
 
         /// <summary>
+        /// Find the drive associated with the path given a list of drives.
+        /// </summary>
+        /// <remarks>
         /// Pre-Conditions: allDrives and path are not null.
         /// Post-Conditions: Return a DriveInfo object matching the path's drive.
-        /// 
-        /// Description: Find the drive associated with the path given a list of drives.
-        /// 
-        /// Exceptions: None.
-        /// </summary>
-        /// <param name="allDrives"></param>
-        /// <param name="path"></param>
+        /// </remarks>
+        /// <param name="allDrives">Array of all drives.</param>
+        /// <param name="path">The path used in matching.</param>
         /// <returns></returns>
         private DriveInfo FindMatchingDrive(DriveInfo[] allDrives, string path)
         {
@@ -594,15 +529,14 @@ namespace GameAnywhere
         }
 
         /// <summary>
+        /// Calculates the total space required for list of files.
+        /// </summary>
+        /// <remarks>
         /// Pre-Condition: List is not null.
         /// Post-Condition: Total space required by list of files is returned in a long variable.
-        /// 
-        /// Description: Calculates the total space required for list of files.
-        /// 
-        /// Exceptions: None.
-        /// </summary>
-        /// <param name="pathList">List of path</param>
-        /// <returns>total space required for config files</returns>
+        /// </remarks>
+        /// <param name="pathList">List of path.</param>
+        /// <returns>Total space required for config files.</returns>
         private long CalculateSpaceForFiles(List<string> pathList)
         {
             long sizeRequired = 0;
@@ -628,15 +562,17 @@ namespace GameAnywhere
 
 
         /// <summary>
+        /// Calculates the size of the directory. Taken from MSDN.
+        /// </summary>
+        /// <remarks>
         /// Pre-Condition: Directory exists.
         /// Post-Condition: Size of directory is returned.
-        /// 
-        /// Description: Calculates the size of the directory. Taken from MSDN.
-        /// 
-        /// Exceptions: UnauthorizedAccessException - access denied.
-        /// </summary>
-        /// <param name="d">directory path</param>
-        /// <returns>size of directory</returns>
+        /// </remarks>
+        /// <exception cref="UnauthorizedAccessException">
+        /// Thrown when access denied.
+        /// </exception>
+        /// <param name="d">Directory path.</param>
+        /// <returns>Size of directory.</returns>
         private long DirSize(DirectoryInfo d)
         {
             long Size = 0;

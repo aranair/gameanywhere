@@ -36,16 +36,25 @@ namespace GameAnywhere
         List<SyncError> unsuccessfulSyncFiles;
 
         #region Propeties
+        /// <summary>
+        /// A Game object.
+        /// </summary>
         public Game MyGame
         {
             get { return myGame; }
             set { myGame = value; }
         }
+        /// <summary>
+        /// The sync action related to the Game object.
+        /// </summary>
         public int Action
         {
             get { return action; }
             set { action = value; }
         }
+        /// <summary>
+        /// The list of files that cannot be sync.
+        /// </summary>
         public List<SyncError> UnsuccessfulSyncFiles
         {
             get { return unsuccessfulSyncFiles; }

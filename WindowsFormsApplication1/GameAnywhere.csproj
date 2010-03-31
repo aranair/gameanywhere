@@ -24,6 +24,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -65,8 +67,10 @@
     </Compile>
     <Compile Include="ConnectionFailureException.cs" />
     <Compile Include="Controller.cs" />
-    <Compile Include="DeleteDirectoryErrorException.cs" />
     <Compile Include="CreateFolderFailedException.cs" />
+    <Compile Include="DeleteDirectoryErrorException.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DriveNotFoundException.cs" />
     <Compile Include="InsufficientSpaceException.cs" />
     <Compile Include="MetaData.cs" />
@@ -89,8 +93,6 @@
       <DependentUpon>ChooseGame.cs</DependentUpon>
     </Compile>
     <Compile Include="GameLibrary.cs" />
-    <Compile Include="InvalidSyncDirectionException.cs" />
-    <Compile Include="NoBackupFolderException.cs" />
     <Compile Include="OfflineSync.cs" />
     <Compile Include="reconfirmationWarning.cs">
       <SubType>Form</SubType>
@@ -132,7 +134,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="SyncAction.cs" />
-    <Compile Include="SyncFolderFileDiscrepancyException.cs" />
     <Compile Include="User.cs" />
     <Compile Include="WaitingDialog.cs">
       <SubType>Form</SubType>
