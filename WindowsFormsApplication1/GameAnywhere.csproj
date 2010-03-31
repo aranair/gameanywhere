@@ -24,8 +24,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>
-    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -59,25 +57,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConflictResolve.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ConflictResolve.Designer.cs">
-      <DependentUpon>ConflictResolve.cs</DependentUpon>
-    </Compile>
     <Compile Include="ConnectionFailureException.cs" />
     <Compile Include="Controller.cs" />
+    <Compile Include="DeleteDirectoryErrorException.cs" />
     <Compile Include="CreateFolderFailedException.cs" />
-    <Compile Include="DeleteDirectoryErrorException.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="DriveNotFoundException.cs" />
     <Compile Include="InsufficientSpaceException.cs" />
-    <Compile Include="MetaData.cs" />
-    <Compile Include="OnlineSync.cs" />
     <Compile Include="SimpleDB.cs" />
-    <Compile Include="Storage.cs" />
-    <Compile Include="Sync.cs" />
     <Compile Include="SyncError.cs" />
     <Compile Include="SyncErrorDisplay.cs">
       <SubType>Form</SubType>
@@ -93,7 +79,11 @@
       <DependentUpon>ChooseGame.cs</DependentUpon>
     </Compile>
     <Compile Include="GameLibrary.cs" />
+    <Compile Include="InvalidSyncDirectionException.cs" />
+    <Compile Include="NoBackupFolderException.cs" />
     <Compile Include="OfflineSync.cs" />
+    <Compile Include="Tester\FolderOperation.cs" />
+    <Compile Include="Tester\PreCondition.cs" />
     <Compile Include="reconfirmationWarning.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -134,6 +124,17 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="SyncAction.cs" />
+    <Compile Include="SyncFolderFileDiscrepancyException.cs" />
+    <Compile Include="Tester\Tester.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Tester\Tester.designer.cs">
+      <DependentUpon>Tester.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tester\TestCase.cs" />
+    <Compile Include="Tester\TestDriver.cs" />
+    <Compile Include="Tester\TestResult.cs" />
+    <Compile Include="Tester\Verifier.cs" />
     <Compile Include="User.cs" />
     <Compile Include="WaitingDialog.cs">
       <SubType>Form</SubType>
@@ -141,8 +142,6 @@
     <Compile Include="WaitingDialog.designer.cs">
       <DependentUpon>WaitingDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="WebAndThumbSync.cs" />
-    <Compile Include="WebTransferException.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="startPage.resx">
@@ -292,6 +291,10 @@
       <DependentUpon>SyncErrorDisplay.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Tester\Tester.resx">
+      <DependentUpon>Tester.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\errorsButton.gif" />
@@ -373,68 +376,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\computerToWebButton.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\computerToWebButtonMouseDown.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\computerToWebButtonMouseOver.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\thumbdriveAndWebButton.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\thumbdriveAndWebButtonMouseDown.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\thumbdriveAndWebButtonMouseOver.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\webToComputerButton.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\webToComputerButtonMouseDown.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\webToComputerButtonMouseOver.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\overallbackground3.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="ConflictResolve.resx">
-      <DependentUpon>ConflictResolve.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\overallbackground4.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\bannerConflictResolve.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\upload.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\uploadArrowed.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\download.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\downloadArrowed.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\arrowDownload.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\arrowUpload.gif" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\abuseIcon.jpg" />
-    <EmbeddedResource Include="WaitingDialog.resx">
-      <DependentUpon>WaitingDialog.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\buttonRestore.gif" />
@@ -444,15 +386,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\buttonRestoreMouseOver.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="bin\Debug\gamev3.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="gamev3.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\defaultIcon.png" />
+    <EmbeddedResource Include="WaitingDialog.resx">
+      <DependentUpon>WaitingDialog.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

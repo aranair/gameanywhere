@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Collections;
-using System.Text.RegularExpressions;
-
 
 namespace GameAnywhere
 {
@@ -27,22 +25,9 @@ namespace GameAnywhere
             {
                 Controller c = new Controller();
             }
-            */
-            //GameLibrary gl = new GameLibrary();
-            //gl.initGamesFromFile();
-
+            //*/
+            
             Controller c = new Controller();
- 
-            /*
-            Dictionary<string, int> cList = new Dictionary<string, int>();
-            cList.Add("Warcraft 3/savedGame", 0);
-            cList.Add("Warcraft 3/config", 0);
-            cList.Add("World of Warcraft/config", 0);
-            cList.Add("Football Manager 2010/config", 0);
-            cList.Add("Football Manager 2010/savedGame", 0);
-            cList.Add("FIFA 10/savedGame", 0);
-            ConflictResolve cr = new ConflictResolve(c, cList);
-            cr.ShowDialog();*/
         }
     }
 }

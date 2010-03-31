@@ -298,59 +298,8 @@
   <data name="worldOfWarcraftIcon1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\worldOfWarcraftIcon1.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="computerToWebButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\computerToWebButton.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="computerToWebButtonMouseDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\computerToWebButtonMouseDown.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="computerToWebButtonMouseOver" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\computerToWebButtonMouseOver.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="thumbdriveAndWebButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\thumbdriveAndWebButton.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="thumbdriveAndWebButtonMouseDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\thumbdriveAndWebButtonMouseDown.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="thumbdriveAndWebButtonMouseOver" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\thumbdriveAndWebButtonMouseOver.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="webToComputerButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\webToComputerButton.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="webToComputerButtonMouseDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\webToComputerButtonMouseDown.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="webToComputerButtonMouseOver" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\webToComputerButtonMouseOver.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="overallbackground3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\overallbackground3.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="overallbackground4" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\overallbackground4.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="bannerConflictResolve" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\bannerConflictResolve.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="download" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\download.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="downloadArrowed" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\downloadArrowed.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="upload" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\upload.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="uploadArrowed" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\uploadArrowed.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="arrowDownload" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\arrowDownload.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="arrowUpload" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\arrowUpload.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="abuseIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\abuseIcon.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="buttonRestore" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\buttonRestore.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

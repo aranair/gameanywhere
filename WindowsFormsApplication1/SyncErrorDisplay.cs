@@ -15,7 +15,6 @@ namespace GameAnywhere
         // The parent who called this form ( to facilitate .close())
         private Form parent;
         private List<SyncAction> syncActionList;
-
         /// <summary>
         /// A variable to determine the current yAxis location to facilitate the dynamic creation of the displays.
         /// </summary>
@@ -33,40 +32,6 @@ namespace GameAnywhere
 
             InitializeComponent();
             this.syncActionList = syncActionList;
-
-            // Function to start displaying the errors from the list of syncActions.
-            DisplayErrors();
-        }
-
-        public SyncErrorDisplay(List<SyncError> syncErrorList, Form parent)
-        {
-            this.parent = parent;
-            parent.Close();
-
-            InitializeComponent();
-            CompileSyncErrors(syncErrorList);
-            
-            // Function to start displaying the errors from the list of syncActions.
-            DisplayErrors();
-        }
-
-        private void CompileSyncErrors(List<SyncError> syncErrorList)
-        {
-            this.syncActionList = new List<SyncAction>();
-            foreach (SyncError se in syncErrorList)
-            {
-                string gameName = se.FilePath;
-                Game newGame = new Game(new List<string>(), new List<string>(),gameName, "", "", "");
-                SyncAction newSyncAction = new SyncAction(newGame);
-                syncActionList.Add(newSyncAction);
-            }
-
-        }
-
-        public SyncErrorDisplay(List<SyncError> syncErrorList)
-        {
-            InitializeComponent();
-            CompileSyncErrors(syncErrorList);
 
             // Function to start displaying the errors from the list of syncActions.
             DisplayErrors();

@@ -45,10 +45,9 @@ namespace GameAnywhere
         /// </summary>
         private int yAxisLocation = 50;
 
-        private startPage parent;
-
         private WaitingDialog waitDialog;
 
+        private startPage parent;
         #endregion
 
         #region Constructors
@@ -60,7 +59,6 @@ namespace GameAnywhere
             InitializeComponent();
             gameList = new List<Game>();
             this.controller = controller;
-            this.waitDialog = new WaitingDialog();
         }
 
         /// <summary>
@@ -71,21 +69,18 @@ namespace GameAnywhere
         /// <param name="controller">Controller to do comunicate with the other classes</param>
         /// <param name="gList">List of games to be displayed</param>
         /// <param name="errorLabel">Error label of the startPage form</param>
-        public ChooseGame(Controller controller, List<Game> gameList, startPage parent)
+        public ChooseGame(Controller controller, List<Game> gList, startPage parent)
         {
             this.controller = controller;
-            //this.errorLabel = errorLabel;
-            this.waitDialog = new WaitingDialog();
-            this.gameList = gameList;
+            gameList = gList;
+            this.parent = parent;
 
             InitializeComponent();
-            this.parent = parent;
 
             // Displays the game list for user to choose files.
             DisplayGameList();
-
+            
         }
-
         #endregion
 
         #region Game Files Display Pages
@@ -109,20 +104,21 @@ namespace GameAnywhere
             showGamePanel.BackColor = System.Drawing.Color.Black;
 
             // Passes in current Y axis to start the generation of game display.
-            GenerateGameDisplay();
+            GenerateGameDisplay(gameList);
         }
 
         /// <summary>
         /// Dynamically generates the games display.
         /// </summary>
         /// <param name="gameList">List of games to be displayed</param>
-        private void GenerateGameDisplay()
+        private void GenerateGameDisplay(List<Game> gameList)
         {
             this.SuspendLayout();
             // Creates a set of GUI elements per game, namely: 
             // 1 game name label, 1 checkBox if config files are available, 1 checkBox if saved game files are available.
             foreach (Game g in gameList)
             {
+
                 // Creates and edit a new label to display each game name and add it to the display panel
                 CreateLabel(g, showGamePanel);
 
@@ -177,15 +173,15 @@ namespace GameAnywhere
         /// <param name="g">Game to create the label for.</param>
         private void CreateErrorConfigFileLabel(Game g)
         {
-            System.Windows.Forms.Label errorLabelcg;
-            errorLabelcg = new Label();
-            errorLabelcg.Name = "errorLabelcgConfig" + g.Name;
-            errorLabelcg.Text = " - No Config Files -";
-            errorLabelcg.Size = new System.Drawing.Size(170, 20);
-            errorLabelcg.Location = new System.Drawing.Point(297, yAxisLocation);
-            errorLabelcg.ForeColor = System.Drawing.Color.Gray;
-            errorLabelcg.BackColor = System.Drawing.Color.Black;
-            showGamePanel.Controls.Add(errorLabelcg);
+            System.Windows.Forms.Label errorLabel;
+            errorLabel = new Label();
+            errorLabel.Name = "errorLabelConfig" + g.Name;
+            errorLabel.Text = " - No Config Files -";
+            errorLabel.Size = new System.Drawing.Size(170, 20);
+            errorLabel.Location = new System.Drawing.Point(297, yAxisLocation);
+            errorLabel.ForeColor = System.Drawing.Color.Gray;
+            errorLabel.BackColor = System.Drawing.Color.Black;
+            showGamePanel.Controls.Add(errorLabel);
         }
 
         /// <summary>
@@ -248,7 +244,7 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="syncAction">SyncAction to be modified</param>
         /// <param name="s">Either "Config" or "SavedGame"</param>
-        private static void SetSyncAction(SyncAction syncAction, string s)
+        private void SetSyncAction(SyncAction syncAction, string s)
         {
             if (s.Equals("Config"))
             {
@@ -307,7 +303,7 @@ namespace GameAnywhere
         /// <param name="location">Location to add this label to in the container.</param>
         /// <param name="txt">Text to be displayed.</param>
         /// <param name="container">Container for the label to be added in.</param>
-        private static void CreateLabel(Point location, string txt, Control container)
+        private void CreateLabel(Point location, string txt, Control container)
         {
             Label newLabel = new Label();
             newLabel = new Label();
@@ -345,7 +341,7 @@ namespace GameAnywhere
             if (!containsError)
             {
                 // No need to display individual sync results.
-                parent.SetErrorLabel("Successfully Synchronized.", System.Drawing.Color.DeepSkyBlue);
+                SetErrorLabel("Successfully Synchronized.", System.Drawing.Color.DeepSkyBlue);
                 this.Close();
                 return;
             }
@@ -365,12 +361,12 @@ namespace GameAnywhere
                 // No errors for this syncAction: create a label to to let user know it was a success for this game.
                 if (syncAction.UnsuccessfulSyncFiles.Count > 0)
                 {
-                    if (controller.direction == OfflineSync.ExternalToCom)
+                    if (controller.GetDirection() == OfflineSync.ExternalToCom)
                     {
                         //ShowSyncErrors(syncAction.UnsuccessfulSyncFiles, ref yAxisControl);
                         CreateLabel(new System.Drawing.Point(300, yAxisLocation), "Synchronization Failed.\n- Please re-synchronize.", resultPanel);
                     }
-                    else if (controller.direction == OfflineSync.ComToExternal)
+                    else if (controller.GetDirection() == OfflineSync.ComToExternal)
                     {
                         CreateLabel(new System.Drawing.Point(300, yAxisLocation), "Synchronization Failed.\n- Please re-synchronize or manually copy error files.", resultPanel);
                     }
@@ -475,17 +471,10 @@ namespace GameAnywhere
             syncActionListResult = new List<SyncAction>();
             SetupSynchronizationFiles();
 
-            try
-            {
-                OpenWaitDialog();
-                syncActionListResult = controller.SynchronizeGames(syncActionList);
-                CloseWaitDialog();
-            }
-            catch (ConnectionFailureException)
-            {
-                parent.SetErrorLabel("Unable to connect to server", Color.Red);
-            }
-            
+            OpenWaitDialog();
+            syncActionListResult = controller.SynchronizeGames(syncActionList);
+            CloseWaitDialog();
+
             DisplaySyncResult(syncActionListResult);
         }
 
@@ -591,7 +580,7 @@ namespace GameAnywhere
         /// Sets the fonts of the checkBox according to their checked state.
         /// </summary>
         /// <param name="checkBox">Checkbox to be analyzed and editted.</param>
-        private static void SetFonts (CheckBox checkBox)
+        private void SetFonts (CheckBox checkBox)
         {
             if (checkBox.Checked)
             {
@@ -653,21 +642,29 @@ namespace GameAnywhere
             this.Focus();
         }
 
-        public void SetBackgroundImage(System.Windows.Forms.Control control, string resourcePath, ImageLayout imageLayout)
+        public void SetBackgroundImage(System.Windows.Forms.Control o, string resourcePath, ImageLayout imageLayout)
         {
             System.IO.Stream imageStream = this.GetType().Assembly.GetManifestResourceStream(resourcePath);
-            control.BackgroundImage = Image.FromStream(imageStream);
-            control.BackgroundImageLayout = imageLayout;
+            o.BackgroundImage = Image.FromStream(imageStream);
+            o.BackgroundImageLayout = imageLayout;
             imageStream.Close();
         }
 
-        private static void SetVisibilityAndUsability(System.Windows.Forms.Control c, bool makeVisible, bool makeEnabled)
+        private void SetVisibilityAndUsability(System.Windows.Forms.Control c, bool makeVisible, bool makeEnabled)
         {
             c.Visible = makeVisible;
             c.Enabled = makeEnabled;
         }
 
-
+        /// <summary>
+        /// Sets the error label of the start page.
+        /// </summary>
+        /// <param name="s">String to be dispalyed.</param>
+        /// <param name="c">Color to display the string in.</param>
+        public void SetErrorLabel(string s, System.Drawing.Color c)
+        {
+            parent.SetErrorLabel(s, c);
+        }
 
         /// <summary>
         /// Assigns the appropriate icon image to the icon box sent in as argument.
@@ -681,20 +678,17 @@ namespace GameAnywhere
             if (gameName.Equals(GameLibrary.FIFA10GameName))
                 SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.fifa2010.png", ImageLayout.Zoom);
 
-            else if (gameName.Equals(GameLibrary.Warcraft3GameName))
+            if (gameName.Equals(GameLibrary.Warcraft3GameName))
                 SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.warcraft3.png", ImageLayout.Zoom);
 
-            else if (gameName.Equals(GameLibrary.FM2010GameName))
+            if (gameName.Equals(GameLibrary.FM2010GameName))
                 SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.footballManagerIcon1.gif", ImageLayout.Zoom);
 
-            else if (gameName.Equals(GameLibrary.WOWGameName))
+            if (gameName.Equals(GameLibrary.WOWGameName))
                 SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.worldOfWarcraftIcon1.gif", ImageLayout.Zoom);
 
-            else if (gameName.Equals(GameLibrary.AbuseGameName))
+            if (gameName.Equals(GameLibrary.AbuseGameName))
                 SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.abuseIcon.jpg", ImageLayout.Zoom);
-
-            else
-                SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.defaultIcon.png", ImageLayout.Zoom);
 
         }
         #endregion

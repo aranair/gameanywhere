@@ -33,14 +33,12 @@
             this.loginButton = new System.Windows.Forms.Button();
             this.registerButton = new System.Windows.Forms.Button();
             this.exitButton = new System.Windows.Forms.Button();
-            this.computerToWebButton = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.thumbdriveToComputerButton = new System.Windows.Forms.Button();
-            this.thumbdriveAndWebButton = new System.Windows.Forms.Button();
-            this.webToComputerButton = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             this.computerToThumbdriveButton = new System.Windows.Forms.Button();
             this.startPanel = new System.Windows.Forms.Panel();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.errorLabel = new System.Windows.Forms.Label();
             this.loginNavPanel = new System.Windows.Forms.Panel();
             this.loginLoginPanelButton = new System.Windows.Forms.Button();
@@ -106,11 +104,12 @@
             this.loginButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.loginButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.loginButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.loginButton.Location = new System.Drawing.Point(120, 10);
+            this.loginButton.Location = new System.Drawing.Point(110, 10);
             this.loginButton.Name = "loginButton";
             this.loginButton.Size = new System.Drawing.Size(90, 25);
             this.loginButton.TabIndex = 10;
             this.loginButton.UseVisualStyleBackColor = true;
+            this.loginButton.Visible = false;
             this.loginButton.MouseLeave += new System.EventHandler(this.loginButton_MouseLeave);
             this.loginButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.loginButton_MouseClick);
             this.loginButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.loginButton_MouseDown);
@@ -126,11 +125,12 @@
             this.registerButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.registerButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.registerButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.registerButton.Location = new System.Drawing.Point(216, 10);
+            this.registerButton.Location = new System.Drawing.Point(211, 10);
             this.registerButton.Name = "registerButton";
             this.registerButton.Size = new System.Drawing.Size(90, 25);
             this.registerButton.TabIndex = 11;
             this.registerButton.UseVisualStyleBackColor = false;
+            this.registerButton.Visible = false;
             this.registerButton.MouseLeave += new System.EventHandler(this.registerButton_MouseLeave);
             this.registerButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.registerButton_MouseClick);
             this.registerButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.registerButton_MouseDown);
@@ -143,7 +143,7 @@
             this.exitButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.exitButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.exitButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.exitButton.Location = new System.Drawing.Point(295, 10);
+            this.exitButton.Location = new System.Drawing.Point(297, 10);
             this.exitButton.Name = "exitButton";
             this.exitButton.Size = new System.Drawing.Size(72, 25);
             this.exitButton.TabIndex = 12;
@@ -154,40 +154,34 @@
             this.exitButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.exitButton_MouseUp);
             this.exitButton.MouseEnter += new System.EventHandler(this.exitButton_MouseEnter);
             // 
-            // computerToWebButton
+            // button1
             // 
-            this.computerToWebButton.BackgroundImage = global::GameAnywhere.Properties.Resources.computerToWebButton;
-            this.computerToWebButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.computerToWebButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.computerToWebButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.computerToWebButton.FlatAppearance.BorderSize = 0;
-            this.computerToWebButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            this.computerToWebButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.computerToWebButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.computerToWebButton.Location = new System.Drawing.Point(15, 10);
-            this.computerToWebButton.Name = "computerToWebButton";
-            this.computerToWebButton.Size = new System.Drawing.Size(180, 90);
-            this.computerToWebButton.TabIndex = 13;
-            this.computerToWebButton.UseVisualStyleBackColor = true;
-            this.computerToWebButton.MouseLeave += new System.EventHandler(this.computerToWebButton_MouseLeave);
-            this.computerToWebButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.computerToWebButton_MouseClick);
-            this.computerToWebButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.computerToWebButton_MouseDown);
-            this.computerToWebButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.computerToWebButton_MouseUp);
-            this.computerToWebButton.MouseEnter += new System.EventHandler(this.computerToWebButton_MouseEnter);
+            this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button1.Enabled = false;
+            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.button1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Location = new System.Drawing.Point(14, 3);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(200, 100);
+            this.button1.TabIndex = 13;
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
             // 
             // thumbdriveToComputerButton
             // 
             this.thumbdriveToComputerButton.BackgroundImage = global::GameAnywhere.Properties.Resources.thumbdriveToComputerButton;
-            this.thumbdriveToComputerButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.thumbdriveToComputerButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.thumbdriveToComputerButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.thumbdriveToComputerButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.thumbdriveToComputerButton.FlatAppearance.BorderSize = 0;
             this.thumbdriveToComputerButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.thumbdriveToComputerButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.thumbdriveToComputerButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.thumbdriveToComputerButton.Location = new System.Drawing.Point(537, 132);
+            this.thumbdriveToComputerButton.Location = new System.Drawing.Point(267, 127);
             this.thumbdriveToComputerButton.Name = "thumbdriveToComputerButton";
-            this.thumbdriveToComputerButton.Size = new System.Drawing.Size(180, 90);
+            this.thumbdriveToComputerButton.Size = new System.Drawing.Size(200, 100);
             this.thumbdriveToComputerButton.TabIndex = 2;
             this.thumbdriveToComputerButton.UseVisualStyleBackColor = true;
             this.thumbdriveToComputerButton.MouseLeave += new System.EventHandler(this.thumbdriveToComputerButton_MouseLeave);
@@ -196,47 +190,35 @@
             this.thumbdriveToComputerButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.thumbdriveToComputerButton_MouseUp);
             this.thumbdriveToComputerButton.MouseEnter += new System.EventHandler(this.thumbdriveToComputerButton_MouseEnter);
             // 
-            // thumbdriveAndWebButton
+            // button3
             // 
-            this.thumbdriveAndWebButton.BackgroundImage = global::GameAnywhere.Properties.Resources.thumbdriveAndWebButton;
-            this.thumbdriveAndWebButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.thumbdriveAndWebButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.thumbdriveAndWebButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.thumbdriveAndWebButton.FlatAppearance.BorderSize = 0;
-            this.thumbdriveAndWebButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            this.thumbdriveAndWebButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.thumbdriveAndWebButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.thumbdriveAndWebButton.Location = new System.Drawing.Point(246, 57);
-            this.thumbdriveAndWebButton.Name = "thumbdriveAndWebButton";
-            this.thumbdriveAndWebButton.Size = new System.Drawing.Size(250, 100);
-            this.thumbdriveAndWebButton.TabIndex = 15;
-            this.thumbdriveAndWebButton.UseVisualStyleBackColor = true;
-            this.thumbdriveAndWebButton.MouseLeave += new System.EventHandler(this.thumbdriveAndWebButton_MouseLeave);
-            this.thumbdriveAndWebButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.thumbdriveAndWebButton_MouseClick);
-            this.thumbdriveAndWebButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.thumbdriveAndWebButton_MouseDown);
-            this.thumbdriveAndWebButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.thumbdriveAndWebButton_MouseUp);
-            this.thumbdriveAndWebButton.MouseEnter += new System.EventHandler(this.thumbdriveAndWebButton_MouseEnter);
+            this.button3.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button3.Enabled = false;
+            this.button3.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.button3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button3.Location = new System.Drawing.Point(516, 57);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(200, 100);
+            this.button3.TabIndex = 15;
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Visible = false;
             // 
-            // webToComputerButton
+            // button4
             // 
-            this.webToComputerButton.BackgroundImage = global::GameAnywhere.Properties.Resources.webToComputerButton;
-            this.webToComputerButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.webToComputerButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.webToComputerButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.webToComputerButton.FlatAppearance.BorderSize = 0;
-            this.webToComputerButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            this.webToComputerButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.webToComputerButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.webToComputerButton.Location = new System.Drawing.Point(15, 135);
-            this.webToComputerButton.Name = "webToComputerButton";
-            this.webToComputerButton.Size = new System.Drawing.Size(180, 90);
-            this.webToComputerButton.TabIndex = 16;
-            this.webToComputerButton.UseVisualStyleBackColor = true;
-            this.webToComputerButton.MouseLeave += new System.EventHandler(this.webToComputerButton_MouseLeave);
-            this.webToComputerButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.webToComputerButton_MouseClick);
-            this.webToComputerButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.webToComputerButton_MouseDown);
-            this.webToComputerButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.webToComputerButton_MouseUp);
-            this.webToComputerButton.MouseEnter += new System.EventHandler(this.webToComputerButton_MouseEnter);
+            this.button4.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button4.Enabled = false;
+            this.button4.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.button4.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.button4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button4.Location = new System.Drawing.Point(14, 127);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(200, 100);
+            this.button4.TabIndex = 16;
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Visible = false;
             // 
             // computerToThumbdriveButton
             // 
@@ -248,9 +230,9 @@
             this.computerToThumbdriveButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.computerToThumbdriveButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.computerToThumbdriveButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.computerToThumbdriveButton.Location = new System.Drawing.Point(537, 10);
+            this.computerToThumbdriveButton.Location = new System.Drawing.Point(267, 3);
             this.computerToThumbdriveButton.Name = "computerToThumbdriveButton";
-            this.computerToThumbdriveButton.Size = new System.Drawing.Size(180, 90);
+            this.computerToThumbdriveButton.Size = new System.Drawing.Size(200, 100);
             this.computerToThumbdriveButton.TabIndex = 1;
             this.computerToThumbdriveButton.UseVisualStyleBackColor = true;
             this.computerToThumbdriveButton.MouseLeave += new System.EventHandler(this.computerToThumbdriveButton_MouseLeave);
@@ -262,12 +244,10 @@
             // startPanel
             // 
             this.startPanel.BackColor = System.Drawing.Color.Black;
-            this.startPanel.Controls.Add(this.label4);
-            this.startPanel.Controls.Add(this.label3);
             this.startPanel.Controls.Add(this.errorLabel);
-            this.startPanel.Controls.Add(this.computerToWebButton);
-            this.startPanel.Controls.Add(this.thumbdriveAndWebButton);
-            this.startPanel.Controls.Add(this.webToComputerButton);
+            this.startPanel.Controls.Add(this.button1);
+            this.startPanel.Controls.Add(this.button3);
+            this.startPanel.Controls.Add(this.button4);
             this.startPanel.Controls.Add(this.computerToThumbdriveButton);
             this.startPanel.Controls.Add(this.thumbdriveToComputerButton);
             this.startPanel.Location = new System.Drawing.Point(50, 100);
@@ -275,32 +255,12 @@
             this.startPanel.Size = new System.Drawing.Size(734, 242);
             this.startPanel.TabIndex = 18;
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.ForeColor = System.Drawing.Color.DarkGray;
-            this.label4.Location = new System.Drawing.Point(531, 110);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(193, 13);
-            this.label4.TabIndex = 20;
-            this.label4.Text = "_______________________________";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.ForeColor = System.Drawing.Color.DarkGray;
-            this.label3.Location = new System.Drawing.Point(14, 109);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(193, 13);
-            this.label3.TabIndex = 19;
-            this.label3.Text = "_______________________________";
-            // 
             // errorLabel
             // 
             this.errorLabel.AutoSize = true;
             this.errorLabel.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.errorLabel.ForeColor = System.Drawing.Color.Red;
-            this.errorLabel.Location = new System.Drawing.Point(280, 166);
+            this.errorLabel.Location = new System.Drawing.Point(516, 187);
             this.errorLabel.Name = "errorLabel";
             this.errorLabel.Size = new System.Drawing.Size(38, 16);
             this.errorLabel.TabIndex = 18;
@@ -512,7 +472,7 @@
             this.restoreButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.restoreButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.restoreButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.restoreButton.Location = new System.Drawing.Point(24, 10);
+            this.restoreButton.Location = new System.Drawing.Point(210, 10);
             this.restoreButton.Name = "restoreButton";
             this.restoreButton.Size = new System.Drawing.Size(90, 25);
             this.restoreButton.TabIndex = 13;
@@ -943,18 +903,18 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.BackgroundImage = global::GameAnywhere.Properties.Resources.overallbackground3;
+            this.BackgroundImage = global::GameAnywhere.Properties.Resources.overallbackground2;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(832, 435);
+            this.Controls.Add(this.startNavPanel);
+            this.Controls.Add(this.titlePanel);
             this.Controls.Add(this.startPanel);
             this.Controls.Add(this.resendActivationPanel);
             this.Controls.Add(this.registerPanel);
-            this.Controls.Add(this.changePasswordPanel);
             this.Controls.Add(this.forgetPasswordPanel);
+            this.Controls.Add(this.changePasswordPanel);
             this.Controls.Add(this.loginPanel);
-            this.Controls.Add(this.titlePanel);
-            this.Controls.Add(this.startNavPanel);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "startPage";
@@ -987,10 +947,10 @@
         private System.Windows.Forms.Button loginButton;
         private System.Windows.Forms.Button registerButton;
         private System.Windows.Forms.Button exitButton;
-        private System.Windows.Forms.Button computerToWebButton;
+        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button computerToThumbdriveButton;
-        private System.Windows.Forms.Button thumbdriveAndWebButton;
-        private System.Windows.Forms.Button webToComputerButton;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button thumbdriveToComputerButton;
         private System.Windows.Forms.Panel startPanel;
         private System.Windows.Forms.Panel loginPanel;
@@ -1039,8 +999,6 @@
         private System.Windows.Forms.TextBox emailChangePasswordPanelTextBox;
         private System.Windows.Forms.Label newpasswordMismatchChangePasswordPanelLabel;
         private System.Windows.Forms.Label userDetailsInvalidResendActivationPanelLabel;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button restoreButton;
 
 

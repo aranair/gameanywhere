@@ -8,6 +8,8 @@ using System.Security.AccessControl;
 
 using System.Security.Cryptography;
 
+//Codes of md5generation from tutorial site: http://sharpertutorials.com/calculate-md5-checksum-file/
+
 namespace GameAnywhere
 {
     /// <summary>
@@ -38,7 +40,7 @@ namespace GameAnywhere
             sourcePath = source; targetPath = target;
         }
         private static string external = @".\SyncFolder";
-        public static readonly int CONFIG=2, SAVE =1,BOTH=3, ExtToCom = 4, ComToExt = 5;
+        public static readonly int CONFIG=2, SAVE =1,BOTH=3, ExtToCom = 4, ComToExt = 5, WebToCom = 6, ComToWeb = 7;
         /// <summary>
         /// copies the original settings to test back up folder to check created backup folder
         /// settings: FolderOperation.CONFIG/SAVE
@@ -51,12 +53,12 @@ namespace GameAnywhere
             GameLibrary library = new GameLibrary();
             List<Game> gameList = library.GetGameList(OfflineSync.ComToExternal);
             //settings 1 - save, 2 - config, 3 - both
-            if (settings != 1) // for settings 2 & 3
+            if (settings != SyncAction.SavedGameFiles) // for settings config & all
             {
                 foreach (SyncAction action in synclist)
                 {
                     string testbackup = "";
-                    if (direction == ExtToCom)
+                    if (direction == ExtToCom || direction == WebToCom)
                         testbackup = Path.Combine(action.MyGame.ConfigParentPath, "ConfigTestBackup");
                     else
                         testbackup = Path.Combine(external, "ConfigTestBackup");
@@ -70,7 +72,7 @@ namespace GameAnywhere
                     foreach (string s in list)
                     {
                         if (File.Exists(s))
-                            File.Copy(s, testbackup+@"\"+Path.GetFileName(s));
+                            File.Copy(s, testbackup+@"\"+Path.GetFileName(s),true);
                         else
                         {                
                             if(Directory.Exists(s))
@@ -79,12 +81,12 @@ namespace GameAnywhere
                     }
                 }
             }
-            if(settings  != 2) //for setting 1 & 3
+            if(settings  != SyncAction.ConfigFiles) //for setting save and all
             {
                 foreach (SyncAction action in synclist)
                 {
                     string testbackup = "";
-                    if (direction == ExtToCom)
+                    if (direction == ExtToCom || direction == WebToCom)
                         testbackup = Path.Combine(action.MyGame.SaveParentPath, "SaveTestBackup");
                     else
                         testbackup = Path.Combine(external, "SaveTestBackup");
@@ -106,6 +108,58 @@ namespace GameAnywhere
                         }
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Pre-Condition: path is a folder
+        /// Get all the files contain in this folder and sub-folder
+        /// </summary>
+        /// <param name="path">Path of the file</param>
+        /// <returns>A list of Files contained in the path</returns>
+        public static List<string> GetAllFilesName(string path)
+        {
+            string[] files = Directory.GetFiles(path);
+            List<string> allFiles = new List<string>();
+            if(files != null)
+                allFiles.AddRange(files);
+            string[] dirs = Directory.GetDirectories(path);
+            foreach(string s in dirs)
+            {
+                List<string> temp = new List<string>();
+                if (Directory.Exists(s))
+                {
+                    temp = GetAllFilesName(s);
+                    allFiles.AddRange(temp);
+                }
+                else
+                    allFiles.Add(s);
+            }
+            return allFiles;
+        }
+
+        /// <summary>
+        /// This method will create the file and folders which is not present in the path specified.
+        /// </summary>
+        /// <param name="path">full path of the file</param>
+        public static void CreateFile(string path, string rootDir)
+        {
+
+            // .\localTest1\Game1\savedGame\test1.txt
+            string[] folders = path.Split(new Char[] {'\\'});
+            for (int i = 0; i < folders.Length-1; i++ )
+            {
+                rootDir = Path.Combine(rootDir, folders[i]);
+                if (! Directory.Exists(rootDir))
+                {
+                    Directory.CreateDirectory(rootDir);
+                }
+            }
+            string fullPath = rootDir+@"\"+Path.GetFileName(path);
+            if (fullPath.Contains("txt"))
+            {
+                FileStream fs = File.Create(rootDir + @"\" + Path.GetFileName(path));
+                fs.Close();
             }
         }
 
@@ -150,6 +204,20 @@ namespace GameAnywhere
         }
 
         /// <summary>
+        /// GenerateHash method from the WebAndThumbSync Class
+        /// </summary>
+        /// <param name="path">The path of the file to be hashed</param>
+        /// <returns>The hashcode in string</returns>
+        public static string GenerateHash(string path)
+        {
+            FileStream fs = File.Open(path, FileMode.Open);
+            MD5 md5 = MD5.Create();
+            string hash = BitConverter.ToString(md5.ComputeHash(fs)).Replace(@"-", @"").ToLower();
+            fs.Close();
+            return hash;
+        }
+
+        /// <summary>
         /// copy all the files of the directory from source to destination
         /// </summary>
         /// <param name="source"></param>
@@ -165,7 +233,7 @@ namespace GameAnywhere
 
         /// <summary>
         /// return the string of the Md5 hash code
-        /// Codes from tutorial site: http://sharpertutorials.com/calculate-md5-checksum-file/
+        /// 
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
@@ -182,6 +250,17 @@ namespace GameAnywhere
                 sb.Append(retVal[i].ToString("x2"));
             }
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Find the differences in the given file specified in the parameters.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="destination"></param>
+        /// <returns></returns>
+        public static bool findFileDifferences(string source, string destination)
+        {
+            return GetMD5HashFromFile(source).Equals(GetMD5HashFromFile(destination));
         }
 
         /// <summary>

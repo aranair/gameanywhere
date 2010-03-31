@@ -6,6 +6,7 @@ using System.Collections;
 using System.IO;
 using System.Reflection;
 using System.Diagnostics;
+using System.Security.Cryptography;
 
 using System.Windows.Forms;
 
@@ -90,11 +91,80 @@ namespace GameAnywhere
             }
         }
 
+
+        /// <summary>
+        /// This method will create the test folders/files for testing the sync method 
+        /// </summary>
+        /// <param name="localHash">a string array of the text file</param>
+        public void CreateWebThumbSyncTestFile(string[] file)
+        {
+            int index = 0;
+            string front = @".\";
+            while (!file[index].Equals("#"))
+            {
+                if (file[index].Equals("@"))
+                {
+                    front = @".\"+file[++index];
+                    Directory.CreateDirectory(front);
+                    ++index;
+                }
+                else
+                {
+                    string[] current = file[index].Split(new Char[] { ',' });
+                    FolderOperation.CreateFile(current[0],front);
+                    if (current.Length == 2)
+                    {
+                        TextWriter tw = new StreamWriter(front + "\\" + current[0]);
+                        tw.WriteLine(current[1]);
+                        tw.Close();
+                    }
+                    index++;
+                }
+            }
+        }
+
         /// <summary>
         /// startTest will invoke the 
         /// </summary>
         public List<TestCase> startTest()
         {
+            /*
+            //initialize thefiles and folders if the test class is WebAndThumbSync
+            if (testClass.GetType().Equals(typeof(WebAndThumbSync)))
+            {
+                string localPath = @".\GenerateLocalTestFile.txt";
+                string webPath = @".\GenerateWebTestFile.txt";
+                string metaDataPath = @".\GenerateMetaData.txt";
+
+                //Read the files for each
+                string[] localHash = File.ReadAllLines(localPath);
+                string[] webHash = File.ReadAllLines(webPath);
+                string[] metaHash = File.ReadAllLines(metaDataPath);
+
+                //Create the test files and folders
+                CreateWebThumbSyncTestFile(localHash);
+                //Create and Upload web copy
+                CreateWebThumbSyncTestFile(webHash);
+
+                //Create metadata files
+                CreateWebThumbSyncTestFile(metaHash);
+
+                //create the serialize object for local for verification
+                FolderOperation.SerializeMetaData(localHash,WebAndThumbSync.LocalMetaDataFileName+"Test",false);
+
+                //create metadata of web copy and upload. for verification later
+                FolderOperation.SerializeMetaData(webHash,WebAndThumbSync.WebMetaDataFileName+"Test",false);
+
+                //create the meta data and locally and upload
+                FolderOperation.SerializeMetaData(metaHash,WebAndThumbSync.LocalMetaDataFileName,false);
+                for (int i = 1; 1 <= 16; ++i)
+                {
+                    File.Copy(@".\metaTest" + i + @"\metadata.ga", @".\localTest" + i + @"\metadata.ga");
+                    File.Copy(@".\metaTest" + i + @"\metadata.ga", @".\webTest" + i + @"\metadata.web");
+                }
+
+            }
+             * */
             foreach (TestCase t in testCases)
             {
                 t.invokeTestMethod(/*ref testClass*/);

@@ -10,7 +10,6 @@ using System.Collections;
 using System.IO;
 using Microsoft.Win32;
 using System.Diagnostics;
-using System.Text.RegularExpressions;
 
 namespace GameAnywhere
 {
@@ -27,24 +26,11 @@ namespace GameAnywhere
         /// </summary>
         private string typeOS;
 
-        /// <summary>
-        /// Controller class to communicate with other layers.
-        /// </summary>
-        private Controller controller;
-
-        /// <summary>
-        /// List of all currently supposed game names for use with GUI and other classes.
-        /// </summary>
         #region static game names
-        ///<value>Warcraft 3 game name.</value>
         public static readonly string Warcraft3GameName = "Warcraft 3";
-        ///<value>FIFA10 game name.</value>
         public static readonly string FIFA10GameName = "FIFA 10";
-        ///<value>Football Manager 2010 game name.</value>
         public static readonly string FM2010GameName = "Football Manager 2010";
-        ///<value>World of Warcraft game name.</value>
         public static readonly string WOWGameName = "World of Warcraft";
-        ///<value>Abuse game name.</value>
         public static readonly string AbuseGameName = "Abuse";
         #endregion
 
@@ -53,19 +39,6 @@ namespace GameAnywhere
         /// </summary>
         public GameLibrary()
         {
-            // Create an empty list of games.
-            installedGameList = new List<Game>();
-
-            // Find the OS name and stores it into the data member.
-            typeOS = GetOSName();
-        }
-
-        /// <summary>
-        /// Overloaded Constructor.
-        /// </summary>
-        public GameLibrary(Controller controller)
-        {
-            this.controller = controller;
             // Create an empty list of games.
             installedGameList = new List<Game>();
 
@@ -93,110 +66,36 @@ namespace GameAnywhere
         /// </summary>
         private void Initialize()
         {
-            System.IO.Stream fileStream = this.GetType().Assembly.GetManifestResourceStream("GameAnywhere.gamev3.txt");
-            StreamReader r = new StreamReader(fileStream);
-            InitGamesFromFile(r);
+            InitializeAbuse();
+            InitializeWarcraft3();
+            InitializeFIFA2010();
+            InitializeWOW();
+            InitializeFM2010();
+
+            //InitializeCODModernWarfare();
+            //InitializeDragonAge();       
+            //InitializeL4D2();
         }
 
         /// <summary>
         /// Returns a game list according to the direction passed in.
-        /// This is the default GetGameList function that handles only OFFLINE synchronizations.
-        /// Pre-condition: Direction passed in must be valid: either ExternalToCom or ComToExternal
-        /// Post-condition: A new list of installed games that are compatible with the direction will be returned.
         /// </summary>
         /// <param name="direction">Direction of sync</param>
         /// <returns>List of installed games that are compatible with the direction</returns>
         public List<Game> GetGameList(int direction) 
         {
-            Debug.Assert(direction == OfflineSync.ExternalToCom || direction == OfflineSync.ComToExternal 
-                || direction == OfflineSync.Uninitialize || direction == OnlineSync.ComToWeb);
+            //Debug.Assert(direction == OfflineSync.ExternalToCom || direction == OfflineSync.ComToExternal || direction == OfflineSync.Uninitialize);
             RefreshList();
 
             if (direction == OfflineSync.ExternalToCom)
             {
+                //NOTE: do not modify installedGameList
                 List<Game> newList = new List<Game>();
-                //NOTE: do not modify installedGameList        
                 AddGamesSupportedByThumbdrive(ref newList);
                 return newList;
             }
-            else // ComToExternal, ComToWeb,
+            else 
                 return this.InstalledGameList;
-        }
-        /// <summary>
-        /// Returns a game list according to the direction passed in.
-        /// This is the overloaded GetGameList function that handles only WEB TO COM direction synchronizations.
-        /// Pre-condition: Direction passed in must be valid: either WebToCom, ComToWeb or ExternalAndWeb.
-        /// Post-condition: A new list of installed games that are compatible with the direction will be returned.
-        /// </summary>
-        /// <param name="direction">Direction of sync.</param>
-        /// <param name="webGamesList">List of web games.</param>
-        /// <returns>List of installed games that are compatible with the direction</returns>
-        public List<Game> GetGameList(int direction, List<string> webGamesList)
-        {
-            Debug.Assert(direction == OnlineSync.WebToCom);
-            RefreshList();
-            List<Game> newList = new List<Game>();
-
-            AddGamesSupportedByWeb(ref newList, webGamesList);
-
-            return newList;
-            
-        }
-  
-        /// <summary>
-        /// Gets the corresponding games/files from the online database for each game in the master installedGameList
-        /// to see if there are config or saved game files available for them.
-        /// </summary>
-        /// <param name="newList">List to add the games supported by web</param>
-        private void AddGamesSupportedByWeb(ref List<Game> newList, List<string> webGamesList)
-        {     
-            //takes the current installedGameList. checks each game with web's and return all the games that is available.
-            foreach (Game installedGame in installedGameList)
-            {
-                MatchWebGameAndFiles(installedGame, webGamesList, ref newList);
-            }//end foreach
-        }
-
-        /// <summary>
-        /// Finds a match for an installed game, with the list of games on the web passed in as strings 
-        /// and creates a new game to be added into the list of common games, and sets the config list/ saved game list
-        /// of the new game according to the web's availability.
-        /// </summary>
-        /// <param name="installedGame">Game to be searched for.</param>
-        /// <param name="webGameList">List of games (strings) on the web.</param>
-        /// <param name="newList">List for the game to be added in.</param>
-        private void MatchWebGameAndFiles(Game installedGame, List<string> webGameList, ref List<Game> newList)
-        {
-            bool gameExists = false;
-
-            List<string> newConfigPathList = new List<string>();
-            List<string> newSavePathList = new List<string>();
-
-            // Finds the games and file types that are available on the web.
-            foreach (string line in webGameList)
-            {
-                // line = e.g "Warcraft 3/Config"
-                string gameName = line.Remove(line.IndexOf('/'));
-                string gameFileType = line.Substring(line.IndexOf("/") + 1);
-                
-                // Game name matches.
-                if (gameName.Equals(installedGame.Name))
-                {
-                    gameExists = true;
-                    if (gameFileType.Equals("config"))
-                        newConfigPathList.Add("Available");
-
-                    if (gameFileType.Equals("savedGame"))
-                        newSavePathList.Add("Available");
-                }
-            }
-
-            if (gameExists)
-            {
-                Game newGame = new Game(newConfigPathList, newSavePathList, installedGame.Name, installedGame.InstallPath, installedGame.ConfigParentPath, installedGame.SaveParentPath);
-                newList.Add(newGame);
-            }
-
         }
 
         /// <summary>
@@ -207,6 +106,7 @@ namespace GameAnywhere
         /// <param name="newList">List to add the games supported by external thumbdrive</param>
         private void AddGamesSupportedByThumbdrive(ref List<Game> newList)
         {
+            
             //takes the current installedGameList. checks each game with thumbdrive,  returns all the games that is available.
             foreach (Game installedGame in installedGameList)
             {
@@ -236,86 +136,56 @@ namespace GameAnywhere
             Game newGame = new Game(installedGame.ConfigPathList, installedGame.SavePathList, installedGame.Name, installedGame.InstallPath, installedGame.ConfigParentPath, installedGame.SaveParentPath);
 
             // Checks if config/saved game files are available on the thumbdrive and sets list accordingly.
-            EditGenericConfigAndSavedGameLists(ref newGame);
+            EditConfigAndSavedGameLists(ref newGame, OfflineSync.ExternalToCom);
 
             // add it to list to be returned;
             newList.Add(newGame);           
         }
 
         /// <summary>
-        /// Edits the ConfigList and SaveGameList of the game passed in.(generic)
+        /// Edits the config and saved game lists of the new game, according to the direction.
         /// </summary>
-        /// <param name="newGame">The game to be editted.</param>
-        public void EditGenericConfigAndSavedGameLists(ref Game newGame)
+        private void EditConfigAndSavedGameLists(ref Game newGame, int direction)
         {
-
-            List<string> newConfigPathList = new List<string>();
-            foreach (string s in newGame.ConfigPathList)
+            if (direction == OfflineSync.ExternalToCom)
             {
                 string externalGameFolderPath = Directory.GetCurrentDirectory() + @"\SyncFolder\" + newGame.Name;
                 //if any of savedgame/config folder does not exist, make the fields blank
                 string configPath = externalGameFolderPath + @"\Config";
+                string savedGamePath = externalGameFolderPath + @"\savedGame";
 
-                string n = s.Replace(newGame.ConfigParentPath, configPath);
-                newConfigPathList.Add(n);
+                try
+                {
+                    if (newGame.Name.Equals(FIFA10GameName))
+                    {
+                        InitializeFIFAConfigList(ref newGame, configPath);
+                        InitializeFIFASavedGameList(ref newGame, savedGamePath);
+                    }
+                    else if (newGame.Name.Equals(Warcraft3GameName))
+                    {
+                        InitializeWarcraft3ConfigList(ref newGame, configPath);
+                        InitializeWarcraft3SavedGameList(ref newGame, savedGamePath);
+                    }
+                    else if (newGame.Name.Equals(WOWGameName))
+                    {
+                        InitializeWOWConfigList(ref newGame, configPath);
+                        InitializeWOWSavedGameList(ref newGame, savedGamePath);
+                    }
+                    else if (newGame.Name.Equals(FM2010GameName))
+                    {
+                        InitializeFM2010SavedGameList(ref newGame, savedGamePath);
+                    }
+                    else if (newGame.Name.Equals(AbuseGameName))
+                    {
+                        InitializeAbuseSavedGameList(ref newGame, savedGamePath);
+                    }
+                }
+
+                catch (Exception)
+                {
+                }
             }
-            newGame.ConfigPathList = newConfigPathList;
-
-            List<string> newSavePathList = new List<string>();
-            foreach (string s in newGame.SavePathList)
-            {
-                string externalGameFolderPath = Directory.GetCurrentDirectory() + @"\SyncFolder\" + newGame.Name;
-                //if any of savedgame/config folder does not exist, make the fields blank
-                string savedGamePath = externalGameFolderPath + @"\SavedGame";
-
-                string n = s.Replace(newGame.SaveParentPath, savedGamePath);
-                newSavePathList.Add(n);
-            }
-            newGame.SavePathList = newSavePathList;
         }
-
-        /// <summary>
-        /// Edits the config and saved game lists of the new game for the direction: External To Computer.
-        /// </summary>
-        private void EditConfigAndSavedGameLists(ref Game newGame)
-        {
-            string externalGameFolderPath = Directory.GetCurrentDirectory() + @"\SyncFolder\" + newGame.Name;
-            //if any of savedgame/config folder does not exist, make the fields blank
-            string configPath = externalGameFolderPath + @"\Config";
-            string savedGamePath = externalGameFolderPath + @"\SavedGame";
-
-            try
-            {
-                if (newGame.Name.Equals(FIFA10GameName))
-                {
-                    InitializeFIFAConfigList(ref newGame, configPath);
-                    InitializeFIFASavedGameList(ref newGame, savedGamePath);
-                }
-                else if (newGame.Name.Equals(Warcraft3GameName))
-                {
-                    InitializeWarcraft3ConfigList(ref newGame, configPath);
-                    InitializeWarcraft3SavedGameList(ref newGame, savedGamePath);
-                }
-                else if (newGame.Name.Equals(WOWGameName))
-                {
-                    InitializeWOWConfigList(ref newGame, configPath);
-                    InitializeWOWSavedGameList(ref newGame, savedGamePath);
-                }
-                else if (newGame.Name.Equals(FM2010GameName))
-                {
-                    InitializeFM2010SavedGameList(ref newGame, savedGamePath);
-                }
-                else if (newGame.Name.Equals(AbuseGameName))
-                {
-                    InitializeAbuseSavedGameList(ref newGame, savedGamePath);
-                }
-            }
-
-            catch (Exception)
-            {
-            }    
-        }
-
         #endregion
 
         #region Currently supported games
@@ -352,7 +222,7 @@ namespace GameAnywhere
                         InitializeFIFAConfigList(ref newGame, configParentPath);
                         InitializeFIFASavedGameList(ref newGame, saveParentPath);
 
-                        installedGameList.Add(newGame);
+                        AddToInstalledGames(newGame);
                     }
 
                 }
@@ -386,18 +256,25 @@ namespace GameAnywhere
         private void InitializeFIFASavedGameList(ref Game newGame, string savedGamePath)
         {
             newGame.SavePathList = new List<string>();
-            // Default saved game folder ( should be always there )
-            if (Directory.Exists(savedGamePath + @"\A. Profiles"))
-                newGame.SavePathList.Add(savedGamePath + @"\A. Profiles");
 
             // Finds each of the variable I. Be A Pro - * saved game files and adds it to the list.
             if (Directory.Exists(savedGamePath))
             {
-                // Generic folders
-                foreach (string folder in Directory.GetDirectories(savedGamePath, "I. Be A Pro - *"))
-                {
-                    newGame.SavePathList.Add(folder);
-                }
+                AddFIFAVariableSavedGames(ref newGame, savedGamePath, "A. *");
+                AddFIFAVariableSavedGames(ref newGame, savedGamePath, "B. *");
+                AddFIFAVariableSavedGames(ref newGame, savedGamePath, "C. *");
+                AddFIFAVariableSavedGames(ref newGame, savedGamePath, "D. *");
+                AddFIFAVariableSavedGames(ref newGame, savedGamePath, "I. *");
+                AddFIFAVariableSavedGames(ref newGame, savedGamePath, "J. *");
+
+            }
+        }
+
+        private static void AddFIFAVariableSavedGames(ref Game newGame, string savedGamePath, string regex)
+        {
+            foreach (string folder in Directory.GetDirectories(savedGamePath, regex))
+            {
+                newGame.SavePathList.Add(folder);
             }
         }
         #endregion
@@ -432,7 +309,7 @@ namespace GameAnywhere
                         InitializeWarcraft3ConfigList(ref newGame, configParentPath);
                         InitializeWarcraft3SavedGameList(ref newGame, saveParentPath);
 
-                        installedGameList.Add(newGame);
+                        AddToInstalledGames(newGame);
                     }
                 }
             }
@@ -496,7 +373,7 @@ namespace GameAnywhere
 
                         InitializeFM2010SavedGameList(ref newGame, saveParentPath);
 
-                        installedGameList.Add(newGame);
+                        AddToInstalledGames(newGame);
                     }
                 }
             }
@@ -513,6 +390,7 @@ namespace GameAnywhere
         /// <param name="saveParentPath">Saved game parent path of the game.</param>
         private void InitializeFM2010SavedGameList(ref Game newGame, string saveParentPath)
         {
+            newGame.SavePathList = new List<string>();
             // Default saved game folder
             if (Directory.Exists(saveParentPath + @"\games"))
                 newGame.SavePathList.Add(saveParentPath + @"\games");
@@ -551,7 +429,7 @@ namespace GameAnywhere
                         InitializeWOWConfigList(ref newGame, configParentPath);
                         InitializeWOWSavedGameList(ref newGame, saveParentPath);
 
-                        installedGameList.Add(newGame);
+                        AddToInstalledGames(newGame);
                     }
                 }
             }
@@ -593,6 +471,7 @@ namespace GameAnywhere
         /// </summary>
         private void InitializeAbuse()
         {
+
             string registryName = "Install_Dir";
             string key = RegistrySoftwarePath + @"\Abuse";
 
@@ -616,7 +495,7 @@ namespace GameAnywhere
 
                         InitializeAbuseSavedGameList(ref newGame, saveParentPath);
 
-                        installedGameList.Add(newGame);
+                        AddToInstalledGames(newGame);
                     }
                 }
             }
@@ -645,19 +524,7 @@ namespace GameAnywhere
             }
         }
 
-        /// <summary>
-        /// Initializes config files list for Abuse
-        /// </summary>
-        /// <param name="newGame">Game instance to be editted.</param>
-        /// <param name="saveParentPath">Config files parent path of the game.</param>
-        private void InitializeAbuseConfigList(ref Game newGame, string configParentPath)
-        {
-            newGame.ConfigPathList = new List<string>();
-            if (Directory.Exists(configParentPath + @"\Account"))
-                newGame.ConfigPathList.Add(configParentPath + @"\Account");
-        }
         #endregion
-
 
         #endregion
 
@@ -783,6 +650,15 @@ namespace GameAnywhere
         #endregion
 
         #region Propeties and Helper functions
+
+        /// <summary>
+        /// Adds a game into the installedGameList;
+        /// </summary>
+        /// <param name="game"></param>
+        private void AddToInstalledGames(Game game)
+        {
+            installedGameList.Add(game);
+        }
 
         /// <summary>
         /// Returns full list of installed games on current machine.
@@ -913,274 +789,6 @@ namespace GameAnywhere
             if (s.LastIndexOf("\\") == s.Length - 1)
                 s = s.Remove(s.LastIndexOf("\\"));
         }
-        #endregion
-
-        #region Text File Initialization
-        /// <summary>
-        /// Initializes a single game from one set of dictionary text file entries.
-        /// </summary>
-        /// <param name="variableListPassed">The set of dictionary values for one game entry.</param>
-        private void InitializeGameFromTextFile(Dictionary<string, string> variableListPassed)
-        {
-            string gameName = "";
-            string regKey = "";
-            string regValue = "";
-            string saveParentPath = "";
-            string configParentPath = "";
-
-            
-            Dictionary<string, string> variableList = new Dictionary<string, string>();
-
-            foreach (string key in variableListPassed.Keys)
-            {
-                string s = ReplaceStrings(variableListPassed[key]);
-                variableList.Add(key, s);
-
-            }
-            gameName = variableList["Game"];
-            regKey = variableList["RegKey"];
-            regValue = variableList["RegValue"];
-
-            try
-            {
-                // Attempts to open the registry key to check existence of game.
-                RegistryKey rk;
-                if (variableList["RegType"].Equals("HKCU"))
-                    rk = Registry.CurrentUser.OpenSubKey(regKey);
-                else if (variableList["RegType"].Equals("HKLM"))
-                    rk = Registry.LocalMachine.OpenSubKey(regKey);
-                else
-                    return;
-
-                using (rk)
-                {
-                    // If game exists ( key is not null and value of InstallPath is not null )
-                    if (rk != null && rk.GetValue(regValue) != null)
-                    {
-                        List<string> configList = new List<string>();
-                        List<string> saveList = new List<string>();
-                        string installPath = "" + rk.GetValue(regValue);
-                        RemoveTrailingSlash(ref installPath);
-
-                        Dictionary<string, string> variableListFinal = new Dictionary<string, string>();
-
-                        // This portion replaces all "InstallPath" variable with the correct install path of the game.
-                        foreach (string key in variableList.Keys)
-                        {
-                            string s = ReplaceInstallPath(variableList[key], installPath);
-                            variableListFinal.Add(key, s);
-                        }
-
-                        if (variableListFinal.ContainsKey("ConfigParentPath"))
-                            configParentPath = variableListFinal["ConfigParentPath"];
-
-                        if (variableListFinal.ContainsKey("SaveParentPath"))
-                            saveParentPath = variableListFinal["SaveParentPath"];
-
-                        FindAllSavedGameFiles(ref saveList, variableListFinal);
-
-                        FindAllConfigFiles(ref configList, variableListFinal);
-
-                        Game newGame = new Game(configList, saveList, gameName, installPath, configParentPath, saveParentPath);
-
-                        installedGameList.Add(newGame);
-                    }
-                }
-            }// end try
-            catch (Exception)
-            {
-                // Game folders not accessible.
-            }
-
-        }
-        
-        /// <summary>
-        /// Adds both variable saved game files and the fixed ones given in "SavePathList" variable.
-        /// </summary>
-        /// <param name="saveList">The saved game list to add the files to.</param>
-        /// <param name="variableListFinal">The final variable list, of which certain variables have been replaced with actual paths on the PC.</param>
-        private static void FindAllSavedGameFiles(ref List<string> saveList, Dictionary<string, string> variableListFinal)
-        {
-            if (variableListFinal.ContainsKey("SavePathList"))
-                AddSaveFiles(ref saveList, variableListFinal);
-
-            if (variableListFinal.ContainsKey("SearchSaveParent"))
-                AddVariableSaveFiles(ref saveList, variableListFinal);
-        }
-
-        /// <summary>
-        /// Adds both variable config files and the fixed ones given in "ConfigPathList" variable.
-        /// </summary>
-        /// <param name="configList">The config file list to add the files to.</param>
-        /// <param name="variableListFinal">The final variable list, of which certain variables have been replaced with actual paths on the PC.</param>
-        private static void FindAllConfigFiles(ref List<string> configList, Dictionary<string, string> variableListFinal)
-        {
-            if (variableListFinal.ContainsKey("ConfigPathList"))
-                AddConfigFiles(ref configList, variableListFinal);
-
-            if (variableListFinal.ContainsKey("SearchConfigParent"))
-                AddVariableConfigFiles(ref configList, variableListFinal);
-        }
-
-        /// <summary>
-        /// Adds saved games files from a regex key given in value of key "SearchSaveParent" in the given dictionary.
-        /// </summary>
-        /// <param name="saveList">The List of saved games file to add the files to.</param>
-        /// <param name="variableListFinal">The dictionary list of all data from text file.</param>
-        private static void AddVariableSaveFiles(ref List<string> saveList, Dictionary<string, string> variableListFinal)
-        {
-            List<string> listOfVariableSaveList = SeperatePathsByDelimiter(variableListFinal["SearchSaveParent"]);
-
-            foreach (string regex in listOfVariableSaveList)
-            {
-                if (Directory.Exists(variableListFinal["SaveParentPath"]))
-                    AddFoldersAndFiles(ref saveList, variableListFinal["SaveParentPath"], regex);
-            }
-        }
-
-        /// <summary>
-        /// Searches a given regex, at the path provided, and add all files and folders that matches the regex to the list.
-        /// </summary>
-        /// <param name="list">The List for files and folders to be added to.</param>
-        /// <param name="path">Path to search regex at.</param>
-        /// <param name="regex">Regex string to search.</param>
-        private static void AddFoldersAndFiles(ref List<string> list, string path, string regex)
-        {
-            foreach (string folder in Directory.GetDirectories(path, regex))
-            {
-                list.Add(folder);
-            }
-            foreach (string file in Directory.GetFiles(path, regex))
-            {
-                list.Add(file);
-            }
-        }
-
-        /// <summary>
-        /// Adds config files from a regex key given in value of key "SearchConfigParent" in the given dictionary.
-        /// </summary>
-        /// <param name="saveList">The List of config files to add the files  to.</param>
-        /// <param name="variableListFinal">The dictionary list of all data from text file.</param>
-        private static void AddVariableConfigFiles(ref List<string> configList, Dictionary<string, string> variableListFinal)
-        {
-            List<string> listOfVariableConfigList = SeperatePathsByDelimiter(variableListFinal["SearchConfigParent"]);
-
-            foreach (string regex in listOfVariableConfigList)
-            {
-                if (Directory.Exists(variableListFinal["ConfigParentPath"]))
-                    AddFoldersAndFiles(ref configList, variableListFinal["ConfigParentPath"], regex);
-            }
-        }
-
-        /// <summary>
-        /// Adds Saved game files from the dictionary list, reading from the SavePathList key.
-        /// </summary>
-        /// <param name="saveList">The List of saved game files to add the files to.</param>
-        /// <param name="variableListFinal">The dictionary list of all data from text file.</param>
-        private static void AddSaveFiles(ref List<string> saveList, Dictionary<string, string> variableListFinal)
-        {
-            List<string> delimitedConfigPaths = SeperatePathsByDelimiter(variableListFinal["SavePathList"]);
-            foreach (string path in delimitedConfigPaths)
-            {
-               if (Directory.Exists(path)) 
-                    saveList.Add(path);
-            }
-        }
-
-        /// <summary>
-        /// Adds config files from the dictionary list, reading from the ConfigPathList key.
-        /// </summary>
-        /// <param name="configList">The List of config files to add the files to.</param>
-        /// <param name="variableListFinal">The dictionary list of all data from text file.</param>
-        private static void AddConfigFiles(ref List<string> configList, Dictionary<string, string> variableListFinal)
-        {
-            List<string> delimitedConfigPaths = SeperatePathsByDelimiter(variableListFinal["ConfigPathList"]);
-            foreach (string path in delimitedConfigPaths)
-            {
-                if(Directory.Exists(path))
-                    configList.Add(path);
-            }
-        }
-
-        /// <summary>
-        /// Seperates a line into delimited paths to a character, and returns a list of strings.
-        /// </summary>
-        /// <param name="longPath">The string to delimit.</param>
-        /// <returns>List of strings delimited by ,</returns>
-        private static List<string> SeperatePathsByDelimiter(string longPath)
-        {
-            List<string> delimitedPaths = new List<string>();
-
-            while (longPath.IndexOf(",") != -1)
-            {
-                delimitedPaths.Add(longPath.Remove(longPath.IndexOf(",")));
-                longPath = longPath.Substring(longPath.IndexOf(",") + 1);
-            }
-            delimitedPaths.Add(longPath);
-
-            return delimitedPaths;
-        }
-
-        /// <summary>
-        /// Replaces a list of strings, with a variable value, in the string passed in.
-        /// </summary>
-        /// <param name="s">String to edit.</param>
-        /// <returns>Editted string</returns>
-        public string ReplaceStrings(string s)
-        {
-            s = Regex.Replace(s, "DocumentsPath", DocumentsPath);
-            s = Regex.Replace(s, "RegistrySoftwarePath", RegistrySoftwarePath);
-            return s;
-        }
-
-        /// <summary>
-        /// Replaces InstallPath variable in the given string with the actual install path passed in.
-        /// </summary>
-        /// <param name="s">String to edit.</param>
-        /// <returns>Editted string</returns>
-        public string ReplaceInstallPath(string s, string installPath)
-        {
-            s = Regex.Replace(s, "InstallPath", installPath);
-            return s;
-        }
-
-        /// <summary>
-        /// File parser for the game init text file.
-        /// </summary>
-        /// <param name="filename">File path/name to be parsed.</param>
-        public void InitGamesFromFile(StreamReader streamReader)
-        {
-            Dictionary<string, string> game = new Dictionary<string, string>();
-            // One single line in the text file
-            string line;
-
-            while (streamReader.Peek() >= 0)
-            {
-                line = streamReader.ReadLine();
-                // # designated for comments
-                if (line.IndexOf("#") == 0)
-                    continue;
-
-                // [ENDGAME] in file determines end of this game's information.
-                if (line.Equals("[ENDGAME]"))
-                {
-                    InitializeGameFromTextFile(game);
-                    game.Clear();
-                    continue;
-                }
-                
-                // Empty line
-                if (line.Equals(""))
-                    continue;
-
-                string[] kv = line.Split('=');
-                //this trims white spaces from the entries in the text file.
-                game[kv[0].Trim()] = kv[1].Trim();
-            }
-
-        }
-
-        
         #endregion
     }
 }

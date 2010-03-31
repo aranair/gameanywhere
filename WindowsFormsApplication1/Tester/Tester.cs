@@ -80,9 +80,9 @@ namespace GameAnywhere
         {
 
             //Move any existing SyncFolder
-            if(Directory.Exists(@".\SyncFolder"))
+            if (Directory.Exists(@".\SyncFolder"))
                 Directory.Move(@".\SyncFolder", @".\SyncFolder-backup");
-            Directory.Move(@".\Syncfolder-test",@"SyncFolder");
+            Directory.Move(@".\Syncfolder-test", @"SyncFolder");
 
             TestDriver test = null;
             if (testCaseSource.Text.EndsWith(".tcf"))
@@ -101,8 +101,6 @@ namespace GameAnywhere
                 displayResult.AppendText(cases.Index+") "+cases.MethodName + " : " + cases.TestOutcome.Result + " \nRemarks : " + cases.TestOutcome.Remarks);
                 displayResult.AppendText("\n");
             }
-
-            MessageBox.Show("Restore original SyncFolder now?");
 
             Directory.Move(@"SyncFolder", @".\Syncfolder-test");
             //restore the syncfolder if it is backup

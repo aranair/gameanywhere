@@ -35,9 +35,6 @@ namespace GameAnywhere
         /// </summary>
         private List<Panel> panelList;
 
-        /// <summary>
-        /// Form to ask user to wait in patience.
-        /// </summary>
         private WaitingDialog waitDialog;
 
         /// <summary>
@@ -48,30 +45,27 @@ namespace GameAnywhere
         {
             InitializeComponent();
             this.controller = controller;
-            waitDialog = new WaitingDialog();
             ChildActive = false;
             ResetErrorLabels();
-            /*if (controller.IsFixedMedia())
-            {
-                DisableThumbdriveFunctions();
-            }*/
+
+            //CheckRunningLocation();
 
             SetPanelList();
-            //controller.Login("lego_jdwx@hotmail.com", "666666");
-            
 
         }
 
         /// <summary>
-        /// Disables all buttons related to external thumbdrive
+        /// Checks to see if program is running from thumbdrive or computer and disables the appropriate buttons.
         /// </summary>
-        private void DisableThumbdriveFunctions()
+        /// <param name="controller"></param>
+        private void CheckRunningLocation()
         {
-            SetBackgroundImage(computerToThumbdriveButton, "GameAnywhere.Resources.computerToThumbdriveButtonMouseDown.gif", ImageLayout.Zoom);
-            SetVisibilityAndUsability(computerToThumbdriveButton, true, false);
+            if (this.controller.IsFixedMedia())
+            {
+                DisableThumbdriveFunctions();
+                SetErrorLabel("Please run from thumbdrive.", Color.Red);
 
-            SetBackgroundImage(thumbdriveToComputerButton, "GameAnywhere.Resources.thumbdriveToComputerButtonMouseDown.gif", ImageLayout.Zoom);
-            SetVisibilityAndUsability(thumbdriveToComputerButton, true, false);
+            }
         }
 
         /// <summary>
@@ -90,7 +84,7 @@ namespace GameAnywhere
         }
         #endregion
 
-        // Mouse event handlers, and other helper functions for all the buttons in the START Panel. (Subsequent Regions as well)
+        // Mouse event handlers, and other help er functions for all the buttons in the START Panel. (Subsequent Regions as well)
         #region Start Panel
         // This region handles all the mouse event handlers for the Computer To Thumbdrive synchronization button.
         #region computerToThumbdriveButton
@@ -127,7 +121,7 @@ namespace GameAnywhere
             // This resets all the error labels that are in this form.
             ResetErrorLabels();
 
-            controller.direction = OfflineSync.ComToExternal;
+            controller.SetSyncDirection(OfflineSync.ComToExternal);
 
             // Get the list of compatible games to be displayed to user.
             List<Game> gameList = controller.GetGameList();
@@ -138,7 +132,7 @@ namespace GameAnywhere
                 errorLabel.Text = "";
 
                 // Show the ChooseGame form for user to choose the files.
-                ChooseGame chooseGameForm = new ChooseGame(controller, gameList, this);
+                ChooseGame chooseGameForm = new ChooseGame(controller, gameList, this );
                 chooseGameForm.ShowDialog();
             }
             else
@@ -170,7 +164,7 @@ namespace GameAnywhere
         private void thumbdriveToComputerButton_MouseClick(object sender, MouseEventArgs e)
         {
             ResetErrorLabels();
-            controller.direction = OfflineSync.ExternalToCom;
+            controller.SetSyncDirection(OfflineSync.ExternalToCom);
 
             List<Game> gList = controller.GetGameList();
 
@@ -181,7 +175,7 @@ namespace GameAnywhere
             }
             else
             {
-                SetErrorLabel("No compatible games.", Color.Red);
+                SetErrorLabel("No compatible games found.", Color.Red);
             }
         }
         #endregion
@@ -275,182 +269,6 @@ namespace GameAnywhere
         }
 
         #endregion
-
-        #region computerToWebButton
-        private void computerToWebButton_MouseClick(object sender, MouseEventArgs e)
-        {
-            // This resets all the error labels that are in this form.
-            ResetErrorLabels();
-            if (controller.IsLoggedIn())
-            {
-                controller.direction = OnlineSync.ComToWeb;
-
-                // Get the list of compatible games to be displayed to user.
-                List<Game> gameList = controller.GetGameList();
-
-                // If there are no games.
-                if (gameList.Count > 0)
-                {
-                    errorLabel.Text = "";
-
-                    // Show the ChooseGame form for user to choose the files.
-                    ChooseGame chooseGameForm = new ChooseGame(controller, gameList, this);
-                    chooseGameForm.ShowDialog();
-                }
-                else
-                    SetErrorLabel("No compatible games found.", Color.Red);
-            }
-            else
-                SetErrorLabel("Please login first.", Color.Red);
-        }
-
-        private void computerToWebButton_MouseDown(object sender, MouseEventArgs e)
-        {
-            SetBackgroundImage(computerToWebButton, "GameAnywhere.Resources.computerToWebButtonMouseDown.gif", ImageLayout.Zoom);
-        }
-
-        private void computerToWebButton_MouseEnter(object sender, EventArgs e)
-        {
-            SetBackgroundImage(computerToWebButton, "GameAnywhere.Resources.computerToWebButtonMouseOver.gif", ImageLayout.Zoom);
-        }
-
-        private void computerToWebButton_MouseLeave(object sender, EventArgs e)
-        {
-            SetBackgroundImage(computerToWebButton, "GameAnywhere.Resources.computerToWebButton.gif", ImageLayout.Zoom);
-        }
-
-        private void computerToWebButton_MouseUp(object sender, MouseEventArgs e)
-        {
-            SetBackgroundImage(computerToWebButton, "GameAnywhere.Resources.computerToWebButton.gif", ImageLayout.Zoom);
-        }
-        #endregion
-
-        #region webToComputerButton
-        private void webToComputerButton_MouseClick(object sender, MouseEventArgs e)
-        {
-            // This resets all the error labels that are in this form.
-            ResetErrorLabels();
-
-            if (controller.IsLoggedIn())
-            {
-
-                controller.direction = OnlineSync.WebToCom;
-
-                // Get the list of compatible games to be displayed to user.
-                List<Game> gameList = controller.GetGameList();
-
-                // If there are no games.
-                if (gameList.Count > 0)
-                {
-                    errorLabel.Text = "";
-
-                    // Show the ChooseGame form for user to choose the files.
-                    ChooseGame chooseGameForm = new ChooseGame(controller, gameList, this);
-                    chooseGameForm.ShowDialog();
-                }
-                else
-                    SetErrorLabel("No compatible games found.", Color.Red);
-            }
-            else
-                SetErrorLabel("Please login first.", Color.Red);
-        }
-
-        private void webToComputerButton_MouseDown(object sender, MouseEventArgs e)
-        {
-            SetBackgroundImage(webToComputerButton, "GameAnywhere.Resources.webToComputerButtonMouseDown.gif", ImageLayout.Zoom);
-        }
-
-        private void webToComputerButton_MouseEnter(object sender, EventArgs e)
-        {
-            SetBackgroundImage(webToComputerButton, "GameAnywhere.Resources.webToComputerButtonMouseOver.gif", ImageLayout.Zoom);
-        }
-
-        private void webToComputerButton_MouseLeave(object sender, EventArgs e)
-        {
-            SetBackgroundImage(webToComputerButton, "GameAnywhere.Resources.webToComputerButton.gif", ImageLayout.Zoom);
-        }
-
-        private void webToComputerButton_MouseUp(object sender, MouseEventArgs e)
-        {
-            SetBackgroundImage(webToComputerButton, "GameAnywhere.Resources.webToComputerButton.gif", ImageLayout.Zoom);
-        }
-        #endregion
-
-        #region thumbdriveAndWebButton
-        private void thumbdriveAndWebButton_MouseClick(object sender, MouseEventArgs e)
-        {
-            ResetErrorLabels();
-            if (controller.IsLoggedIn())
-            {
-                Dictionary<string, int> conflictsList = new Dictionary<string, int>();
-                try
-                {
-                    SetErrorLabel("    Checking Conflicts", Color.Lime);
-                    conflictsList = controller.CheckConflicts();
-                    SetErrorLabel("", Color.Black);
-                }
-                catch (ConnectionFailureException)
-                {
-                    MessageBox.Show("Unable to connect to Web server.");
-                }
-
-                if (conflictsList.Count != 0)
-                {
-                    ConflictResolve conflictsResolve = new ConflictResolve(controller, conflictsList, this);
-                    conflictsResolve.ShowDialog();
-                }
-                else
-                {
-                    List<SyncError> syncErrorList = new List<SyncError>();
-                    try
-                    {
-                        OpenWaitDialog();      
-                        syncErrorList = controller.SynchronizeWebAndThumb(conflictsList);
-                        CloseWaitDialog();
-                    }
-                    catch (ConnectionFailureException)
-                    {
-                        MessageBox.Show("Unable to connect to Web server.");
-                    }
-
-                    if (syncErrorList.Count == 0)
-                        SetErrorLabel("Successfully synchronized", Color.DeepSkyBlue);
-                    else
-                    {
-                        SyncErrorDisplay syncErrorDisplay = new SyncErrorDisplay(syncErrorList);
-                        syncErrorDisplay.ShowDialog();
-                    }
-                    
-                }
-            }
-            else
-                SetErrorLabel("Please login first.", Color.Red);
-
-        }
-
-       
-
-        private void thumbdriveAndWebButton_MouseDown(object sender, MouseEventArgs e)
-        {
-            SetBackgroundImage(thumbdriveAndWebButton, "GameAnywhere.Resources.thumbdriveAndWebButtonMouseDown.gif", ImageLayout.Zoom);
-        }
-
-        private void thumbdriveAndWebButton_MouseEnter(object sender, EventArgs e)
-        {
-            SetBackgroundImage(thumbdriveAndWebButton, "GameAnywhere.Resources.thumbdriveAndWebButtonMouseOver.gif", ImageLayout.Zoom);
-        }
-
-        private void thumbdriveAndWebButton_MouseLeave(object sender, EventArgs e)
-        {
-            SetBackgroundImage(thumbdriveAndWebButton, "GameAnywhere.Resources.thumbdriveAndWebButton.gif", ImageLayout.Zoom);
-        }
-
-        private void thumbdriveAndWebButton_MouseUp(object sender, MouseEventArgs e)
-        {
-            SetBackgroundImage(thumbdriveAndWebButton, "GameAnywhere.Resources.thumbdriveAndWebButton.gif", ImageLayout.Zoom);
-        }
-        #endregion
-
         #endregion
 
         #region Login Panel ( and all it's content )
@@ -615,7 +433,7 @@ namespace GameAnywhere
                 {
                     // Go back to first page and display success text.
                     InitiateStartPanel();
-                    SetErrorLabel("     User Logged In", System.Drawing.Color.DeepSkyBlue);
+                    SetErrorLabel("     User Logged in.", System.Drawing.Color.DeepSkyBlue);
                 }
                 // Login fails
                 else 
@@ -753,7 +571,7 @@ namespace GameAnywhere
                     case 1:
                         {
                             InitiateStartPanel();
-                            SetErrorLabel("   Registration Complete", System.Drawing.Color.DeepSkyBlue);
+                            SetErrorLabel("  Registration Complete", System.Drawing.Color.DeepSkyBlue);
                             break;
                         }// Successfully Registered.
                     case 2:
@@ -1416,9 +1234,9 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="password">Password string to be checked.</param>
         /// <returns>Feedback message for validity of the password passed in.</returns>
-        private static string IsValidPassword(string password)
+        private string IsValidPassword(string password)
         {
-            if (String.IsNullOrEmpty(password))
+            if (password.Equals(""))
                 return "Password field cannot be empty.";
             if (password.Length < 6)
                 return "Password length must be 6 or more characters";
@@ -1432,9 +1250,9 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="password">Email string to be checked.</param>
         /// <returns>Feedback message for validity of the password passed in</returns>
-        public static string IsValidEmail(string email)
+        public string IsValidEmail(string email)
         {
-            if (String.IsNullOrEmpty(email))
+            if (email == null || email.Equals(""))
                 return "Email field cannot be empty. ";
 
             // address is ok regarding the single @ sign
@@ -1446,6 +1264,21 @@ namespace GameAnywhere
         }
         #endregion
 
+        private void OpenWaitDialog()
+        {
+            waitDialog = new WaitingDialog();
+            waitDialog.Show();
+            waitDialog.Refresh();
+            this.Enabled = false;
+        }
+
+        private void CloseWaitDialog()
+        {
+            waitDialog.Close();
+            this.Enabled = true;
+            this.Focus();
+        }
+
         // Enables the main control buttons.
         private void EnableMainControlButtons()
         {
@@ -1454,10 +1287,10 @@ namespace GameAnywhere
         }
 
         // Sets the front page error label's text to the desired string and color.
-        public void SetErrorLabel(string txt, System.Drawing.Color color)
+        public void SetErrorLabel(string s, System.Drawing.Color c)
         {
-            this.errorLabel.Text = txt;
-            this.errorLabel.ForeColor = color;
+            errorLabel.Text = s;
+            errorLabel.ForeColor = c;
         }
 
         // Function disables all other panels other than the one passed in.
@@ -1503,25 +1336,22 @@ namespace GameAnywhere
         }
 
         // Sets control to be visible or enabled and vice versa.
-        private static void SetVisibilityAndUsability(System.Windows.Forms.Control control, bool makeVisible, bool makeEnabled)
+        private void SetVisibilityAndUsability(System.Windows.Forms.Control c, bool makeVisible, bool makeEnabled)
         {
-            control.Visible = makeVisible;
-            control.Enabled = makeEnabled;
+            c.Visible = makeVisible;
+            c.Enabled = makeEnabled;
         }
 
-        private void OpenWaitDialog()
+        /// <summary>
+        /// Disables all buttons related to external thumbdrive
+        /// </summary>
+        private void DisableThumbdriveFunctions()
         {
-            waitDialog = new WaitingDialog();
-            waitDialog.Show();
-            waitDialog.Refresh();
-            this.Enabled = false;
-        }
+            SetBackgroundImage(computerToThumbdriveButton, "GameAnywhere.Resources.computerToThumbdriveButtonMouseDown.gif", ImageLayout.Zoom);
+            SetVisibilityAndUsability(computerToThumbdriveButton, true, false);
 
-        private void CloseWaitDialog()
-        {
-            waitDialog.Close();
-            this.Enabled = true;
-            this.Focus();
+            SetBackgroundImage(thumbdriveToComputerButton, "GameAnywhere.Resources.thumbdriveToComputerButtonMouseDown.gif", ImageLayout.Zoom);
+            SetVisibilityAndUsability(thumbdriveToComputerButton, true, false);
         }
 
         #endregion
@@ -1566,7 +1396,7 @@ namespace GameAnywhere
         }
         #endregion
 
-        #region restoreButton
+        #region restore button
         private void restoreButton_MouseClick(object sender, MouseEventArgs e)
         {
             ResetErrorLabels();
@@ -1613,7 +1443,7 @@ namespace GameAnywhere
                     "Warning");
             }
             else
-                SetErrorLabel("Successfully Restored", Color.DeepSkyBlue);
+                SetErrorLabel("Successfully Restored.", Color.DeepSkyBlue);
         }
 
         private void restoreButton_MouseDown(object sender, MouseEventArgs e)
@@ -1637,10 +1467,6 @@ namespace GameAnywhere
         }
 
         #endregion
-
-
-
-
 
     }
 }

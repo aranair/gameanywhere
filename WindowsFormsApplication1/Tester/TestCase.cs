@@ -116,11 +116,6 @@ namespace GameAnywhere
                     OfflineSync offline = (OfflineSync)testClass;
                     GetExpectedOutput(expected, offline.SyncDirection);
                 }
-                else if(testClass.GetType().Equals(typeof(OnlineSync)))
-                {
-                    OnlineSync online = (OnlineSync)testClass;
-                    GetExpectedOutput(expected, online.SyncDirection);
-                }
             }
             else
                 GetExpectedOutput(expected, 0);
@@ -233,7 +228,8 @@ namespace GameAnywhere
                         case "Register":
                         case "Login":
                             if (err.GetBaseException().GetType().Equals(typeof(System.Net.WebException)) ||
-                                err.GetBaseException().GetType().Equals(typeof(ArgumentException)))
+                                err.GetBaseException().GetType().Equals(typeof(ArgumentException))||
+                                err.GetType().Equals(typeof(ConnectionFailureException)))
                                 returnType = err;
                             else
                             {
@@ -241,7 +237,9 @@ namespace GameAnywhere
                                 result = getInvalidError(err);
                             }
                             break;
-
+                        case "CheckConflict":
+                            MessageBox.Show(err.Message);
+                            break;
                         //add more methods and exceptions here
                         default: 
                             break;
@@ -290,8 +288,12 @@ namespace GameAnywhere
                 case "SynchronizeGames":
                     if(testClass.GetType().Equals(typeof(OfflineSync)))
                         result = Verifier.VerifySynchronizeGames(index, returnType, testClass, exceptionThrown, expectedOutput);
-                    else
+                        /*
+                    else if (testClass.GetType().Equals(typeof(OnlineSync)))
                         result = Verifier.VerifyOnlineSync(index, returnType, testClass, exceptionThrown, expectedOutput);
+                    else if (testClass.GetType().Equals(typeof(WebAndThumbSync)))
+                        result = Verifier.VerifyWebThumbSync(index, returnType, testClass, exceptionThrown, expectedOutput);
+                         * */
                     break;
                 case "Restore":
                     result = Verifier.VerifyRestore(index,input, returnType, testClass, exceptionThrown, expectedOutput, deletedFile);
@@ -309,9 +311,8 @@ namespace GameAnywhere
                 case "ResendActivation":
                     result = Verifier.VerifyResendActivation(index, returnType, testClass, exceptionThrown, expectedOutput);
                     break;
-                case "CheckConflicts":
-                    result = Verifier.VerifyCheckConflicts(index, returnType, testClass, exceptionThrown, expectedOutput);
-                    break;
+
+                //Add more cases here for different methods
             }
             return result; //return test result
         }
@@ -420,11 +421,6 @@ namespace GameAnywhere
                         OfflineSync offline = (OfflineSync)testClass;
                         temp = PreCondition.GetArrayList(param_string[i], offline.SyncDirection);
                     }
-                    else if (testClass.GetType().Equals(typeof(OnlineSync)))
-                    {
-                        OnlineSync online = (OnlineSync)testClass;
-                        temp = PreCondition.GetArrayList(param_string[i], online.SyncDirection);
-                    }
                     else
                         temp = PreCondition.GetArrayList(param_string[i], 0);
                     switch (type)
@@ -472,8 +468,6 @@ namespace GameAnywhere
                     OfflineSync offline = (OfflineSync)testClass;
                     param[i] = PreCondition.GetArray(param_string[i],offline.SyncDirection);   
                 }
-
-                // add in other data type here, queue ... ...
                 else //other primitive data type
                 {
                     if (param_string[i].StartsWith("Integer")) //eg. Integer:100
@@ -489,12 +483,51 @@ namespace GameAnywhere
                     }
                     else if (param_string[i].StartsWith("bool")) //eg. bool:true
                         param[i] = Convert.ToBoolean(param_string[i].Substring(5, param_string[i].Length - 5));
+                    else if (param_string[i].StartsWith("Dictionary"))
+                    {
+                        param[i] = GetDictionaryParam(param_string[i]);
+                    }
                     //add in other primitve data here
+                    else if (param_string[i].ToLower().StartsWith("comtowebuser"))
+                    {
+                        User newUser = new User();
+                        newUser.Email = "TestComToWeb@gmails.com";
+                        param[i] = newUser;
+                    }
+                    else if (param_string[i].ToLower().StartsWith("webtocomuser"))
+                    {
+                            User newUser = new User();
+                            newUser.Email = "TestWebToCom@gmails.com";
+                            param[i] = newUser;
+                    }
                 }
                 //support for other data structure to be added        
             } //end of for loop, extracting input parameters
 
             this.input = param; //set the input
+        }
+
+        public static Dictionary<string,int> GetDictionaryParam(string param_string)
+        {
+            Dictionary<string,int> resolvedConflicts = new Dictionary<string,int>();
+            int start, end;
+            start = param_string.IndexOf("{");
+            end = param_string.IndexOf("}");
+            string dictionaryKeys = param_string.Substring(start + 1, end - (start + 1));
+
+            //if empty Dictionary
+            if (dictionaryKeys.Equals("void"))
+                return resolvedConflicts;
+            string[] keyEntry = dictionaryKeys.Split(new Char[] {'+'});
+
+            foreach (string key in keyEntry)
+            {
+                string[] keyValues = key.Split(new Char[] {';'});
+                string entryName = keyValues[0];
+                string action = keyValues[1];
+                resolvedConflicts.Add(entryName, Convert.ToInt32(action));
+            }
+            return resolvedConflicts;
         }
 
         // test reading in of input and storing the data

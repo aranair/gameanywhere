@@ -15,25 +15,16 @@ namespace GameAnywhere
         string errorMessage;
 
         #region Properties
-        /// <summary>
-        /// The path of the file.
-        /// </summary>
         public string FilePath
         {
             get { return filePath; }
             set { filePath = value; }
         }
-        /// <summary>
-        /// The process that encounter this sync error.
-        /// </summary>
         public string ProcessName
         {
             get { return processName; }
             set { processName = value; }
         }
-        /// <summary>
-        /// The error message of this sync error.
-        /// </summary>
         public string ErrorMessage
         {
             get { return errorMessage; }
