@@ -221,4 +221,4 @@ http://lh6.ggpht.com/_-Xzk-2Bdr-I/S7Iq2aMa2cI/AAAAAAAAALI/pZ3qHURBYTk/s512/seqdi
 
 = API Reference =
 
-Click here for !GameAnywhere [http://docs.google.com/Doc?docid=0AaWx7AIMLnNSZGNqY3JiMmdfNWcycDI1N2Zi&hl=en library].
+Click here for !GameAnywhere [http://api.game-anywhere.com/index.html library].
