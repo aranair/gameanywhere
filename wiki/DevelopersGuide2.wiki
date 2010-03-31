@@ -30,7 +30,7 @@ In this section, we would introduce the basic features of !GameAnywhere and what
  * Restore the computer to its original state after you're done playing on the computer with the files you have synchronized.
 
 
- * Supports World of Warcraft, Warcraft 3, FIFA 10 and Football Manager 2010. 
+ * Supports World of Warcraft, Warcraft 3: The Frozen Throne, FIFA 10 and Football Manager 2010. 
 
  * No installation needed.
 
