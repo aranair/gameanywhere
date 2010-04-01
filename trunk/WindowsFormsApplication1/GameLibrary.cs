@@ -96,6 +96,7 @@ namespace GameAnywhere
         {
             // Replaces current installed games list with a new List.
             installedGameList = new List<Game>();
+            entriesFromTextFile = new List<Dictionary<string, string>>();
 
             // Initializes each of the games again.
             Initialize();
@@ -126,6 +127,7 @@ namespace GameAnywhere
         {
             Debug.Assert(direction == OfflineSync.ExternalToCom || direction == OfflineSync.ComToExternal 
                 || direction == OfflineSync.Uninitialize || direction == OnlineSync.ComToWeb);
+
             RefreshList();
 
             if (direction == OfflineSync.ExternalToCom)
