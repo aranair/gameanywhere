@@ -18,5 +18,11 @@ namespace GameAnywhere
         {
             InitializeComponent();
         }
+
+        public WaitingDialog(string text)
+        {
+            InitializeComponent();
+            this.label1.Text = text;
+        }
     }
 }

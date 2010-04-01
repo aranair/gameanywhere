@@ -388,17 +388,18 @@ namespace GameAnywhere
                 Dictionary<string, int> conflictsList = new Dictionary<string, int>();
                 try
                 {
-                    SetErrorLabel("    Checking Conflicts", Color.Lime);
+                    OpenWaitDialog("Please wait while the files are checked for conflicts.");
                     conflictsList = controller.CheckConflicts();
-                    SetErrorLabel("", Color.Black);
                 }
                 catch (ConnectionFailureException)
                 {
                     MessageBox.Show("Unable to connect to Web server.");
                 }
 
+                // There are conflicts to be resolved, popup will be shown.
                 if (conflictsList.Count != 0)
                 {
+                    CloseWaitDialog();
                     ConflictResolve conflictsResolve = new ConflictResolve(controller, conflictsList, this);
                     conflictsResolve.ShowDialog();
                 }
@@ -407,7 +408,8 @@ namespace GameAnywhere
                     List<SyncError> syncErrorList = new List<SyncError>();
                     try
                     {
-                        OpenWaitDialog();      
+
+                        waitDialog.label1.Text = "Please wait while your files are being synchronized.";
                         syncErrorList = controller.SynchronizeWebAndThumb(conflictsList);
                         CloseWaitDialog();
                     }
@@ -427,7 +429,7 @@ namespace GameAnywhere
                 }
             }
             else
-                SetErrorLabel("Please login first.", Color.Red);
+                SetErrorLabel("      Please login first.", Color.Red);
 
         }
 
@@ -609,7 +611,9 @@ namespace GameAnywhere
                 {
                     // loginResult = false if login fails.
                     // loginResult = true  if login succeeds.
+                    OpenWaitDialog("Please wait while the system is logging you in.");
                     loginResult = controller.Login(emailTextBox.Text, passwordTextBox.Text);
+                    CloseWaitDialog();
                 }
                 catch (ConnectionFailureException)
                 {
@@ -622,7 +626,7 @@ namespace GameAnywhere
                 {
                     // Go back to first page and display success text.
                     InitiateStartPanel();
-                    SetErrorLabel("     User Logged In", System.Drawing.Color.DeepSkyBlue);
+                    SetErrorLabel("         User Logged In", System.Drawing.Color.DeepSkyBlue);
                 }
                 // Login fails
                 else
@@ -1577,9 +1581,9 @@ namespace GameAnywhere
             control.Enabled = makeEnabled;
         }
 
-        private void OpenWaitDialog()
+        private void OpenWaitDialog(string text)
         {
-            waitDialog = new WaitingDialog();
+            waitDialog = new WaitingDialog(text);
             waitDialog.Show();
             waitDialog.Refresh();
             this.Enabled = false;
@@ -1641,7 +1645,7 @@ namespace GameAnywhere
             // There is backup -> run warning dialog
             if (controller.EndProgram())
             {
-                OpenWaitDialog();
+                OpenWaitDialog("Please wait while your files are being restored.");
                 restoreOriginalFiles();
                 CloseWaitDialog();
             }
