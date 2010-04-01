@@ -1,0 +1,7 @@
+Game=   Abuse
+RegValue=   Install_Dir
+RegKey=RegistrySoftwarePath\Abuse
+RegType=HKLM
+SaveParentPath=InstallPath
+SearchSaveParent=    *.sp
+[ENDGAME]

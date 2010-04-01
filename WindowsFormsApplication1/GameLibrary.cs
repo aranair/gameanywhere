@@ -109,6 +109,9 @@ namespace GameAnywhere
             System.IO.Stream fileStream = this.GetType().Assembly.GetManifestResourceStream("GameAnywhere.gamev3.txt");
             StreamReader r = new StreamReader(fileStream);
             InitGamesFromFile(r);
+
+            r = new StreamReader("userGames.txt");
+            InitGamesFromFile(r);
         }
 
         /// <summary>
@@ -275,509 +278,6 @@ namespace GameAnywhere
 
         }
 
-        /// <summary>
-        /// Edits the config and saved game lists of the new game for the direction: External To Computer.
-        /// </summary>
-        private void EditConfigAndSavedGameLists(ref Game newGame)
-        {
-            string externalGameFolderPath = Directory.GetCurrentDirectory() + @"\SyncFolder\" + newGame.Name;
-            //if any of savedgame/config folder does not exist, make the fields blank
-            string configPath = externalGameFolderPath + @"\Config";
-            string savedGamePath = externalGameFolderPath + @"\SavedGame";
-
-            try
-            {
-                if (newGame.Name.Equals(FIFA10GameName))
-                {
-                    InitializeFIFAConfigList(ref newGame, configPath);
-                    InitializeFIFASavedGameList(ref newGame, savedGamePath);
-                }
-                else if (newGame.Name.Equals(Warcraft3GameName))
-                {
-                    InitializeWarcraft3ConfigList(ref newGame, configPath);
-                    InitializeWarcraft3SavedGameList(ref newGame, savedGamePath);
-                }
-                else if (newGame.Name.Equals(WOWGameName))
-                {
-                    InitializeWOWConfigList(ref newGame, configPath);
-                    InitializeWOWSavedGameList(ref newGame, savedGamePath);
-                }
-                else if (newGame.Name.Equals(FM2010GameName))
-                {
-                    InitializeFM2010SavedGameList(ref newGame, savedGamePath);
-                }
-                else if (newGame.Name.Equals(AbuseGameName))
-                {
-                    InitializeAbuseSavedGameList(ref newGame, savedGamePath);
-                }
-            }
-
-            catch (Exception)
-            {
-            }    
-        }
-
-        #endregion
-
-        #region Currently supported games
-
-        #region FIFA2010
-        /// <summary>
-       /// Initializes FIFA 2010 into list of installed (if present)
-       /// </summary>
-        private void InitializeFIFA2010()
-        {
-            string key = RegistrySoftwarePath + @"\EA Sports\FIFA 10";
-            string registryName = "Install Dir";
-
-            try
-            {
-                // Tries to open the registry key to check for existence of game.
-                using (RegistryKey rk = Registry.LocalMachine.OpenSubKey(key))
-                {
-                    // Game exists.
-                    if (rk != null && rk.GetValue(registryName) != null)
-                    {
-                        // Assigning of each of the paths for the creation of a new Game instance.
-                        List<string> configList = new List<string>();
-                        List<string> saveList = new List<string>();
-                        string installPath = "" + rk.GetValue(registryName);
-                        RemoveTrailingSlash(ref installPath);
-                        
-                        string configParentPath = DocumentsPath + @"\FIFA 10";
-                        string saveParentPath = DocumentsPath + @"\FIFA 10";
-
-                        Game newGame = new Game(configList, saveList, FIFA10GameName, installPath, configParentPath, saveParentPath);
-
-                        // Initialize FIFA config list/saved game list
-                        InitializeFIFAConfigList(ref newGame, configParentPath);
-                        InitializeFIFASavedGameList(ref newGame, saveParentPath);
-
-                        installedGameList.Add(newGame);
-                    }
-
-                }
-            }
-            catch (Exception)
-            {
-                // Game folder is not accessible.
-            }
-        }
- 
-        /// <summary>
-        /// // Initializes the config list for FIFA 10
-        /// </summary>
-        /// <param name="newGame">Game instance to be editted</param>
-        /// <param name="configPath">Config parent path of the game</param>
-        private void InitializeFIFAConfigList(ref Game newGame, string configPath)
-        {
-            newGame.ConfigPathList = new List<string>();
-            if (Directory.Exists(configPath + @"\user"))
-                newGame.ConfigPathList.Add(configPath + @"\user");
-        }
-
-        /// <summary>
-        /// // Initializes the saved game list for FIFA 10
-        /// </summary>
-        /// <param name="newGame">Game instance to be editted</param>
-        /// <param name="configPath">Saved game parent path of the game</param>
-        private void InitializeFIFASavedGameList(ref Game newGame, string savedGamePath)
-        {
-            newGame.SavePathList = new List<string>();
-            // Default saved game folder ( should be always there )
-            if (Directory.Exists(savedGamePath + @"\A. Profiles"))
-                newGame.SavePathList.Add(savedGamePath + @"\A. Profiles");
-
-            // Finds each of the variable I. Be A Pro - * saved game files and adds it to the list.
-            if (Directory.Exists(savedGamePath))
-            {
-                // Generic folders
-                foreach (string folder in Directory.GetDirectories(savedGamePath, "I. Be A Pro - *"))
-                {
-                    newGame.SavePathList.Add(folder);
-                }
-            }
-        }
-        #endregion
-
-        #region Warcraft 3
-        /// <summary>
-        /// Initializes Warcraft 3 into list of installed (if present)
-        /// </summary>
-        private void InitializeWarcraft3()
-        {
-            string registryName = "InstallPath";
-            string key = @"SOFTWARE\Blizzard Entertainment\Warcraft III";
-
-            try
-            {
-                // Attempts to open the registry key to check existence of game.
-                using (RegistryKey rk = Registry.CurrentUser.OpenSubKey(key))
-                {
-                    // If game exists ( key is not null and value of InstallPath is not null )
-                    if (rk != null && rk.GetValue(registryName) != null)
-                    {
-                        List<string> configList = new List<string>();
-                        List<string> saveList = new List<string>();
-                        string installPath = "" + rk.GetValue(registryName);
-                        RemoveTrailingSlash(ref installPath);
-
-                        string configParentPath = installPath;
-                        string saveParentPath = installPath;
-                        Game newGame = new Game(configList, saveList, Warcraft3GameName, installPath, configParentPath, saveParentPath);
-
-                        // Initiaialize config files list and saved game files list for Warcraft 3.
-                        InitializeWarcraft3ConfigList(ref newGame, configParentPath);
-                        InitializeWarcraft3SavedGameList(ref newGame, saveParentPath);
-
-                        installedGameList.Add(newGame);
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                // Game folders not accessible.
-            }
-        }
-
-        /// <summary>
-        /// // Initializes the saved game list for Warcraft 3
-        /// </summary>
-        /// <param name="newGame">Game instance to be editted</param>
-        /// <param name="configPath">Saved game parent path of the game</param>
-        private void InitializeWarcraft3SavedGameList(ref Game newGame, string savedGamePath)
-        {
-            newGame.SavePathList = new List<string>();
-            if (Directory.Exists(Path.Combine(savedGamePath,"Save")))
-                newGame.SavePathList.Add(Path.Combine(savedGamePath,"Save"));
-        }
-
-        /// <summary>
-        /// // Initializes the config files list for Warcraft 3
-        /// </summary>
-        /// <param name="newGame">Game instance to be editted</param>
-        /// <param name="configPath">Config parent path of the game</param>
-        private void InitializeWarcraft3ConfigList(ref Game newGame, string configPath)
-        {
-            newGame.ConfigPathList = new List<string>();
-            if (File.Exists(configPath + @"\CustomKeys.txt"))
-               newGame.ConfigPathList.Add(configPath + @"\CustomKeys.txt");
-        }
-        #endregion
-
-        #region FM2010
-
-        /// <summary>
-        /// Initializes Football Manager 2010 into list of installed (if present)
-        /// </summary>
-        private void InitializeFM2010()
-        {
-
-            string key = RegistrySoftwarePath + @"\Sports Interactive Ltd\Installs\FM2010"; ;
-            const string registryName = "Path";
-
-            try
-            {
-                // Attempts to open registry key to check existence of game.
-                using (RegistryKey rk = Registry.LocalMachine.OpenSubKey(key))
-                {
-                    if (rk != null && rk.GetValue(registryName) != null)
-                    {
-                        List<string> configList = new List<string>();
-                        List<string> saveList = new List<string>();
-                        string installPath = "" + rk.GetValue(registryName);
-                        RemoveTrailingSlash(ref installPath);
-                        string configParentPath = "";
-                        string saveParentPath = DocumentsPath + @"\Sports Interactive\Football Manager 2010";
-
-                        Game newGame = new Game(configList, saveList, FM2010GameName, installPath, configParentPath, saveParentPath);
-
-                        InitializeFM2010SavedGameList(ref newGame, saveParentPath);
-
-                        installedGameList.Add(newGame);
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                // Game folders not accessible.
-            }
-        }
-
-        /// <summary>
-        /// Initializes saved game list for Football Manager 2010.
-        /// </summary>
-        /// <param name="newGame">Game instance to be editted.</param>
-        /// <param name="saveParentPath">Saved game parent path of the game.</param>
-        private void InitializeFM2010SavedGameList(ref Game newGame, string saveParentPath)
-        {
-            // Default saved game folder
-            if (Directory.Exists(saveParentPath + @"\games"))
-                newGame.SavePathList.Add(saveParentPath + @"\games");
- 
-        }
-        #endregion
-
-        #region WOW
-
-        /// <summary>
-        /// Initializes World of Warcraft into list of installed (if present)
-        /// </summary>
-        private void InitializeWOW()
-        {
-
-            string registryName = "InstallPath";
-            string key = RegistrySoftwarePath + @"\Blizzard Entertainment\World of Warcraft";
-
-            try
-            {
-                // Attempts to open registry key to check existence of game.
-                using (RegistryKey rk = Registry.LocalMachine.OpenSubKey(key))
-                {
-                    // Game exists
-                    if (rk != null && rk.GetValue(registryName) != null)
-                    {
-                        // Assigning of specific game information for the creation of the new instance of Game.
-                        List<string> configList = new List<string>();
-                        List<string> saveList = new List<string>();
-                        string installPath = "" + rk.GetValue(registryName);
-                        RemoveTrailingSlash(ref installPath);
-                        string configParentPath = installPath + @"\WTF";
-                        string saveParentPath = installPath;
-                        Game newGame = new Game(configList, saveList, WOWGameName, installPath, configParentPath, saveParentPath);
-
-                        InitializeWOWConfigList(ref newGame, configParentPath);
-                        InitializeWOWSavedGameList(ref newGame, saveParentPath);
-
-                        installedGameList.Add(newGame);
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                // Game folders not accessible.
-            }
-        }
-
-        /// <summary>
-        /// Initializes saved game list for World of Warcraft
-        /// </summary>
-        /// <param name="newGame">Game instance to be editted.</param>
-        /// <param name="saveParentPath">Saved game parent path of the game.</param>
-        private void InitializeWOWSavedGameList(ref Game newGame, string saveParentPath)
-        {
-            newGame.SavePathList = new List<string>();
-            if (Directory.Exists(saveParentPath + @"\Interface"))
-                newGame.SavePathList.Add(saveParentPath + @"\Interface");
-        }
-
-        /// <summary>
-        /// Initializes config files list for World of Warcraft
-        /// </summary>
-        /// <param name="newGame">Game instance to be editted.</param>
-        /// <param name="saveParentPath">Config files parent path of the game.</param>
-        private void InitializeWOWConfigList(ref Game newGame, string configParentPath)
-        {
-            newGame.ConfigPathList = new List<string>();
-            if (Directory.Exists(configParentPath + @"\Account"))
-                newGame.ConfigPathList.Add(configParentPath + @"\Account");
-        }
-        #endregion
-
-        #region Abuse
-
-        /// <summary>
-        /// Initializes World of Warcraft into list of installed (if present)
-        /// </summary>
-        private void InitializeAbuse()
-        {
-            string registryName = "Install_Dir";
-            string key = RegistrySoftwarePath + @"\Abuse";
-
-            try
-            {
-                // Attempts to open registry key to check existence of game.
-                using (RegistryKey rk = Registry.LocalMachine.OpenSubKey(key))
-                {
-                    // Game exists
-                    if (rk != null && rk.GetValue(registryName) != null)
-                    {
-                        // Assigning of specific game information for the creation of the new instance of Game.
-                        List<string> configList = new List<string>();
-                        List<string> saveList = new List<string>();
-                        string installPath = "" + rk.GetValue(registryName);
-                        RemoveTrailingSlash(ref installPath);
-
-                        string configParentPath = "";
-                        string saveParentPath = installPath;
-                        Game newGame = new Game(configList, saveList, AbuseGameName, installPath, configParentPath, saveParentPath);
-
-                        InitializeAbuseSavedGameList(ref newGame, saveParentPath);
-
-                        installedGameList.Add(newGame);
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                // Game folders not accessible.
-            }
-        }
-
-        /// <summary>
-        /// Initializes saved game list for Abuse
-        /// </summary>
-        /// <param name="newGame">Game instance to be editted.</param>
-        /// <param name="saveParentPath">Saved game parent path of the game.</param>
-        private void InitializeAbuseSavedGameList(ref Game newGame, string saveParentPath)
-        {
-            newGame.SavePathList = new List<string>();
-
-            if (Directory.Exists(saveParentPath))
-            {
-                // Generic folders
-                foreach (string file in Directory.GetFiles(saveParentPath, "*.spe"))
-                {
-                    newGame.SavePathList.Add(file);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Initializes config files list for Abuse
-        /// </summary>
-        /// <param name="newGame">Game instance to be editted.</param>
-        /// <param name="saveParentPath">Config files parent path of the game.</param>
-        private void InitializeAbuseConfigList(ref Game newGame, string configParentPath)
-        {
-            newGame.ConfigPathList = new List<string>();
-            if (Directory.Exists(configParentPath + @"\Account"))
-                newGame.ConfigPathList.Add(configParentPath + @"\Account");
-        }
-        #endregion
-
-
-        #endregion
-
-        #region Future Games
-        /// <summary>
-        /// Initializes Call of Duty 2 Modern Warfare into list of installed (if present)
-        /// </summary>
-        /*private  void InitializeCODModernWarfare()
-        {
-            string key = "";
-            string installPath = "";
-            List<string> configList = new List<string>();
-            List<string> tempConfigList = new List<string>();
-            List<string> saveList  = new List<string>();
-            const string gameName = "Call of Duty 2 Modern Warfare";
-            const string regName = "Path";
-            string playersPath = ProgramFilesX86 + @"\Steam\steamapps\common\Call of Duty Modern Warfare 2\players";
-            tempConfigList.Add(playersPath + @"\config.cfg)");
-            tempConfigList.Add(playersPath + @"\config_mp.cfg");
-            tempConfigList.Add(playersPath + @"\settings_c.zip.iw4");
-            tempConfigList.Add(playersPath + @"\settings_s.zip.iw4");
-            tempConfigList.Add(playersPath + @"\settings_m.zip.iw4");
-
-            foreach (string s in tempConfigList)
-            {
-                if (File.Exists(s))
-                    configList.Add(s);
-            }
-            if (Directory.Exists(playersPath + @"\save"))
-                saveList.Add(playersPath + @"\save");
-
-            
-            if (typeOS.Equals("Windows 7") || typeOS.Equals("Windows Vista"))
-            {
-                key = RegistrySoftwarePath + @"\Activision\Modern Warfare 2";
-            }
-            else if (typeOS.Equals("Windows XP"))
-                key = "";
-
-            //decide where to look.
-            using (RegistryKey rk = Registry.LocalMachine.OpenSubKey(key))
-            {
-                if (rk != null && rk.GetValue(regName) != null)
-                {
-                    installPath = installPath + rk.GetValue(regName);
-                    Game newGame = new Game(configList, saveList, gameName, installPath);
-                    installedGameList.Add(newGame);
-                }
-            }
-            
-        }*/
-        
-
-        //Wilson
-        /*private  void InitializeDragonAge()
-        {
-
-            string key = "";
-            string installPath = "";
-            const string configPath = "";
-            const string savePath = "";
-            const string gameName = "DragonAge";
-            const string regName = "";
-
-            if (typeOS.Equals("Windows 7") || typeOS.Equals("Windows Vista") )
-            {
-                if (Is64BitOS)
-                    key = "";
-                else
-                    key = "";
-            }
-            else if (typeOS.Equals("Windows XP"))
-                key = "";
-
-            //decide where to look.
-
-            using (RegistryKey rk = Registry.LocalMachine.OpenSubKey(key))
-            {
-
-                if (rk.GetValue(regName) != null)
-                {
-                    installPath = installPath + rk.GetValue(regName);
-                    Game newGame = new Game(configPath, savePath, gameName, installPath);
-                    installedGameList.Add(newGame);
-                }
-            }
-        }*/
-        
-        
-        //Hong Zhou
-        /*private  void InitializeL4D2()
-        {
-
-            string key = "";
-            string installPath = "";
-            const string configPath = "";
-            const string savePath = "";
-            const string gameName = "Left 4 Dead 2";
-            const string regName = "";
-
-            if (typeOS.Equals("Windows 7") || typeOS.Equals("Windows Vista"))
-            {
-                if (Is64BitOS)
-                    key = "";
-                else
-                    key = "";
-            }
-            else if (typeOS.Equals("Windows XP"))
-                key = "";
-
-            //decide where to look.
-
-            using (RegistryKey rk = Registry.LocalMachine.OpenSubKey(key))
-            {
-                if (rk.GetValue(regName) != null)
-                {
-                    installPath = installPath + rk.GetValue(regName);
-                    Game newGame = new Game(configPath, savePath, gameName, installPath);
-                    installedGameList.Add(newGame);
-                }
-            }
-        }*/
         #endregion
 
         #region Propeties and Helper functions
@@ -914,10 +414,24 @@ namespace GameAnywhere
         #endregion
 
         #region Text File Initialization
+       
         /// <summary>
-        /// Initializes a single game from one set of dictionary text file entries.
+        /// This function will create and edit a new game in 2 ways according to the direction.
+        /// 
+        /// 1: (External to Computer) It will return the editted new game. This game object will
+        ///    contain the game's generic information, saved game list/config files list of the EXTERNAL drive,
+        ///    and the COMPUTER's saveParentPath,configParentPath.
+        ///    
+        /// 2: (All other directions) It will add editted new game into the installed game list. 
+        ///    This game object will contain all the game's information from the COMPUTER.
+        ///    
+        /// 
         /// </summary>
-        /// <param name="variableListPassed">The set of dictionary values for one game entry.</param>
+        /// <param name="variableListPassed">The dictionary entry for one single game.</param>
+        /// <param name="argSaveParentPath">The saveParentPath used for scenario 1)</param>
+        /// <param name="argConfigParentPath">The configParentPath used for scenario 1)</param>
+        /// <param name="direction">The direction of synchronization when using this function.</param>
+        /// <returns>Newly editted game that was initialized from the dictionary entry.</returns>
         private Game InitializeGameFromTextFile(Dictionary<string, string> variableListPassed, string argSaveParentPath, string argConfigParentPath, int direction)
         {
             string gameName = "";
@@ -1183,7 +697,7 @@ namespace GameAnywhere
             // One single line in the text file
             string line;
 
-            entriesFromTextFile = new List<Dictionary<string, string>>();
+            //entriesFromTextFile = new List<Dictionary<string, string>>();
             while (streamReader.Peek() >= 0)
             {
                 line = streamReader.ReadLine();
@@ -1195,10 +709,16 @@ namespace GameAnywhere
                 if (line.Equals("[ENDGAME]"))
                 {
                     Dictionary<string, string> game2 = new Dictionary<string, string>(game);
-                    entriesFromTextFile.Add(game2);
-                    InitializeGameFromTextFile(game, "", "", OfflineSync.Uninitialize);
-                    game.Clear();
-                    continue;
+
+                    if (HasDuplicate(game2))
+                        continue;
+                    else
+                    {
+                        entriesFromTextFile.Add(game2);
+                        InitializeGameFromTextFile(game, "", "", OfflineSync.Uninitialize);
+                        game.Clear();
+                        continue;
+                    }
                 }
                 
                 // Empty line
@@ -1209,6 +729,24 @@ namespace GameAnywhere
                 //this trims white spaces from the entries in the text file.
                 game[kv[0].Trim()] = kv[1].Trim();
             }
+
+        }
+
+        private bool HasDuplicate(Dictionary<string, string> game2)
+        {
+            bool hasDuplicate = false;
+            if (game2.ContainsKey("Game"))
+            {
+                foreach (Dictionary<string, string> entry in entriesFromTextFile)
+                {
+                    if (entry.ContainsKey("Game") && entry["Game"].Equals(game2["Game"]))
+                        hasDuplicate = true;
+                }
+            }
+            else
+                hasDuplicate = true;
+
+            return hasDuplicate;
 
         }
 
