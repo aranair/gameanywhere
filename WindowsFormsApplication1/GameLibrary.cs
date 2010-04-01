@@ -110,9 +110,13 @@ namespace GameAnywhere
             System.IO.Stream fileStream = this.GetType().Assembly.GetManifestResourceStream("GameAnywhere.gamev3.txt");
             StreamReader r = new StreamReader(fileStream);
             InitGamesFromFile(r);
-
-            r = new StreamReader("userGames.txt");
-            InitGamesFromFile(r);
+            string userTextFilePath = Directory.GetCurrentDirectory() + @"\userGames.txt";
+            if (Directory.Exists(userTextFilePath))
+            {
+                r = new StreamReader("userGames.txt");
+                InitGamesFromFile(r);
+            }
+            
         }
 
         /// <summary>
