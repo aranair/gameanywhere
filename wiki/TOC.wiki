@@ -12,7 +12,7 @@
     * [DevelopersGuide2#Offline_Synchronization Offline Synchronization]
     * [DevelopersGuide2#API_Reference API_Reference]
   * [TestDriverUserGuide Test Driver User Guide]
-    * [TestDriverUserGuide#Test_File Test Case File]
+    * [TestDriverUserGuide#Test_Case_File Test Case File]
     * [TestDriverUserGuide#How_to_use_the_Test_Driver Test Driver]
     * [TestDriverUserGuide#How_to_test_GameLibrary_and_OfflineSync Testing]
     * [TestDriverUserGuide#See_Also See Also]
