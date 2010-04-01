@@ -732,14 +732,19 @@ namespace GameAnywhere
 
         }
 
-        private bool HasDuplicate(Dictionary<string, string> game2)
+        /// <summary>
+        /// This function checks for duplicates
+        /// </summary>
+        /// <param name="game2"></param>
+        /// <returns></returns>
+        private bool HasDuplicate(Dictionary<string, string> gameEntry)
         {
             bool hasDuplicate = false;
-            if (game2.ContainsKey("Game"))
+            if (gameEntry.ContainsKey("Game"))
             {
                 foreach (Dictionary<string, string> entry in entriesFromTextFile)
                 {
-                    if (entry.ContainsKey("Game") && entry["Game"].Equals(game2["Game"]))
+                    if (entry.ContainsKey("Game") && entry["Game"].Equals(gameEntry["Game"]))
                         hasDuplicate = true;
                 }
             }
