@@ -1,11 +1,11 @@
 Game=Warcraft 3
-RegValue=InstallPath
+RegValue=$InstallPath$
 RegKey=SOFTWARE\Blizzard Entertainment\Warcraft III
 RegType=HKCU
-ConfigPathList=InstallPath\CustomKeys.txt
-ConfigParentPath=InstallPath
-SavePathList=InstallPath\Save
-SaveParentPath=InstallPath
+ConfigPathList=$InstallPath$\CustomKeys.txt
+ConfigParentPath=$InstallPath$
+SavePathList=$InstallPath$\Save
+SaveParentPath=$InstallPath$
 [ENDGAME]
 #Comments
 Game=Football Manager 2010
@@ -16,13 +16,13 @@ SaveParentPath=DocumentsPath\Sports Interactive\Football Manager 2010
 SavePathList=DocumentsPath\Sports Interactive\Football Manager 2010\games
 [ENDGAME]
 Game=World of Warcraft
-RegValue=InstallPath
+RegValue=$InstallPath$
 RegKey=RegistrySoftwarePath\Blizzard Entertainment\World of Warcraft
 RegType=HKLM
-ConfigPathList=InstallPath\WTF\Account
-ConfigParentPath=InstallPath\WTF
-SavePathList=InstallPath\Interface
-SaveParentPath=InstallPath
+ConfigPathList=$InstallPath$\WTF\Account
+ConfigParentPath=$InstallPath$\WTF
+SavePathList=$InstallPath$\Interface
+SaveParentPath=$InstallPath$
 [ENDGAME]
 Game=FIFA 10
 RegValue=Install Dir
@@ -37,6 +37,6 @@ Game=   Abuse
 RegValue=   Install_Dir
 RegKey=RegistrySoftwarePath\Abuse
 RegType=HKLM
-SaveParentPath=InstallPath
+SaveParentPath=$InstallPath$
 SearchSaveParent=    *.spe
 [ENDGAME]

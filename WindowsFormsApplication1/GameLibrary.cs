@@ -109,12 +109,12 @@ namespace GameAnywhere
         {
             System.IO.Stream fileStream = this.GetType().Assembly.GetManifestResourceStream("GameAnywhere.gamev3.txt");
             StreamReader r = new StreamReader(fileStream);
-            InitGamesFromFile(r);
+            ParseGamesFromFile(r);
             string userTextFilePath = Directory.GetCurrentDirectory() + @"\userGames.txt";
             if (Directory.Exists(userTextFilePath))
             {
                 r = new StreamReader("userGames.txt");
-                InitGamesFromFile(r);
+                ParseGamesFromFile(r);
             }
             
         }
@@ -275,7 +275,7 @@ namespace GameAnywhere
             foreach (Dictionary<string, string> entry in entriesFromTextFile)
             {
                 if (entry.ContainsKey("Game") && entry["Game"].Equals(installedGame.Name))
-                {
+                { 
                     newGame = InitializeGameFromTextFile(entry, saveParentPath, configParentPath, OfflineSync.ExternalToCom);
                 }
             }
@@ -446,7 +446,6 @@ namespace GameAnywhere
             string saveParentPath = argSaveParentPath;
             string configParentPath = argConfigParentPath;
 
-            
             Dictionary<string, string> variableList = new Dictionary<string, string>();
 
             foreach (string key in variableListPassed.Keys)
@@ -458,6 +457,9 @@ namespace GameAnywhere
             gameName = variableList["Game"];
             regKey = variableList["RegKey"];
             regValue = variableList["RegValue"];
+
+            if (direction == OfflineSync.ExternalToCom)            
+                ChangeFixedListsToExternalPaths(ref variableList, gameName);
 
             try
             {
@@ -488,10 +490,7 @@ namespace GameAnywhere
                             string s = ReplaceInstallPath(variableList[key], installPath);
                             variableListFinal.Add(key, s);
                         }
-
-
-
-                        
+         
                         if (variableListFinal.ContainsKey("ConfigParentPath"))
                         {
                             string originalConfigParentPath = variableListFinal["ConfigParentPath"];
@@ -499,10 +498,8 @@ namespace GameAnywhere
                             if (direction != OfflineSync.ExternalToCom)
                                 configParentPath = variableListFinal["ConfigParentPath"];
                             else
-                            {
-                                originalConfigParentPath = 
                                 variableListFinal["ConfigParentPath"] = configParentPath;
-                            }
+                            
                             FindAllConfigFiles(ref configList, variableListFinal);
 
                             configParentPath = originalConfigParentPath;
@@ -541,6 +538,22 @@ namespace GameAnywhere
 
             return null;
         }
+
+        private void ChangeFixedListsToExternalPaths(ref Dictionary<string, string> variableList, string gameName)
+        {
+            // Replace all savePathList and configPathList into the source's paths (external)
+            string externalGameFolderPath = Directory.GetCurrentDirectory() + @"\SyncFolder\" + gameName;
+            string externalSavePath = externalGameFolderPath + @"\savedGame";
+            string externalConfigPath = externalGameFolderPath + @"\config";
+
+            if (variableList.ContainsKey("SavePathList"))
+                variableList["SavePathList"] = variableList["SavePathList"].Replace(variableList["SaveParentPath"], externalSavePath);
+
+            if (variableList.ContainsKey("ConfigPathList"))
+                variableList["ConfigPathList"] = variableList["ConfigPathList"].Replace(variableList["ConfigParentPath"], externalConfigPath);
+
+        }
+
         
         /// <summary>
         /// Adds both variable saved game files and the fixed ones given in "SavePathList" variable.
@@ -689,7 +702,7 @@ namespace GameAnywhere
         /// <returns>Editted string</returns>
         public string ReplaceInstallPath(string s, string installPath)
         {
-            s = Regex.Replace(s, "InstallPath", installPath);
+            s = Regex.Replace(s, "$InstallPath$", installPath);
             return s;
         }
 
@@ -697,7 +710,7 @@ namespace GameAnywhere
         /// File parser for the game init text file.
         /// </summary>
         /// <param name="filename">File path/name to be parsed.</param>
-        public void InitGamesFromFile(StreamReader streamReader)
+        public void ParseGamesFromFile(StreamReader streamReader)
         {
             Dictionary<string, string> game = new Dictionary<string, string>();
             // One single line in the text file
