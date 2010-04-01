@@ -1,0 +1,7 @@
+C:\Users\Wilson\Desktop\ga\WebComms\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Wilson\Desktop\ga\WebComms\bin\Debug\WebComms.dll
+C:\Users\Wilson\Desktop\ga\WebComms\bin\Debug\WebComms.pdb
+C:\Users\Wilson\Desktop\ga\WebComms\bin\Debug\AWSSDK.dll
+C:\Users\Wilson\Desktop\ga\WebComms\bin\Debug\AWSSDK.xml
+C:\Users\Wilson\Desktop\ga\WebComms\obj\Debug\WebComms.dll
+C:\Users\Wilson\Desktop\ga\WebComms\obj\Debug\WebComms.pdb

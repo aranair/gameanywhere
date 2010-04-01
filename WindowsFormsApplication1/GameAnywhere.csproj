@@ -36,11 +36,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AWSSDK, Version=1.0.4.1, Culture=neutral, PublicKeyToken=cd2d24cd2bace800, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Desktop\AWSSDK.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -65,7 +60,6 @@
     <Compile Include="ConflictResolve.Designer.cs">
       <DependentUpon>ConflictResolve.cs</DependentUpon>
     </Compile>
-    <Compile Include="ConnectionFailureException.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="CreateFolderFailedException.cs" />
     <Compile Include="DeleteDirectoryErrorException.cs">
@@ -75,8 +69,6 @@
     <Compile Include="InsufficientSpaceException.cs" />
     <Compile Include="MetaData.cs" />
     <Compile Include="OnlineSync.cs" />
-    <Compile Include="SimpleDB.cs" />
-    <Compile Include="Storage.cs" />
     <Compile Include="Sync.cs" />
     <Compile Include="SyncError.cs" />
     <Compile Include="SyncErrorDisplay.cs">
@@ -134,7 +126,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="SyncAction.cs" />
-    <Compile Include="User.cs" />
     <Compile Include="WaitingDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -142,7 +133,6 @@
       <DependentUpon>WaitingDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="WebAndThumbSync.cs" />
-    <Compile Include="WebTransferException.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="startPage.resx">
@@ -453,6 +443,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\defaultIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WebComms\WebComms.csproj">
+      <Project>{98F7FCA0-4C4B-421B-BD0A-6F997408C65C}</Project>
+      <Name>WebComms</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

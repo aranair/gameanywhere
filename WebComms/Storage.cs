@@ -16,7 +16,7 @@ namespace GameAnywhere
     /// This class handles all the uploads and downloads to and from the Amazon S3 service.
     /// </summary>
     /// <remarks>This class requires the AWSSDK DLL.</remarks>
-    class Storage
+    public class Storage
     {
         #region Data Members
         /// <summary>
@@ -46,8 +46,8 @@ namespace GameAnywhere
         /// </summary>
         public Storage()
         {
-            accessKeyID = "*";
-            secretAccessKeyID = "*";
+            accessKeyID = "AKIAIF3ZSAPQXNF6ZIOQ";
+            secretAccessKeyID = "P7a+fn9UVxR0MXBn+u83hTAKbeskcsfJ80TGCiln";
             bucketName = "GameAnywhere";
             client = new AmazonS3Client(accessKeyID, secretAccessKeyID, new AmazonS3Config().WithCommunicationProtocol(Protocol.HTTP));
         }
