@@ -12,8 +12,14 @@ using Microsoft.Win32;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
+
 namespace GameAnywhere
 {
+    /// <summary>
+    /// This class handles all operations regarding the Game class. 
+    /// Primarily, it initializes entries from the text files and 
+    /// loads the crucial information about each game into game objects.
+    /// </summary>
     public class GameLibrary
     {
         #region Properties and Constructor
@@ -21,6 +27,11 @@ namespace GameAnywhere
         /// List of installed games on the computer, will always be updated if Propeties is called.
         /// </summary>
         private List<Game> installedGameList;
+
+        /// <summary>
+        /// List of all dictionary entries from textfile.
+        /// </summary>
+        private List<Dictionary<string, string>> entriesFromTextFile;
         
         /// <summary>
         /// Type of OS that the current system is running on.
@@ -55,6 +66,7 @@ namespace GameAnywhere
         {
             // Create an empty list of games.
             installedGameList = new List<Game>();
+            entriesFromTextFile = new List<Dictionary<string, string>>();
 
             // Find the OS name and stores it into the data member.
             typeOS = GetOSName();
@@ -68,6 +80,7 @@ namespace GameAnywhere
             this.controller = controller;
             // Create an empty list of games.
             installedGameList = new List<Game>();
+            entriesFromTextFile = new List<Dictionary<string, string>>();
 
             // Find the OS name and stores it into the data member.
             typeOS = GetOSName();
@@ -232,11 +245,8 @@ namespace GameAnywhere
             // Game exists in external drive.
             Debug.Assert(Directory.Exists(externalGameFolderPath));
 
-            // Create a new instance of Game, identical to the current wantedGame.(in loop)
-            Game newGame = new Game(installedGame.ConfigPathList, installedGame.SavePathList, installedGame.Name, installedGame.InstallPath, installedGame.ConfigParentPath, installedGame.SaveParentPath);
-
             // Checks if config/saved game files are available on the thumbdrive and sets list accordingly.
-            EditGenericConfigAndSavedGameLists(ref newGame);
+            Game newGame = EditGenericConfigAndSavedGameLists(installedGame);
 
             // add it to list to be returned;
             newList.Add(newGame);           
@@ -246,32 +256,23 @@ namespace GameAnywhere
         /// Edits the ConfigList and SaveGameList of the game passed in.(generic)
         /// </summary>
         /// <param name="newGame">The game to be editted.</param>
-        public void EditGenericConfigAndSavedGameLists(ref Game newGame)
+        public Game EditGenericConfigAndSavedGameLists(Game installedGame)
         {
+            Game newGame = new Game();
+            string externalGameFolderPath = Directory.GetCurrentDirectory() + @"\SyncFolder\" + installedGame.Name;
+            string configParentPath = externalGameFolderPath + @"\config";
+            string saveParentPath = externalGameFolderPath + @"\savedGame";
 
-            List<string> newConfigPathList = new List<string>();
-            foreach (string s in newGame.ConfigPathList)
+            foreach (Dictionary<string, string> entry in entriesFromTextFile)
             {
-                string externalGameFolderPath = Directory.GetCurrentDirectory() + @"\SyncFolder\" + newGame.Name;
-                //if any of savedgame/config folder does not exist, make the fields blank
-                string configPath = externalGameFolderPath + @"\Config";
-
-                string n = s.Replace(newGame.ConfigParentPath, configPath);
-                newConfigPathList.Add(n);
+                if (entry.ContainsKey("Game") && entry["Game"].Equals(installedGame.Name))
+                {
+                    newGame = InitializeGameFromTextFile(entry, saveParentPath, configParentPath, OfflineSync.ExternalToCom);
+                }
             }
-            newGame.ConfigPathList = newConfigPathList;
 
-            List<string> newSavePathList = new List<string>();
-            foreach (string s in newGame.SavePathList)
-            {
-                string externalGameFolderPath = Directory.GetCurrentDirectory() + @"\SyncFolder\" + newGame.Name;
-                //if any of savedgame/config folder does not exist, make the fields blank
-                string savedGamePath = externalGameFolderPath + @"\SavedGame";
+            return newGame;
 
-                string n = s.Replace(newGame.SaveParentPath, savedGamePath);
-                newSavePathList.Add(n);
-            }
-            newGame.SavePathList = newSavePathList;
         }
 
         /// <summary>
@@ -362,10 +363,7 @@ namespace GameAnywhere
                 // Game folder is not accessible.
             }
         }
-
-        
-
-        
+ 
         /// <summary>
         /// // Initializes the config list for FIFA 10
         /// </summary>
@@ -920,13 +918,13 @@ namespace GameAnywhere
         /// Initializes a single game from one set of dictionary text file entries.
         /// </summary>
         /// <param name="variableListPassed">The set of dictionary values for one game entry.</param>
-        private void InitializeGameFromTextFile(Dictionary<string, string> variableListPassed)
+        private Game InitializeGameFromTextFile(Dictionary<string, string> variableListPassed, string argSaveParentPath, string argConfigParentPath, int direction)
         {
             string gameName = "";
             string regKey = "";
             string regValue = "";
-            string saveParentPath = "";
-            string configParentPath = "";
+            string saveParentPath = argSaveParentPath;
+            string configParentPath = argConfigParentPath;
 
             
             Dictionary<string, string> variableList = new Dictionary<string, string>();
@@ -950,7 +948,7 @@ namespace GameAnywhere
                 else if (variableList["RegType"].Equals("HKLM"))
                     rk = Registry.LocalMachine.OpenSubKey(regKey);
                 else
-                    return;
+                    return new Game();
 
                 using (rk)
                 {
@@ -971,27 +969,57 @@ namespace GameAnywhere
                             variableListFinal.Add(key, s);
                         }
 
+
+
+                        
                         if (variableListFinal.ContainsKey("ConfigParentPath"))
-                            configParentPath = variableListFinal["ConfigParentPath"];
+                        {
+                            string originalConfigParentPath = variableListFinal["ConfigParentPath"];
+
+                            if (direction != OfflineSync.ExternalToCom)
+                                configParentPath = variableListFinal["ConfigParentPath"];
+                            else
+                            {
+                                originalConfigParentPath = 
+                                variableListFinal["ConfigParentPath"] = configParentPath;
+                            }
+                            FindAllConfigFiles(ref configList, variableListFinal);
+
+                            configParentPath = originalConfigParentPath;
+                        }
 
                         if (variableListFinal.ContainsKey("SaveParentPath"))
-                            saveParentPath = variableListFinal["SaveParentPath"];
+                        {
+                            string originalSaveParentPath = variableListFinal["SaveParentPath"];
 
-                        FindAllSavedGameFiles(ref saveList, variableListFinal);
+                            if (direction != OfflineSync.ExternalToCom)
+                                saveParentPath = variableListFinal["SaveParentPath"];
+                            else
+                                variableListFinal["SaveParentPath"] = saveParentPath;
+                            
+                            FindAllSavedGameFiles(ref saveList, variableListFinal);
 
-                        FindAllConfigFiles(ref configList, variableListFinal);
+                            saveParentPath = originalSaveParentPath;        
+                        }
 
                         Game newGame = new Game(configList, saveList, gameName, installPath, configParentPath, saveParentPath);
 
-                        installedGameList.Add(newGame);
+                        if (direction != OfflineSync.ExternalToCom)
+                            installedGameList.Add(newGame);
+                        
+                        return newGame;
+                        
                     }
-                }
+                    return null;
+
+                } 
             }// end try
             catch (Exception)
             {
                 // Game folders not accessible.
             }
 
+            return null;
         }
         
         /// <summary>
@@ -1033,8 +1061,9 @@ namespace GameAnywhere
 
             foreach (string regex in listOfVariableSaveList)
             {
+                // Add files (function checks if it exists)
                 if (Directory.Exists(variableListFinal["SaveParentPath"]))
-                    AddFoldersAndFiles(ref saveList, variableListFinal["SaveParentPath"], regex);
+                    AddFoldersAndFiles(ref saveList, variableListFinal["SaveParentPath"], regex);          
             }
         }
 
@@ -1154,6 +1183,7 @@ namespace GameAnywhere
             // One single line in the text file
             string line;
 
+            entriesFromTextFile = new List<Dictionary<string, string>>();
             while (streamReader.Peek() >= 0)
             {
                 line = streamReader.ReadLine();
@@ -1164,7 +1194,9 @@ namespace GameAnywhere
                 // [ENDGAME] in file determines end of this game's information.
                 if (line.Equals("[ENDGAME]"))
                 {
-                    InitializeGameFromTextFile(game);
+                    Dictionary<string, string> game2 = new Dictionary<string, string>(game);
+                    entriesFromTextFile.Add(game2);
+                    InitializeGameFromTextFile(game, "", "", OfflineSync.Uninitialize);
                     game.Clear();
                     continue;
                 }

@@ -11,6 +11,9 @@ using System.Diagnostics;
 
 namespace GameAnywhere
 {
+    /// <summary>
+    /// This form allows the user to choose games and the file types to synchronize.
+    /// </summary>
     public partial class ChooseGame : Form
     {
         #region Properties

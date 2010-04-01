@@ -5,6 +5,9 @@ using System.Text;
 
 namespace GameAnywhere
 {
+    /// <summary>
+    /// This class is primarily a data encapsulation of all information regarding a single Game.
+    /// </summary>
     public class Game
     {
         #region Properties

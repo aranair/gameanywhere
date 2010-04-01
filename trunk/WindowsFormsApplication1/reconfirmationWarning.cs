@@ -9,6 +9,9 @@ using System.Windows.Forms;
 
 namespace GameAnywhere
 {
+    /// <summary>
+    /// This form handles the display of the 2nd warning dialog when user chooses not to restore original game files.
+    /// </summary>
     public partial class reconfirmationWarning : Form
     {
         private Form formParent;

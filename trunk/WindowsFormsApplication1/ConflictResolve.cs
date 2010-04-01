@@ -9,6 +9,9 @@ using System.Windows.Forms;
 
 namespace GameAnywhere
 {
+    /// <summary>
+    /// This form allows the user to choose the direction to resolve conflicts during synchronization.
+    /// </summary>
     public partial class ConflictResolve : Form
     {
         #region Properties

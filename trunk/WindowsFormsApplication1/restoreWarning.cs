@@ -9,6 +9,9 @@ using System.Windows.Forms;
 
 namespace GameAnywhere
 {
+    /// <summary>
+    /// This form handles the display of the first restore warning when user tries to exit program.
+    /// </summary>
     public partial class restoreWarning : Form
     {
         private Form formParent;
