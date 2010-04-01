@@ -591,8 +591,12 @@ namespace GameAnywhere
         /// <param name="e"></param>
         private void loginLoginPanelButton_MouseClick(object sender, MouseEventArgs e)
         {
-            ResetErrorLabels();
+            LoginFunctions();
+        }
 
+        private void LoginFunctions()
+        {
+            ResetErrorLabels();
             // Login Details are VALID ( before checking with data base )
             if (CheckLoginDetails())
             {
@@ -621,7 +625,7 @@ namespace GameAnywhere
                     SetErrorLabel("     User Logged In", System.Drawing.Color.DeepSkyBlue);
                 }
                 // Login fails
-                else 
+                else
                 {
                     loginFailedLabel.Text = "Invalid user details";
                 }
@@ -701,6 +705,14 @@ namespace GameAnywhere
 
         }
 
+        private void LoginPanel_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13)
+            {
+                LoginFunctions();
+            }
+        }
+
         #endregion
 
         #region RegisterPanel
@@ -732,8 +744,14 @@ namespace GameAnywhere
         /// <param name="e"></param>
         private void registerRegisterPanelButton_MouseClick(object sender, MouseEventArgs e)
         {
+            RegisterFunctions();
+
+        }
+
+        private void RegisterFunctions()
+        {
             ResetErrorLabels();
-            
+
             // If email is valid, and password is valid.
             if (CheckEmailErrorsRegisterPanel() && CheckPasswordErrorsRegisterPanel())
             {
@@ -743,14 +761,14 @@ namespace GameAnywhere
                 int errorCode = 0;
                 try
                 {
-                     errorCode = controller.Register(emailRegisterPanelTextBox.Text, passwordRegisterPanelTextBox.Text);
+                    errorCode = controller.Register(emailRegisterPanelTextBox.Text, passwordRegisterPanelTextBox.Text);
                 }
                 catch (ConnectionFailureException)
                 {
                     MessageBox.Show("Unable to connect to Web Server");
                     return;
                 }
-                
+
                 switch (errorCode)
                 {
                     case 1:
@@ -776,10 +794,9 @@ namespace GameAnywhere
                         }  // Invalid Email
                     default: break;
                 }
-                
+
                 ResetAllRegisterPanelTextboxes();
             }
-
         }
         #endregion
 
@@ -874,6 +891,14 @@ namespace GameAnywhere
             }
         }
 
+        private void RegisterPanel_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13)
+            {
+                RegisterFunctions();
+            }
+        }
+
         
         #endregion
 
@@ -911,6 +936,11 @@ namespace GameAnywhere
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void confirmChangePasswordPanelButton_MouseClick(object sender, MouseEventArgs e)
+        {
+            ChangePasswordFunctions();
+        }
+
+        private void ChangePasswordFunctions()
         {
             ResetErrorLabels();
             if (CheckEmailErrorsChangePasswordPanel() && CheckPasswordErrorsChangePasswordPanel())
@@ -1044,6 +1074,14 @@ namespace GameAnywhere
             }
 
         }     
+
+        private void ChangePasswordPanel_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13)
+            {
+                ChangePasswordFunctions();
+            }
+        }
        
         #endregion
 
@@ -1073,6 +1111,10 @@ namespace GameAnywhere
 
         #region sendButton ( Forget Password )
         private void sendButton_MouseClick(object sender, MouseEventArgs e)
+        {
+            ForgetPasswordFunctions();
+        }
+        private void ForgetPasswordFunctions()
         {
             ResetErrorLabels();
             // Gets feedback from helper function regarding the validity of the email entered by user in the Forget Password Panel.
@@ -1138,7 +1180,16 @@ namespace GameAnywhere
         {
             SetBackgroundImage(sendButton, "GameAnywhere.Resources.sendButton.gif", ImageLayout.Zoom);
         }
+
+       
         #endregion
+        private void ForgetPasswordPanel_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13)
+            {
+                ForgetPasswordFunctions();
+            }
+        }
 
         #endregion
 
@@ -1166,6 +1217,11 @@ namespace GameAnywhere
         #endregion
         #region resendButton ( Resend Activation )
         private void resendButton_MouseClick(object sender, MouseEventArgs e)
+        {
+            ResendActivationFunctions();
+
+        }
+        private void ResendActivationFunctions()
         {
             ResetErrorLabels();
             if (CheckEmailErrorsResendActivationPanel() && CheckPasswordErrorsResendActivationPanel())
@@ -1206,23 +1262,19 @@ namespace GameAnywhere
                 }
 
             }
-
         }
         private void resendButton_MouseDown(object sender, MouseEventArgs e)
         {
             SetBackgroundImage(resendButton, "GameAnywhere.Resources.resendButtonMouseDown.gif", ImageLayout.Zoom);
         }
-
         private void resendButton_MouseEnter(object sender, EventArgs e)
         {
             SetBackgroundImage(resendButton, "GameAnywhere.Resources.resendButtonMouseOver.gif", ImageLayout.Zoom);
         }
-
         private void resendButton_MouseLeave(object sender, EventArgs e)
         {
             SetBackgroundImage(resendButton, "GameAnywhere.Resources.resendButton.gif", ImageLayout.Zoom);
         }
-
         private void resendButton_MouseUp(object sender, MouseEventArgs e)
         {
             SetBackgroundImage(resendButton, "GameAnywhere.Resources.resendButton.gif", ImageLayout.Zoom);
@@ -1281,6 +1333,14 @@ namespace GameAnywhere
             }
         }
 
+        private void ResendActivationPanel_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13)
+            {
+                ResendActivationFunctions();
+            }
+        }
+
         #endregion
 
         #region Helper Functions
@@ -1312,6 +1372,7 @@ namespace GameAnywhere
             SetVisibilityAndUsability(registerButton, false, false);
             SetVisibilityAndUsability(titlePanel, true, true);
             SetBackgroundImage(titlePanel, "GameAnywhere.Resources.bannerRegisterPanel.gif", ImageLayout.Zoom);
+            emailRegisterPanelTextBox.Focus();
 
             this.PerformLayout();
             this.ResumeLayout();
@@ -1328,6 +1389,7 @@ namespace GameAnywhere
             SetVisibilityAndUsability(registerButton, true, true);
             SetVisibilityAndUsability(titlePanel, true, true);
             SetBackgroundImage(titlePanel, "GameAnywhere.Resources.bannerLoginPanel.gif", ImageLayout.Zoom);
+            emailTextBox.Focus();
 
             this.PerformLayout();
             this.ResumeLayout();
@@ -1344,6 +1406,7 @@ namespace GameAnywhere
             EnableMainControlButtons();
             SetVisibilityAndUsability(titlePanel, true, true);
             SetBackgroundImage(titlePanel, "GameAnywhere.Resources.bannerForgetPasswordPanel.gif", ImageLayout.Zoom);
+            emailForgetPasswordPanelTextBox.Focus();
 
             this.PerformLayout();
             this.ResumeLayout();
@@ -1359,6 +1422,7 @@ namespace GameAnywhere
             EnableMainControlButtons();
             SetVisibilityAndUsability(titlePanel, true, true);
             SetBackgroundImage(titlePanel, "GameAnywhere.Resources.bannerResendActivationPanel.gif", ImageLayout.Zoom);
+            emailResendActivationPanelTextBox.Focus();
 
             this.PerformLayout();
             this.ResumeLayout();
@@ -1376,6 +1440,7 @@ namespace GameAnywhere
             SetVisibilityAndUsability(titlePanel, true, true);
 
             SetBackgroundImage(titlePanel, "GameAnywhere.Resources.bannerChangePasswordPanel.gif", ImageLayout.Zoom);
+            emailChangePasswordPanelTextBox.Focus();
 
             this.PerformLayout();
             this.ResumeLayout();
@@ -1640,6 +1705,10 @@ namespace GameAnywhere
         }
 
         #endregion
+
+        
+
+        
 
 
 

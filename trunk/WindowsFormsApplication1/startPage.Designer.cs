@@ -470,6 +470,7 @@
             this.emailTextBox.Name = "emailTextBox";
             this.emailTextBox.Size = new System.Drawing.Size(268, 21);
             this.emailTextBox.TabIndex = 1;
+            this.emailTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.LoginPanel_KeyPress);
             // 
             // passwordTextBox
             // 
@@ -482,6 +483,7 @@
             this.passwordTextBox.Size = new System.Drawing.Size(268, 21);
             this.passwordTextBox.TabIndex = 2;
             this.passwordTextBox.UseSystemPasswordChar = true;
+            this.passwordTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.LoginPanel_KeyPress);
             // 
             // loginFailedLabel
             // 
@@ -608,6 +610,7 @@
             this.passwordReEnterRegisterPanelTextBox.Size = new System.Drawing.Size(282, 21);
             this.passwordReEnterRegisterPanelTextBox.TabIndex = 3;
             this.passwordReEnterRegisterPanelTextBox.UseSystemPasswordChar = true;
+            this.passwordReEnterRegisterPanelTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.RegisterPanel_KeyPress);
             // 
             // passwordRegisterPanelTextBox
             // 
@@ -620,6 +623,7 @@
             this.passwordRegisterPanelTextBox.Size = new System.Drawing.Size(282, 21);
             this.passwordRegisterPanelTextBox.TabIndex = 2;
             this.passwordRegisterPanelTextBox.UseSystemPasswordChar = true;
+            this.passwordRegisterPanelTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.RegisterPanel_KeyPress);
             // 
             // emailRegisterPanelTextBox
             // 
@@ -631,6 +635,7 @@
             this.emailRegisterPanelTextBox.Name = "emailRegisterPanelTextBox";
             this.emailRegisterPanelTextBox.Size = new System.Drawing.Size(282, 21);
             this.emailRegisterPanelTextBox.TabIndex = 1;
+            this.emailRegisterPanelTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.RegisterPanel_KeyPress);
             // 
             // emailInvalidLabel
             // 
@@ -699,6 +704,7 @@
             this.emailForgetPasswordPanelTextBox.Name = "emailForgetPasswordPanelTextBox";
             this.emailForgetPasswordPanelTextBox.Size = new System.Drawing.Size(268, 21);
             this.emailForgetPasswordPanelTextBox.TabIndex = 11;
+            this.emailForgetPasswordPanelTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ForgetPasswordPanel_KeyPress);
             // 
             // sendButton
             // 
@@ -771,6 +777,7 @@
             this.emailResendActivationPanelTextBox.Name = "emailResendActivationPanelTextBox";
             this.emailResendActivationPanelTextBox.Size = new System.Drawing.Size(268, 21);
             this.emailResendActivationPanelTextBox.TabIndex = 1;
+            this.emailResendActivationPanelTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ResendActivationPanel_KeyPress);
             // 
             // passwordResendActivationPanelTextBox
             // 
@@ -783,6 +790,7 @@
             this.passwordResendActivationPanelTextBox.Size = new System.Drawing.Size(268, 21);
             this.passwordResendActivationPanelTextBox.TabIndex = 2;
             this.passwordResendActivationPanelTextBox.UseSystemPasswordChar = true;
+            this.passwordResendActivationPanelTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ResendActivationPanel_KeyPress);
             // 
             // resendButton
             // 
@@ -858,6 +866,7 @@
             this.confirmNewpasswordChangePasswordPanelTextBox.Size = new System.Drawing.Size(268, 21);
             this.confirmNewpasswordChangePasswordPanelTextBox.TabIndex = 4;
             this.confirmNewpasswordChangePasswordPanelTextBox.UseSystemPasswordChar = true;
+            this.confirmNewpasswordChangePasswordPanelTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ChangePasswordPanel_KeyPress);
             // 
             // newpasswordChangePasswordPanelTextBox
             // 
@@ -870,6 +879,7 @@
             this.newpasswordChangePasswordPanelTextBox.Size = new System.Drawing.Size(268, 21);
             this.newpasswordChangePasswordPanelTextBox.TabIndex = 3;
             this.newpasswordChangePasswordPanelTextBox.UseSystemPasswordChar = true;
+            this.newpasswordChangePasswordPanelTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ChangePasswordPanel_KeyPress);
             // 
             // passwordChangePasswordPanelTextBox
             // 
@@ -882,6 +892,7 @@
             this.passwordChangePasswordPanelTextBox.Size = new System.Drawing.Size(268, 21);
             this.passwordChangePasswordPanelTextBox.TabIndex = 2;
             this.passwordChangePasswordPanelTextBox.UseSystemPasswordChar = true;
+            this.passwordChangePasswordPanelTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ChangePasswordPanel_KeyPress);
             // 
             // emailChangePasswordPanelTextBox
             // 
@@ -893,6 +904,7 @@
             this.emailChangePasswordPanelTextBox.Name = "emailChangePasswordPanelTextBox";
             this.emailChangePasswordPanelTextBox.Size = new System.Drawing.Size(268, 21);
             this.emailChangePasswordPanelTextBox.TabIndex = 1;
+            this.emailChangePasswordPanelTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ChangePasswordPanel_KeyPress);
             // 
             // userDetailsInvalidChangePasswordPanelLabel
             // 
@@ -946,14 +958,14 @@
             this.BackgroundImage = global::GameAnywhere.Properties.Resources.overallbackground3;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(832, 435);
-            this.Controls.Add(this.startPanel);
+            this.Controls.Add(this.titlePanel);
+            this.Controls.Add(this.startNavPanel);
             this.Controls.Add(this.resendActivationPanel);
             this.Controls.Add(this.registerPanel);
             this.Controls.Add(this.changePasswordPanel);
             this.Controls.Add(this.forgetPasswordPanel);
             this.Controls.Add(this.loginPanel);
-            this.Controls.Add(this.titlePanel);
-            this.Controls.Add(this.startNavPanel);
+            this.Controls.Add(this.startPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
