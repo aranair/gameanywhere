@@ -9,7 +9,7 @@ The test driver requires the following classes: TestDriver, TestCase, PreConditi
 
 The test driver is also required to read in test file before it can start testing.
 
-= Test File =
+= Test Case File =
 
 Test file are saved as .tcf format. The test case are required to follow a certain format.
 
