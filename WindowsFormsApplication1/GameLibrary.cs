@@ -644,7 +644,7 @@ namespace GameAnywhere
             List<string> delimitedConfigPaths = SeperatePathsByDelimiter(variableListFinal["SavePathList"]);
             foreach (string path in delimitedConfigPaths)
             {
-               if (Directory.Exists(path)) 
+               if (File.Exists(path) || Directory.Exists(path)) 
                     saveList.Add(path);
             }
         }
@@ -659,7 +659,7 @@ namespace GameAnywhere
             List<string> delimitedConfigPaths = SeperatePathsByDelimiter(variableListFinal["ConfigPathList"]);
             foreach (string path in delimitedConfigPaths)
             {
-                if(Directory.Exists(path))
+                if (File.Exists(path) || Directory.Exists(path))
                     configList.Add(path);
             }
         }
@@ -702,7 +702,7 @@ namespace GameAnywhere
         /// <returns>Editted string</returns>
         public string ReplaceInstallPath(string s, string installPath)
         {
-            s = Regex.Replace(s, "$InstallPath$", installPath);
+            s = Regex.Replace(s, "InstallPathVar", installPath);
             return s;
         }
 
