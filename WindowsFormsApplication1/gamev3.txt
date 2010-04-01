@@ -1,5 +1,5 @@
 Game=Warcraft 3
-RegValue=$InstallPath$
+RegValue=InstallPath
 RegKey=SOFTWARE\Blizzard Entertainment\Warcraft III
 RegType=HKCU
 ConfigPathList=$InstallPath$\CustomKeys.txt
