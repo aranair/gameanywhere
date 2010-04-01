@@ -12,6 +12,9 @@ using System.IO;
 
 namespace GameAnywhere
 {
+    /// <summary>
+    /// This is the front page where all the primary buttons for the functions of the application is displayed.
+    /// </summary>
     public partial class startPage : Form
     {
         #region Constructors and Propeties

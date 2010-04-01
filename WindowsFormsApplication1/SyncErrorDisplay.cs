@@ -9,6 +9,9 @@ using System.Windows.Forms;
 
 namespace GameAnywhere
 {
+    /// <summary>
+    /// This class handles the display of detailed errors after synchronization.
+    /// </summary>
     public partial class SyncErrorDisplay : Form
     {
         #region Constructors and Data Members

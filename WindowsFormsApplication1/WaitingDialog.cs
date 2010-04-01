@@ -9,6 +9,9 @@ using System.Windows.Forms;
 
 namespace GameAnywhere
 {
+    /// <summary>
+    /// This Form handles the Waiting Dialog during all waits.
+    /// </summary>
     public partial class WaitingDialog : Form
     {
         public WaitingDialog()
