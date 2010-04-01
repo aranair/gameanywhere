@@ -14,7 +14,7 @@ namespace GameAnywhere
     /// <summary>
     /// User account information and its related methods.
     /// </summary>
-    class User
+    public class User
     {
         #region Data Members
         /// <summary>

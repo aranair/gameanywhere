@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GameAnywhere
 {
-    class ConnectionFailureException : System.ApplicationException
+    public class ConnectionFailureException : System.ApplicationException
     {
         public ConnectionFailureException() { }
         public ConnectionFailureException(String message) { }

@@ -14,7 +14,7 @@ namespace GameAnywhere
     /// Provides methods to access and update Amazon Web Services (AWS) SimpleDB.
     /// </summary>
     /// <remarks>This class requires the AWSSDK DLL.</remarks>
-    class SimpleDB
+    public class SimpleDB
     {
         #region Data Members
         /// <summary>
@@ -44,8 +44,8 @@ namespace GameAnywhere
         /// </summary>
         public SimpleDB()
         {
-            this.accessKey = "*";
-            this.secretAccessKey = "*";
+            this.accessKey = "AKIAIF3ZSAPQXNF6ZIOQ";
+            this.secretAccessKey = "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";
             this.sdb = new AmazonSimpleDBClient(accessKey, secretAccessKey);
             this.domain = "UserAccounts";
         }

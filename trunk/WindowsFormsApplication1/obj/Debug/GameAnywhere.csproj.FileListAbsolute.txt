@@ -49,3 +49,24 @@ C:\Documents and Settings\Wilmer\Desktop\gameanywhere\WindowsFormsApplication1\o
 C:\Documents and Settings\Wilmer\Desktop\gameanywhere\WindowsFormsApplication1\bin\Debug\GameAnywhere.exe
 C:\Documents and Settings\Wilmer\Desktop\gameanywhere\WindowsFormsApplication1\bin\Debug\GameAnywhere.pdb
 C:\Documents and Settings\Wilmer\Desktop\gameanywhere\WindowsFormsApplication1\bin\Debug\Interop.Shell32.dll
+C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\obj\Debug\Interop.Shell32.dll
+C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\obj\Debug\GameAnywhere.csproj.ResolveComReference.cache
+C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\obj\Debug\GameAnywhere.exe
+C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\obj\Debug\GameAnywhere.pdb
+C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\obj\Debug\GameAnywhere.Properties.Resources.resources
+C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\obj\Debug\GameAnywhere.startPage.resources
+C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\obj\Debug\GameAnywhere.ChooseGame.resources
+C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\obj\Debug\GameAnywhere.reconfirmationWarning.resources
+C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\obj\Debug\GameAnywhere.restoreWarning.resources
+C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\obj\Debug\GameAnywhere.SyncErrorDisplay.resources
+C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\obj\Debug\GameAnywhere.ConflictResolve.resources
+C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\obj\Debug\GameAnywhere.WaitingDialog.resources
+C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\obj\Debug\GameAnywhere.csproj.GenerateResource.Cache
+C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\bin\Debug\GameAnywhere.exe
+C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\bin\Debug\GameAnywhere.pdb
+C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\bin\Debug\WebComms.dll
+C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\bin\Debug\AWSSDK.dll
+C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\bin\Debug\AWSSDK.xml
+C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\bin\Debug\WebComms.pdb
+C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\bin\Debug\Interop.Shell32.dll
