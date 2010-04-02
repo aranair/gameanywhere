@@ -487,8 +487,12 @@ namespace GameAnywhere
             {
                 parent.SetErrorLabel("Unable to connect to server", Color.Red);
             }
-            
-            DisplaySyncResult(syncActionListResult);
+
+            if (syncActionListResult.Count > 0)
+                DisplaySyncResult(syncActionListResult);
+            else
+                this.Close();
+     
         }
 
         private void confirmButton_MouseDown(object sender, MouseEventArgs e)
