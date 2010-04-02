@@ -287,7 +287,7 @@ namespace GameAnywhere
             if (controller.IsLoggedIn())
             {
                 controller.direction = OnlineSync.ComToWeb;
-
+                List<Game> gameList = null;
                 try
                 {
                     OpenWaitDialog("Please wait while your files in our server is being fetched.");
