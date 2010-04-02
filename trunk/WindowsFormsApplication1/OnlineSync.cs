@@ -294,7 +294,7 @@ namespace GameAnywhere
             {
                 if (Directory.Exists(path))
                 {
-                    if (!IsLocked(path))
+                    if (!IsLockedFolder(path))
                     {
                         //Upload directory
                         try
@@ -314,7 +314,7 @@ namespace GameAnywhere
                 else if (File.Exists(path))
                 {
                     string keyName = gamePath + path.Replace(parentPath, "").Replace(@"\", "/");
-                    if (!IsLocked(path))
+                    if (!IsLockedFile(path))
                     {
                         try
                         {
@@ -357,7 +357,7 @@ namespace GameAnywhere
                 string keyName = key + filePath.Replace(parent, "").Replace(@"\", "/");
                 try
                 {
-                    if(!IsLocked(filePath))
+                    if(!IsLockedFile(filePath))
                     {
                         //Upload a single file
                         s3.UploadFile(filePath, keyName);
@@ -573,7 +573,7 @@ namespace GameAnywhere
         /// True - file is not read only.
         /// False - file is read only.
         /// </returns>
-        private bool IsLocked(string filePath)
+        private bool IsLockedFile(string filePath)
         {
             FileStream stream = null;
 
@@ -600,6 +600,32 @@ namespace GameAnywhere
             }
 
             //file is not locked
+            return false;
+        }
+
+        /// <summary>
+        /// Check if folder access is denied.
+        /// </summary>
+        /// <param name="filePath">Path to a folder.</param>
+        /// <returns>
+        /// True - folder is not read only.
+        /// False - folder is read only.
+        /// </returns>
+        private bool IsLockedFolder(string folderPath)
+        {
+            DirectoryInfo di = new DirectoryInfo(folderPath);
+
+
+            try
+            {
+                DirectoryInfo[] diArr = di.GetDirectories();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return true;
+            }
+
+            //folder is not locked
             return false;
         }
         #endregion
