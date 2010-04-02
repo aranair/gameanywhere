@@ -288,11 +288,25 @@ namespace GameAnywhere
             {
                 controller.direction = OnlineSync.ComToWeb;
 
-                // Get the list of compatible games to be displayed to user.
-                List<Game> gameList = controller.GetGameList();
+                try
+                {
+                    OpenWaitDialog("Please wait while your files in our server is being fetched.");
+                    // Get the list of compatible games to be displayed to user.
+                    gameList = controller.GetGameList();
+                    CloseWaitDialog();
+                }
+                catch (ConnectionFailureException)
+                {
+                    SetErrorLabel("Unable to connect to Web server.", Color.Red);
+                    CloseWaitDialog();
+                }
 
+                if (gameList == null)
+                {
+                    SetErrorLabel("Unable to connect to Web server.", Color.Red);
+                }
                 // If there are no games.
-                if (gameList.Count > 0)
+                else if (gameList.Count > 0)
                 {
                     errorLabel.Text = "";
 
@@ -336,16 +350,27 @@ namespace GameAnywhere
 
             if (controller.IsLoggedIn())
             {
-
                 controller.direction = OnlineSync.WebToCom;
+                List<Game> gameList = null;
+                try
+                {
+                    OpenWaitDialog("Please wait while your files in our server is being fetched.");
+                    // Get the list of compatible games to be displayed to user.
+                    gameList = controller.GetGameList();
+                    CloseWaitDialog();
+                }
+                catch (ConnectionFailureException)
+                {
+                    SetErrorLabel("Unable to connect to Web server.", Color.Red);
+                    CloseWaitDialog();
+                }
 
-                OpenWaitDialog("Please wait while your files in our server is being fetched.");
-                // Get the list of compatible games to be displayed to user.
-                List<Game> gameList = controller.GetGameList();
-                CloseWaitDialog();
-
+                if (gameList == null)
+                {
+                    SetErrorLabel("Unable to connect to Web server.", Color.Red);
+                }
                 // If there are no games.
-                if (gameList.Count > 0)
+                else if (gameList.Count > 0)
                 {
                     errorLabel.Text = "";
 
@@ -387,7 +412,7 @@ namespace GameAnywhere
             ResetErrorLabels();
             if (controller.IsLoggedIn())
             {
-                Dictionary<string, int> conflictsList = new Dictionary<string, int>();
+                Dictionary<string, int> conflictsList = null;
                 try
                 {
                     OpenWaitDialog("Please wait while the files are checked for conflicts.");
@@ -395,11 +420,16 @@ namespace GameAnywhere
                 }
                 catch (ConnectionFailureException)
                 {
-                    MessageBox.Show("Unable to connect to Web server.");
+                    CloseWaitDialog();
+                    SetErrorLabel("Unable to connect to Web server.", Color.Red);
                 }
 
+                if (conflictsList == null)
+                {
+                    SetErrorLabel("Unable to connect to Web server.", Color.Red);
+                }
                 // There are conflicts to be resolved, popup will be shown.
-                if (conflictsList.Count != 0)
+                else if (conflictsList.Count != 0)
                 {
                     CloseWaitDialog();
                     ConflictResolve conflictsResolve = new ConflictResolve(controller, conflictsList, this);
@@ -407,7 +437,7 @@ namespace GameAnywhere
                 }
                 else
                 {
-                    List<SyncError> syncErrorList = new List<SyncError>();
+                    List<SyncError> syncErrorList = null;
                     try
                     {
                         waitDialog.label1.Text = "Please wait while your files are being synchronized.";
@@ -415,11 +445,15 @@ namespace GameAnywhere
                         CloseWaitDialog();
                     }
                     catch (ConnectionFailureException)
-                    {
-                        MessageBox.Show("Unable to connect to Web server.");
+                    {   
+
                     }
 
-                    if (syncErrorList.Count == 0)
+                    if (syncErrorList == null)
+                    {
+                        SetErrorLabel("Unable to connect to Web server.", Color.Red);
+                    }
+                    else if (syncErrorList.Count == 0)
                         SetErrorLabel("Successfully synchronized", Color.DeepSkyBlue);
                     else
                     {
@@ -618,6 +652,7 @@ namespace GameAnywhere
                 }
                 catch (ConnectionFailureException)
                 {
+                    CloseWaitDialog();
                     MessageBox.Show("Unable to connect to Web Server");
                     return;
                 }
