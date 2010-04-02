@@ -147,7 +147,7 @@ namespace GameAnywhere
 
             }//end foreach (Game g in gameList)
 
-            this.ResumeLayout(false);
+            this.ResumeLayout(true);
             this.PerformLayout();
         }
 

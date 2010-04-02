@@ -408,7 +408,6 @@ namespace GameAnywhere
                     List<SyncError> syncErrorList = new List<SyncError>();
                     try
                     {
-
                         waitDialog.label1.Text = "Please wait while your files are being synchronized.";
                         syncErrorList = controller.SynchronizeWebAndThumb(conflictsList);
                         CloseWaitDialog();
