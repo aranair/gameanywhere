@@ -463,7 +463,6 @@
             // emailTextBox
             // 
             this.emailTextBox.BackColor = System.Drawing.SystemColors.InfoText;
-            this.emailTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.emailTextBox.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.emailTextBox.ForeColor = System.Drawing.Color.DeepSkyBlue;
             this.emailTextBox.Location = new System.Drawing.Point(182, 44);
@@ -475,7 +474,6 @@
             // passwordTextBox
             // 
             this.passwordTextBox.BackColor = System.Drawing.SystemColors.InfoText;
-            this.passwordTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.passwordTextBox.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.passwordTextBox.ForeColor = System.Drawing.Color.DeepSkyBlue;
             this.passwordTextBox.Location = new System.Drawing.Point(182, 68);
@@ -602,7 +600,6 @@
             // passwordReEnterRegisterPanelTextBox
             // 
             this.passwordReEnterRegisterPanelTextBox.BackColor = System.Drawing.SystemColors.InfoText;
-            this.passwordReEnterRegisterPanelTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.passwordReEnterRegisterPanelTextBox.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.passwordReEnterRegisterPanelTextBox.ForeColor = System.Drawing.Color.DeepSkyBlue;
             this.passwordReEnterRegisterPanelTextBox.Location = new System.Drawing.Point(376, 78);
@@ -615,7 +612,6 @@
             // passwordRegisterPanelTextBox
             // 
             this.passwordRegisterPanelTextBox.BackColor = System.Drawing.SystemColors.InfoText;
-            this.passwordRegisterPanelTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.passwordRegisterPanelTextBox.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.passwordRegisterPanelTextBox.ForeColor = System.Drawing.Color.DeepSkyBlue;
             this.passwordRegisterPanelTextBox.Location = new System.Drawing.Point(376, 54);
@@ -628,7 +624,6 @@
             // emailRegisterPanelTextBox
             // 
             this.emailRegisterPanelTextBox.BackColor = System.Drawing.SystemColors.InfoText;
-            this.emailRegisterPanelTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.emailRegisterPanelTextBox.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.emailRegisterPanelTextBox.ForeColor = System.Drawing.Color.DeepSkyBlue;
             this.emailRegisterPanelTextBox.Location = new System.Drawing.Point(376, 30);
@@ -697,7 +692,6 @@
             // emailForgetPasswordPanelTextBox
             // 
             this.emailForgetPasswordPanelTextBox.BackColor = System.Drawing.SystemColors.InfoText;
-            this.emailForgetPasswordPanelTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.emailForgetPasswordPanelTextBox.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.emailForgetPasswordPanelTextBox.ForeColor = System.Drawing.Color.DeepSkyBlue;
             this.emailForgetPasswordPanelTextBox.Location = new System.Drawing.Point(166, 44);
@@ -770,7 +764,6 @@
             // emailResendActivationPanelTextBox
             // 
             this.emailResendActivationPanelTextBox.BackColor = System.Drawing.Color.Black;
-            this.emailResendActivationPanelTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.emailResendActivationPanelTextBox.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.emailResendActivationPanelTextBox.ForeColor = System.Drawing.Color.DeepSkyBlue;
             this.emailResendActivationPanelTextBox.Location = new System.Drawing.Point(166, 44);
@@ -782,7 +775,6 @@
             // passwordResendActivationPanelTextBox
             // 
             this.passwordResendActivationPanelTextBox.BackColor = System.Drawing.Color.Black;
-            this.passwordResendActivationPanelTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.passwordResendActivationPanelTextBox.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.passwordResendActivationPanelTextBox.ForeColor = System.Drawing.Color.DeepSkyBlue;
             this.passwordResendActivationPanelTextBox.Location = new System.Drawing.Point(166, 68);
@@ -858,7 +850,6 @@
             // confirmNewpasswordChangePasswordPanelTextBox
             // 
             this.confirmNewpasswordChangePasswordPanelTextBox.BackColor = System.Drawing.SystemColors.InfoText;
-            this.confirmNewpasswordChangePasswordPanelTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.confirmNewpasswordChangePasswordPanelTextBox.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.confirmNewpasswordChangePasswordPanelTextBox.ForeColor = System.Drawing.Color.DeepSkyBlue;
             this.confirmNewpasswordChangePasswordPanelTextBox.Location = new System.Drawing.Point(343, 117);
@@ -871,7 +862,6 @@
             // newpasswordChangePasswordPanelTextBox
             // 
             this.newpasswordChangePasswordPanelTextBox.BackColor = System.Drawing.SystemColors.InfoText;
-            this.newpasswordChangePasswordPanelTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.newpasswordChangePasswordPanelTextBox.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.newpasswordChangePasswordPanelTextBox.ForeColor = System.Drawing.Color.DeepSkyBlue;
             this.newpasswordChangePasswordPanelTextBox.Location = new System.Drawing.Point(343, 93);
@@ -884,7 +874,6 @@
             // passwordChangePasswordPanelTextBox
             // 
             this.passwordChangePasswordPanelTextBox.BackColor = System.Drawing.SystemColors.InfoText;
-            this.passwordChangePasswordPanelTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.passwordChangePasswordPanelTextBox.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.passwordChangePasswordPanelTextBox.ForeColor = System.Drawing.Color.DeepSkyBlue;
             this.passwordChangePasswordPanelTextBox.Location = new System.Drawing.Point(343, 69);
@@ -897,7 +886,6 @@
             // emailChangePasswordPanelTextBox
             // 
             this.emailChangePasswordPanelTextBox.BackColor = System.Drawing.SystemColors.InfoText;
-            this.emailChangePasswordPanelTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.emailChangePasswordPanelTextBox.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.emailChangePasswordPanelTextBox.ForeColor = System.Drawing.Color.DeepSkyBlue;
             this.emailChangePasswordPanelTextBox.Location = new System.Drawing.Point(343, 45);
