@@ -960,12 +960,12 @@
             this.ClientSize = new System.Drawing.Size(832, 435);
             this.Controls.Add(this.titlePanel);
             this.Controls.Add(this.startNavPanel);
-            this.Controls.Add(this.resendActivationPanel);
-            this.Controls.Add(this.registerPanel);
-            this.Controls.Add(this.changePasswordPanel);
             this.Controls.Add(this.forgetPasswordPanel);
             this.Controls.Add(this.loginPanel);
             this.Controls.Add(this.startPanel);
+            this.Controls.Add(this.resendActivationPanel);
+            this.Controls.Add(this.registerPanel);
+            this.Controls.Add(this.changePasswordPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;

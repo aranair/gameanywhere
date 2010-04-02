@@ -304,7 +304,7 @@ namespace GameAnywhere
                     SetErrorLabel("No compatible games found.", Color.Red);
             }
             else
-                SetErrorLabel("Please login first.", Color.Red);
+                SetErrorLabel("       Please login first.", Color.Red);
         }
 
         private void computerToWebButton_MouseDown(object sender, MouseEventArgs e)
@@ -339,8 +339,10 @@ namespace GameAnywhere
 
                 controller.direction = OnlineSync.WebToCom;
 
+                OpenWaitDialog("Please wait while your files in our server is being fetched.");
                 // Get the list of compatible games to be displayed to user.
                 List<Game> gameList = controller.GetGameList();
+                CloseWaitDialog();
 
                 // If there are no games.
                 if (gameList.Count > 0)
@@ -355,7 +357,7 @@ namespace GameAnywhere
                     SetErrorLabel("No compatible games found.", Color.Red);
             }
             else
-                SetErrorLabel("Please login first.", Color.Red);
+                SetErrorLabel("       Please login first.", Color.Red);
         }
 
         private void webToComputerButton_MouseDown(object sender, MouseEventArgs e)
@@ -428,7 +430,7 @@ namespace GameAnywhere
                 }
             }
             else
-                SetErrorLabel("      Please login first.", Color.Red);
+                SetErrorLabel("       Please login first.", Color.Red);
 
         }
 
@@ -1359,6 +1361,7 @@ namespace GameAnywhere
             SetVisibilityAndUsability(loginButton, true, true);
             SetVisibilityAndUsability(registerButton, true, true);
             SetVisibilityAndUsability(titlePanel, false, false);
+            SetVisibilityAndUsability(restoreButton, true, true);
 
             this.PerformLayout();
             this.ResumeLayout();
@@ -1373,6 +1376,7 @@ namespace GameAnywhere
             DisableOtherPanels(registerPanel);
             SetVisibilityAndUsability(loginButton, true, true);
             SetVisibilityAndUsability(registerButton, false, false);
+            SetVisibilityAndUsability(restoreButton, false, false);
             SetVisibilityAndUsability(titlePanel, true, true);
             SetBackgroundImage(titlePanel, "GameAnywhere.Resources.bannerRegisterPanel.gif", ImageLayout.Zoom);
             emailRegisterPanelTextBox.Focus();
@@ -1389,6 +1393,7 @@ namespace GameAnywhere
             SetVisibilityAndUsability(loginPanel, true, true);
             DisableOtherPanels(loginPanel);
             SetVisibilityAndUsability(loginButton, false, false);
+            SetVisibilityAndUsability(restoreButton, false, false);
             SetVisibilityAndUsability(registerButton, true, true);
             SetVisibilityAndUsability(titlePanel, true, true);
             SetBackgroundImage(titlePanel, "GameAnywhere.Resources.bannerLoginPanel.gif", ImageLayout.Zoom);
@@ -1408,6 +1413,7 @@ namespace GameAnywhere
             DisableOtherPanels(forgetPasswordPanel);
             EnableMainControlButtons();
             SetVisibilityAndUsability(titlePanel, true, true);
+            SetVisibilityAndUsability(restoreButton, false, false);
             SetBackgroundImage(titlePanel, "GameAnywhere.Resources.bannerForgetPasswordPanel.gif", ImageLayout.Zoom);
             emailForgetPasswordPanelTextBox.Focus();
 
@@ -1424,6 +1430,7 @@ namespace GameAnywhere
             DisableOtherPanels(resendActivationPanel);
             EnableMainControlButtons();
             SetVisibilityAndUsability(titlePanel, true, true);
+            SetVisibilityAndUsability(restoreButton, false, false);
             SetBackgroundImage(titlePanel, "GameAnywhere.Resources.bannerResendActivationPanel.gif", ImageLayout.Zoom);
             emailResendActivationPanelTextBox.Focus();
 
@@ -1441,6 +1448,7 @@ namespace GameAnywhere
             EnableMainControlButtons();
 
             SetVisibilityAndUsability(titlePanel, true, true);
+            SetVisibilityAndUsability(restoreButton, false, false);
 
             SetBackgroundImage(titlePanel, "GameAnywhere.Resources.bannerChangePasswordPanel.gif", ImageLayout.Zoom);
             emailChangePasswordPanelTextBox.Focus();

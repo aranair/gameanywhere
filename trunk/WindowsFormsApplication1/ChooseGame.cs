@@ -368,15 +368,14 @@ namespace GameAnywhere
                 // No errors for this syncAction: create a label to to let user know it was a success for this game.
                 if (syncAction.UnsuccessfulSyncFiles.Count > 0)
                 {
-                    if (controller.direction == OfflineSync.ExternalToCom)
+                    if (controller.direction == OfflineSync.ExternalToCom || controller.direction == OnlineSync.ComToWeb 
+                        || controller.direction == OnlineSync.WebToCom)
                     {
                         //ShowSyncErrors(syncAction.UnsuccessfulSyncFiles, ref yAxisControl);
                         CreateLabel(new System.Drawing.Point(300, yAxisLocation), "Synchronization Failed.\n- Please re-synchronize.", resultPanel);
                     }
                     else if (controller.direction == OfflineSync.ComToExternal)
-                    {
                         CreateLabel(new System.Drawing.Point(300, yAxisLocation), "Synchronization Failed.\n- Please re-synchronize or manually copy error files.", resultPanel);
-                    }
                         
                     yAxisLocation += 20;
                 }
