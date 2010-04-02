@@ -40,3 +40,14 @@ RegType=HKLM
 SaveParentPath=InstallPathVar
 SearchSaveParent=    *.spe
 [ENDGAME]
+Game=Command and Conquer 4
+RegValue=Install Dir
+RegKey=RegistrySoftwarePath\Electronic Arts\Command and Conquer 4
+RegType=HKLM
+ConfigPathList=InstallPathVar\CNC4.ini
+ConfigParentPath=InstallPathVar
+SavePathList=DocumentsPath\Command and Conquer 4
+SaveParentPath=DocumentsPath\
+[ENDGAME]
+
+
