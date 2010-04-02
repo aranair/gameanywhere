@@ -16,7 +16,7 @@ SaveParentPath=DocumentsPath\Sports Interactive\Football Manager 2010
 SavePathList=DocumentsPath\Sports Interactive\Football Manager 2010\games
 [ENDGAME]
 Game=World of Warcraft
-RegValue=InstallPathVar
+RegValue=InstallPath
 RegKey=RegistrySoftwarePath\Blizzard Entertainment\World of Warcraft
 RegType=HKLM
 ConfigPathList=InstallPathVar\WTF\Account
