@@ -445,8 +445,8 @@ namespace GameAnywhere
                         CloseWaitDialog();
                     }
                     catch (ConnectionFailureException)
-                    {   
-
+                    {
+                        CloseWaitDialog();
                     }
 
                     if (syncErrorList == null)
@@ -653,7 +653,7 @@ namespace GameAnywhere
                 catch (ConnectionFailureException)
                 {
                     CloseWaitDialog();
-                    MessageBox.Show("Unable to connect to Web Server");
+                    SetErrorLabel("Unable to connect to Web server.", Color.Red);
                     return;
                 }
 
@@ -805,7 +805,7 @@ namespace GameAnywhere
                 }
                 catch (ConnectionFailureException)
                 {
-                    MessageBox.Show("Unable to connect to Web Server");
+                    SetErrorLabel("Unable to connect to Web server.", Color.Red);
                     return;
                 }
 
@@ -993,7 +993,7 @@ namespace GameAnywhere
                 }
                 catch (ConnectionFailureException)
                 {
-                    MessageBox.Show("Unable to connect to Web Server");
+                    SetErrorLabel("Unable to connect to Web server.", Color.Red);
                     return;
                 }
 
@@ -1171,7 +1171,7 @@ namespace GameAnywhere
                 }
                 catch (ConnectionFailureException)
                 {
-                    MessageBox.Show("Unable to connect to Web Server");
+                    SetErrorLabel("Unable to connect to Web server.", Color.Red);
                     return;
                 }
                 // Display the appropriate messages according to errorCode.
@@ -1273,7 +1273,7 @@ namespace GameAnywhere
                 }
                 catch (ConnectionFailureException)
                 {
-                    MessageBox.Show("Unable to connect to Web Server");
+                    SetErrorLabel("Unable to connect to Web server.", Color.Red);
                     return;
                 }
 
