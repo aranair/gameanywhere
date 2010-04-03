@@ -374,9 +374,8 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="gameIconPictureBox">Icon box to be set the background image.</param>
         /// <param name="gameName">Name of the game to be displayed.</param>
-        private void SetIcon(PictureBox gameIconPictureBox, Game g)
+        private void SetIcon(PictureBox gameIconPictureBox, string gameName)
         {
-            string gameName = g.Name;
             string iconPath = "GameAnywhere.Resources.GameIcons." + gameName + ".gif";
             string defaultIconPath = "GameAnywhere.Resources.GameIcons.defaultIcon.gif";
 
