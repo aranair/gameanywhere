@@ -40,7 +40,7 @@
             // 
             this.cancelButton.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cancelButton.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.cancelButton.Location = new System.Drawing.Point(241, 57);
+            this.cancelButton.Location = new System.Drawing.Point(268, 57);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(110, 25);
             this.cancelButton.TabIndex = 2;
@@ -61,18 +61,18 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Verdana", 9.75F);
             this.label1.ForeColor = System.Drawing.Color.Red;
             this.label1.Location = new System.Drawing.Point(65, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(266, 15);
+            this.label1.Size = new System.Drawing.Size(320, 16);
             this.label1.TabIndex = 7;
             this.label1.Text = "Warning! All original files backup will be erased!";
             // 
             // buttonOk
             // 
             this.buttonOk.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonOk.Location = new System.Drawing.Point(108, 57);
+            this.buttonOk.Location = new System.Drawing.Point(123, 57);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(110, 25);
             this.buttonOk.TabIndex = 1;
@@ -83,11 +83,11 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Font = new System.Drawing.Font("Verdana", 9.75F);
             this.label2.ForeColor = System.Drawing.Color.Red;
             this.label2.Location = new System.Drawing.Point(65, 32);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(143, 15);
+            this.label2.Size = new System.Drawing.Size(178, 16);
             this.label2.TabIndex = 10;
             this.label2.Text = "Proceed at your own risk!";
             // 
@@ -95,7 +95,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(374, 94);
+            this.ClientSize = new System.Drawing.Size(386, 94);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.pictureBoxWarning);
