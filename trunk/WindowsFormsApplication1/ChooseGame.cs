@@ -662,9 +662,12 @@ namespace GameAnywhere
         public void SetBackgroundImage(System.Windows.Forms.Control control, string resourcePath, ImageLayout imageLayout)
         {
             System.IO.Stream imageStream = this.GetType().Assembly.GetManifestResourceStream(resourcePath);
+
             control.BackgroundImage = Image.FromStream(imageStream);
+
             control.BackgroundImageLayout = imageLayout;
             imageStream.Close();
+            
         }
 
         private static void SetVisibilityAndUsability(System.Windows.Forms.Control c, bool makeVisible, bool makeEnabled)
@@ -683,25 +686,18 @@ namespace GameAnywhere
         private void SetIcon(PictureBox gameIconPictureBox, Game g)
         {
             string gameName = g.Name;
+            string iconPath = "GameAnywhere.Resources.GameIcons." + gameName + ".gif";
+            string defaultIconPath = "GameAnywhere.Resources.GameIcons.defaultIcon.gif";
 
-            if (gameName.Equals(GameLibrary.FIFA10GameName))
-                SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.fifa2010.png", ImageLayout.Zoom);
+            System.IO.Stream imageStream = this.GetType().Assembly.GetManifestResourceStream(iconPath);
 
-            else if (gameName.Equals(GameLibrary.Warcraft3GameName))
-                SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.warcraft3.png", ImageLayout.Zoom);
+            if (imageStream == null)
+                imageStream = this.GetType().Assembly.GetManifestResourceStream(defaultIconPath);
 
-            else if (gameName.Equals(GameLibrary.FM2010GameName))
-                SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.footballManagerIcon1.gif", ImageLayout.Zoom);
-
-            else if (gameName.Equals(GameLibrary.WOWGameName))
-                SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.worldOfWarcraftIcon1.gif", ImageLayout.Zoom);
-
-            else if (gameName.Equals(GameLibrary.AbuseGameName))
-                SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.abuseIcon.jpg", ImageLayout.Zoom);
-
-            else
-                SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.defaultIcon.png", ImageLayout.Zoom);
-
+            gameIconPictureBox.BackgroundImage = Image.FromStream(imageStream);
+            gameIconPictureBox.BackgroundImageLayout = ImageLayout.Zoom;
+            imageStream.Close();
+   
         }
         #endregion
 

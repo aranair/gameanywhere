@@ -271,12 +271,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\warcraft3.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\fifa2010.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\confirmGameChoicePopupButtonDulled.gif" />
     <EmbeddedResource Include="SyncErrorDisplay.resx">
       <DependentUpon>SyncErrorDisplay.cs</DependentUpon>
@@ -336,12 +330,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\changePasswordPanelBackground.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\footballManagerIcon1.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\worldOfWarcraftIcon1.gif" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="bin\Debug\AWSSDK.dll" />
@@ -421,7 +409,6 @@
     <EmbeddedResource Include="Resources\arrowUpload.gif" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\abuseIcon.jpg" />
     <EmbeddedResource Include="WaitingDialog.resx">
       <DependentUpon>WaitingDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -443,13 +430,18 @@
     <EmbeddedResource Include="gamev3.txt" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\defaultIcon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\WebComms\WebComms.csproj">
       <Project>{98F7FCA0-4C4B-421B-BD0A-6F997408C65C}</Project>
       <Name>WebComms</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\GameIcons\Abuse.gif" />
+    <EmbeddedResource Include="Resources\GameIcons\defaultIcon.gif" />
+    <EmbeddedResource Include="Resources\GameIcons\FIFA 10.gif" />
+    <EmbeddedResource Include="Resources\GameIcons\Football Manager 2010.gif" />
+    <EmbeddedResource Include="Resources\GameIcons\Warcraft 3.gif" />
+    <EmbeddedResource Include="Resources\GameIcons\World of Warcraft.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
