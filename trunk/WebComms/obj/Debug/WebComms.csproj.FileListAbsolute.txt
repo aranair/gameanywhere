@@ -5,3 +5,10 @@ C:\Users\Wilson\Desktop\ga\WebComms\bin\Debug\AWSSDK.dll
 C:\Users\Wilson\Desktop\ga\WebComms\bin\Debug\AWSSDK.xml
 C:\Users\Wilson\Desktop\ga\WebComms\obj\Debug\WebComms.dll
 C:\Users\Wilson\Desktop\ga\WebComms\obj\Debug\WebComms.pdb
+C:\Users\Wilson\Desktop\gameanywhere\WebComms\bin\Debug\WebComms.dll
+C:\Users\Wilson\Desktop\gameanywhere\WebComms\bin\Debug\WebComms.pdb
+C:\Users\Wilson\Desktop\gameanywhere\WebComms\bin\Debug\AWSSDK.dll
+C:\Users\Wilson\Desktop\gameanywhere\WebComms\bin\Debug\AWSSDK.xml
+C:\Users\Wilson\Desktop\gameanywhere\WebComms\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Wilson\Desktop\gameanywhere\WebComms\obj\Debug\WebComms.dll
+C:\Users\Wilson\Desktop\gameanywhere\WebComms\obj\Debug\WebComms.pdb
