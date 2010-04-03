@@ -24,7 +24,8 @@ namespace GameAnywhere
         /// <remarks>
         /// The integer values represent the direction or conflict of the resolution result.
         /// </remarks>
-        public Dictionary<string, int> NoConflict, Conflicts;
+        public Dictionary<string, NoConflictDirection> NoConflict;
+        public Dictionary<string, ConflictDirection> Conflicts;
 
         /// <summary>
         /// Metadata objects stored as class data members.
@@ -45,17 +46,18 @@ namespace GameAnywhere
         private string WebMetaDataPath = Path.Combine(syncFolderPath, WebMetaDataFileName);
 
         /// <summary>
-        /// The list of integer values that represents the direction for conflict resolution.
+        /// Enumeration of directions for files that do not require conflict resolution.
         /// </summary>
-        private const int UPLOAD = 1;
-        private const int DOWNLOAD = 2;
-        private const int DELETELOCAL = 3;
-        private const int DELETEWEB = 4;
-        private const int DELETEMETA = 5;
-        private const int UPDOWNCONFLICT = 12;
-        private const int DELETELOCALCONFLICT = 13;
-        private const int DELETEWEBCONFLICT = 24;
-        
+        public enum NoConflictDirection { Upload, Download, DeleteLocal, DeleteWeb, DeleteMetadata };
+        /// <summary>
+        /// Enumeration of conflicting directions for files that require conflict resolution.
+        /// </summary>
+        public enum ConflictDirection { UploadOrDownload, UploadOrDeleteLocal, DownloadOrDeleteWeb };
+        /// <summary>
+        /// Enumeration for CheckConflicts() method.
+        /// </summary>
+        private enum CheckConflictsDirection { LocalToWeb, WebToLocal };
+         
         /// <summary>
         /// Stored Metadata object of files stored on the web.
         /// </summary>
@@ -104,8 +106,8 @@ namespace GameAnywhere
         public WebAndThumbSync(User user)
         {
             email = user.Email;
-            NoConflict = new Dictionary<string,int>();
-            Conflicts = new Dictionary<string, int>();
+            NoConflict = new Dictionary<string,NoConflictDirection>();
+            Conflicts = new Dictionary<string, ConflictDirection>();
             try
             {
                 CreateMetaData(email);
@@ -281,8 +283,8 @@ namespace GameAnywhere
         /// <returns>The Conflicts that has been filtered by FilterConflicts().</returns>
         public Dictionary<string,int> CheckConflicts()
         {
-            CheckConflictsHelper(localHash, localMeta, webHash, webMeta, UPLOAD);
-            CheckConflictsHelper(webHash, webMeta, localHash, localMeta, DOWNLOAD);
+            CheckConflictsHelper(localHash, localMeta, webHash, webMeta, CheckConflictsDirection.LocalToWeb);
+            CheckConflictsHelper(webHash, webMeta, localHash, localMeta, CheckConflictsDirection.WebToLocal);
 
             return FilterConflicts();
         }
@@ -295,18 +297,18 @@ namespace GameAnywhere
         /// Call 1:
         ///         First location - Local files
         ///         Second location - Web files
-        ///         Direction - UPLOAD
+        ///         Direction - CheckConflictsDirection.LocalToWeb
         /// Call 2:
         ///         First location - Web files
         ///         Second location - Local files
-        ///         Direction - DOWNLOAD
+        ///         Direction - CheckConflictsDirection.WebToLocal
         /// </remarks>
         /// <param name="hash1">Current Metadata object of the first location.</param>
         /// <param name="meta1">Stored Metadata object of the first location.</param>
         /// <param name="hash2">Current Metadata object of the second location.</param>
         /// <param name="meta2">Stored Metadata object of the second location.</param>
         /// <param name="direction">Direction of synchronization for resolution.</param>
-        private void CheckConflictsHelper(MetaData hash1, MetaData meta1, MetaData hash2, MetaData meta2, int direction)
+        private void CheckConflictsHelper(MetaData hash1, MetaData meta1, MetaData hash2, MetaData meta2, CheckConflictsDirection direction)
         {
             foreach (KeyValuePair<string, string> entry in hash1.FileTable)
             {
@@ -318,44 +320,44 @@ namespace GameAnywhere
                         //If hash2 and meta2 have a deleted file
                         if (FileIsDeleted(hash2, meta2, entry.Key))
                         {
-                            if (direction == UPLOAD)
+                            if (direction == CheckConflictsDirection.LocalToWeb)
                             {
-                                Conflicts[entry.Key] = DELETELOCALCONFLICT;
+                                Conflicts[entry.Key] = ConflictDirection.UploadOrDeleteLocal;
                             }
-                            else if (direction == DOWNLOAD)
+                            else if (direction == CheckConflictsDirection.WebToLocal)
                             {
-                                Conflicts[entry.Key] = DELETEWEBCONFLICT;
+                                Conflicts[entry.Key] = ConflictDirection.DownloadOrDeleteWeb;
                             }
                         }
                         //If hash2 and meta2 are same (i.e. not changed)
                         else if (!HashIsDifferent(hash2, meta2, entry.Key))
                         {
-                            if (direction == UPLOAD)
+                            if (direction == CheckConflictsDirection.LocalToWeb)
                             {
-                                NoConflict[entry.Key] = UPLOAD;
+                                NoConflict[entry.Key] = NoConflictDirection.Upload;
                             }
-                            else if (direction == DOWNLOAD)
+                            else if (direction == CheckConflictsDirection.WebToLocal)
                             {
-                                NoConflict[entry.Key] = DOWNLOAD;
+                                NoConflict[entry.Key] = NoConflictDirection.Download;
                             }
                         }
                         //If hash2 and meta2 are different (i.e. conflict)
                         else
                         {
-                            Conflicts[entry.Key] = UPDOWNCONFLICT;
+                            Conflicts[entry.Key] = ConflictDirection.UploadOrDownload;
                         }
                     }
                 }
                 else //New file
                 {
                     if (hash2.EntryExist(entry.Key)) //both new files, conflict
-                        Conflicts[entry.Key] = UPDOWNCONFLICT;
+                        Conflicts[entry.Key] = ConflictDirection.UploadOrDownload;
                     else
                     {
-                        if (direction == UPLOAD)
-                            NoConflict[entry.Key] = UPLOAD;
-                        else if (direction == DOWNLOAD)
-                            NoConflict[entry.Key] = DOWNLOAD;
+                        if (direction == CheckConflictsDirection.LocalToWeb)
+                            NoConflict[entry.Key] = NoConflictDirection.Upload;
+                        else if (direction == CheckConflictsDirection.WebToLocal)
+                            NoConflict[entry.Key] = NoConflictDirection.Download;
                     }
                 }
             }
@@ -365,29 +367,29 @@ namespace GameAnywhere
                 if (!hash1.EntryExist(entry.Key)) //Deleted file
                 {
                     if (!hash2.EntryExist(entry.Key)) //both deleted, delete metadata
-                        NoConflict[entry.Key] = DELETEMETA;
+                        NoConflict[entry.Key] = NoConflictDirection.DeleteMetadata;
                     else if (Conflicts.ContainsKey(entry.Key))
                         continue;
                     else if (HashIsDifferent(hash2, meta2, entry.Key))
                     {
-                        if (direction == UPLOAD)
+                        if (direction == CheckConflictsDirection.LocalToWeb)
                         {
-                            Conflicts[entry.Key] = DELETEWEBCONFLICT;
+                            Conflicts[entry.Key] = ConflictDirection.DownloadOrDeleteWeb;
                         }
-                        if (direction == DOWNLOAD)
+                        if (direction == CheckConflictsDirection.WebToLocal)
                         {
-                            Conflicts[entry.Key] = DOWNLOAD;
+                            Conflicts[entry.Key] = ConflictDirection.UploadOrDeleteLocal;
                         }
                     }
                     else
                     {
-                        if (direction == UPLOAD) //Delete from web
+                        if (direction == CheckConflictsDirection.LocalToWeb) //Delete from web
                         {
-                            NoConflict[entry.Key] = DELETEWEB;
+                            NoConflict[entry.Key] = NoConflictDirection.DeleteWeb;
                         }
-                        if (direction == DOWNLOAD)//Delete from thumb
+                        if (direction == CheckConflictsDirection.WebToLocal)//Delete from thumb
                         {
-                            NoConflict[entry.Key] = DELETELOCAL;
+                            NoConflict[entry.Key] = NoConflictDirection.DeleteLocal;
                         }
                     }
                 }
@@ -419,12 +421,12 @@ namespace GameAnywhere
                 {
                     switch (NoConflict[key])
                     {
-                        case UPLOAD:
+                        case NoConflictDirection.Upload:
                             //Upload file to S3
                             s3.UploadFile(localPath, webPath);
                             UpdateMetaData(key, s3.GenerateHash(localPath));
                             break;
-                        case DOWNLOAD:
+                        case NoConflictDirection.Download:
                             //Create the target directory if needed
                             if (!Directory.Exists(Path.GetDirectoryName(localPath)))
                                 CreateDirectory(Path.GetDirectoryName(localPath));
@@ -432,17 +434,17 @@ namespace GameAnywhere
                             s3.DownloadFile(localPath, webPath);
                             UpdateMetaData(key, s3.GenerateHash(localPath));
                             break;
-                        case DELETELOCAL:
+                        case NoConflictDirection.DeleteLocal:
                             //Delete file from thumbdrive
                             File.Delete(localPath);
                             DeleteMetaData(key);
                             break;
-                        case DELETEWEB:
+                        case NoConflictDirection.DeleteWeb:
                             //Delete file from S3
                             s3.DeleteDirectory(webPath);
                             DeleteMetaData(key);
                             break;
-                        case DELETEMETA:
+                        case NoConflictDirection.DeleteMetadata:
                             //Delete metadata entry
                             DeleteMetaData(key);
                             break;
@@ -505,33 +507,29 @@ namespace GameAnywhere
         /// <remarks>
         /// The only values of resolvedConflicts are 1 and 2, which determine the direction of all files of that type.
         /// The conflicts will be merged as follows:
-        /// UPDOWNCONFLICT      - 1:UPLOAD,   2:DOWNLOAD
-        /// DELETELOCALCONFLICT - 1:UPLOAD,   2:DELETELOCAL
-        /// DELETEWEBCONFLICT   - 1:DOWNLOAD, 2:DELETEWEB
+        /// UploadOrDownload      - 1:Upload,   2:Download
+        /// UploadOrDeleteLocal   - 1:Upload,   2:DeleteLocal
+        /// DownloadOrDeleteWeb   - 1:Download, 2:DeleteWeb
         /// </remarks>
         /// <param name="resolvedConflicts"></param>
         public void MergeConflicts(Dictionary<string, int> resolvedConflicts)
         {
             foreach (string key in Conflicts.Keys)
             {
-                int side = resolvedConflicts[GetGamesAndTypes(key)];
+                int direction = resolvedConflicts[GetGamesAndTypes(key)];
                 switch (Conflicts[key])
                 {
-                    case 12:
-                        if (side == 1) NoConflict[key] = 1;
-                        else if (side == 2) NoConflict[key] = 2;
+                    case ConflictDirection.UploadOrDownload:
+                        if (direction == 1) NoConflict[key] = NoConflictDirection.Upload;
+                        else if (direction == 2) NoConflict[key] = NoConflictDirection.Download;
                         break;
-                    case 13:
-                        if (side == 1) NoConflict[key] = 1;
-                        else if (side == 2) NoConflict[key] = 3;
+                    case ConflictDirection.UploadOrDeleteLocal:
+                        if (direction == 1) NoConflict[key] = NoConflictDirection.Upload;
+                        else if (direction == 2) NoConflict[key] = NoConflictDirection.DeleteLocal;
                         break;
-                    case 14:
-                        if (side == 1) NoConflict[key] = 1;
-                        else if (side == 2) NoConflict[key] = 4;
-                        break;
-                    case 24:
-                        if (side == 1) NoConflict[key] = 2;
-                        else if (side == 2) NoConflict[key] = 4;
+                    case ConflictDirection.DownloadOrDeleteWeb:
+                        if (direction == 1) NoConflict[key] = NoConflictDirection.Download;
+                        else if (direction == 2) NoConflict[key] = NoConflictDirection.DeleteWeb;
                         break;
                 }
             }
