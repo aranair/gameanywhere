@@ -39,16 +39,16 @@
             this.label1.ForeColor = System.Drawing.Color.Black;
             this.label1.Location = new System.Drawing.Point(12, 19);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(302, 13);
+            this.label1.Size = new System.Drawing.Size(340, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Please wait while your files are being synchronized.";
+            this.label1.Text = "Please wait while we fetch your files from the Web server.";
             // 
             // WaitingDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(328, 55);
+            this.ClientSize = new System.Drawing.Size(360, 55);
             this.Controls.Add(this.label1);
             this.ForeColor = System.Drawing.Color.Black;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
