@@ -34,16 +34,14 @@ namespace GameAnywhere
         /// localHash and localMeta are current and stored Metadata objects of local files.
         /// webHash and webMeta are current and stored Metadata objects of files stored on the web.
         /// </remarks>
-        private MetaData localHash, localMeta, webHash, webMeta;
+        private MetaData localHash, localMeta, webHash;
 
         private string email;
         private Storage s3 = new Storage();
 
         public static readonly string LocalMetaDataFileName = "metadata.ga";
-        public static readonly string WebMetaDataFileName = "metadata.web";
         private static string syncFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "SyncFolder");
         private string LocalMetaDataPath = Path.Combine(syncFolderPath, LocalMetaDataFileName);
-        private string WebMetaDataPath = Path.Combine(syncFolderPath, WebMetaDataFileName);
 
         /// <summary>
         /// Enumeration of directions for files that do not require conflict resolution.
@@ -54,18 +52,9 @@ namespace GameAnywhere
         /// </summary>
         public enum ConflictDirection { UploadOrDownload, UploadOrDeleteLocal, DownloadOrDeleteWeb };
         /// <summary>
-        /// Enumeration for CheckConflicts() method.
+        /// Enumeration for CheckConflictsHelper method.
         /// </summary>
         private enum CheckConflictsDirection { LocalToWeb, WebToLocal };
-         
-        /// <summary>
-        /// Stored Metadata object of files stored on the web.
-        /// </summary>
-        internal MetaData WebMeta
-        {
-            get { return webMeta; }
-            set { webMeta = value; }
-        }
 
         /// <summary>
         /// Current Metadata object of files stored on the web.
@@ -77,6 +66,15 @@ namespace GameAnywhere
         }
 
         /// <summary>
+        /// Current Metadata object of local files.
+        /// </summary>
+        internal MetaData LocalHash
+        {
+            get { return localHash; }
+            set { localHash = value; }
+        }
+
+        /// <summary>
         /// Stored Metadata object of local files.
         /// </summary>
         internal MetaData LocalMeta
@@ -85,14 +83,7 @@ namespace GameAnywhere
             set { localMeta = value; }
         }
 
-        /// <summary>
-        /// Current Metadata object of local files.
-        /// </summary>
-        internal MetaData LocalHash
-        {
-            get { return localHash; }
-            set { localHash = value; }
-        }
+
 
         /// <summary>
         /// Constructor for WebAndThumbSync
@@ -137,7 +128,7 @@ namespace GameAnywhere
             {
                 foreach (string file in Directory.GetFiles(dir))
                 {
-                    if (Path.GetFileName(file).Equals(WebMetaDataFileName) || Path.GetFileName(file).Equals(LocalMetaDataFileName)) continue;
+                    if (Path.GetFileName(file).Equals(LocalMetaDataFileName)) continue; //ignore metadata file
                     dict[file.Replace(syncFolderPath + @"\", "").Replace(@"\", "/")] = s3.GenerateHash(file);
                 }
                 foreach (string subdir in Directory.GetDirectories(dir))
@@ -178,7 +169,6 @@ namespace GameAnywhere
                 throw new ArgumentException("Parameter cannot be empty/null", "email");
 
             localMeta = new MetaData();
-            webMeta = new MetaData();
 
             try
             {
@@ -186,13 +176,6 @@ namespace GameAnywhere
                 {
                     //Create Local Metadata
                     localMeta.DeSerialize(LocalMetaDataPath);
-                }
-
-                if (s3.ListFiles(email + '/' + WebMetaDataFileName).Count == 1)
-                {
-                    //Create Web Metadata - download from web and deserialize
-                    s3.DownloadFile(WebMetaDataPath, email + '/' + WebMetaDataFileName);
-                    webMeta.DeSerialize(WebMetaDataPath);
                 }
 
                 //Generate hash from files stored on web and create Metadata object
@@ -283,8 +266,8 @@ namespace GameAnywhere
         /// <returns>The Conflicts that has been filtered by FilterConflicts().</returns>
         public Dictionary<string,int> CheckConflicts()
         {
-            CheckConflictsHelper(localHash, localMeta, webHash, webMeta, CheckConflictsDirection.LocalToWeb);
-            CheckConflictsHelper(webHash, webMeta, localHash, localMeta, CheckConflictsDirection.WebToLocal);
+            CheckConflictsHelper(localHash, webHash, localMeta, CheckConflictsDirection.LocalToWeb);
+            CheckConflictsHelper(webHash, localHash, localMeta, CheckConflictsDirection.WebToLocal);
 
             return FilterConflicts();
         }
@@ -304,21 +287,20 @@ namespace GameAnywhere
         ///         Direction - CheckConflictsDirection.WebToLocal
         /// </remarks>
         /// <param name="hash1">Current Metadata object of the first location.</param>
-        /// <param name="meta1">Stored Metadata object of the first location.</param>
         /// <param name="hash2">Current Metadata object of the second location.</param>
-        /// <param name="meta2">Stored Metadata object of the second location.</param>
+        /// <param name="meta">Stored Metadata object.</param>
         /// <param name="direction">Direction of synchronization for resolution.</param>
-        private void CheckConflictsHelper(MetaData hash1, MetaData meta1, MetaData hash2, MetaData meta2, CheckConflictsDirection direction)
+        private void CheckConflictsHelper(MetaData hash1, MetaData hash2, MetaData meta, CheckConflictsDirection direction)
         {
             foreach (KeyValuePair<string, string> entry in hash1.FileTable)
             {
-                if (meta1.EntryExist(entry.Key))
+                if (meta.EntryExist(entry.Key))
                 {
                     //If hash1 and meta1 are different (i.e. changed)
-                    if (HashIsDifferent(hash1, meta1, entry.Key))
+                    if (HashIsDifferent(hash1, meta, entry.Key))
                     {
                         //If hash2 and meta2 have a deleted file
-                        if (FileIsDeleted(hash2, meta2, entry.Key))
+                        if (FileIsDeleted(hash2, meta, entry.Key))
                         {
                             if (direction == CheckConflictsDirection.LocalToWeb)
                             {
@@ -330,7 +312,7 @@ namespace GameAnywhere
                             }
                         }
                         //If hash2 and meta2 are same (i.e. not changed)
-                        else if (!HashIsDifferent(hash2, meta2, entry.Key))
+                        else if (!HashIsDifferent(hash2, meta, entry.Key))
                         {
                             if (direction == CheckConflictsDirection.LocalToWeb)
                             {
@@ -362,7 +344,7 @@ namespace GameAnywhere
                 }
             }
 
-            foreach (KeyValuePair<string, string> entry in meta1.FileTable)
+            foreach (KeyValuePair<string, string> entry in meta.FileTable)
             {
                 if (!hash1.EntryExist(entry.Key)) //Deleted file
                 {
@@ -370,7 +352,7 @@ namespace GameAnywhere
                         NoConflict[entry.Key] = NoConflictDirection.DeleteMetadata;
                     else if (Conflicts.ContainsKey(entry.Key))
                         continue;
-                    else if (HashIsDifferent(hash2, meta2, entry.Key))
+                    else if (HashIsDifferent(hash2, meta, entry.Key))
                     {
                         if (direction == CheckConflictsDirection.LocalToWeb)
                         {
@@ -463,11 +445,9 @@ namespace GameAnywhere
 
             try
             {
-                //Serialize and Upload Metadata
+                //Serialize Metadata object
                 localHash.Serialize(LocalMetaDataPath);
-                webHash.Serialize(WebMetaDataPath);
-                s3.UploadFile(WebMetaDataPath, email + "/" + WebMetaDataFileName);
-                File.Delete(WebMetaDataPath);
+                File.SetAttributes(LocalMetaDataPath, FileAttributes.Hidden);
             }
             catch (ConnectionFailureException)
             {
@@ -475,7 +455,7 @@ namespace GameAnywhere
             }
             catch (Exception ex)
             {
-                errorList.Add(new SyncError("Metadata serialization failed.", processName, ex.Message)); //TODO:handle all exceptions here
+                errorList.Add(new SyncError("Metadata serialization failed.", processName, ex.Message));
             }
 
             return errorList;
@@ -572,7 +552,6 @@ namespace GameAnywhere
             //Update metadata
             localMeta.UpdateEntryValue(key, value);
             localHash.UpdateEntryValue(key, value);
-            webMeta.UpdateEntryValue(key, value);
             webHash.UpdateEntryValue(key, value);
         }
 
@@ -590,7 +569,6 @@ namespace GameAnywhere
             //Delete entry from metadata
             localMeta.DeleteEntry(key);
             localHash.DeleteEntry(key);
-            webMeta.DeleteEntry(key);
             webHash.DeleteEntry(key);
         }
 
