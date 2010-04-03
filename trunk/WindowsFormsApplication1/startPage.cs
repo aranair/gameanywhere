@@ -653,7 +653,7 @@ namespace GameAnywhere
                 catch (ConnectionFailureException)
                 {
                     CloseWaitDialog();
-                    SetErrorLabel("Unable to connect to Web server.", Color.Red);
+                    MessageBox.Show("Unable to connect to Web server.");
                     return;
                 }
 
@@ -801,11 +801,14 @@ namespace GameAnywhere
                 int errorCode = 0;
                 try
                 {
+                    OpenWaitDialog("Please wait while we register you with our Web server.");
                     errorCode = controller.Register(emailRegisterPanelTextBox.Text, passwordRegisterPanelTextBox.Text);
+                    CloseWaitDialog();
                 }
                 catch (ConnectionFailureException)
                 {
-                    SetErrorLabel("Unable to connect to Web server.", Color.Red);
+                    CloseWaitDialog();
+                    MessageBox.Show("Unable to connect to Web server.");
                     return;
                 }
 
@@ -988,12 +991,15 @@ namespace GameAnywhere
                 int errorCode = 0;
                 try
                 {
+                    OpenWaitDialog("Please wait while we attempt to change your password.");
                     // Attempts to change password with the user entered data and gets feedback regarding the success of the operation.
                     errorCode = controller.ChangePassword(emailChangePasswordPanelTextBox.Text, passwordChangePasswordPanelTextBox.Text, newpasswordChangePasswordPanelTextBox.Text);
+                    CloseWaitDialog();
                 }
                 catch (ConnectionFailureException)
                 {
-                    SetErrorLabel("Unable to connect to Web server.", Color.Red);
+                    CloseWaitDialog();
+                    MessageBox.Show("Unable to connect to Web server.");
                     return;
                 }
 
@@ -1171,7 +1177,7 @@ namespace GameAnywhere
                 }
                 catch (ConnectionFailureException)
                 {
-                    SetErrorLabel("Unable to connect to Web server.", Color.Red);
+                    MessageBox.Show("Unable to connect to Web server.");
                     return;
                 }
                 // Display the appropriate messages according to errorCode.
@@ -1273,7 +1279,7 @@ namespace GameAnywhere
                 }
                 catch (ConnectionFailureException)
                 {
-                    SetErrorLabel("Unable to connect to Web server.", Color.Red);
+                    MessageBox.Show("Unable to connect to Web server.");
                     return;
                 }
 
