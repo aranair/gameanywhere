@@ -233,11 +233,11 @@ namespace GameAnywhere
             //Pre-conditions
             if (fileName.Equals("") || fileName == null)
                 throw new ArgumentException("Parameter cannot be empty/null", "fileName");
-
+            Stream stream = null;
             try
             {
                 IFormatter formatter = new BinaryFormatter();
-                Stream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+                stream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
                 MetaData obj = (MetaData)formatter.Deserialize(stream);
                 stream.Close();
                 this.fileTable = obj.fileTable;
@@ -252,6 +252,7 @@ namespace GameAnywhere
             }
             catch (Exception)
             {
+                if(stream!=null) stream.Close();
             }
 
             return this;
