@@ -440,7 +440,6 @@
     <EmbeddedResource Include="Resources\GameIcons\defaultIcon.gif" />
     <EmbeddedResource Include="Resources\GameIcons\FIFA 10.gif" />
     <EmbeddedResource Include="Resources\GameIcons\Football Manager 2010.gif" />
-    <EmbeddedResource Include="Resources\GameIcons\Warcraft 3.gif" />
     <EmbeddedResource Include="Resources\GameIcons\World of Warcraft.gif" />
   </ItemGroup>
   <ItemGroup>
@@ -448,6 +447,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\GameIcons\Dragon Age Origins.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\GameIcons\Warcraft 3.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
