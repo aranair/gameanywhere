@@ -49,7 +49,7 @@ ConfigParentPath=InstallPathVar
 SavePathList=DocumentsPath\Command and Conquer 4
 SaveParentPath=DocumentsPath\
 [ENDGAME]
-Game=Dragon Age: Origins
+Game=Dragon Age Origins
 RegValue=Path
 RegKey=RegistrySoftwarePath\BioWare\Dragon Age
 RegType=HKLM
