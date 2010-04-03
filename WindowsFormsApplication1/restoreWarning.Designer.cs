@@ -61,10 +61,10 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Verdana", 9F);
             this.label1.Location = new System.Drawing.Point(65, 24);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(193, 15);
+            this.label1.Size = new System.Drawing.Size(230, 14);
             this.label1.TabIndex = 2;
             this.label1.Text = "Restore computer to original state?";
             // 
@@ -91,7 +91,7 @@
             // 
             // restoreWarning
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(374, 94);
             this.Controls.Add(this.cancelButton);
@@ -108,7 +108,7 @@
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "GameAnywhere";            
+            this.Text = "GameAnywhere";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxWarning)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
