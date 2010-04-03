@@ -49,5 +49,13 @@ ConfigParentPath=InstallPathVar
 SavePathList=DocumentsPath\Command and Conquer 4
 SaveParentPath=DocumentsPath\
 [ENDGAME]
-
+Game=Dragon Age: Origins
+RegValue=Path
+RegKey=RegistrySoftwarePath\BioWare\Dragon Age
+RegType=HKLM
+ConfigPathList=DocumentsPath\BioWare\Dragon Age\Settings
+ConfigParentPath=DocumentsPath\BioWare\Dragon Age
+SavePathList=DocumentsPath\BioWare\Dragon Age\Characters
+SaveParentPath=DocumentsPath\BioWare\Dragon Age
+[ENDGAME]
 
