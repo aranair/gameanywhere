@@ -14,7 +14,7 @@ namespace GameAnywhere
     /// Provides methods to access and update Amazon Web Services (AWS) SimpleDB.
     /// </summary>
     /// <remarks>This class requires the AWSSDK DLL.</remarks>
-    public class SimpleDB
+    class SimpleDB
     {
         #region Data Members
         /// <summary>
@@ -44,8 +44,8 @@ namespace GameAnywhere
         /// </summary>
         public SimpleDB()
         {
-            this.accessKey = "AKIAIF3ZSAPQXNF6ZIOQ";
-            this.secretAccessKey = "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";
+            this.accessKey = "*";
+            this.secretAccessKey = "*";
             this.sdb = new AmazonSimpleDBClient(accessKey, secretAccessKey);
             this.domain = "UserAccounts";
         }
@@ -237,6 +237,44 @@ namespace GameAnywhere
                 {
                     return "";
                 }
+            }
+            catch (AmazonSimpleDBException)
+            {
+                //ConnectionFailureException thrown
+                throw new ConnectionFailureException("Unable to connect to web server.");
+            }
+        }
+
+        /// <summary>
+        /// Add a new attribute and attribute value to the item.
+        /// </summary>
+        /// <param name="itemId">Item id.</param>
+        /// <param name="attribute">Attribute name.</param>
+        /// <param name="attributeValue">Attribute value.</param>
+        /// <exception cref="ConnectionFailureException"></exception>
+        public void AddAttributeValue(string itemId, string attribute, string attributeValue)
+        {
+            //Pre-conditions
+            Debug.Assert(!itemId.Equals("") && itemId != null);
+            Debug.Assert(!attribute.Equals("") && attribute != null);
+            Debug.Assert(!attributeValue.Equals("") && attributeValue != null);
+
+            if (String.IsNullOrEmpty(itemId))
+                throw new ArgumentException("Parameter cannot be empty/null", "itemId");
+            if (String.IsNullOrEmpty(attribute))
+                throw new ArgumentException("Parameter cannot be empty/null", "attribute");
+            if (String.IsNullOrEmpty(attributeValue))
+                throw new ArgumentException("Parameter cannot be empty/null", "attributeValue");
+
+            //Setup request
+            PutAttributesRequest request = new PutAttributesRequest().WithDomainName(domain).WithItemName(itemId);
+            request.WithAttribute(new ReplaceableAttribute().WithName(attribute).WithValue(attributeValue));
+
+            //Send request
+            try
+            {
+                //Add attribute and value
+                sdb.PutAttributes(request);
             }
             catch (AmazonSimpleDBException)
             {
