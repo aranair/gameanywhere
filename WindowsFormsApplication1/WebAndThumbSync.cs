@@ -159,7 +159,6 @@ namespace GameAnywhere
         /// <param name="email">user's email</param>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ConnectionFailureException"></exception>
-        /// <exception cref="WebTransferException"></exception>
         /// <exception cref="IOException"></exception>
         /// <exception cref="UnauthorizedAccessException"></exception>
         private void CreateMetaData(string email)
@@ -192,7 +191,7 @@ namespace GameAnywhere
             }
             catch (Exception)
             {
-                //Exceptions: ArgumentException, WebTransferException, IOException, UnauthorizedAccessException
+                //Exceptions: ArgumentException, IOException, UnauthorizedAccessException
                 throw;
             }
         }
@@ -447,7 +446,6 @@ namespace GameAnywhere
             {
                 //Serialize Metadata object
                 localHash.Serialize(LocalMetaDataPath);
-                File.SetAttributes(LocalMetaDataPath, FileAttributes.Hidden);
             }
             catch (ConnectionFailureException)
             {
