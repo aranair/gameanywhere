@@ -376,10 +376,18 @@ namespace GameAnywhere
         /// <param name="gameName">Name of the game to be displayed.</param>
         private void SetIcon(PictureBox gameIconPictureBox, string gameName)
         {
-            string iconPath = "GameAnywhere.Resources.GameIcons." + gameName + ".gif";
+            string gifIconPath = "GameAnywhere.Resources.GameIcons." + gameName + ".gif";
+            string pngIconPath = "GameAnywhere.Resources.GameIcons." + gameName + ".png";
+            string jpgIconPath = "GameAnywhere.Resources.GameIcons." + gameName + ".jpg";
             string defaultIconPath = "GameAnywhere.Resources.GameIcons.defaultIcon.gif";
 
-            System.IO.Stream imageStream = this.GetType().Assembly.GetManifestResourceStream(iconPath);
+            System.IO.Stream imageStream = this.GetType().Assembly.GetManifestResourceStream(gifIconPath);
+
+            if (imageStream == null)
+                imageStream = this.GetType().Assembly.GetManifestResourceStream(pngIconPath);
+           
+            if (imageStream == null)
+                imageStream = this.GetType().Assembly.GetManifestResourceStream(jpgIconPath);
 
             if (imageStream == null)
                 imageStream = this.GetType().Assembly.GetManifestResourceStream(defaultIconPath);
