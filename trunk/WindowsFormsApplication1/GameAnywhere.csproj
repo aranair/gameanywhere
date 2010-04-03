@@ -443,6 +443,10 @@
     <EmbeddedResource Include="Resources\GameIcons\Warcraft 3.gif" />
     <EmbeddedResource Include="Resources\GameIcons\World of Warcraft.gif" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\GameIcons\Command and Conquer 4.gif" />
+    <EmbeddedResource Include="Resources\GameIcons\Dragon Age Origins.gif" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
