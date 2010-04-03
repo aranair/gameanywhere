@@ -290,7 +290,7 @@ namespace GameAnywhere
                 List<Game> gameList = null;
                 try
                 {
-                    OpenWaitDialog("Please wait while your files in our server is being fetched.");
+                    OpenWaitDialog("Please wait while we fetch your files from the Web server.");
                     // Get the list of compatible games to be displayed to user.
                     gameList = controller.GetGameList();
                     CloseWaitDialog();
