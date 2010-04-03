@@ -374,25 +374,20 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="gameIconPictureBox">Icon box to be set the background image.</param>
         /// <param name="gameName">Name of the game to be displayed.</param>
-        private void SetIcon(PictureBox gameIconPictureBox, string gameName)
+        private void SetIcon(PictureBox gameIconPictureBox, Game g)
         {
-            if (gameName.Equals(GameLibrary.FIFA10GameName))
-                SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.fifa2010.png", ImageLayout.Zoom);
+            string gameName = g.Name;
+            string iconPath = "GameAnywhere.Resources.GameIcons." + gameName + ".gif";
+            string defaultIconPath = "GameAnywhere.Resources.GameIcons.defaultIcon.gif";
 
-            else if (gameName.Equals(GameLibrary.Warcraft3GameName))
-                SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.warcraft3.png", ImageLayout.Zoom);
+            System.IO.Stream imageStream = this.GetType().Assembly.GetManifestResourceStream(iconPath);
 
-            else if (gameName.Equals(GameLibrary.FM2010GameName))
-                SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.footballManagerIcon1.gif", ImageLayout.Zoom);
+            if (imageStream == null)
+                imageStream = this.GetType().Assembly.GetManifestResourceStream(defaultIconPath);
 
-            else if (gameName.Equals(GameLibrary.WOWGameName))
-                SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.worldOfWarcraftIcon1.gif", ImageLayout.Zoom);
-
-            else if (gameName.Equals(GameLibrary.AbuseGameName))
-                SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.abuseIcon.jpg", ImageLayout.Zoom);
-
-            else
-                SetBackgroundImage(gameIconPictureBox, "GameAnywhere.Resources.defaultIcon.png", ImageLayout.Zoom);
+            gameIconPictureBox.BackgroundImage = Image.FromStream(imageStream);
+            gameIconPictureBox.BackgroundImageLayout = ImageLayout.Zoom;
+            imageStream.Close();
 
         }
         #endregion

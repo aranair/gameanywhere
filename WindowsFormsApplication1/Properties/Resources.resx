@@ -229,12 +229,6 @@
   <data name="bannerSyncResults" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\bannerSyncResults.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="fifa2010" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\fifa2010.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="warcraft3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\warcraft3.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="confirmGameChoicePopupButtonDulled" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\confirmGameChoicePopupButtonDulled.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -291,12 +285,6 @@
   </data>
   <data name="resendActivationPanelBackground" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\resendActivationPanelBackground.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="footballManagerIcon1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\footballManagerIcon1.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="worldOfWarcraftIcon1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\worldOfWarcraftIcon1.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="computerToWebButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\computerToWebButton.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
