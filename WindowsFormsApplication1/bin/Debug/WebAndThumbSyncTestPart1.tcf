@@ -1,0 +1,9 @@
+WebAndThumbSync|WebAndThumbUser
+1~SynchronizeGames|Dictionary<string;int>:{void}|int:0|void
+2~SynchronizeGames|Dictionary<string;int>:{void}|int:0|void
+3~SynchronizeGames|Dictionary<string;int>:{void}|int:0|void
+4~SynchronizeGames|Dictionary<string;int>:{void}|int:0|void
+5~SynchronizeGames|Dictionary<string;int>:{Game1/savedGame;1}|int:0|void
+6~SynchronizeGames|Dictionary<string;int>:{Game1/savedGame;2}|int:0|void
+7~SynchronizeGames|Dictionary<string;int>:{Game1/savedGame;1}|int:0|void
+8~SynchronizeGames|Dictionary<string;int>:{Game1/savedGame;2}|int:0|void

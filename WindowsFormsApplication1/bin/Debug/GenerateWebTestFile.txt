@@ -1,0 +1,81 @@
+@
+webTest1
+Game1\savedGame\File 1.txt,A
+Game2\savedGame\File 2.txt,B
+@
+webTest2
+Game1\savedGame\File 1.txt,X
+Game2\savedGame\File 2.txt,B
+@
+webTest3
+Game1\savedGame\File 1.txt,A
+Game2\savedGame\File 2.txt,B
+@
+webTest4
+Game1\savedGame\File 1.txt,A
+Game2\savedGame\File 2.txt,B
+Game3\savedGame\File 3.txt,X
+Game4\savedGame\File 4.txt,D
+@
+webTest5
+Game1\savedGame\File 1.txt,Y
+Game2\savedGame\File 2.txt,B
+Game3\savedGame\File 3.txt,X
+Game4\savedGame\File 4.txt,D
+@
+webTest6
+Game1\savedGame\File 1.txt,Y
+Game2\savedGame\File 2.txt,B
+Game3\savedGame\File 3.txt,X
+@
+webTest7
+Game1\savedGame\File 1.txt,Y
+Game2\savedGame\File 2.txt,B
+Game3\savedGame\File 3.txt,X
+Game4\savedGame\File 4.txt,D
+@
+webTest8
+Game1\savedGame\File 1.txt,Y
+Game2\savedGame\File 2.txt,B
+Game3\savedGame\File 3.txt,X
+Game5\savedGame\File 5.txt,E
+@
+webTest9
+Game1\savedGame\File 1.txt,Y
+@
+webTest10
+Game1\savedGame\File 1.txt,Y
+Game2\savedGame\File 2.txt,A
+@
+webTest11
+Game1\savedGame\File 1.txt,Y
+Game2\savedGame\File 2.txt,A
+Game4\savedGame\File 4.txt,Z
+@
+webTest12
+Game1\savedGame\
+@
+webTest13
+@
+webTest14
+Game1\savedGame\File 1.txt,X
+@
+webTest15
+Game1\savedGame\File 1.txt,Y
+Game1\savedGame\File 2.txt,X
+@
+webTest16
+Game1\savedGame\File 1.txt,Y
+Game1\savedGame\File 2.txt,X
+Game2\config\File 4.txt,Y
+@
+webTest17
+Game1\savedGame\File 1.txt,Y
+Game1\savedGame\File 2.txt,X
+Game2\config\File 4.txt,Y
+@
+webTest18
+Game1\savedGame\File 1.txt,Y
+Game1\savedGame\File 2.txt,X
+Game2\config\File 4.txt,Y
+#
