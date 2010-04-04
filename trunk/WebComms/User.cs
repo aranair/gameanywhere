@@ -45,8 +45,8 @@ namespace GameAnywhere
         /// </summary>
         public User()
         {
-            email = "";
-            password = "";
+            email = string.Empty;
+            password = string.Empty;
             db = new SimpleDB();
             state = UserState.Guest;
         }
@@ -130,7 +130,9 @@ namespace GameAnywhere
         /// </summary>
         public void Logout()
         {
-            state = UserState.Guest;
+            this.state = UserState.Guest;
+            this.email = string.Empty;
+            this.password = string.Empty;
         }
 
         /// <summary>
@@ -146,7 +148,6 @@ namespace GameAnywhere
         /// <exception cref="AmazonSimpleDBException"></exception>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ConnectionFailureException"></exception>
-        /// <exception cref="SmtpException"></exception>
         public int Register(string email, string password)
         {
             //Pre-conditions
@@ -164,6 +165,8 @@ namespace GameAnywhere
                     //Registration complete
                     string activationKey = CreateMD5Hash(email.Substring(email.Length / 2) + password);
                     string md5Password = CreateMD5Hash(email + password);
+
+                    //Insert user info into DB
                     db.InsertItem(email, md5Password, activationKey);
                     SendActivationEmail(email, password, activationKey);
                     return 1;
@@ -184,7 +187,7 @@ namespace GameAnywhere
             }
             catch
             {
-                //Exceptions: ArgumentException, SmtpException, ConnectionFailureException, AmazonSimpleDBException
+                //Exceptions: ArgumentException, ConnectionFailureException, AmazonSimpleDBException
                 throw;
             }
         }
@@ -201,7 +204,6 @@ namespace GameAnywhere
         /// </returns>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ConnectionFailureException"></exception>
-        /// <exception cref="SmtpException"></exception>
         public int RetrievePassword(string email)
         {
             //Pre-conditions
@@ -217,6 +219,8 @@ namespace GameAnywhere
                         //Retrieve complete
                         string password = db.GetAttribute(email, "Password");
                         string resetKey = CreateMD5Hash(email + password);
+
+                        //Insert new attribute to item DB
                         db.AddAttributeValue(email, "ResetKey", resetKey);
                         SendPasswordEmail(email, resetKey);
                         return 1;
@@ -235,8 +239,7 @@ namespace GameAnywhere
             }
             catch
             {
-                //Exceptions: ArgumentException, SmtpException, ConnectionFailureException
-                //Delete ResetKey attribute if fail to send email
+                //Exceptions: ArgumentException, ConnectionFailureException
                 throw;
             }
         }
@@ -273,9 +276,11 @@ namespace GameAnywhere
                 {
                     string userPassword = db.GetAttribute(email, "Password");
                     string md5OldPassword = CreateMD5Hash(email + oldPassword);
+
+                    //Check if current password matches in DB
                     if (userPassword.Equals(md5OldPassword))
                     {
-                        //Password changed
+                        //Change to new password and update item in DB
                         string md5NewPassword = CreateMD5Hash(email + newPassword);
                         db.UpdateAttributeValue(email, "Password", md5NewPassword);
                         return 1;
@@ -311,7 +316,6 @@ namespace GameAnywhere
         /// </returns>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ConnectionFailureException"></exception>
-        /// <exception cref="SmtpException"></exception>
         public int ResendActivation(string email, string inputPassword)
         {
             //Pre-conditions
@@ -357,7 +361,7 @@ namespace GameAnywhere
             }
             catch
             {
-                //Exceptions: ArgumentException, ConnectionFailureException, SmtpException
+                //Exceptions: ArgumentException, ConnectionFailureException
                 throw;
             }
         }
@@ -437,6 +441,7 @@ namespace GameAnywhere
             {
                 string activationStatus = db.GetAttribute(email, "ActivationStatus");
 
+                //Checks if account is activated
                 if (activationStatus.Equals("1"))
                 {
                     return true;
@@ -460,8 +465,7 @@ namespace GameAnywhere
         /// <param name="password">User password.</param>
         /// <param name="activationKey">Activation key.</param>
         /// <exception cref="ArgumentException"></exception>
-        /// <exception cref="SmtpException"></exception>
-        private void SendActivationEmail(string email, string password, string activationKey)
+        private bool SendActivationEmail(string email, string password, string activationKey)
         {
             //Pre-conditions
             if (String.IsNullOrEmpty(email))
@@ -506,11 +510,12 @@ namespace GameAnywhere
                 client.Send(message);
                 message = null;
                 client = null;
+                return true;
             }
             catch
             {
                 //Exceptions: System.Net.Mail.SmtpException, System.Net.Mail.SmtpFailedRecipientsException - Failure sending mail
-                throw new SmtpException("Failure sending email.");
+                return false;
             }
         }
 
@@ -520,8 +525,7 @@ namespace GameAnywhere
         /// <param name="email">User email.</param>
         /// <param name="resetKey">Key to reset password.</param>
         /// <exception cref="ArgumentException"></exception>
-        /// <exception cref="SmtpException"></exception>
-        private void SendPasswordEmail(string email, string resetKey)
+        private bool SendPasswordEmail(string email, string resetKey)
         {
             //Pre-conditions
             if (String.IsNullOrEmpty(email))
@@ -559,11 +563,12 @@ namespace GameAnywhere
                 client.Send(message);
                 message = null;
                 client = null;
+                return true;
             }
             catch (Exception)
             {
                 //Exceptions: System.Net.Mail.SmtpException, System.Net.Mail.SmtpFailedRecipientsException - Failure sending mail
-                throw new SmtpException("Failure sending email.");
+                return false;
             }
         }
 
@@ -589,9 +594,6 @@ namespace GameAnywhere
             for (int i = 0; i < hashBytes.Length; i++)
             {
                 sb.Append(hashBytes[i].ToString("X2"));
-                // To force the hex string to lower-case letters instead of
-                // upper-case, use he following line instead:
-                // sb.Append(hashBytes[i].ToString("x2")); 
             }
             return sb.ToString();
         }
