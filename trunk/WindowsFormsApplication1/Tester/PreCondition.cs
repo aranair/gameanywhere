@@ -344,7 +344,7 @@ namespace GameAnywhere
                 case 18:
                     {
                         FolderOperation.RemoveFileSecurity(@".\SyncFolder\Game1\savedGame",user,FileSystemRights.FullControl,AccessControlType.Deny);
-                        FolderOperation.RemoveFileSecurity(@".\SyncFolder\Game2\config", user, FileSystemRights.FullControl, AccessControlType.Deny);
+                        FolderOperation.RemoveFileSecurity(@".\SyncFolder\Game2\config\File 4.txt", user, FileSystemRights.FullControl, AccessControlType.Deny);
                         break;
                     }
                 case 19:
@@ -848,7 +848,7 @@ namespace GameAnywhere
                         webThumb = WebAndThumbFileSetUp(index);
                         //Lock Game1\savedGame Folder
                         FolderOperation.AddFileSecurity(@".\SyncFolder\Game1\savedGame", user, FileSystemRights.FullControl, AccessControlType.Deny);
-                        FolderOperation.AddFileSecurity(@".\SyncFolder\Game2\config", user, FileSystemRights.FullControl, AccessControlType.Deny);
+                        FolderOperation.AddFileSecurity(@".\SyncFolder\Game2\config\File 4.txt", user, FileSystemRights.FullControl, AccessControlType.Deny);
                         
                         break;
                     }
