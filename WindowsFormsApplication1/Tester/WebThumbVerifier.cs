@@ -790,7 +790,7 @@ namespace GameAnywhere
                         if (errorList.Count != 2)
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! Error List fail to include File 1.txt of Game1/savedGame and File 4.txt of Game2/config.");
+                            result.AddRemarks("Failed! Error List fail to include File 1.txt of Game1/savedGame or File 4.txt of Game2/config. Current count: "+errorList.Count);
                         }
 
                         CheckUpload(index, ref result, ref verifyMeta, ref currentMeta, "File 3.txt", "config", "Game1");
@@ -798,6 +798,16 @@ namespace GameAnywhere
                         break;
                     }
 
+                case 19:
+                    {
+                        List<SyncError> errorList = (List<SyncError>)returnType;
+                        if (errorList.Count != 4)
+                        {
+                            result.Result = false;
+                            result.AddRemarks("Failed! Error List Expects 4, Current count: " + errorList.Count);
+                        }
+                        break;
+                    }
             }
 
             //All cases conflicts should be 0 after synchronization method.

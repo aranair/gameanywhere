@@ -79,10 +79,10 @@ namespace GameAnywhere
         private void ReadButton_Click(object sender, EventArgs e)
         {
             string user = WindowsIdentity.GetCurrent().Name;
-            FolderOperation.RemoveFileSecurity(@".\SyncFolder\Game1\savedGame", user, FileSystemRights.FullControl, AccessControlType.Deny);
-            FolderOperation.RemoveFileSecurity(@".\SyncFolder\Game2\config", user, FileSystemRights.FullControl, AccessControlType.Deny);
+            //FolderOperation.RemoveFileSecurity(@".\SyncFolder\Game1\savedGame", user, FileSystemRights.FullControl, AccessControlType.Deny);
+            //FolderOperation.RemoveFileSecurity(@".\SyncFolder\Game2\config", user, FileSystemRights.FullControl, AccessControlType.Deny);
 
-            MessageBox.Show("Stop!");
+            //MessageBox.Show("Stop!");
             //Move any existing SyncFolder
             /*if (Directory.Exists(@".\SyncFolder"))
                 Directory.Move(@".\SyncFolder", @".\SyncFolder-backup");
