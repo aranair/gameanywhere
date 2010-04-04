@@ -1,4 +1,6 @@
-WebAndThumbSync Test case
+WebAndThumbSync Test case for conflict check and synchronize game
+
+
 Conflict = 0, upload = 1, download = 2, deleteLocal = 3, deleteWeb = 4
 
 TODO: Check if deletion on one side, do we remove meta data entry.
@@ -146,4 +148,12 @@ result: conflict contains 4 entries, noconflict contains 0.
 		2:- Game1\configGame : 0
 		3:- Game2\configGame : 0
 
-TODO: add verifier for the new test cases.
+17. Test for Game1\savedGame folder locked.
+	Case 17 uses case 16 folders/files set.
+
+Did not handle file lock exception when creating meta data in constructor.
+
+18. Test for locking of folder after creating WebAndThumbSync class
+	direction for Game2\configGame\File 4: X : D | Y : D -> updownconflict, changed to download
+
+
