@@ -214,8 +214,16 @@ namespace GameAnywhere
                                 returnType = err;
                             else
                             {
-                                error = true;
-                                result = getInvalidError(err);
+                                WebAndThumbSync webClass = (WebAndThumbSync)testClass;
+                                if (webClass.LocalHash.FileTable.ContainsKey("UnauthorizedAccessException"))
+                                {
+                                    return new TestResult(true);
+                                }
+                                else
+                                {
+                                    error = true;
+                                    result = getInvalidError(err);
+                                }
                             }
                             break;
                         case "Restore":
