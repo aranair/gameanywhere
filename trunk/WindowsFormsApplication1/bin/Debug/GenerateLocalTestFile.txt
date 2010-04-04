@@ -79,4 +79,9 @@ localTest18
 Game1\savedGame\File 1.txt,X
 Game1\config\File 3.txt,X
 Game2\config\File 4.txt,X
+@
+localTest19
+Game1\savedGame\File 1.txt,X
+Game1\config\File 3.txt,X
+Game2\config\File 4.txt,X
 #
