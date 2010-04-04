@@ -11,21 +11,17 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace GameAnywhere
 {
     /// <summary>
-    /// MetaData Class
-    /// Desc: Stores information about each file/directory's hashcode
-    /// 
-    /// Serialization Info:
-    /// http://msdn.microsoft.com/en-us/library/4abbf6k0(VS.71).aspx
-    /// Dictionary API:
-    /// http://msdn.microsoft.com/en-us/library/xfhwa508.aspx
+    /// Stores information about each file.
     /// </summary>
     [Serializable]
     class MetaData
     {
+        #region Data Members
         /// <summary>
-        /// Data members
+        /// Stores the file path and hashcode of file.
         /// </summary>
         private Dictionary<string, string> fileTable;
+        #endregion
 
         /// <summary>
         /// Accessors & Mutators
@@ -36,14 +32,19 @@ namespace GameAnywhere
             set { fileTable = value; }
         }
 
+        #region Constructors
         /// <summary>
-        /// Constructor
+        /// Initialize the data members.
         /// </summary>
         public MetaData()
         {
             this.fileTable = new Dictionary<string, string>();
         }
 
+        /// <summary>
+        /// Initialize the data members.
+        /// </summary>
+        /// <param name="hashTable"></param>
         public MetaData(Dictionary<string, string> hashTable)
         {
             if (hashTable == null)
@@ -56,21 +57,22 @@ namespace GameAnywhere
                 this.fileTable = hashTable;
             }
         }
+        #endregion
 
         /// <summary>
-        /// Adds an entry to the file table
+        /// Adds an entry to the file table.
         /// </summary>
-        /// <param name="fileName">path of file/directory</param>
-        /// <param name="hashCode">hash code of file</param>
+        /// <param name="fileName">Path of file.</param>
+        /// <param name="hashCode">Hash code of file.</param>
         /// <returns>
-        /// true - Entry added successfully to table
-        /// false - Entry already exists in table
+        /// True - Entry added successfully to table.
+        /// False - Entry already exists in table.
         /// </returns>
-        /// Exceptions: ArgumentException
+        /// <exception cref="ArgumentException"></exception>
         public bool AddEntry(string fileName, string hashCode)
         {
             //Pre-conditions
-            if (fileName.Equals("") || fileName == null)
+            if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentException("Parameter cannot be empty/null", "fileName");
             if (hashCode == null)
                 throw new ArgumentException("Parameter cannot be null", "hashCode");
@@ -89,18 +91,18 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Deletes an entry from the file table
+        /// Deletes an entry from the file table.
         /// </summary>
-        /// <param name="fileName">path of file/directory</param>
+        /// <param name="fileName">Path of file.</param>
         /// <returns>
-        /// true - Entry found and successfully removed from table
-        /// false - Entry not found
+        /// True - Entry found and successfully removed from table.
+        /// False - Entry not found.
         /// </returns>
-        /// Exceptions: ArgumentException
+        /// <exception cref="ArgumentException"></exception>
         public bool DeleteEntry(string fileName)
         {
             //Pre-conditions
-            if (fileName.Equals("") || fileName == null)
+            if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentException("Parameter cannot be empty/null", "fileName");
 
             //Remove entry
@@ -108,15 +110,15 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Updates entry with new value
+        /// Updates entry with new value.
         /// </summary>
-        /// <param name="fileName">path of file/directory</param>
-        /// <param name="newValue">new value of entry</param>
-        /// Exceptions: ArgumentException
+        /// <param name="fileName">Path of file.</param>
+        /// <param name="newValue">New value of entry.</param>
+        /// <exception cref="ArgumentException"></exception>
         public void UpdateEntryValue(string fileName, string newValue)
         {
             //Pre-conditions
-            if (fileName.Equals("") || fileName == null)
+            if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentException("Parameter cannot be empty/null", "fileName");
             if (newValue == null)
                 throw new ArgumentException("Parameter cannot be null", "newValue");
@@ -126,15 +128,15 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Gets the value of the entry in the table
+        /// Gets the value of the entry in the table.
         /// </summary>
-        /// <param name="fileName">path of file/directory</param>
-        /// <returns>value of the key</returns>
-        /// Exceptions: ArgumentException
+        /// <param name="fileName">Path of file.</param>
+        /// <returns>Value of the key.</returns>
+        /// <exception cref="ArgumentException"></exception>
         public string GetEntryValue(string fileName)
         {
             //Pre-conditions
-            if (fileName.Equals("") || fileName == null)
+            if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentException("Parameter cannot be empty/null", "fileName");
 
             //Checks if entry is in table before accessing
@@ -145,24 +147,23 @@ namespace GameAnywhere
             else
             {
                 //Entry not found in metadata
-                //throw new KeyNotFoundException("Entry \"{fileName}\" not found in metadata");
                 return "";
             }
         }
 
         /// <summary>
-        /// Checks if entry exists in table
+        /// Checks if entry exists in table.
         /// </summary>
-        /// <param name="fileName">path of file/directory</param>
+        /// <param name="fileName">Path of file.</param>
         /// <returns>
-        /// true - Entry exists table
-        /// false - Entry does not exist in table
+        /// True - Entry exists table.
+        /// False - Entry does not exist in table.
         /// </returns>
-        /// Exceptions: ArgumentException
+        /// <exception cref="ArgumentException"></exception>
         public bool EntryExist(string fileName)
         {
             //Pre-conditions
-            if (fileName.Equals("") || fileName == null)
+            if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentException("Parameter cannot be empty/null", "fileName");
 
             //Checks if entry exists in table
@@ -170,7 +171,7 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Prints the list of entries found in the table
+        /// Prints the list of entries found in the table.
         /// </summary>
         public void PrintMetaDataContents()
         {
@@ -188,16 +189,16 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// Serialize this MetaData object to a file
+        /// Serialize this MetaData object to a file.
         /// </summary>
-        /// <param name="fileName">path of metadata file</param>
+        /// <param name="fileName">Path of metadata file.</param>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="IOException"></exception>
         /// <exception cref="UnauthorizedAccessException"></exception>
         public void Serialize(string fileName)
         {
             //Pre-conditions
-            if (fileName.Equals("") || fileName == null)
+            if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentException("Parameter cannot be empty/null", "fileName");
 
             try
@@ -221,17 +222,17 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// DeSerialize the file to a MetaData object
+        /// DeSerialize the file to a MetaData object.
         /// </summary>
-        /// <param name="fileName">path of metadata file</param>
-        /// <returns>MetaData object</returns>
+        /// <param name="fileName">Path of metadata file.</param>
+        /// <returns>MetaData object.</returns>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="IOException"></exception>
         /// <exception cref="UnauthorizedAccessException"></exception>
         public MetaData DeSerialize(string fileName)
         {
             //Pre-conditions
-            if (fileName.Equals("") || fileName == null)
+            if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentException("Parameter cannot be empty/null", "fileName");
             Stream stream = null;
             try
@@ -240,7 +241,7 @@ namespace GameAnywhere
                 stream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
                 MetaData obj = (MetaData)formatter.Deserialize(stream);
                 stream.Close();
-                this.fileTable = obj.fileTable;
+                fileTable = obj.fileTable;
             }
             catch (IOException)
             {
