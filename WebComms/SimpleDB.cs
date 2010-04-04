@@ -63,16 +63,9 @@ namespace GameAnywhere
         public void InsertItem(string itemId, string password, string activationKey)
         {
             //Pre-conditions
-            Debug.Assert(itemId.Length != 0 && itemId != null);
-            Debug.Assert(password.Length != 0 && password != null);
-            Debug.Assert(activationKey.Length != 0 && activationKey != null);
-
-            if(String.IsNullOrEmpty(itemId))
-                throw new ArgumentException("Parameter cannot be empty/null", "itemId");
-            if (String.IsNullOrEmpty(password))
-                throw new ArgumentException("Parameter cannot be empty/null", "password");
-            if (String.IsNullOrEmpty(activationKey))
-                throw new ArgumentException("Parameter cannot be empty/null", "activationKey");
+            Debug.Assert(!string.IsNullOrEmpty(itemId));
+            Debug.Assert(!string.IsNullOrEmpty(password));
+            Debug.Assert(!string.IsNullOrEmpty(activationKey));
 
             //Setup request
             PutAttributesRequest putAttributesActionOne = new PutAttributesRequest().WithDomainName(domain).WithItemName(itemId);
@@ -111,16 +104,9 @@ namespace GameAnywhere
         public void UpdateAttributeValue(string itemId, string attribute, string newAttributeValue)
         {
             //Pre-conditions
-            Debug.Assert(itemId.Length != 0 && itemId != null);
-            Debug.Assert(attribute.Length != 0 && attribute != null);
-            Debug.Assert(newAttributeValue.Length != 0 && newAttributeValue != null);
-
-            if (String.IsNullOrEmpty(itemId))
-                throw new ArgumentException("Parameter cannot be empty/null", "itemId");
-            if (String.IsNullOrEmpty(attribute))
-                throw new ArgumentException("Parameter cannot be empty/null", "attribute");
-            if (String.IsNullOrEmpty(newAttributeValue))
-                throw new ArgumentException("Parameter cannot be empty/null", "newAttributeValue");
+            Debug.Assert(!string.IsNullOrEmpty(itemId));
+            Debug.Assert(!string.IsNullOrEmpty(attribute));
+            Debug.Assert(!string.IsNullOrEmpty(newAttributeValue));
 
             //Setup request
             ReplaceableAttribute replaceableAttribute = new ReplaceableAttribute().WithName(attribute).WithValue(newAttributeValue).WithReplace(true);
@@ -157,10 +143,7 @@ namespace GameAnywhere
         public bool ItemExists(string itemId)
         {
             //Pre-conditions
-            Debug.Assert(itemId.Length != 0 && itemId != null);
-
-            if (String.IsNullOrEmpty(itemId))
-                throw new ArgumentException("Parameter cannot be empty/null", "itemId");
+            Debug.Assert(!string.IsNullOrEmpty(itemId));
 
             //Setup request - using select statement
             SelectRequest request = new SelectRequest();
@@ -198,13 +181,8 @@ namespace GameAnywhere
         public string GetAttribute(string itemId, string attribute)
         {
             //Pre-conditions
-            Debug.Assert(itemId.Length != 0 && itemId != null);
-            Debug.Assert(attribute.Length != 0 && attribute != null);
-
-            if (String.IsNullOrEmpty(itemId))
-                throw new ArgumentException("Parameter cannot be empty/null", "itemId");
-            if (String.IsNullOrEmpty(attribute))
-                throw new ArgumentException("Parameter cannot be empty/null", "attribute");
+            Debug.Assert(!string.IsNullOrEmpty(itemId));
+            Debug.Assert(!string.IsNullOrEmpty(attribute));
 
             //Setup request
             GetAttributesRequest request = new GetAttributesRequest().WithDomainName(domain).WithItemName(itemId).WithAttributeName(attribute);
@@ -248,16 +226,9 @@ namespace GameAnywhere
         public void AddAttributeValue(string itemId, string attribute, string attributeValue)
         {
             //Pre-conditions
-            Debug.Assert(itemId.Length != 0 && itemId != null);
-            Debug.Assert(attribute.Length != 0 && attribute != null);
-            Debug.Assert(attributeValue.Length != 0 && attributeValue != null);
-
-            if (String.IsNullOrEmpty(itemId))
-                throw new ArgumentException("Parameter cannot be empty/null", "itemId");
-            if (String.IsNullOrEmpty(attribute))
-                throw new ArgumentException("Parameter cannot be empty/null", "attribute");
-            if (String.IsNullOrEmpty(attributeValue))
-                throw new ArgumentException("Parameter cannot be empty/null", "attributeValue");
+            Debug.Assert(!string.IsNullOrEmpty(itemId));
+            Debug.Assert(!string.IsNullOrEmpty(attribute));
+            Debug.Assert(!string.IsNullOrEmpty(attributeValue));
 
             //Setup request
             PutAttributesRequest request = new PutAttributesRequest().WithDomainName(domain).WithItemName(itemId);

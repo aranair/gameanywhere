@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Diagnostics;
+using Amazon.SimpleDB;
 
 
 namespace GameAnywhere
@@ -35,7 +36,7 @@ namespace GameAnywhere
         /// <summary>
         /// State of user, either UserLoggedIn or Guest.
         /// </summary>
-        UserState state;
+        private UserState state;
         enum UserState { UserLoggedIn, Guest };
         #endregion
 
@@ -92,36 +93,28 @@ namespace GameAnywhere
 
             Debug.Assert(password.Length >= 6);
 
-            try
+            if (UserExists(email) && IsAccountActivated(email))
             {
-                if (UserExists(email) && IsAccountActivated(email))
+                //Login user
+                string userPassword = db.GetAttribute(email, "Password");
+                string md5Password = CreateMD5Hash(email + password);
+                if (userPassword.Equals(md5Password))
                 {
-                    //Login user
-                    string userPassword = db.GetAttribute(email, "Password");
-                    string md5Password = CreateMD5Hash(email + password);
-                    if (userPassword.Equals(md5Password))
-                    {
-                        this.email = email;
-                        this.password = password;
-                        this.state = UserState.UserLoggedIn;
-                        return true;
-                    }
-                    else
-                    {
-                        //User exists but wrong password
-                        return false;
-                    }
+                    this.email = email;
+                    this.password = password;
+                    this.state = UserState.UserLoggedIn;
+                    return true;
                 }
                 else
                 {
-                    //User doesn't exist or Exists but not activated
+                    //User exists but wrong password
                     return false;
                 }
             }
-            catch
+            else
             {
-                //Exceptions: ArgumentException, ConnectionFailureException
-                throw;
+                //User doesn't exist or Exists but not activated
+                return false;
             }
         }
 
@@ -130,9 +123,9 @@ namespace GameAnywhere
         /// </summary>
         public void Logout()
         {
-            this.state = UserState.Guest;
-            this.email = string.Empty;
-            this.password = string.Empty;
+            state = UserState.Guest;
+            email = string.Empty;
+            password = string.Empty;
         }
 
         /// <summary>
@@ -158,37 +151,29 @@ namespace GameAnywhere
 
             Debug.Assert(password.Length >= 6);
 
-            try
+            if (!UserExists(email))
             {
-                if (!UserExists(email))
-                {
-                    //Registration complete
-                    string activationKey = CreateMD5Hash(email.Substring(email.Length / 2) + password);
-                    string md5Password = CreateMD5Hash(email + password);
+                //Registration complete
+                string activationKey = CreateMD5Hash(email.Substring(email.Length / 2) + password);
+                string md5Password = CreateMD5Hash(email + password);
 
-                    //Insert user info into DB
-                    db.InsertItem(email, md5Password, activationKey);
-                    SendActivationEmail(email, password, activationKey);
-                    return 1;
+                //Insert user info into DB
+                db.InsertItem(email, md5Password, activationKey);
+                SendActivationEmail(email, password, activationKey);
+                return 1;
+            }
+            else
+            {
+                if (IsAccountActivated(email))
+                {
+                    //Duplicate account "Account has already been registered"
+                    return 2;
                 }
                 else
                 {
-                    if (IsAccountActivated(email))
-                    {
-                        //Duplicate account "Account has already been registered"
-                        return 2;
-                    }
-                    else
-                    {
-                        //Unactivated account "Account has already been registered and needs activation"
-                        return 3;
-                    }
+                    //Unactivated account "Account has already been registered and needs activation"
+                    return 3;
                 }
-            }
-            catch
-            {
-                //Exceptions: ArgumentException, ConnectionFailureException, AmazonSimpleDBException
-                throw;
             }
         }
 
@@ -210,37 +195,29 @@ namespace GameAnywhere
             if (String.IsNullOrEmpty(email))
                 throw new ArgumentException("Parameter cannot be empty/null", "email");
 
-            try
+            if (UserExists(email))
             {
-                if (UserExists(email))
+                if (IsAccountActivated(email))
                 {
-                    if (IsAccountActivated(email))
-                    {
-                        //Retrieve complete
-                        string password = db.GetAttribute(email, "Password");
-                        string resetKey = CreateMD5Hash(email + password);
+                    //Retrieve complete
+                    string password = db.GetAttribute(email, "Password");
+                    string resetKey = CreateMD5Hash(email + password);
 
-                        //Insert new attribute to item DB
-                        db.AddAttributeValue(email, "ResetKey", resetKey);
-                        SendPasswordEmail(email, resetKey);
-                        return 1;
-                    }
-                    else
-                    {
-                        //Unactivated account
-                        return 2;
-                    }
+                    //Insert new attribute to item DB
+                    db.AddAttributeValue(email, "ResetKey", resetKey);
+                    SendPasswordEmail(email, resetKey);
+                    return 1;
                 }
                 else
                 {
-                    //Invalid user
-                    return 3;
+                    //Unactivated account
+                    return 2;
                 }
             }
-            catch
+            else
             {
-                //Exceptions: ArgumentException, ConnectionFailureException
-                throw;
+                //Invalid user
+                return 3;
             }
         }
 
@@ -270,37 +247,29 @@ namespace GameAnywhere
 
             Debug.Assert(newPassword.Length >= 6);
 
-            try
+            if (UserExists(email) && IsAccountActivated(email))
             {
-                if (UserExists(email) && IsAccountActivated(email))
-                {
-                    string userPassword = db.GetAttribute(email, "Password");
-                    string md5OldPassword = CreateMD5Hash(email + oldPassword);
+                string userPassword = db.GetAttribute(email, "Password");
+                string md5OldPassword = CreateMD5Hash(email + oldPassword);
 
-                    //Check if current password matches in DB
-                    if (userPassword.Equals(md5OldPassword))
-                    {
-                        //Change to new password and update item in DB
-                        string md5NewPassword = CreateMD5Hash(email + newPassword);
-                        db.UpdateAttributeValue(email, "Password", md5NewPassword);
-                        return 1;
-                    }
-                    else
-                    {
-                        //Invalid password
-                        return 2;
-                    }
+                //Check if current password matches in DB
+                if (userPassword.Equals(md5OldPassword))
+                {
+                    //Change to new password and update item in DB
+                    string md5NewPassword = CreateMD5Hash(email + newPassword);
+                    db.UpdateAttributeValue(email, "Password", md5NewPassword);
+                    return 1;
                 }
                 else
                 {
-                    //Invalid user
-                    return 3;
+                    //Invalid password
+                    return 2;
                 }
             }
-            catch
+            else
             {
-                //Exceptions: ArgumentException, ConnectionFailureException, AmazonSimpleDBException
-                throw;
+                //Invalid user
+                return 3;
             }
         }
 
@@ -326,43 +295,35 @@ namespace GameAnywhere
 
             Debug.Assert(inputPassword.Length >= 6);
 
-            try
+            if (UserExists(email))
             {
-                if (UserExists(email))
+                if (!IsAccountActivated(email))
                 {
-                    if (!IsAccountActivated(email))
-                    {
-                        string password = db.GetAttribute(email, "Password");
-                        string md5InputPassword = CreateMD5Hash(email + inputPassword);
-                        string activationKey = CreateMD5Hash(email.Substring(email.Length / 2) + inputPassword);
+                    string password = db.GetAttribute(email, "Password");
+                    string md5InputPassword = CreateMD5Hash(email + inputPassword);
+                    string activationKey = CreateMD5Hash(email.Substring(email.Length / 2) + inputPassword);
 
-                        //Account not activated and wrong password provided
-                        if (!md5InputPassword.Equals(password))
-                        {
-                            return 0;
-                        }
-                        else
-                        {
-                            SendActivationEmail(email, inputPassword, activationKey);
-                            return 1;
-                        }
+                    //Account not activated and wrong password provided
+                    if (!md5InputPassword.Equals(password))
+                    {
+                        return 0;
                     }
                     else
                     {
-                        //Account already activated
-                        return 2;
+                        SendActivationEmail(email, inputPassword, activationKey);
+                        return 1;
                     }
                 }
                 else
                 {
-                    //Invalid user
-                    return 3;
+                    //Account already activated
+                    return 2;
                 }
             }
-            catch
+            else
             {
-                //Exceptions: ArgumentException, ConnectionFailureException
-                throw;
+                //Invalid user
+                return 3;
             }
         }
 
@@ -379,11 +340,10 @@ namespace GameAnywhere
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+
+            return false;
         }
+
         #endregion
 
         #region Private Methods
@@ -403,22 +363,12 @@ namespace GameAnywhere
             if (String.IsNullOrEmpty(email))
                 throw new ArgumentException("Parameter cannot be empty/null", "email");
 
-            try
+            if (db.ItemExists(email))
             {
-                if (db.ItemExists(email))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return true;
             }
-            catch
-            {
-                //Exceptions: ConnectionFailureException
-                throw;
-            }
+
+            return false;
         }
 
         /// <summary>
@@ -437,25 +387,15 @@ namespace GameAnywhere
             if (String.IsNullOrEmpty(email))
                 throw new ArgumentException("Parameter cannot be empty/null", "email");
 
-            try
-            {
-                string activationStatus = db.GetAttribute(email, "ActivationStatus");
+            string activationStatus = db.GetAttribute(email, "ActivationStatus");
 
-                //Checks if account is activated
-                if (activationStatus.Equals("1"))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch
+            //Checks if account is activated
+            if (activationStatus.Equals("1"))
             {
-                //Exceptions: ConnectionFailureException
-                throw;
+                return true;
             }
+
+            return false;
         }
 
         /// <summary>
@@ -478,6 +418,28 @@ namespace GameAnywhere
             Debug.Assert(password.Length >= 6);
 
             //Setup mail message
+            MailMessage message = GetActivationMessage(email, password, activationKey);
+
+            //Setup smtp client
+            SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+            client.EnableSsl = true;
+            client.Credentials = new NetworkCredential("gameanywhere@gmail.com", "cs3215666666");
+
+            //Send email
+            try
+            {
+                client.Send(message);
+                return true;
+            }
+            catch (Exception)
+            {
+                //Exceptions: System.Net.Mail.SmtpException, System.Net.Mail.SmtpFailedRecipientsException - Failure sending mail
+                return false;
+            }
+        }
+
+        private MailMessage GetActivationMessage(string email, string password, string activationKey)
+        {
             MailMessage message = new MailMessage();
             message.From = new MailAddress("gameanywhere@gmail.com", "GameAnywhere");
             message.To.Add(email);
@@ -498,25 +460,7 @@ namespace GameAnywhere
                     <b>GameAnywhere Team</b>
                 </body></html>
                 ", activationKey, email, password);
-
-            //Setup smtp client
-            SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
-            client.EnableSsl = true;
-            client.Credentials = new NetworkCredential("gameanywhere@gmail.com", "cs3215666666");
-
-            //Send email
-            try
-            {
-                client.Send(message);
-                message = null;
-                client = null;
-                return true;
-            }
-            catch
-            {
-                //Exceptions: System.Net.Mail.SmtpException, System.Net.Mail.SmtpFailedRecipientsException - Failure sending mail
-                return false;
-            }
+            return message;
         }
 
         /// <summary>
@@ -534,6 +478,28 @@ namespace GameAnywhere
                 throw new ArgumentException("Parameter cannot be empty/null", "resetKey");
 
             //Setup mail message
+            MailMessage message = GetRetrievePasswordMessage(email, resetKey);
+
+            //Setup smtp client
+            SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+            client.EnableSsl = true;
+            client.Credentials = new NetworkCredential("gameanywhere@gmail.com", "cs3215666666");
+
+            //Send email
+            try
+            {
+                client.Send(message);
+                return true;
+            }
+            catch (Exception)
+            {
+                //Exceptions: System.Net.Mail.SmtpException, System.Net.Mail.SmtpFailedRecipientsException - Failure sending mail
+                return false;
+            }
+        }
+
+        private MailMessage GetRetrievePasswordMessage(string email, string resetKey)
+        {
             MailMessage message = new MailMessage();
             message.From = new MailAddress("gameanywhere@gmail.com", "GameAnywhere");
             message.To.Add(email);
@@ -551,25 +517,7 @@ namespace GameAnywhere
                     <b>GameAnywhere Team</b>
                 </body></html>
                 ", resetKey);
-
-            //Setup smtp client
-            SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
-            client.EnableSsl = true;
-            client.Credentials = new NetworkCredential("gameanywhere@gmail.com", "cs3215666666");
-
-            //Send email
-            try
-            {
-                client.Send(message);
-                message = null;
-                client = null;
-                return true;
-            }
-            catch (Exception)
-            {
-                //Exceptions: System.Net.Mail.SmtpException, System.Net.Mail.SmtpFailedRecipientsException - Failure sending mail
-                return false;
-            }
+            return message;
         }
 
         /// <summary>
@@ -586,7 +534,7 @@ namespace GameAnywhere
 
             //Use input string to calculate MD5 hash
             MD5 md5 = MD5.Create();
-            byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+            byte[] inputBytes = Encoding.ASCII.GetBytes(input);
             byte[] hashBytes = md5.ComputeHash(inputBytes);
 
             //Convert the byte array to hexadecimal string
