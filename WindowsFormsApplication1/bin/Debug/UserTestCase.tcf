@@ -7,7 +7,7 @@ User|void
 4~Register|string:evilnicksg@gmail.com,string:123|void|WebException
 4~RetrievePassword|string:watzup_007@yahoo.com.sg|void|WebException
 5~ChangePassword|string:watzup_007@yahoo.com.sg,string:aaa,string:bbb|void|WebException
-3~ResendActivation|string:watzup_007@yahoo.com|void|WebException
+3~ResendActivation|string:watzup_007@yahoo.com,string:123|void|WebException
 1~Register|string:evilnicksg@gmail.com,string:hello|int:2|void
 2~Register|string:james@gmail.com,string:hello|int:3|void
 3~Register|string:void,string:void|void|ArgumentException
@@ -18,7 +18,7 @@ User|void
 2~ChangePassword|string:jamesbond_007@yahoo.com.sg,string:aaa,string:bbb|int:3|void
 3~ChangePassword|string:evilnicksg@gmail.com,string:hello,string:hello|int:-1|void
 4~ChangePassword|string:void,string:void,string:void|void|ArgumentException
-1~ResendActivation|string:watzup_007@yahoo.com.sg|int:2|void
-2~ResendActivation|string:non-existance@gmails.com|int:3|void
+1~ResendActivation|string:watzup_007@yahoo.com.sg,string:123|int:2|void
+2~ResendActivation|string:non-existance@gmails.com,string:123|int:3|void
 
 
