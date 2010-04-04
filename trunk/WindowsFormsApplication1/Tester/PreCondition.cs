@@ -347,15 +347,29 @@ namespace GameAnywhere
                         FolderOperation.RemoveFileSecurity(@".\SyncFolder\Game2\config", user, FileSystemRights.FullControl, AccessControlType.Deny);
                         break;
                     }
+                case 19:
+                    {
+                        //resume online
+                        int i = 0;
+                        while (!ToggleNetworkAdapter(true) && i < 100) ++i;
+                        if (i == 100) MessageBox.Show("Network cannot be resumed");
+
+                        break;
+                    }
 
                 default: break;
             }
-            store.DeleteDirectory(key);
+            try
+            {
+                //if key exist delete it
+                store.DeleteDirectory(key);
+            }
+            catch { }
             Directory.Move(@".\SyncFolder", @".\localTest" + index);
             if (Directory.Exists(@".\SyncFolder-test2"))
                 Directory.Move(@".\SyncFolder-test2", @".\SyncFolder");
 
-            for (int i = 1; i <= 18; i++)
+            for (int i = 1; i <= 19; i++)
             {
                 if (Directory.Exists(@".\webTest" + i))
                     Directory.Delete(@".\webTest" + i,true);
@@ -827,13 +841,25 @@ namespace GameAnywhere
 
             switch (index)
             {
+                //case 17 locked then setup files
                 case 18:
                     {
+                        //set up files before lock
                         webThumb = WebAndThumbFileSetUp(index);
                         //Lock Game1\savedGame Folder
                         FolderOperation.AddFileSecurity(@".\SyncFolder\Game1\savedGame", user, FileSystemRights.FullControl, AccessControlType.Deny);
                         FolderOperation.AddFileSecurity(@".\SyncFolder\Game2\config", user, FileSystemRights.FullControl, AccessControlType.Deny);
                         
+                        break;
+                    }
+                case 19:
+                    {
+                        webThumb = WebAndThumbFileSetUp(index);
+                        //go to offline mode
+                        int i = 0;
+                        while (!ToggleNetworkAdapter(false) && i < 100) ++i;
+                        if (i == 100) MessageBox.Show("Network cannot be off");
+                        Thread.Sleep(1000);
                         break;
                     }
                 default:
@@ -877,21 +903,6 @@ namespace GameAnywhere
 
                         break;
                     }
-                case 18:
-                    {
-                        //upload all web files
-                        List<string> allFiles = FolderOperation.GetAllFilesName(@".\webTest" + index);
-
-                        //upload the test cases files of web test folder to the web
-                        foreach (string file in allFiles)
-                        {
-                            string path = file.Substring(file.IndexOf('\\') + 1);
-                            s3.UploadFile(file, (id + "/" + path.Substring(path.IndexOf('\\') + 1).Replace('\\', '/')));
-                        }
-
-                        Directory.Move(@".\localTest" + index, @".\SyncFolder");
-                        break;
-                    }
                 default:
                     {
                         //upload all web files
@@ -901,6 +912,8 @@ namespace GameAnywhere
                         foreach (string file in allFiles)
                         {
                             string path = file.Substring(file.IndexOf('\\') + 1);
+                            if (Path.GetFileName(file).Equals("metadata.ga"))
+                                continue;
                             s3.UploadFile(file, (id + "/" + path.Substring(path.IndexOf('\\') + 1).Replace('\\', '/')));
                         }
 
@@ -918,6 +931,12 @@ namespace GameAnywhere
             }
             catch (Exception err)
             {
+                if (err.GetType().Equals(typeof(UnauthorizedAccessException)))
+                {
+                    webThumb = new WebAndThumbSync(gaUser);
+                    webThumb.LocalHash.AddEntry("UnauthorizedAccessException", "x");
+                    return webThumb;
+                }
                 Directory.Move(@".\SyncFolder", @".\localTest" + index);
                 if (Directory.Exists(@".\SyncFolder-test2"))
                     Directory.Move(@".\SyncFolder-test2", @".\SyncFolder");

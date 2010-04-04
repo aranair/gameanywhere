@@ -198,11 +198,10 @@ namespace GameAnywhere
 
             //create the meta data and locally
             FolderOperation.SerializeMetaData(metaHash, WebAndThumbSync.LocalMetaDataFileName, false, index);
-            //for (int i = 1; i <= 16; ++i)
-            //{
-                File.Copy(@".\metaTest" + index + @"\metadata.ga", @".\localTest" + index + @"\metadata.ga",true);
-                File.Copy(@".\metaTest" + index + @"\metadata.ga", @".\webTest" + index + @"\metadata.ga",true);
-            //}
+
+            File.Copy(@".\metaTest" + index + @"\metadata.ga", @".\localTest" + index + @"\metadata.ga",true);
+            File.Copy(@".\metaTest" + index + @"\metadata.ga", @".\webTest" + index + @"\metadata.ga",true);
+            
         }
 
         /// <summary>
