@@ -63,9 +63,9 @@ namespace GameAnywhere
         public void InsertItem(string itemId, string password, string activationKey)
         {
             //Pre-conditions
-            Debug.Assert(!itemId.Equals("") && itemId != null);
-            Debug.Assert(!password.Equals("") && password != null);
-            Debug.Assert(!activationKey.Equals("") && activationKey != null);
+            Debug.Assert(itemId.Length != 0 && itemId != null);
+            Debug.Assert(password.Length != 0 && password != null);
+            Debug.Assert(activationKey.Length != 0 && activationKey != null);
 
             if(String.IsNullOrEmpty(itemId))
                 throw new ArgumentException("Parameter cannot be empty/null", "itemId");
@@ -94,11 +94,7 @@ namespace GameAnywhere
                 }
                 else
                 {
-                    //ErrorCodes:
-                    //NumberDomainBytesExceeded - Domain exceeds 10GB
-                    //NumberDomainAttributesExceeded - Domain attributes exceed 1 million
                     //AmazonSimpleDBException thrown
-                    Console.WriteLine("ErrorCode=" + ex.ErrorCode);
                     throw;
                 }
             }
@@ -115,9 +111,9 @@ namespace GameAnywhere
         public void UpdateAttributeValue(string itemId, string attribute, string newAttributeValue)
         {
             //Pre-conditions
-            Debug.Assert(!itemId.Equals("") && itemId != null);
-            Debug.Assert(!attribute.Equals("") && attribute != null);
-            Debug.Assert(!newAttributeValue.Equals("") && newAttributeValue != null);
+            Debug.Assert(itemId.Length != 0 && itemId != null);
+            Debug.Assert(attribute.Length != 0 && attribute != null);
+            Debug.Assert(newAttributeValue.Length != 0 && newAttributeValue != null);
 
             if (String.IsNullOrEmpty(itemId))
                 throw new ArgumentException("Parameter cannot be empty/null", "itemId");
@@ -143,10 +139,7 @@ namespace GameAnywhere
                 }
                 else
                 {
-                    //ErrorCodes:
-                    //NumberDomainBytesExceeded - Domain exceeds 10GB
                     //AmazonSimpleDBException thrown
-                    Console.WriteLine("ErrorCode=" + ex.ErrorCode);
                     throw;
                 }
             }
@@ -164,7 +157,7 @@ namespace GameAnywhere
         public bool ItemExists(string itemId)
         {
             //Pre-conditions
-            Debug.Assert(!itemId.Equals("") && itemId != null);
+            Debug.Assert(itemId.Length != 0 && itemId != null);
 
             if (String.IsNullOrEmpty(itemId))
                 throw new ArgumentException("Parameter cannot be empty/null", "itemId");
@@ -205,8 +198,8 @@ namespace GameAnywhere
         public string GetAttribute(string itemId, string attribute)
         {
             //Pre-conditions
-            Debug.Assert(!itemId.Equals("") && itemId != null);
-            Debug.Assert(!attribute.Equals("") && attribute != null);
+            Debug.Assert(itemId.Length != 0 && itemId != null);
+            Debug.Assert(attribute.Length != 0 && attribute != null);
 
             if (String.IsNullOrEmpty(itemId))
                 throw new ArgumentException("Parameter cannot be empty/null", "itemId");
@@ -255,9 +248,9 @@ namespace GameAnywhere
         public void AddAttributeValue(string itemId, string attribute, string attributeValue)
         {
             //Pre-conditions
-            Debug.Assert(!itemId.Equals("") && itemId != null);
-            Debug.Assert(!attribute.Equals("") && attribute != null);
-            Debug.Assert(!attributeValue.Equals("") && attributeValue != null);
+            Debug.Assert(itemId.Length != 0 && itemId != null);
+            Debug.Assert(attribute.Length != 0 && attribute != null);
+            Debug.Assert(attributeValue.Length != 0 && attributeValue != null);
 
             if (String.IsNullOrEmpty(itemId))
                 throw new ArgumentException("Parameter cannot be empty/null", "itemId");
