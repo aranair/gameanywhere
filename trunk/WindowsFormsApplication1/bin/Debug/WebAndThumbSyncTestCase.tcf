@@ -1,4 +1,4 @@
-WebAndThumbSync|void
+WebAndThumbSync|WebAndThumbUser
 1~CheckConflicts|void|int:0|void
 2~CheckConflicts|void|int:0|void
 3~CheckConflicts|void|int:0|void
