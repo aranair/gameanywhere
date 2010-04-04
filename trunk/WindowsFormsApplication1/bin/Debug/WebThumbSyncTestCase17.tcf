@@ -1,0 +1,2 @@
+WebAndThumbSync|WebAndThumbUser
+17~SynchronizeGames|Dictionary<string;int>:{Game1/savedGame;1+Game1/config;1+Game2/config;2}|int:0|UnauthorizedAccessException
