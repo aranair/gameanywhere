@@ -70,3 +70,8 @@ C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\bin\Debug\AWSSDK.dll
 C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\bin\Debug\AWSSDK.xml
 C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\bin\Debug\WebComms.pdb
 C:\Users\Wilson\Desktop\ga\WindowsFormsApplication1\bin\Debug\Interop.Shell32.dll
+C:\Users\Wilmer\Desktop\gameanywhere\WindowsFormsApplication1\bin\Debug\WebComms.dll
+C:\Users\Wilmer\Desktop\gameanywhere\WindowsFormsApplication1\bin\Debug\AWSSDK.dll
+C:\Users\Wilmer\Desktop\gameanywhere\WindowsFormsApplication1\bin\Debug\AWSSDK.xml
+C:\Users\Wilmer\Desktop\gameanywhere\WindowsFormsApplication1\bin\Debug\WebComms.pdb
+C:\Users\Wilmer\Desktop\gameanywhere\WindowsFormsApplication1\obj\Debug\GameAnywhere.WaitingDialog.resources
