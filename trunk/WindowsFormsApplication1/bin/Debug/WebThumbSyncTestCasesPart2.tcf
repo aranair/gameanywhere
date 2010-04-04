@@ -1,4 +1,4 @@
-WebAndSync|WebAndThumbUser
+WebAndThumbSync|WebAndThumbUser
 9~SynchronizeGames|Dictionary<string;int>:{Game1/savedGame;1}|int:0|void
 10~SynchronizeGames|Dictionary<string;int>:{Game1/savedGame;2}|int:0|void
 11~SynchronizeGames|Dictionary<string;int>:{Game1/savedGame;1+Game4/savedGame;2}|int:0|void
@@ -9,3 +9,4 @@ WebAndSync|WebAndThumbUser
 16~SynchronizeGames|Dictionary<string;int>:{Game1/savedGame;1+Game2/config;2}|int:0|void
 17~SynchronizeGames|Dictionary<string;int>:{Game1/savedGame;1+Game1/config;1+Game2/config;2}|int:0|UnauthorizedAccessException
 18~SynchronizeGames|Dictionary<string;int>:{Game1/savedGame;1+Game1/config;1+Game2/config;2}|int:0|void
+19~SynchronizeGames|Dictionary<string;int>:{Game1/savedGame;1+Game1/config;1+Game2/config;2}|int:0|void
