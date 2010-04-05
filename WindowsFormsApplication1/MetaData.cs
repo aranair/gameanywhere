@@ -201,9 +201,11 @@ namespace GameAnywhere
             if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentException("Parameter cannot be empty/null", "fileName");
 
+            Stream stream = null;
+
             try
             {
-                Stream stream = File.Open(fileName, FileMode.Create);
+                stream = File.Open(fileName, FileMode.Create);
                 IFormatter formatter = new BinaryFormatter();
                 formatter.Serialize(stream, this);
                 stream.Close();
@@ -218,6 +220,10 @@ namespace GameAnywhere
             }
             catch(Exception)
             {
+            }
+            finally
+            {
+                if (stream != null) stream.Close();
             }
         }
 
@@ -253,7 +259,10 @@ namespace GameAnywhere
             }
             catch (Exception)
             {
-                if(stream!=null) stream.Close();
+            }
+            finally
+            {
+                if (stream != null) stream.Close();
             }
 
             return this;
