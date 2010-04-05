@@ -217,7 +217,7 @@ namespace GameAnywhere
                 List<SyncError> syncErrorList = wats.SynchronizeGames(conflictsList);
                 return syncErrorList;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new ConnectionFailureException();
             }
@@ -237,7 +237,7 @@ namespace GameAnywhere
                 Dictionary<string, int> conflictsList = wats.CheckConflicts();
                 return conflictsList;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new ConnectionFailureException();
             }

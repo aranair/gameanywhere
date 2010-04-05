@@ -43,6 +43,10 @@ namespace GameAnywhere
         /// </summary>
         private WaitingDialog waitDialog;
 
+        public enum ClickStatus { ComToWeb, WebToCom, ExtAndWeb, None}
+
+        private ClickStatus userClickStatus = ClickStatus.None;
+
         /// <summary>
         /// Overloaded Constructor
         /// </summary>
@@ -59,8 +63,9 @@ namespace GameAnywhere
                 DisableThumbdriveFunctions();
             }*/
 
+            loggedInUserLabel.Text = "";
             SetPanelList();
-            //controller.Login("lego_jdwx@hotmail.com", "666666");
+            
             
 
         }
@@ -286,39 +291,47 @@ namespace GameAnywhere
             ResetErrorLabels();
             if (controller.IsLoggedIn())
             {
-                controller.direction = OnlineSync.ComToWeb;
-                List<Game> gameList = null;
-                try
-                {
-                    OpenWaitDialog("Please wait while we fetch your files from the Web server.");
-                    // Get the list of compatible games to be displayed to user.
-                    gameList = controller.GetGameList();
-                    CloseWaitDialog();
-                }
-                catch (ConnectionFailureException)
-                {
-                    SetErrorLabel("Unable to connect to Web server.", Color.Red);
-                    CloseWaitDialog();
-                }
-
-                if (gameList == null)
-                {
-                    SetErrorLabel("Unable to connect to Web server.", Color.Red);
-                }
-                // If there are no games.
-                else if (gameList.Count > 0)
-                {
-                    errorLabel.Text = "";
-
-                    // Show the ChooseGame form for user to choose the files.
-                    ChooseGame chooseGameForm = new ChooseGame(controller, gameList, this);
-                    chooseGameForm.ShowDialog();
-                }
-                else
-                    SetErrorLabel("No compatible games found.", Color.Red);
+                ComToWebFunctions();
             }
             else
-                SetErrorLabel("       Please login first.", Color.Red);
+            {
+                userClickStatus = ClickStatus.ComToWeb;
+                InitiateLoginPanel();
+            }
+        }
+
+        private void ComToWebFunctions()
+        {
+            controller.direction = OnlineSync.ComToWeb;
+            List<Game> gameList = null;
+            try
+            {
+                OpenWaitDialog("Please wait while we fetch your files from the server.");
+                // Get the list of compatible games to be displayed to user.
+                gameList = controller.GetGameList();
+                CloseWaitDialog();
+            }
+            catch (ConnectionFailureException)
+            {
+                SetErrorLabel("Unable to connect to Web server.", Color.Red);
+                CloseWaitDialog();
+            }
+
+            if (gameList == null)
+            {
+                SetErrorLabel("Unable to connect to Web server.", Color.Red);
+            }
+            // If there are no games.
+            else if (gameList.Count > 0)
+            {
+                errorLabel.Text = "";
+
+                // Show the ChooseGame form for user to choose the files.
+                ChooseGame chooseGameForm = new ChooseGame(controller, gameList, this);
+                chooseGameForm.ShowDialog();
+            }
+            else
+                SetErrorLabel("No compatible games found.", Color.Red);
         }
 
         private void computerToWebButton_MouseDown(object sender, MouseEventArgs e)
@@ -350,39 +363,47 @@ namespace GameAnywhere
 
             if (controller.IsLoggedIn())
             {
-                controller.direction = OnlineSync.WebToCom;
-                List<Game> gameList = null;
-                try
-                {
-                    OpenWaitDialog("Please wait while your files in our server is being fetched.");
-                    // Get the list of compatible games to be displayed to user.
-                    gameList = controller.GetGameList();
-                    CloseWaitDialog();
-                }
-                catch (ConnectionFailureException)
-                {
-                    SetErrorLabel("Unable to connect to Web server.", Color.Red);
-                    CloseWaitDialog();
-                }
-
-                if (gameList == null)
-                {
-                    SetErrorLabel("Unable to connect to Web server.", Color.Red);
-                }
-                // If there are no games.
-                else if (gameList.Count > 0)
-                {
-                    errorLabel.Text = "";
-
-                    // Show the ChooseGame form for user to choose the files.
-                    ChooseGame chooseGameForm = new ChooseGame(controller, gameList, this);
-                    chooseGameForm.ShowDialog();
-                }
-                else
-                    SetErrorLabel("No compatible games found.", Color.Red);
+                WebToComFunctions();
             }
             else
-                SetErrorLabel("       Please login first.", Color.Red);
+            {
+                userClickStatus = ClickStatus.WebToCom;
+                InitiateLoginPanel();
+            }
+        }
+
+        private void WebToComFunctions()
+        {
+            controller.direction = OnlineSync.WebToCom;
+            List<Game> gameList = null;
+            try
+            {
+                OpenWaitDialog("Please wait while your files in our server is being fetched.");
+                // Get the list of compatible games to be displayed to user.
+                gameList = controller.GetGameList();
+                CloseWaitDialog();
+            }
+            catch (ConnectionFailureException)
+            {
+                SetErrorLabel("Unable to connect to Web server.", Color.Red);
+                CloseWaitDialog();
+            }
+
+            if (gameList == null)
+            {
+                SetErrorLabel("Unable to connect to Web server.", Color.Red);
+            }
+            // If there are no games.
+            else if (gameList.Count > 0)
+            {
+                errorLabel.Text = "";
+
+                // Show the ChooseGame form for user to choose the files.
+                ChooseGame chooseGameForm = new ChooseGame(controller, gameList, this);
+                chooseGameForm.ShowDialog();
+            }
+            else
+                SetErrorLabel("No compatible games found.", Color.Red);
         }
 
         private void webToComputerButton_MouseDown(object sender, MouseEventArgs e)
@@ -412,60 +433,67 @@ namespace GameAnywhere
             ResetErrorLabels();
             if (controller.IsLoggedIn())
             {
-                Dictionary<string, int> conflictsList = null;
+                ExtAndWebFunctions();
+            }
+            else
+            {
+                userClickStatus = ClickStatus.ExtAndWeb;
+                InitiateLoginPanel();
+            }
+        }
+
+        private void ExtAndWebFunctions()
+        {
+            Dictionary<string, int> conflictsList = null;
+            try
+            {
+                OpenWaitDialog("Please wait while the files are checked for conflicts.");
+                conflictsList = controller.CheckConflicts();
+            }
+            catch (ConnectionFailureException)
+            {
+                CloseWaitDialog();
+                SetErrorLabel("Unable to connect to server.", Color.Red);
+            }
+
+            if (conflictsList == null)
+            {
+                SetErrorLabel("Unable to connect to server.", Color.Red);
+            }
+            // There are conflicts to be resolved, popup will be shown.
+            else if (conflictsList.Count != 0)
+            {
+                CloseWaitDialog();
+                ConflictResolve conflictsResolve = new ConflictResolve(controller, conflictsList, this);
+                conflictsResolve.ShowDialog();
+            }
+            else
+            {
+                List<SyncError> syncErrorList = null;
                 try
                 {
-                    OpenWaitDialog("Please wait while the files are checked for conflicts.");
-                    conflictsList = controller.CheckConflicts();
+                    waitDialog.label1.Text = "Please wait while your files are being synchronized.";
+                    syncErrorList = controller.SynchronizeWebAndThumb(conflictsList);
+                    CloseWaitDialog();
                 }
                 catch (ConnectionFailureException)
                 {
                     CloseWaitDialog();
-                    SetErrorLabel("Unable to connect to Web server.", Color.Red);
                 }
 
-                if (conflictsList == null)
+                if (syncErrorList == null)
                 {
                     SetErrorLabel("Unable to connect to Web server.", Color.Red);
                 }
-                // There are conflicts to be resolved, popup will be shown.
-                else if (conflictsList.Count != 0)
-                {
-                    CloseWaitDialog();
-                    ConflictResolve conflictsResolve = new ConflictResolve(controller, conflictsList, this);
-                    conflictsResolve.ShowDialog();
-                }
+                else if (syncErrorList.Count == 0)
+                    SetErrorLabel("Successfully synchronized", Color.DeepSkyBlue);
                 else
                 {
-                    List<SyncError> syncErrorList = null;
-                    try
-                    {
-                        waitDialog.label1.Text = "Please wait while your files are being synchronized.";
-                        syncErrorList = controller.SynchronizeWebAndThumb(conflictsList);
-                        CloseWaitDialog();
-                    }
-                    catch (ConnectionFailureException)
-                    {
-                        CloseWaitDialog();
-                    }
-
-                    if (syncErrorList == null)
-                    {
-                        SetErrorLabel("Unable to connect to Web server.", Color.Red);
-                    }
-                    else if (syncErrorList.Count == 0)
-                        SetErrorLabel("Successfully synchronized", Color.DeepSkyBlue);
-                    else
-                    {
-                        SyncErrorDisplay syncErrorDisplay = new SyncErrorDisplay(syncErrorList);
-                        syncErrorDisplay.ShowDialog();
-                    }
-                    
+                    SyncErrorDisplay syncErrorDisplay = new SyncErrorDisplay(syncErrorList);
+                    syncErrorDisplay.ShowDialog();
                 }
-            }
-            else
-                SetErrorLabel("       Please login first.", Color.Red);
 
+            }
         }
 
        
@@ -604,17 +632,14 @@ namespace GameAnywhere
         {
             SetBackgroundImage(loginLoginPanelButton, "GameAnywhere.Resources.loginButtonMouseOver.gif", ImageLayout.Center);
         }
-
         private void loginLoginPanelButton_MouseLeave(object sender, EventArgs e)
         {
             SetBackgroundImage(loginLoginPanelButton, "GameAnywhere.Resources.loginButton.gif", ImageLayout.Center);
         }
-
         private void loginLoginPanelButton_MouseDown(object sender, MouseEventArgs e)
         {
             SetBackgroundImage(loginLoginPanelButton, "GameAnywhere.Resources.loginButtonMouseDown.gif", ImageLayout.Center);
         }
-
         private void loginLoginPanelButton_MouseUp(object sender, MouseEventArgs e)
         {
             SetBackgroundImage(loginLoginPanelButton, "GameAnywhere.Resources.loginButton.gif", ImageLayout.Center);
@@ -660,9 +685,17 @@ namespace GameAnywhere
                 // Login succeeds
                 if (loginResult)
                 {
-                    // Go back to first page and display success text.
                     InitiateStartPanel();
-                    SetErrorLabel("         User Logged In", System.Drawing.Color.DeepSkyBlue);
+                    if (userClickStatus == ClickStatus.WebToCom)
+                        WebToComFunctions();
+                    else if (userClickStatus == ClickStatus.ComToWeb)
+                        ComToWebFunctions();
+                    else if (userClickStatus == ClickStatus.ExtAndWeb)
+                        ExtAndWebFunctions();
+
+                    userClickStatus = ClickStatus.None;
+                    //SetErrorLabel("       User Logged In", System.Drawing.Color.DeepSkyBlue);
+                    loggedInUserLabel.Text = "User Logged In.";
                 }
                 // Login fails
                 else
@@ -1397,6 +1430,7 @@ namespace GameAnywhere
         {
             this.SuspendLayout();
             ResetErrorLabels();
+            
             SetVisibilityAndUsability(startPanel, true, true);
             DisableOtherPanels(startPanel);
             SetVisibilityAndUsability(loginButton, true, true);

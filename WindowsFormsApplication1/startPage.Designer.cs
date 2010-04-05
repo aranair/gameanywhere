@@ -88,6 +88,7 @@
             this.userDetailsInvalidChangePasswordPanelLabel = new System.Windows.Forms.Label();
             this.confirmChangePasswordPanelButton = new System.Windows.Forms.Button();
             this.cancelChangePasswordPanelButton = new System.Windows.Forms.Button();
+            this.loggedInUserLabel = new System.Windows.Forms.Label();
             this.startPanel.SuspendLayout();
             this.loginNavPanel.SuspendLayout();
             this.loginPanel.SuspendLayout();
@@ -262,6 +263,7 @@
             // startPanel
             // 
             this.startPanel.BackColor = System.Drawing.Color.Black;
+            this.startPanel.Controls.Add(this.loggedInUserLabel);
             this.startPanel.Controls.Add(this.label4);
             this.startPanel.Controls.Add(this.label3);
             this.startPanel.Controls.Add(this.errorLabel);
@@ -938,6 +940,17 @@
             this.cancelChangePasswordPanelButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.cancelChangePasswordPanelButton_MouseUp);
             this.cancelChangePasswordPanelButton.MouseEnter += new System.EventHandler(this.cancelChangePasswordPanelButton_MouseEnter);
             // 
+            // loggedInUserLabel
+            // 
+            this.loggedInUserLabel.AutoSize = true;
+            this.loggedInUserLabel.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.loggedInUserLabel.ForeColor = System.Drawing.Color.DeepSkyBlue;
+            this.loggedInUserLabel.Location = new System.Drawing.Point(309, 201);
+            this.loggedInUserLabel.Name = "loggedInUserLabel";
+            this.loggedInUserLabel.Size = new System.Drawing.Size(38, 16);
+            this.loggedInUserLabel.TabIndex = 21;
+            this.loggedInUserLabel.Text = "label";
+            // 
             // startPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -948,12 +961,12 @@
             this.ClientSize = new System.Drawing.Size(832, 435);
             this.Controls.Add(this.titlePanel);
             this.Controls.Add(this.startNavPanel);
-            this.Controls.Add(this.forgetPasswordPanel);
-            this.Controls.Add(this.loginPanel);
             this.Controls.Add(this.startPanel);
             this.Controls.Add(this.resendActivationPanel);
             this.Controls.Add(this.registerPanel);
             this.Controls.Add(this.changePasswordPanel);
+            this.Controls.Add(this.forgetPasswordPanel);
+            this.Controls.Add(this.loginPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -1042,6 +1055,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button restoreButton;
+        private System.Windows.Forms.Label loggedInUserLabel;
 
 
 
