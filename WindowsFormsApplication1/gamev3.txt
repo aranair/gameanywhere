@@ -7,7 +7,7 @@ ConfigParentPath=InstallPathVar
 SavePathList=InstallPathVar\Save
 SaveParentPath=InstallPathVar
 [ENDGAME]
-#Comments
+#Comments	
 Game=Football Manager 2010
 RegValue=Path
 RegKey=RegistrySoftwarePath\Sports Interactive Ltd\Installs\FM2010
@@ -39,15 +39,6 @@ RegKey=RegistrySoftwarePath\Abuse
 RegType=HKLM
 SaveParentPath=InstallPathVar
 SearchSaveParent=    *.spe
-[ENDGAME]
-Game=Command and Conquer 4
-RegValue=Install Dir
-RegKey=RegistrySoftwarePath\Electronic Arts\Command and Conquer 4
-RegType=HKLM
-ConfigPathList=InstallPathVar\CNC4.ini
-ConfigParentPath=InstallPathVar
-SavePathList=DocumentsPath\Command and Conquer 4
-SaveParentPath=DocumentsPath\
 [ENDGAME]
 Game=Dragon Age Origins
 RegValue=Path
