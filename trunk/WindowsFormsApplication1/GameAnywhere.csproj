@@ -126,20 +126,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="SyncAction.cs" />
-    <Compile Include="Tester\FolderOperation.cs" />
-    <Compile Include="Tester\OfflineSyncVerifier.cs" />
-    <Compile Include="Tester\PreCondition.cs" />
-    <Compile Include="Tester\TestCase.cs" />
-    <Compile Include="Tester\TestDriver.cs" />
-    <Compile Include="Tester\Tester.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Tester\Tester.designer.cs">
-      <DependentUpon>Tester.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tester\TestResult.cs" />
-    <Compile Include="Tester\Verifier.cs" />
-    <Compile Include="Tester\WebThumbVerifier.cs" />
     <Compile Include="WaitingDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -456,11 +442,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\GameIcons\Dragon Age Origins.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Tester\Tester.resx">
-      <DependentUpon>Tester.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\GameIcons\Warcraft 3.png" />

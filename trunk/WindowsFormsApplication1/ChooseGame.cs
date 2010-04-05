@@ -479,7 +479,7 @@ namespace GameAnywhere
 
             try
             {
-                OpenWaitDialog();
+                OpenWaitDialog("Please wait while your files are being synchronized.");
                 syncActionListResult = controller.SynchronizeGames(syncActionList);
                 CloseWaitDialog();
             }
@@ -644,9 +644,9 @@ namespace GameAnywhere
 
         #region Helper Functions
 
-        private void OpenWaitDialog()
+        private void OpenWaitDialog(string text)
         {
-            waitDialog = new WaitingDialog();
+            waitDialog = new WaitingDialog(text);
             waitDialog.Show();
             waitDialog.Refresh();
             this.Enabled = false;

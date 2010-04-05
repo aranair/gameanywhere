@@ -41,7 +41,6 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(340, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Please wait while we fetch your files from the Web server.";
             // 
             // WaitingDialog
             // 
