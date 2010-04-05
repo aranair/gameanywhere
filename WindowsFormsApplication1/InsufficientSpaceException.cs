@@ -8,7 +8,7 @@ namespace GameAnywhere
     /// <summary>
     /// The exception that is thrown when an insufficient space error occurs.
     /// </summary>
-    class InsufficientSpaceException : System.ApplicationException
+    class InsufficientSpaceException : Exception
     {
         public InsufficientSpaceException() { }
         public InsufficientSpaceException(String message) { }
