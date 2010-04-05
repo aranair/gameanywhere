@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
-using System.Text;
 using System.IO;
-using System.Security.Cryptography;
 
 namespace GameAnywhere
 {
@@ -88,26 +86,12 @@ namespace GameAnywhere
                         AddToUnsuccessfulSyncFiles(sa, syncFolderGamePath, "Unable to backup original game files");
                     else
                         //Synchronize from Web to Computer.
-                        try
-                        {
-                            WebToComputer(sa, currentUser.Email, backupResult);
-                        }
-                        catch(ConnectionFailureException)
-                        {
-                            throw;
-                        }
+                        WebToComputer(sa, currentUser.Email, backupResult);
                 }
                 else if (SyncDirection == ComToWeb)
                 {
                     //Synchronize from Computer to Web.
-                    try
-                    {
-                        ComputerToWeb(currentUser.Email, sa);
-                    }
-                    catch (ConnectionFailureException)
-                    {
-                        throw;
-                    }
+                    ComputerToWeb(currentUser.Email, sa);
                 }
            
             }
@@ -121,37 +105,28 @@ namespace GameAnywhere
         /// <returns>List of game names on the user's web account.</returns>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ConnectionFailureException"></exception>
-        /// <exception cref="WebTransferException"></exception>
         public List<string> GetGamesFromWeb(string user)
         {
             //Pre-conditions
             if (String.IsNullOrEmpty(user.Trim()))
                 throw new ArgumentException("Parameter cannot be empty/null", "user");
 
-            try
-            {
-                List<string> games = s3.ListFiles(user);
-                HashSet<string> gamesList = new HashSet<string>();
+            List<string> games = s3.ListFiles(user);
+            HashSet<string> gamesList = new HashSet<string>();
 
-                foreach (string game in games)
+            foreach (string game in games)
+            {
+                string gameName = game.Replace(user + "/", "");
+                int length = gameName.IndexOf("/");
+                if (length < 0) continue;
+                gameName = gameName.Substring(0, length);
+                if (!gamesList.Contains(gameName))
                 {
-                    string gameName = game.Replace(user + "/", "");
-                    int length = gameName.IndexOf("/");
-                    if (length < 0) continue;
-                    gameName = gameName.Substring(0, length);
-                    if (!gamesList.Contains(gameName))
-                    {
-                        gamesList.Add(gameName);
-                    }
+                    gamesList.Add(gameName);
                 }
+            }
 
-                return gamesList.ToList<string>();
-            }
-            catch
-            {
-                //Exceptions: ConnectionFailureException, WebTransferException
-                throw;
-            }
+            return gamesList.ToList<string>();
         }
 
         /// <summary>
@@ -162,7 +137,6 @@ namespace GameAnywhere
         /// <returns>List of game names and types on the user's web account.</returns>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ConnectionFailureException"></exception>
-        /// <exception cref="WebTransferException"></exception>
         public static List<string> GetGamesAndTypesFromWeb(string user)
         {
             //Pre-conditions
@@ -192,7 +166,7 @@ namespace GameAnywhere
             }
             catch
             {
-                //Exceptions: ConnectionFailureException, WebTransferException
+                //Exceptions: ConnectionFailureException
                 throw;
             }
         }
@@ -227,8 +201,16 @@ namespace GameAnywhere
                 //Check if game is available on user's web account(S3)
                 if (GetGamesFromWeb(email).Contains(gameName))
                 {
-                    //Delete game directory in user's account
-                    DeleteGameDirectory(email, gameName);
+                    //Delete save/config game directory in user's account
+                    if (action == SyncAction.SavedGameFiles || action == SyncAction.AllFiles)
+                    {
+                        DeleteGameDirectory(email, gameName, SyncFolderSavedGameFolderName);
+                    }
+                    if (action == SyncAction.ConfigFiles || action == SyncAction.AllFiles)
+                    {
+                        DeleteGameDirectory(email, gameName, SyncFolderConfigFolderName);
+                    }
+                    
                 }
             }
             catch (Exception)
@@ -240,36 +222,18 @@ namespace GameAnywhere
             //Upload Saved Files
             if (action == SyncAction.SavedGameFiles || action == SyncAction.AllFiles)
             {
-                try
-                {
-                    saveGameErrorList = Upload(email, gameName, SyncFolderSavedGameFolderName, saveParentPath, savePathList);
-                }
-                catch (ConnectionFailureException)
-                {
-                    throw;
-                }
+                saveGameErrorList = Upload(email, gameName, SyncFolderSavedGameFolderName, saveParentPath, savePathList);
             }
 
             //Upload Config Files
             if (action == SyncAction.ConfigFiles || action == SyncAction.AllFiles)
             {
-                try
-                {
-                    configFileErrorList = Upload(email, gameName, SyncFolderConfigFolderName, configParentPath, configPathList);
-                }
-                catch (ConnectionFailureException)
-                {
-                    throw;
-                }
+                configFileErrorList = Upload(email, gameName, SyncFolderConfigFolderName, configParentPath, configPathList);
             }
 
             //Updates list of unsuccessful sync files
             syncAction.UnsuccessfulSyncFiles.AddRange(saveGameErrorList);
             syncAction.UnsuccessfulSyncFiles.AddRange(configFileErrorList);
-            savePathList = null;
-            configPathList = null;
-            saveGameErrorList = null;
-            configFileErrorList = null;
         }
 
         /// <summary>
@@ -297,14 +261,7 @@ namespace GameAnywhere
                     if (!IsLockedFolder(path))
                     {
                         //Upload directory
-                        try
-                        {
-                            UploadDirectory(gamePath, parentPath, path, ref errorList);
-                        }
-                        catch (ConnectionFailureException)
-                        {
-                            throw;
-                        }
+                        UploadDirectory(gamePath, parentPath, path, ref errorList);
                     }
                     else
                     {
@@ -376,14 +333,7 @@ namespace GameAnywhere
             //Upload every sub-directory in current directory
             foreach (string subdir in Directory.GetDirectories(dir))
             {
-                try
-                {
-                    UploadDirectory(key, parent, subdir, ref errorList);
-                }
-                catch (ConnectionFailureException)
-                {
-                    throw;
-                }
+                UploadDirectory(key, parent, subdir, ref errorList);
             }
         }
 
@@ -392,6 +342,7 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="email">Email of user's account.</param>
         /// <param name="gameName">Name of a game.</param>
+        /// <param name="syncFolder">Saved Game or Config folder.</param>
         /// <returns>
         /// True - Deletes game directory successfully on S3.
         /// False - Fail to delete game directory on S3.
@@ -399,24 +350,16 @@ namespace GameAnywhere
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ConnectionFailureException"></exception>
         /// <exception cref="WebTransferException"></exception>
-        private void DeleteGameDirectory(string email, string gameName)
+        private void DeleteGameDirectory(string email, string gameName, string syncFolder)
         {
-            try
-            {
-                //Checks user and gamename validity
-                if (email.Equals("") && email == null && !email.Equals(currentUser.Email))
-                    throw new ArgumentException("Parameter cannot be empty/null. Invalid user/User not logged in", email);
-                if (gameName.Equals("") && gameName == null)
-                    throw new ArgumentException("Parameter cannot be empty/null. Invalid game directory.", gameName);
+            //Checks user and gamename validity
+            if (email.Equals("") && email == null && !email.Equals(currentUser.Email))
+                throw new ArgumentException("Parameter cannot be empty/null. Invalid user/User not logged in", email);
+            if (gameName.Equals("") && gameName == null)
+                throw new ArgumentException("Parameter cannot be empty/null. Invalid game directory.", gameName);
 
-                //Delete game directory
-                s3.DeleteDirectory(email + "/" + gameName);
-            }
-            catch(Exception)
-            {
-                //Exceptions: ArgumentException, ConnectionFailureException, WebTransferException
-                throw;
-            }
+            //Delete game directory
+            s3.DeleteDirectory(email + "/" + gameName + "/" + syncFolder);
         }
 
         /// <summary>
@@ -441,15 +384,9 @@ namespace GameAnywhere
                 string webFolderGamePath = user + "/" + sa.MyGame.Name;
                 string webGameConfigPath = webFolderGamePath + "/" + SyncFolderConfigFolderName;
 
-                try
-                {
-                    //Copy over and add the error encounted into the error list
-                    errorList = DownloadToParent(webGameConfigPath, sa.MyGame.ConfigParentPath, processName);
-                }
-                catch (ConnectionFailureException)
-                {
-                    throw;
-                }
+                //Copy over and add the error encounted into the error list
+                errorList = DownloadToParent(webGameConfigPath, sa.MyGame.ConfigParentPath, processName);
+
                 //Update the error list of the game
                 sa.UnsuccessfulSyncFiles.AddRange(errorList);
 
@@ -462,17 +399,9 @@ namespace GameAnywhere
                 string processName = "Sync Saved Game files from Web to Computer";
                 string webFolderGamePath = user + "/" + sa.MyGame.Name;
                 string webGameSavedGamePath = webFolderGamePath + "/" + SyncFolderSavedGameFolderName;
-                //Debug.Assert(Directory.Exists(webFolderGameSavedGamePath));
 
-                try
-                {
-                    //Copy over and add the error encounted into the error list
-                    errorList = DownloadToParent(webGameSavedGamePath, sa.MyGame.SaveParentPath, processName);
-                }
-                catch (ConnectionFailureException)
-                {
-                    throw;
-                }
+                //Copy over and add the error encounted into the error list
+                errorList = DownloadToParent(webGameSavedGamePath, sa.MyGame.SaveParentPath, processName);
 
                 //Update the error list of the game
                 sa.UnsuccessfulSyncFiles.AddRange(errorList);
@@ -537,11 +466,6 @@ namespace GameAnywhere
                 {
                     errorList.Add(new SyncError(file, processName, ex.errorMessage));
                 }
-                catch (ConnectionFailureException)
-                {
-                    throw;
-                }
-                
             }
 
             return errorList;
