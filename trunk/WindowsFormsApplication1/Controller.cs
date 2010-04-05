@@ -219,7 +219,6 @@ namespace GameAnywhere
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
                 throw new ConnectionFailureException();
             }
 
@@ -240,7 +239,6 @@ namespace GameAnywhere
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
                 throw new ConnectionFailureException();
             }
         }
