@@ -111,7 +111,7 @@ namespace GameAnywhere
             StreamReader r = new StreamReader(fileStream);
             ParseGamesFromFile(r);
             string userTextFilePath = Directory.GetCurrentDirectory() + @"\userGames.txt";
-            if (Directory.Exists(userTextFilePath))
+            if (File.Exists(userTextFilePath))
             {
                 r = new StreamReader("userGames.txt");
                 ParseGamesFromFile(r);
