@@ -423,7 +423,7 @@ namespace GameAnywhere
             //Setup smtp client
             SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
             client.EnableSsl = true;
-            client.Credentials = new NetworkCredential("gameanywhere@gmail.com", "cs3215666666");
+            client.Credentials = new NetworkCredential("gameanywhere@gmail.com", "*");
 
             //Send email
             try
@@ -483,7 +483,7 @@ namespace GameAnywhere
             //Setup smtp client
             SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
             client.EnableSsl = true;
-            client.Credentials = new NetworkCredential("gameanywhere@gmail.com", "cs3215666666");
+            client.Credentials = new NetworkCredential("gameanywhere@gmail.com", "*");
 
             //Send email
             try
