@@ -126,6 +126,20 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="SyncAction.cs" />
+    <Compile Include="Tester\FolderOperation.cs" />
+    <Compile Include="Tester\OfflineSyncVerifier.cs" />
+    <Compile Include="Tester\PreCondition.cs" />
+    <Compile Include="Tester\TestCase.cs" />
+    <Compile Include="Tester\TestDriver.cs" />
+    <Compile Include="Tester\Tester.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Tester\Tester.designer.cs">
+      <DependentUpon>Tester.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tester\TestResult.cs" />
+    <Compile Include="Tester\Verifier.cs" />
+    <Compile Include="Tester\WebThumbVerifier.cs" />
     <Compile Include="WaitingDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -439,17 +453,23 @@
     <EmbeddedResource Include="Resources\GameIcons\Abuse.gif" />
     <EmbeddedResource Include="Resources\GameIcons\defaultIcon.gif" />
     <EmbeddedResource Include="Resources\GameIcons\FIFA 10.gif" />
-    <EmbeddedResource Include="Resources\GameIcons\Football Manager 2010.gif" />
-    <EmbeddedResource Include="Resources\GameIcons\World of Warcraft.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\GameIcons\Command and Conquer 4.gif" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\GameIcons\Dragon Age Origins.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Tester\Tester.resx">
+      <DependentUpon>Tester.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Resources\GameIcons\Warcraft 3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\GameIcons\Football Manager 2010.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\GameIcons\World of Warcraft.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
