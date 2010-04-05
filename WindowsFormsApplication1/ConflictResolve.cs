@@ -47,6 +47,8 @@ namespace GameAnywhere
 
         private startPage parent;
 
+        private WaitingDialog waitDialog;
+
         #endregion
 
         /// <summary>
@@ -616,11 +618,13 @@ namespace GameAnywhere
             List<SyncError> syncErrorList = new List<SyncError>();
             try
             {
-
+                OpenWaitDialog("Please wait while your files are being synchronized");
                 syncErrorList = controller.SynchronizeWebAndThumb(resolvedConflictsList);
+                CloseWaitDialog();
             }
             catch (ConnectionFailureException)
             {
+                CloseWaitDialog();
                 MessageBox.Show("Unable to connect to Web server.");
             }
 
@@ -663,6 +667,21 @@ namespace GameAnywhere
         public void SetErrorLabel(string txt, System.Drawing.Color color)
         {
             parent.SetErrorLabel(txt, color);
+        }
+
+        private void OpenWaitDialog(string text)
+        {
+            waitDialog = new WaitingDialog(text);
+            waitDialog.Show();
+            waitDialog.Refresh();
+            this.Enabled = false;
+        }
+
+        private void CloseWaitDialog()
+        {
+            waitDialog.Close();
+            this.Enabled = true;
+            this.Focus();
         }
     }
 }
