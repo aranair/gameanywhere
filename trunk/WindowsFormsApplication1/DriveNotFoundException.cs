@@ -8,7 +8,7 @@ namespace GameAnywhere
     /// <summary>
     /// The exception that is thrown when no drive is found occurs.
     /// </summary>
-    class DriveNotFoundException : System.ApplicationException
+    class DriveNotFoundException : Exception
     {
         public DriveNotFoundException() { }
         public DriveNotFoundException(String message) { }
