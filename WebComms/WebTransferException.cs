@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GameAnywhere
 {
-    public class WebTransferException : System.ApplicationException
+    public class WebTransferException : Exception
     {
         public string errorMessage;
         public WebTransferException() { }
