@@ -60,10 +60,10 @@ namespace GameAnywhere.Interface
             waitDialog = new WaitingDialog();
             ChildActive = false;
             ResetErrorLabels();
-            /*if (controller.IsFixedMedia())
+            if (controller.IsFixedMedia())
             {
                 DisableThumbdriveFunctions();
-            }*/
+            }
 
             loggedInUserLabel.Text = "";
             SetPanelList();
@@ -82,6 +82,8 @@ namespace GameAnywhere.Interface
 
             SetBackgroundImage(thumbdriveToComputerButton, "GameAnywhere.Resources.thumbdriveToComputerButtonMouseDown.gif", ImageLayout.Zoom);
             SetVisibilityAndUsability(thumbdriveToComputerButton, true, false);
+
+            SetVisibilityAndUsability(thumbdriveAndWebButton, true, false);
         }
 
         /// <summary>
