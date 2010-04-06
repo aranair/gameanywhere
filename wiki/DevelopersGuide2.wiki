@@ -105,14 +105,14 @@ SyncAction contains the necessary information to sync a game. A [DevelopersGuide
 The GameLibrary class, contains all the methods and information to initialize installed games into a list of games, that will contain all the appropriate paths to the config files and saved game files of each individual game.
 
 It will also resolve and return the common set of games that are found in both the source and target paths according to the synchronization direction
-chosen by the user, through the method GetGameList(direction). The direction of synchronization must be properly defined with this method.
+chosen by the user, through the method !GetGameList(direction). The direction of synchronization must be properly defined with this method.
 
 
 == !OfflineSync Class ==
 This class handles the file/folder manipulation on the computer as well as on the external storage device. The sync direction determine how the game files are transferred.
 
 === Exception ===
-  * !CreateFolderFailedException will be thrown if [DevelopersGuide2#SyncFolder] cannot be created.
+  * !CreateFolderFailedException will be thrown if [DevelopersGuide2#SyncFolder !SyncFolder] cannot be created.
 
 === See Aslo ===
    * [DevelopersGuide2#Game_Files_Storage_Structure Game Files Storage Structure]
