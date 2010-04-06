@@ -60,10 +60,10 @@ namespace GameAnywhere.Interface
             waitDialog = new WaitingDialog();
             ChildActive = false;
             ResetErrorLabels();
-            if (controller.IsFixedMedia())
+            /*if (controller.IsFixedMedia())
             {
                 DisableThumbdriveFunctions();
-            }
+            }*/
 
             loggedInUserLabel.Text = "";
             SetPanelList();
@@ -317,13 +317,13 @@ namespace GameAnywhere.Interface
             }
             catch (ConnectionFailureException)
             {
-                SetErrorLabel("Unable to connect to Web server.", Color.Red);
+                SetErrorLabel("Connection lost. Please re-synchronize.", Color.Red);
                 CloseWaitDialog();
             }
 
             if (gameList == null)
             {
-                SetErrorLabel("Unable to connect to Web server.", Color.Red);
+                SetErrorLabel("Connection lost. Please re-synchronize.", Color.Red);
             }
             // If there are no games.
             else if (gameList.Count > 0)
@@ -389,13 +389,13 @@ namespace GameAnywhere.Interface
             }
             catch (ConnectionFailureException)
             {
-                SetErrorLabel("Unable to connect to Web server.", Color.Red);
+                SetErrorLabel("Connection lost. Please re-synchronize.", Color.Red);
                 CloseWaitDialog();
             }
 
             if (gameList == null)
             {
-                SetErrorLabel("Unable to connect to Web server.", Color.Red);
+                SetErrorLabel("Connection lost. Please re-synchronize.", Color.Red);
             }
             // If there are no games.
             else if (gameList.Count > 0)
@@ -487,7 +487,7 @@ namespace GameAnywhere.Interface
 
                 if (syncErrorList == null)
                 {
-                    SetErrorLabel("Unable to connect to Web server.", Color.Red);
+                    SetErrorLabel("Unable to connect to web server.", Color.Red);
                 }
                 else if (syncErrorList.Count == 0)
                     SetErrorLabel("Successfully synchronized", Color.DeepSkyBlue);
@@ -682,7 +682,7 @@ namespace GameAnywhere.Interface
                 catch (ConnectionFailureException)
                 {
                     CloseWaitDialog();
-                    MessageBox.Show("Unable to connect to Web server.");
+                    MessageBox.Show("Unable to connect to web server.");
                     return;
                 }
 
@@ -838,14 +838,14 @@ namespace GameAnywhere.Interface
                 int errorCode = 0;
                 try
                 {
-                    OpenWaitDialog("Please wait while we register you with our Web server.");
+                    OpenWaitDialog("Please wait while we register you with our web server.");
                     errorCode = controller.Register(emailRegisterPanelTextBox.Text, passwordRegisterPanelTextBox.Text);
                     CloseWaitDialog();
                 }
                 catch (ConnectionFailureException)
                 {
                     CloseWaitDialog();
-                    MessageBox.Show("Unable to connect to Web server.");
+                    MessageBox.Show("Unable to connect to web server.");
                     return;
                 }
 
@@ -1036,7 +1036,7 @@ namespace GameAnywhere.Interface
                 catch (ConnectionFailureException)
                 {
                     CloseWaitDialog();
-                    MessageBox.Show("Unable to connect to Web server.");
+                    MessageBox.Show("Unable to connect to web server.");
                     return;
                 }
 
@@ -1214,7 +1214,7 @@ namespace GameAnywhere.Interface
                 }
                 catch (ConnectionFailureException)
                 {
-                    MessageBox.Show("Unable to connect to Web server.");
+                    MessageBox.Show("Unable to connect to web server.");
                     return;
                 }
                 // Display the appropriate messages according to errorCode.
@@ -1316,7 +1316,7 @@ namespace GameAnywhere.Interface
                 }
                 catch (ConnectionFailureException)
                 {
-                    MessageBox.Show("Unable to connect to Web server.");
+                    MessageBox.Show("Unable to connect to web server.");
                     return;
                 }
 
