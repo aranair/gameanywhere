@@ -61,10 +61,23 @@ namespace GameAnywhere.Interface
             {
                 string gameName = se.FilePath;
                 Game newGame = new Game(new List<string>(), new List<string>(),gameName, "", "", "");
-                SyncAction newSyncAction = new SyncAction(newGame);
-                syncActionList.Add(newSyncAction);
-            }
+                bool gameExists = false;
+                foreach (SyncAction sa in syncActionList)
+                {
+                    if (sa.MyGame.Name.Equals(newGame.Name))
+                    {
+                        sa.UnsuccessfulSyncFiles.Add(se);
+                        gameExists = true;
+                    }
+                }
+                if (gameExists == false)
+                {
+                    SyncAction newSyncAction = new SyncAction(newGame);
+                    newSyncAction.UnsuccessfulSyncFiles.Add(se);
+                    syncActionList.Add(newSyncAction);
+                }
 
+            }
         }
 
         public SyncErrorDisplay(List<SyncError> syncErrorList)
@@ -156,7 +169,7 @@ namespace GameAnywhere.Interface
             totalCharacters = FindLabelLength(ref newLabel);
             
             // Portion edits the label's height and yAxisLocation variable according to the character count.
-            if (totalCharacters > 640)
+            if (totalCharacters > 530)
             {
                 totalLinesNeeded = (int)Math.Ceiling((totalCharacters / 640.0)) + 1;
                 newLabel.Size = new System.Drawing.Size(620, totalLinesNeeded * 15);

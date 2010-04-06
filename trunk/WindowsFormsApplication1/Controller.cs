@@ -214,7 +214,6 @@ namespace GameAnywhere.Process
         {
             try
             {
-
                 List<SyncError> syncErrorList = wats.SynchronizeGames(conflictsList);
                 return syncErrorList;
             }
@@ -232,9 +231,10 @@ namespace GameAnywhere.Process
         /// <exception cref="ConnectionFailureException">Unable to connect to web server.</exception>
         public Dictionary<string, int> CheckConflicts()
         {
-            wats = new WebAndThumbSync(user);
+            
             try
             {
+                wats = new WebAndThumbSync(user);
                 Dictionary<string, int> conflictsList = wats.CheckConflicts();
                 return conflictsList;
             }

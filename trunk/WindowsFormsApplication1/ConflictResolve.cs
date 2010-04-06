@@ -360,7 +360,6 @@ namespace GameAnywhere.Interface
 
         public void SetImageForBackground(CheckBox cb, string resourcePath, ContentAlignment contentAlignment)
         {
-
             System.IO.Stream imageStream = this.GetType().Assembly.GetManifestResourceStream(resourcePath);
             cb.Image = Image.FromStream(imageStream);
             cb.ImageAlign = contentAlignment;
@@ -627,7 +626,7 @@ namespace GameAnywhere.Interface
             catch (ConnectionFailureException)
             {
                 CloseWaitDialog();
-                MessageBox.Show("Unable to connect to Web server.");
+                MessageBox.Show("Unable to connect to web server.");
             }
 
             if (syncErrorList.Count == 0)
@@ -676,7 +675,6 @@ namespace GameAnywhere.Interface
             waitDialog = new WaitingDialog(text);
             waitDialog.Show();
             waitDialog.Refresh();
-            this.Enabled = false;
         }
 
         private void CloseWaitDialog()
