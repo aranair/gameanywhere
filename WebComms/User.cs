@@ -10,7 +10,7 @@ using System.Diagnostics;
 using Amazon.SimpleDB;
 
 
-namespace GameAnywhere
+namespace GameAnywhere.Process
 {
     /// <summary>
     /// User account information and its related methods.

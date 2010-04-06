@@ -8,7 +8,7 @@ using Amazon;
 using Amazon.SimpleDB;
 using Amazon.SimpleDB.Model;
 
-namespace GameAnywhere
+namespace GameAnywhere.Process
 {
     /// <summary>
     /// Provides methods to access and update Amazon Web Services (AWS) SimpleDB.

@@ -10,7 +10,7 @@ using Amazon.S3;
 using Amazon.S3.Model;
 
 
-namespace GameAnywhere
+namespace GameAnywhere.Process
 {
     /// <summary>
     /// This class handles all the uploads and downloads to and from the Amazon S3 service.
