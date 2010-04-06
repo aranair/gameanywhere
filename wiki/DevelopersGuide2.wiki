@@ -114,6 +114,11 @@ This class handles the file/folder manipulation on the computer as well as on th
 === See Aslo ===
    * [DevelopersGuide2#Game_Files_Storage_Structure Game Files Storage Structure]
 
+
+== !OnlineSync Class ==
+
+//@Wilson/Nick, fill in a simple description of your class.  
+
 ----
 
 = Game Files Storage Structure =
@@ -217,6 +222,52 @@ http://farm3.static.flickr.com/2776/4478572596_fc9a553fca_o.jpg
  # Remove game files on computer.
  # Move game files from backup folder into it's original directory.
  # Remove backup folder.
+
+-----
+
+= Online Synchronization =
+
+//@Wilson/Nick, explain how online sync is executed.
+
+== See Also ==
+  * [DevelopersGuide2#Login_System Login System]
+  * [DevelopersGuide2#GameAnywhere_Account_Registration_System GameAnywhere Account Registration System]
+
+-----
+
+= Thumb Drive and Web Synchronization =
+
+//@Wilson, explain how Thumb Drive and Web Sync is executed.
+
+
+----
+
+= Login System =
+== Overview ==
+To provide users with their own gameanywhere account, we need a database to store account information and Amazon Web Services(AWS) SimpleDB was chosen.
+
+== How the Components Interact ==
+[http://img30.imageshack.us/img30/381/onlinecomponents.jpg]
+
+The User component consists of user related functions such as Login, Register, ChangePassword and Logout.
+
+In AWS SimpleDB, a table is called a domain while rows are identified as items, and columns are attributes. The unique key is known as the item name. So here is an overview of the SimpleDB component, it is meant for database functions like:
+ * Inserting an item into Amazon SimpleDB, use the InsertItem method.
+ * Getting an item’s attribute value, use the GetAttribute method.
+ * Updating an item’s attribute value, use the UpdateAttributeValue method.
+ * Checking if an item exists in the domain, use the ItemExists method.
+
+AmazonSimpleDBClient component mainly deals with amazon simpleDB web service directly by sending requests and receiving responses from it. It hides all the low level amazon webservices programming like authentication and error handling. You may download the latest Amazon Web Services SDK for .NET from http://aws.amazon.com/sdkfornet/.
+
+== Data structure of Domain ==
+The domain that has been created and we will be using is called “UserAccounts”. Each item has the following attributes: ItemName, Password, ActivationStatus, ActivationKey. The ItemName acts like a unique key, there should be no duplicates in the domain. Every attribute is of string datatype as it is a limitation of AWS SimpleDB.
+
+----
+
+= !GameAnywhere Account Registration System =
+
+//@Nick, :)
+
 
 ----
 
