@@ -109,7 +109,10 @@ chosen by the user, through the method GetGameList(direction). The direction of 
 
 
 == !OfflineSync Class ==
-This class handles the file/folder manipulation on the computer as well as on the external storage device. The sync direction determine how the game files are transferred. 
+This class handles the file/folder manipulation on the computer as well as on the external storage device. The sync direction determine how the game files are transferred.
+
+=== Exception ===
+  * !CreateFolderFailedException will be thrown if [DevelopersGuide2#SyncFolder] cannot be created.
 
 === See Aslo ===
    * [DevelopersGuide2#Game_Files_Storage_Structure Game Files Storage Structure]
@@ -131,7 +134,7 @@ This is how game files are stored on the external device:
 
 A general structure looks like this:
   * !GameAnywhere.exe
-  * SyncFolder
+  * !SyncFolder
     * Game 1
       * config
       * savedGame
@@ -182,10 +185,10 @@ This is how to extend the list of supported games.
 - install path = The install path of the game ( found in the registry )
 
 - Private helper methods have been made to find the documents path, the type of OS of user, registry software path, program files path to aid in finding generic paths for all 3 OS:
-  windows xp, windows vista, and windows 7.
-- Methods to edit the configList and savedGameList are preferably seperated because of step 4.
+  Windows XP, Windows Vista, and Windows 7.
+- Methods to edit the configList and savedGameList are preferably separated because of step 4.
 }}}
- # For the sync direction of external to computer, EditConfigAndSavedGameLists() function is to be editted to support the new game as well. Each new game instance in the common list between the external and the computer, upon finding that the thumbdrive has the appropriate folders for the synchronization, MUST be initialized with config/savedList containing the paths to the files in the external thumbdrive instead of paths to the computer's files. 
+ # For the sync direction of external to computer, EditConfigAndSavedGameLists() function is to be editted to support the new game as well. Each new game instance in the common list between the external and the computer, upon finding that the thumb drive has the appropriate folders for the synchronization, MUST be initialized with config/savedList containing the paths to the files in the external thumb drive instead of paths to the computer's files. 
  # You're set to synchronize. If you would like to add icons to your game in the program, you would have to edit the GUI class to load your icons as well.
 
 _For the upcoming version (v2.0), there will be a new implementation that involves parsing some variables from text files to initialize the games._
