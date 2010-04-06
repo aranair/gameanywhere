@@ -5,9 +5,10 @@ using System.Windows.Forms;
 using System.Collections;
 using System.Diagnostics;
 using System.IO;
+using GameAnywhere.Data;
+using GameAnywhere.Interface;
 
-
-namespace GameAnywhere
+namespace GameAnywhere.Process
 {
     /// <summary>
     /// This class is the middle-man between the GUI class and the other classes. It determines which

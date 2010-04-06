@@ -6,8 +6,10 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using GameAnywhere.Process;
+using GameAnywhere.Data;
 
-namespace GameAnywhere
+namespace GameAnywhere.Interface
 {
     /// <summary>
     /// This form handles the display of the 2nd warning dialog when user chooses not to restore original game files.

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Diagnostics;
+using GameAnywhere.Data;
 
-namespace GameAnywhere
+namespace GameAnywhere.Process
 {
     /// <summary>
     /// An abstract synchronization class. Contain methods to create and delete directory. And also backup and restore original game files. 

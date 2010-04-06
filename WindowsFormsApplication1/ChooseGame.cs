@@ -8,8 +8,10 @@ using System.Text;
 using System.Windows.Forms;
 using System.Collections;
 using System.Diagnostics;
+using GameAnywhere.Process;
+using GameAnywhere.Data;
 
-namespace GameAnywhere
+namespace GameAnywhere.Interface
 {
     /// <summary>
     /// This form allows the user to choose games and the file types to synchronize.

@@ -11,9 +11,9 @@ using System.IO;
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using GameAnywhere.Data;
 
-
-namespace GameAnywhere
+namespace GameAnywhere.Process
 {
     /// <summary>
     /// This class handles all operations regarding the Game class. 

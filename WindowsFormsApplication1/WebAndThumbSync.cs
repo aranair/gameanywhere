@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Security.Cryptography;
+using GameAnywhere.Data;
 
-namespace GameAnywhere
+namespace GameAnywhere.Process
 {
     /// <summary>
     /// This class contains all the required methods to synchronize game files store on the external drive and S3.

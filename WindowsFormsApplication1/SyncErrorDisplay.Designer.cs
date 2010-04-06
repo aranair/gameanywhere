@@ -1,4 +1,4 @@
-﻿namespace GameAnywhere
+﻿namespace GameAnywhere.Interface
 {
     partial class SyncErrorDisplay
     {

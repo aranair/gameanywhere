@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace GameAnywhere
+namespace GameAnywhere.Interface
 {
     /// <summary>
     /// This Form handles the Waiting Dialog during all waits.

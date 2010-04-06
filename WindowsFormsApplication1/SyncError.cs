@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GameAnywhere
+namespace GameAnywhere.Data
 {
     /// <summary>
     /// A data structure that stores the error information per file during synchronizing.

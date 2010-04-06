@@ -9,8 +9,10 @@ using System.Windows.Forms;
 using System.Collections;
 using System.Text.RegularExpressions;
 using System.IO;
+using GameAnywhere.Process;
+using GameAnywhere.Data;
 
-namespace GameAnywhere
+namespace GameAnywhere.Interface
 {
     /// <summary>
     /// This is the front page where all the primary buttons for the functions of the application is displayed.

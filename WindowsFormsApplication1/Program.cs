@@ -6,7 +6,7 @@ using System.Collections;
 using System.Text.RegularExpressions;
 
 
-namespace GameAnywhere
+namespace GameAnywhere.Process
 {
     static class Program
     {
