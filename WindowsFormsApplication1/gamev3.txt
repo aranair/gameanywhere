@@ -19,7 +19,7 @@ Game=World of Warcraft
 RegValue=InstallPath
 RegKey=RegistrySoftwarePath\Blizzard Entertainment\World of Warcraft
 RegType=HKLM
-ConfigPathList=InstallPathVar\WTF\Account
+ConfigPathList=InstallPathVar\WTF\Accounts
 ConfigParentPath=InstallPathVar\WTF
 SavePathList=InstallPathVar\Interface
 SaveParentPath=InstallPathVar
@@ -49,4 +49,12 @@ ConfigParentPath=DocumentsPath\BioWare\Dragon Age
 SavePathList=DocumentsPath\BioWare\Dragon Age\Characters
 SaveParentPath=DocumentsPath\BioWare\Dragon Age
 [ENDGAME]
-
+Game=Batman Arkham Asylum
+RegValue=Install Directory
+RegKey=RegistrySoftwarePath\RocksteadyLtd\Batman Arkham Asylum
+RegType=HKLM
+ConfigPathList=DocumentsPath\Eidos\Batman Arkham Asylum\BmGame\Config\UserInput.ini,DocumentsPath\Eidos\Batman Arkham Asylum\BmGame\Config\UserGame.ini
+ConfigParentPath=DocumentsPath\Eidos\Batman Arkham Asylum\BmGame\Config
+SavePathList=DocumentsPath\Eidos\Batman Arkham Asylum\SaveData
+SaveParentPath=DocumentsPath\Eidos\Batman Arkham Asylum
+[ENDGAME]
