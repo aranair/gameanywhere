@@ -103,34 +103,6 @@ namespace GameAnywhere.Process
             return syncActionList;
         }
 
-        /// <summary>
-        /// Undo changes made by ExternalToCom sychronization.
-        /// Restore original status to computer if an error occurred in the synchronization of any file of the specific game
-        /// </summary>
-        /// <param name="sa"></param>
-        private void UndoExternalToComSync(SyncAction sa)
-        {
-            if (SyncDirection == ExternalToCom)
-            {
-
-                if (sa.UnsuccessfulSyncFiles.Count > 0)
-                {
-
-                    DeleteCopiedFiles(sa);
-
-                    RestoreGame(sa, false);
-
-                    List<SyncAction> singleSyncAction = new List<SyncAction>();
-
-
-                    sa.MyGame = FindInstalledGame(sa.MyGame);
-                    singleSyncAction.Add(sa);
-
-                    RemoveAllBackup(singleSyncAction);
-                }
-
-            }
-        }
 
 
         /// <summary>

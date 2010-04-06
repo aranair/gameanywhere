@@ -75,19 +75,21 @@ namespace GameAnywhere.Process
             foreach (SyncAction sa in syncActionList)
             {
                 Debug.Assert(sa.MyGame != null);
-                
+                        
                 string syncFolderGamePath = Path.Combine(syncFolderPath, sa.MyGame.Name);
 
                 if (SyncDirection == WebToCom)
                 {
+                    PopulatePathLists(sa);
+
                     //Backup files on computer.
                     int backupResult = Backup(sa);
-                    if (backupResult == None)
-                        //Backup was not successful - Add all game files to error list.
-                        AddToUnsuccessfulSyncFiles(sa, syncFolderGamePath, "Unable to backup original game files");
-                    else
-                        //Synchronize from Web to Computer.
-                        WebToComputer(sa, currentUser.Email, backupResult);
+
+                    //Synchronize from Web to Computer.
+                    WebToComputer(sa, currentUser.Email, backupResult);
+                    if (sa.UnsuccessfulSyncFiles.Count > 0)
+                        UndoExternalToComSync(sa);
+
                 }
                 else if (SyncDirection == ComToWeb)
                 {
@@ -171,6 +173,47 @@ namespace GameAnywhere.Process
                 throw;
             }
         }
+
+        public static List<string> GetGamesAndTypesAndFilesFromWeb(string user)
+        {
+            //Pre-conditions
+            if (String.IsNullOrEmpty(user))
+                throw new ArgumentException("Parameter cannot be empty/null", "user");
+
+            try
+            {
+                Storage s3 = new Storage();
+                HashSet<string> gameSet = new HashSet<string>();
+
+                //Get game name and type(config/save), and add to gameset
+                List<string> files = s3.ListFiles(user);
+                foreach (string file in files)
+                {
+                    string f = file.Substring(file.IndexOf('/') + 1); //remove username
+                    string game, type, tail, last;
+                    if (f.IndexOf('/') != -1)
+                    {
+                        game = f.Substring(0, f.IndexOf('/')); //get game name
+                        tail = f.Substring(f.IndexOf('/') + 1); //get tail after game name
+                        type = tail.Substring(0, tail.IndexOf('/')); //get config or savedGame
+                        tail = tail.Substring(tail.IndexOf('/') + 1); //get tail after type
+                        if (tail.IndexOf('/') == -1)
+                            last = tail;
+                        else
+                            last = tail.Substring(0, tail.IndexOf('/'));
+                        gameSet.Add(game + "/" + type + "/" + last);
+                    }
+                }
+
+                return gameSet.ToList<string>();
+            }
+            catch
+            {
+                //Exceptions: ConnectionFailureException
+                throw;
+            }
+        }
+
         #endregion
 
         #region Private Methods
@@ -376,6 +419,13 @@ namespace GameAnywhere.Process
             Debug.Assert(sa.Action == SyncAction.ConfigFiles || sa.Action == SyncAction.SavedGameFiles || sa.Action == SyncAction.AllFiles);
             Debug.Assert(sa.MyGame != null);
 
+            if (backupItem == None)
+            {
+                //Backup was not successful - Add all game files to error list.
+                AddToUnsuccessfulSyncFiles(sa, Path.Combine(syncFolderPath, sa.MyGame.Name), "Unable to backup original game files");
+                return;
+            }
+
             List<SyncError> errorList = null;
 
             //Sync config files
@@ -552,6 +602,56 @@ namespace GameAnywhere.Process
 
             //folder is not locked
             return false;
+        }
+
+        private void PopulatePathLists(SyncAction sa)
+        {
+            sa.MyGame.ConfigPathList.Clear();
+            sa.MyGame.SavePathList.Clear();
+            string configKey = currentUser.Email + "/" + sa.MyGame.Name + "/" + SyncFolderConfigFolderName;
+            string saveKey = currentUser.Email + "/" + sa.MyGame.Name + "/" + SyncFolderSavedGameFolderName;
+            sa.MyGame.ConfigPathList.AddRange(GetPathList(configKey));
+            sa.MyGame.SavePathList.AddRange(GetPathList(saveKey));
+        }
+
+        private List<string> GetPathList(string key)
+        {
+            //Pre-conditions
+            if (String.IsNullOrEmpty(key))
+                throw new ArgumentException("Parameter cannot be empty/null", "user");
+
+            try
+            {
+                Storage s3 = new Storage();
+                HashSet<string> gameSet = new HashSet<string>();
+
+                //Get game name and type(config/save), and add to gameset
+                List<string> files = s3.ListFiles(key);
+                foreach (string file in files)
+                {
+                    string f = file.Substring(file.IndexOf('/') + 1); //remove username
+                    string game, type, tail, last;
+                    if (f.IndexOf('/') != -1)
+                    {
+                        game = f.Substring(0, f.IndexOf('/')); //get game name
+                        tail = f.Substring(f.IndexOf('/') + 1); //get tail after game name
+                        type = tail.Substring(0, tail.IndexOf('/')); //get config or savedGame
+                        tail = tail.Substring(tail.IndexOf('/') + 1); //get tail after type
+                        if (tail.IndexOf('/') == -1)
+                            last = tail;
+                        else
+                            last = tail.Substring(0, tail.IndexOf('/'));
+                        gameSet.Add("web\\" + last);
+                    }
+                }
+
+                return gameSet.ToList<string>();
+            }
+            catch
+            {
+                //Exceptions: ConnectionFailureException
+                throw;
+            }
         }
         #endregion
     }
