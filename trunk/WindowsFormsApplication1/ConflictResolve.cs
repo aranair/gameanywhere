@@ -6,8 +6,10 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using GameAnywhere.Data;
+using GameAnywhere.Process;
 
-namespace GameAnywhere
+namespace GameAnywhere.Interface
 {
     /// <summary>
     /// This form allows the user to choose the direction to resolve conflicts during synchronization.

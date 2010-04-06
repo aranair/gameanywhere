@@ -8,7 +8,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace GameAnywhere
+namespace GameAnywhere.Process
 {
     /// <summary>
     /// Stores information about each file.

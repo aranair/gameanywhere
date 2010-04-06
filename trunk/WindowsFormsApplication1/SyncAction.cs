@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 
-namespace GameAnywhere
+namespace GameAnywhere.Data
 {
     /// <summary>
     /// A data structure that contains a Game and its sync information.

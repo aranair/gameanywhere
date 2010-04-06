@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
+using GameAnywhere.Data;
 
-
-namespace GameAnywhere
+namespace GameAnywhere.Process
 {
     /// <summary>
     /// Method to synchronize Game files between computer and external storage device. 

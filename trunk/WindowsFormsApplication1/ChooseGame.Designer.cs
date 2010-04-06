@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace GameAnywhere
+namespace GameAnywhere.Interface
 {
     partial class ChooseGame
     {
