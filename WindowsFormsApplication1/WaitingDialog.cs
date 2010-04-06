@@ -24,5 +24,10 @@ namespace GameAnywhere.Interface
             InitializeComponent();
             this.label1.Text = text;
         }
+
+        internal void runClose()
+        {
+            this.Close();
+        }
     }
 }

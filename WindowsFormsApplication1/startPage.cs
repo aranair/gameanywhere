@@ -1216,6 +1216,7 @@ namespace GameAnywhere.Interface
                 }
                 catch (ConnectionFailureException)
                 {
+                    CloseWaitDialog();
                     MessageBox.Show("Unable to connect to web server.");
                     return;
                 }
@@ -1314,7 +1315,9 @@ namespace GameAnywhere.Interface
                 int errorCode = 0;
                 try
                 {
+                    OpenWaitDialog("Please wait while we process your request");
                     errorCode = controller.ResendActivation(emailResendActivationPanelTextBox.Text, passwordResendActivationPanelTextBox.Text);
+                    CloseWaitDialog();
                 }
                 catch (ConnectionFailureException)
                 {
@@ -1672,16 +1675,20 @@ namespace GameAnywhere.Interface
         private void OpenWaitDialog(string text)
         {
             waitDialog = new WaitingDialog(text);
+
             waitDialog.Show();
             waitDialog.Refresh();
             this.Enabled = false;
+            this.Hide();
+            
         }
 
         private void CloseWaitDialog()
         {
-            waitDialog.Close();
-            this.Enabled = true;
+            waitDialog.runClose();
+            this.Show();
             this.Focus();
+            this.Enabled = true;
         }
 
         #endregion
