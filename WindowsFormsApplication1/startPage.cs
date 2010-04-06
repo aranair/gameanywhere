@@ -1209,8 +1209,10 @@ namespace GameAnywhere.Interface
                 int errorCode = 0;
                 try
                 {
+                    OpenWaitDialog("Please wait while we process your request.");
                     // Attempts to send password to user's email account and gets appropriate feedback error code from controller.
                     errorCode = controller.RetrievePassword(emailForgetPasswordPanelTextBox.Text);
+                    CloseWaitDialog();
                 }
                 catch (ConnectionFailureException)
                 {
