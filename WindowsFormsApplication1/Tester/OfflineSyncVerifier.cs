@@ -20,7 +20,7 @@ namespace GameAnywhere
         {
             List<SyncAction> syncList = new List<SyncAction>();
             TestResult result = new TestResult(true);
-            if (returnType.GetType().Equals(typeof(List<SyncAction>)))
+            if (returnType != null && returnType.GetType().Equals(typeof(List<SyncAction>)))
             {
                 syncList = (List<SyncAction>)returnType;
             }
@@ -370,40 +370,6 @@ namespace GameAnywhere
                         result.AddRemarks("Failed! : Expected List is " + expectedOutput + " returned : " + restoreList.Count);
                     else
                         result.AddRemarks("Passed: Expected output okay!");
-
-                    foreach (SyncAction action in restoreList)
-                    {
-                        if (action.MyGame.Name.Equals("FIFA 10"))
-                        {
-                            Game g = action.MyGame;
-                            List<string> allPath = new List<string>();
-                            List<string> errorPath = new List<string>();
-
-                            foreach (string path in g.ConfigPathList)
-                            {
-                                allPath.Add(Path.GetFileName(path));
-                            }
-
-                            allPath.Add("GA-savedGameBackup");
-                            allPath.Add("GA-configBackup");
-
-                            foreach (string path in g.SavePathList)
-                                allPath.Add(Path.GetFileName(path));
-
-                            foreach (SyncError errorList in action.UnsuccessfulSyncFiles)
-                                errorPath.Add(Path.GetFileName(errorList.FilePath));
-
-                            foreach (string path in allPath)
-                            {
-                                if (!errorPath.Contains(path))
-                                {
-                                    result.Result = false;
-                                    result.AddRemarks("Failed! Sync Error List did not list :" + path);
-                                }
-                            }
-                        }
-
-                    }
                     break;
                 case 7:
                     {

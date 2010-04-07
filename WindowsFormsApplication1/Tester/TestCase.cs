@@ -220,7 +220,7 @@ namespace GameAnywhere
                                 err.GetBaseException().GetType().Equals(typeof(CreateFolderFailedException))||
                                 err.GetBaseException().GetType().Equals(typeof(ConnectionFailureException)))
                                 returnType = err;
-                            else
+                            else if(testClass.GetType().Equals(typeof(WebAndThumbSync)))
                             {
                                 WebAndThumbSync webClass = (WebAndThumbSync)testClass;
                                 if (webClass.LocalHash.FileTable.ContainsKey("UnauthorizedAccessException"))
