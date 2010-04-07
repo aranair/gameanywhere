@@ -25,9 +25,12 @@ namespace GameAnywhere.Interface
             this.label1.Text = text;
         }
 
-        internal void runClose()
+        public void startUp()
         {
-            this.Close();
+            this.Show();
+            this.Refresh();
+            while (true) { Application.DoEvents(); }
         }
+
     }
 }
