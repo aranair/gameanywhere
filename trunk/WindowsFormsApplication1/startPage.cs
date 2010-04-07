@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.IO;
 using GameAnywhere.Process;
 using GameAnywhere.Data;
+using System.Threading;
 
 namespace GameAnywhere.Interface
 {
@@ -44,6 +45,8 @@ namespace GameAnywhere.Interface
         /// Form to ask user to wait in patience.
         /// </summary>
         private WaitingDialog waitDialog;
+
+        private Thread waitThread;
 
         public enum ClickStatus { ComToWeb, WebToCom, ExtAndWeb, None}
 
@@ -1687,17 +1690,15 @@ namespace GameAnywhere.Interface
         private void OpenWaitDialog(string text)
         {
             waitDialog = new WaitingDialog(text);
-
-            waitDialog.Show();
-            waitDialog.Refresh();
-            this.Enabled = false;
+            waitThread = new Thread(new ThreadStart(waitDialog.startUp));
+            waitThread.Start();
             this.Hide();
-            
+            this.Enabled = false;
         }
 
         private void CloseWaitDialog()
         {
-            waitDialog.runClose();
+            waitThread.Abort();
             this.Show();
             this.Focus();
             this.Enabled = true;

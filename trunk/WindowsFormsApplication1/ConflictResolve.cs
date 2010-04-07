@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using GameAnywhere.Data;
 using GameAnywhere.Process;
+using System.Threading;
 
 namespace GameAnywhere.Interface
 {
@@ -50,6 +51,8 @@ namespace GameAnywhere.Interface
         private startPage parent;
 
         private WaitingDialog waitDialog;
+
+        private Thread waitThread;
 
         #endregion
 
@@ -673,15 +676,18 @@ namespace GameAnywhere.Interface
         private void OpenWaitDialog(string text)
         {
             waitDialog = new WaitingDialog(text);
-            waitDialog.Show();
-            waitDialog.Refresh();
+            waitThread = new Thread(new ThreadStart(waitDialog.startUp));
+            waitThread.Start();
+            this.Hide();
+            this.Enabled = false;
         }
 
         private void CloseWaitDialog()
         {
-            waitDialog.Close();
-            this.Enabled = true;
+            waitThread.Abort();
+            this.Show();
             this.Focus();
+            this.Enabled = true;
         }
     }
 }
