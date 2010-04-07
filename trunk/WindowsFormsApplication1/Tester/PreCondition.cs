@@ -490,7 +490,7 @@ namespace GameAnywhere
                         Game wc3 = PreCondition.getGame(Warcraft3GameName, OfflineSync.ExternalToCom);
                         File.Delete(wc3.ConfigParentPath + @"\CustomKeys.txt");
                         Game fifa = PreCondition.getGame(FIFA10GameName, OfflineSync.ExternalToCom);
-                        Directory.Delete(fifa.SaveParentPath + @"\A. Profile", true);
+                        Directory.Delete(fifa.SaveParentPath + @"\A. Profiles", true);
                         break;
                     }
                 case 4:

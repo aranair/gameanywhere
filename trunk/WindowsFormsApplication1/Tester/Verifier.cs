@@ -1202,7 +1202,7 @@ namespace GameAnywhere
                             break;
                     }
                 }
-                if (errorList.Count == 0 && result.Result == true)
+                if (errorList.Count == 0)
                     result.AddRemarks("Passed! Backup Folder is copied in order.");
                 else
                 {
