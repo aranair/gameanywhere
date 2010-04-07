@@ -125,36 +125,11 @@ namespace GameAnywhere
                     }
 
                 case 5: //verify all files are unsuccessful
-                    {                       
-                        List<SyncAction> returnAction = (List<SyncAction>)returnType;
-                        CheckSyncGamesExpectedOutput(expectedOutput, ref result, returnAction, false);
-                        foreach (SyncAction sa in returnAction)
+                    {
+                        if (!returnType.GetType().Equals(typeof(ConnectionFailureException)))
                         {
-                            bool configFound = false;
-                            bool saveFound = false;
-                            if (sa.MyGame.Name.Equals("Warcraft 3"))
-                            {
-                                foreach (SyncError syncError in sa.UnsuccessfulSyncFiles)
-                                {
-                                    if (syncError.FilePath.Equals(@"C:\Warcraft III\Warcraft III\CustomKeys.txt"))
-                                        configFound = true;
-                                }
-                                foreach (SyncError syncError in sa.UnsuccessfulSyncFiles)
-                                {
-                                    if (syncError.FilePath.Equals(@"C:\Warcraft III\Warcraft III\Save"))
-                                        saveFound = true;
-                                }
-                            }
-                            if (!configFound)
-                            {
-                                result.Result = false;
-                                result.AddRemarks("Failed! config Error path is not found in unsuccessful file list");
-                            }
-                            if (!saveFound)
-                            {
-                                result.Result = false;
-                                result.AddRemarks("Failed! save Error path is not added correctly in unsuccessful file list.");
-                            }
+                            result.Result = false;
+                            result.AddRemarks("Failed! return is not ConnectionFailureException!");
                         }
 
                         break;
@@ -225,48 +200,23 @@ namespace GameAnywhere
                         break;
                     }
 
-                    /*
-                     * 
-                case 3: // check syncAction list for the list of error
+                case 10:
                     {
-                        Game fifa = PreCondition.getGame("FIFA 10",OnlineSync.ComToWeb);
-                        //check for all the paths to be sync-ed, they are in the sync error list in the sync Action.
-                        List<SyncAction> ret = (List<SyncAction>)returnType;
-                        SyncAction fifaSyncAction = null;
-                        foreach(SyncAction sa in ret)
+                        List<SyncAction> syncList = (List<SyncAction>)returnType;
+                        foreach (SyncAction sa in syncList)
                         {
-                            if(sa.MyGame.Name.Equals("FIFA 10"))
-                                fifaSyncAction = sa;
-                        }
-                        List<string> errorPath = new List<string>();
-                        foreach(SyncError se in fifaSyncAction.UnsuccessfulSyncFiles)
-                        {
-                            errorPath.Add(se.FilePath);
-                        }
-                        //check config path
-                        foreach (string path in fifa.ConfigPathList)
-                        {
-                            //if error path do not contain the config file
-                            if (!errorPath.Contains(path))
+                            //Check Wc3 sync
+                            List<string> errList = new List<string>();
+                            errList = CheckOnlineSync(ref result, sa);
+                            if (errList.Count != 0)
                             {
                                 result.Result = false;
-                                result.AddRemarks("Failed! "+path+" is not in Sync Error list.");
-                            }
-                        }
-
-                        //
-                        foreach (string path in fifa.SavePathList)
-                        {
-                            //if error path do not contain the config file
-                            if (!errorPath.Contains(path))
-                            {
-                                result.Result = false;
-                                result.AddRemarks("Failed! " + path + " is not in Sync Error list.");
+                                foreach (string s in errList)
+                                    result.AddRemarks(s);
                             }
                         }
                         break;
-                        
-                    }*/
+                    }
                         default : break;
             }
             return result;
@@ -283,7 +233,8 @@ namespace GameAnywhere
             //check sync
             if (sa.Action == SyncAction.ConfigFiles || sa.Action == SyncAction.AllFiles)
             {
-                string[] checkFiles = Directory.GetFiles(@".\ConfigSyncTest");
+                string gameName = sa.MyGame.Name;
+                string[] checkFiles = Directory.GetFiles(@".\ConfigSyncTest-"+gameName);
                 List<string> gamefiles = new List<string>();
                 
                 foreach (string path in game.ConfigPathList)
@@ -309,7 +260,8 @@ namespace GameAnywhere
             if (sa.Action == SyncAction.SavedGameFiles || sa.Action == SyncAction.AllFiles)
             {
                 //check sync
-                string[] checkFiles = Directory.GetFiles(@".\SaveSyncTest");
+                string gameName = sa.MyGame.Name;
+                string[] checkFiles = Directory.GetFiles(@".\SaveSyncTest-"+gameName);
                 List<string> gameFiles = new List<string>();
 
                 foreach (string path in game.SavePathList)
@@ -354,7 +306,7 @@ namespace GameAnywhere
                 }
                 else
                 {
-                    errList.AddRange(FolderOperation.FindDifferences(game.SaveParentPath + @"\SaveTestBackup", game.ConfigParentPath + @"\GA-savedGameBackup", false));
+                    errList.AddRange(FolderOperation.FindDifferences(game.SaveParentPath + @"\SaveTestBackup", game.SaveParentPath + @"\GA-savedGameBackup", false));
                 }
             }
             return errList;

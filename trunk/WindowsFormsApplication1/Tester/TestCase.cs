@@ -167,7 +167,12 @@ namespace GameAnywhere
             PreCondition.SetPreCondition(index, methodName, ref input, ref testClass);
 
             //try and run the test case
-            Assembly assembly = Assembly.GetExecutingAssembly(); 
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            if (testClass.GetType().Equals(typeof(User)))
+            {
+                Type user = typeof(User);
+                assembly = Assembly.GetAssembly(user);
+            }
             Type classType = null;
             if (testClass != null)
             {
@@ -175,7 +180,10 @@ namespace GameAnywhere
                 {
                     // Pick up a class
                     if (type.IsClass == true && type.Name.Equals(testClass.GetType().Name))
+                    {
                         classType = type;
+                        break;
+                    }
                 }
             }
 
@@ -241,7 +249,7 @@ namespace GameAnywhere
                         case "RetrievePassword":
                         case "Register":
                         case "Login":
-                            if (err.GetBaseException().GetType().Equals(typeof(System.Net.WebException)) ||
+                            if (err.GetBaseException().GetType().Equals(typeof(ConnectionFailureException)) ||
                                 err.GetBaseException().GetType().Equals(typeof(ArgumentException)))
                                 returnType = err;
                             else

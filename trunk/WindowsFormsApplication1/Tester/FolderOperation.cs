@@ -62,6 +62,7 @@ namespace GameAnywhere
                         testbackup = Path.Combine(action.MyGame.ConfigParentPath, "ConfigTestBackup");
                     else
                         testbackup = Path.Combine(external, "ConfigTestBackup");
+                    
                     Directory.CreateDirectory(testbackup);
                     List<string> list = null;
                     foreach(Game g in gameList)

@@ -63,10 +63,18 @@ namespace GameAnywhere
             
             //Load the assembly and create the instance of it
             Assembly assembly = Assembly.GetExecutingAssembly();
+            if (className.Equals("User"))
+            {
+                Type user = typeof(User);
+                assembly = Assembly.GetAssembly(user);
+            }
             foreach (Type type in assembly.GetTypes())
             {
                 if (type.IsClass && type.Name.Equals(className))
+                {
                     foundType = type;
+                    break;
+                }
             }
             Debug.Assert(foundType != null);
             this.testClass = Activator.CreateInstance(foundType, constructorParameters);
