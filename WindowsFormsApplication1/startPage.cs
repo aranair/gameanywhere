@@ -458,6 +458,19 @@ namespace GameAnywhere.Interface
             {
                 CloseWaitDialog();
                 SetErrorLabel("Unable to connect to server.", Color.Red);
+                return;
+            }
+            catch (IOException)
+            {
+                CloseWaitDialog();
+                SetErrorLabel("Please unlock files/folders and retry.", Color.Red);
+                return;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                CloseWaitDialog();
+                SetErrorLabel("Please unlock files/folders and retry.", Color.Red);
+                return;
             }
 
             if (conflictsList == null)
@@ -500,8 +513,7 @@ namespace GameAnywhere.Interface
             }
         }
 
-       
-
+      
         private void thumbdriveAndWebButton_MouseDown(object sender, MouseEventArgs e)
         {
             SetBackgroundImage(thumbdriveAndWebButton, "GameAnywhere.Resources.thumbdriveAndWebButtonMouseDown.gif", ImageLayout.Zoom);
