@@ -71,8 +71,8 @@ namespace GameAnywhere
         {
             foreach (Game game in library.InstalledGameList)
             {
-                string saveBackup = @".\SaveSyncTest";
-                string configBackup = @".\ConfigSyncTest";
+                string saveBackup = @".\SaveSyncTest-"+game.Name;
+                string configBackup = @".\ConfigSyncTest-"+game.Name;
 
                 if (Directory.Exists(saveBackup))
                     Directory.Delete(saveBackup, true);
@@ -301,10 +301,11 @@ namespace GameAnywhere
                         }
                         break;
                     }
+
+                case "Register":
+                case "RetrievePassword":
                 case "ChangePassword":
                 case "Login":
-                case "Register": 
-                case "RetrievePassword":
                     break;
                 case "ResendActivation":
                     {
@@ -446,10 +447,18 @@ namespace GameAnywhere
                 case 9:
                     {
                         Game fifa = getGame("FIFA 10",OfflineSync.Uninitialize);
-                        FolderOperation.RemoveFileSecurity(fifa.SaveParentPath, user, FileSystemRights.CreateDirectories, AccessControlType.Allow);
+                        FolderOperation.RemoveFileSecurity(fifa.SaveParentPath, user, FileSystemRights.CreateDirectories, AccessControlType.Deny);
                         DeleteTestBackup();
                         DeleteVerifySyncFolder();
                         Directory.Delete(@".\AllFifaFiles",true);
+                        OfflineSync off = new OfflineSync(OfflineSync.ComToExternal, library.GetGameList(OfflineSync.Uninitialize));
+                        off.Restore();
+                        break;
+                    }
+                case 10:
+                    {
+                        DeleteTestBackup();
+                        DeleteVerifySyncFolder();
                         OfflineSync off = new OfflineSync(OfflineSync.ComToExternal, library.GetGameList(OfflineSync.Uninitialize));
                         off.Restore();
                         break;
@@ -818,7 +827,7 @@ namespace GameAnywhere
                 case "Register":
                 case "RetrievePassword":
                 case "ResendActivation":
-                        break;
+                    break;
 
                 default: break;
             } //end switch method
@@ -1295,7 +1304,8 @@ namespace GameAnywhere
                     testClass = new OnlineSync(OnlineSync.ComToWeb, gameLibrary.GetGameList(OfflineSync.Uninitialize),newUser);
 
                     break;
-                case 6:
+                case 6: //Upload all game to Web
+
                     break;
 
                     //Test Web To Com
@@ -1308,13 +1318,13 @@ namespace GameAnywhere
                         FolderOperation.CopyOriginalSettings(synclist, FolderOperation.BOTH, FolderOperation.WebToCom);
                         //download the games files to check correct games files are sync
                         Game game = getGame("Warcraft 3",OfflineSync.Uninitialize);
-                        Directory.CreateDirectory(@".\SaveSyncTest");
-                        Directory.CreateDirectory(@".\ConfigSyncTest");
-                        store.DownloadFile(@".\ConfigSyncTest\CustomKeys.txt", webToCom + 
+                        Directory.CreateDirectory(@".\SaveSyncTest-Warcraft 3");
+                        Directory.CreateDirectory(@".\ConfigSyncTest-Warcraft 3");
+                        store.DownloadFile(@".\ConfigSyncTest-Warcraft 3\CustomKeys.txt", webToCom + 
                                             "/Warcraft 3/config/CustomKeys.txt");
-                        store.DownloadFile(@".\SaveSyncTest\com.txt",webToCom+
+                        store.DownloadFile(@".\SaveSyncTest-Warcraft 3\com.txt", webToCom +
                                             "/Warcraft 3/savedGame/Save/com.txt");
-                        store.DownloadFile(@".\SaveSyncTest\commm.txt", webToCom + 
+                        store.DownloadFile(@".\SaveSyncTest-Warcraft 3\commm.txt", webToCom + 
                                             "/Warcraft 3/savedGame/Save/commm.txt");
 
                         break;
@@ -1334,26 +1344,26 @@ namespace GameAnywhere
 
                         //copy original game settings
                         FolderOperation.CopyOriginalSettings(synclist, FolderOperation.BOTH, FolderOperation.WebToCom);
-                        Directory.CreateDirectory(@".\SaveSyncTest");
-                        Directory.CreateDirectory(@".\ConfigSyncTest");
-                        store.DownloadFile(@".\ConfigSyncTest\CustomKeys.txt", webToCom +
+                        Directory.CreateDirectory(@".\SaveSyncTest-Warcraft 3");
+                        Directory.CreateDirectory(@".\ConfigSyncTest-Warcraft 3");
+                        store.DownloadFile(@".\ConfigSyncTest-Warcraft 3\CustomKeys.txt", webToCom +
                                             "/Warcraft 3/config/CustomKeys.txt");
-                        store.DownloadFile(@".\SaveSyncTest\com.txt", webToCom +
+                        store.DownloadFile(@".\SaveSyncTest-Warcraft 3\com.txt", webToCom +
                                             "/Warcraft 3/savedGame/Save/com.txt");
-                        store.DownloadFile(@".\SaveSyncTest\commm.txt", webToCom +
+                        store.DownloadFile(@".\SaveSyncTest-Warcraft 3\commm.txt", webToCom +
                                             "/Warcraft 3/savedGame/Save/commm.txt");
                         break;
                     }
                 case 9:
                     {
                         //download warcraft 3 to verify later
-                        Directory.CreateDirectory(@".\SaveSyncTest");
-                        Directory.CreateDirectory(@".\ConfigSyncTest");
-                        store.DownloadFile(@".\ConfigSyncTest\CustomKeys.txt", webToCom +
+                        Directory.CreateDirectory(@".\SaveSyncTest-Warcraft 3");
+                        Directory.CreateDirectory(@".\ConfigSyncTest-Warcraft3");
+                        store.DownloadFile(@".\ConfigSyncTest-Warcraft 3\CustomKeys.txt", webToCom +
                                             "/Warcraft 3/config/CustomKeys.txt");
-                        store.DownloadFile(@".\SaveSyncTest\com.txt", webToCom +
+                        store.DownloadFile(@".\SaveSyncTest-Warcraft 3\com.txt", webToCom +
                                             "/Warcraft 3/savedGame/Save/com.txt");
-                        store.DownloadFile(@".\SaveSyncTest\commm.txt", webToCom +
+                        store.DownloadFile(@".\SaveSyncTest-Warcraft 3\commm.txt", webToCom +
                                             "/Warcraft 3/savedGame/Save/commm.txt");
 
                         Game fifa = getGame("FIFA 10",OfflineSync.Uninitialize);
@@ -1379,6 +1389,62 @@ namespace GameAnywhere
 
                         //lock a folder
                         FolderOperation.AddFileSecurity(fifa.SaveParentPath, user, FileSystemRights.CreateDirectories, AccessControlType.Deny);
+                        break;
+                    }
+                case 10: //download all to com, com is empty
+                    {
+                        FolderOperation.CopyOriginalSettings(synclist, FolderOperation.BOTH, FolderOperation.WebToCom);
+
+                        List<string> allfilesOnWeb = store.ListFiles(webToCom);
+
+                        List<Game> games = library.GetGameList(0);
+                        foreach (Game g in games)
+                        {
+                            if (!g.ConfigParentPath.Equals(""))
+                                Directory.CreateDirectory(@".\ConfigSyncTest-"+g.Name);
+                            if (!g.SaveParentPath.Equals(""))
+                                Directory.CreateDirectory(@".\SaveSyncTest-"+g.Name);
+                        }
+
+                        foreach (string file in allfilesOnWeb)
+                        {
+                            if(file.Contains(FIFA10GameName))
+                            {
+                                if(file.Contains("savedGame"))
+                                    store.DownloadFile(@".\SaveSyncTest-"+FIFA10GameName + file.Substring(file.LastIndexOf('/')), file);
+                                if (file.Contains("config"))
+                                    store.DownloadFile(@".\ConfigSyncTest-" + FIFA10GameName + file.Substring(file.LastIndexOf('/')), file);
+                            }
+                            if (file.Contains(Warcraft3GameName))
+                            {
+                                if (file.Contains("savedGame"))
+                                    store.DownloadFile(@".\SaveSyncTest-" + Warcraft3GameName + file.Substring(file.LastIndexOf('/')), file);
+                                if (file.Contains("config"))
+                                    store.DownloadFile(@".\ConfigSyncTest-" + Warcraft3GameName + file.Substring(file.LastIndexOf('/')), file);
+                            }
+                            if (file.Contains(footballManager))
+                            {
+                                if (file.Contains("savedGame"))
+                                    store.DownloadFile(@".\SaveSyncTest-" + footballManager + file.Substring(file.LastIndexOf('/')), file);
+                            }
+                            if (file.Contains(worldOfWarcraft))
+                            {
+                                if (file.Contains("savedGame"))
+                                    store.DownloadFile(@".\SaveSyncTest-" + worldOfWarcraft + file.Substring(file.LastIndexOf('/')), file);
+                                if (file.Contains("config"))
+                                    store.DownloadFile(@".\ConfigSyncTest-" + worldOfWarcraft + file.Substring(file.LastIndexOf('/')), file);
+                            }
+                            if (file.Contains(abuseGameName))
+                            {
+                                if (file.Contains("savedGame"))
+                                    store.DownloadFile(@".\SaveSyncTest-" + abuseGameName + file.Substring(file.LastIndexOf('/')), file);
+                            }
+                        }
+
+                        newUser.Email = webToCom;
+                        testClass = new OnlineSync(OnlineSync.WebToCom,
+                                               gameLibrary.GetGameList(OfflineSync.Uninitialize), newUser);
+
                         break;
                     }
 

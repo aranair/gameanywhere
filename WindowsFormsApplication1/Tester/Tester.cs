@@ -80,8 +80,9 @@ namespace GameAnywhere
         {
             string user = WindowsIdentity.GetCurrent().Name;
             //FolderOperation.RemoveFileSecurity(@".\SyncFolder\Game1\savedGame", user, FileSystemRights.FullControl, AccessControlType.Deny);
-            //FolderOperation.RemoveFileSecurity(@".\SyncFolder\Game2\config", user, FileSystemRights.FullControl, AccessControlType.Deny);
-
+            //FolderOperation.RemoveFileSecurity(@".\SyncFolder\Game2\config", user, FileSystemRights.CreateFiles, AccessControlType.Deny);
+            Game fifa = PreCondition.getGame("FIFA 10",0);
+            FolderOperation.RemoveFileSecurity(fifa.SaveParentPath, user, FileSystemRights.CreateDirectories, AccessControlType.Deny);
             //MessageBox.Show("Stop!");
             //Move any existing SyncFolder
             /*if (Directory.Exists(@".\SyncFolder"))
