@@ -436,6 +436,10 @@ namespace GameAnywhere.Process
                 {
                     throw;
                 }
+                catch (NullReferenceException)
+                {
+                    throw new ConnectionFailureException();
+                }
                 catch (Exception ex)
                 {
                     string gameName = key.Substring(0, key.IndexOf('/'));
