@@ -460,19 +460,20 @@ namespace GameAnywhere.Interface
             }
             catch (ConnectionFailureException)
             {
+                CloseWaitDialog();
                 SetErrorLabel("Connection lost. Please re-synchronize.", Color.Red);
+                return;
             }
             catch (IOException)
             {
+                CloseWaitDialog();
                 SetErrorLabel("Synchronization failed. Please retry.", Color.Red);
+                return;
             }
             catch (UnauthorizedAccessException)
             {
-                SetErrorLabel("Please unlock files/folders and retry.", Color.Red);
-            }
-            finally
-            {
                 CloseWaitDialog();
+                SetErrorLabel("Please unlock files/folders and retry.", Color.Red);
                 return;
             }
 
