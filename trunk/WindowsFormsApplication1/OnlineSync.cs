@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
 using System.IO;
-using Amazon.S3;
 using GameAnywhere.Data;
 
 namespace GameAnywhere.Process
@@ -359,6 +358,7 @@ namespace GameAnywhere.Process
                 }
                 
             }
+
             //Upload every sub-directory in current directory
             foreach (string subdir in Directory.GetDirectories(dir))
             {

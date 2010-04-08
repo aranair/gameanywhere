@@ -456,23 +456,23 @@ namespace GameAnywhere.Interface
             {
                 OpenWaitDialog("Please wait while the files are checked for conflicts.");
                 conflictsList = controller.CheckConflicts();
+                CloseWaitDialog();
             }
             catch (ConnectionFailureException)
             {
-                CloseWaitDialog();
-                SetErrorLabel("Unable to connect to server.", Color.Red);
-                return;
+                SetErrorLabel("Connection lost. Please re-synchronize.", Color.Red);
             }
             catch (IOException)
             {
-                CloseWaitDialog();
-                SetErrorLabel("Please unlock files/folders and retry.", Color.Red);
-                return;
+                SetErrorLabel("Synchronization failed. Please retry.", Color.Red);
             }
             catch (UnauthorizedAccessException)
             {
-                CloseWaitDialog();
                 SetErrorLabel("Please unlock files/folders and retry.", Color.Red);
+            }
+            finally
+            {
+                CloseWaitDialog();
                 return;
             }
 
@@ -492,7 +492,7 @@ namespace GameAnywhere.Interface
                 List<SyncError> syncErrorList = null;
                 try
                 {
-                    waitDialog.label1.Text = "Please wait while your files are being synchronized.";
+                    OpenWaitDialog("Please wait while your files are being synchronized.");
                     syncErrorList = controller.SynchronizeWebAndThumb(conflictsList);
                     CloseWaitDialog();
                 }
@@ -515,7 +515,6 @@ namespace GameAnywhere.Interface
 
             }
         }
-
       
         private void thumbdriveAndWebButton_MouseDown(object sender, MouseEventArgs e)
         {
