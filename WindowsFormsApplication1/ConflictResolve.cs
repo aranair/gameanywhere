@@ -679,15 +679,17 @@ namespace GameAnywhere.Interface
             waitThread = new Thread(new ThreadStart(waitDialog.startUp));
             waitThread.Start();
             this.Hide();
-            this.Enabled = false;
         }
 
         private void CloseWaitDialog()
         {
-            waitThread.Abort();
-            this.Show();
-            this.Focus();
-            this.Enabled = true;
+            try
+            {
+                waitThread.Abort();
+            }
+            catch (Exception) { };
+            parent.Show();
+            parent.Focus();
         }
     }
 }

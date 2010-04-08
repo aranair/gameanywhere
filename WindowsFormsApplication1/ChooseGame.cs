@@ -68,7 +68,6 @@ namespace GameAnywhere.Interface
             InitializeComponent();
             gameList = new List<Game>();
             this.controller = controller;
-            this.waitDialog = new WaitingDialog();
         }
 
         /// <summary>
@@ -83,7 +82,6 @@ namespace GameAnywhere.Interface
         {
             this.controller = controller;
             //this.errorLabel = errorLabel;
-            this.waitDialog = new WaitingDialog();
             this.gameList = gameList;
 
             InitializeComponent();
@@ -497,7 +495,10 @@ namespace GameAnywhere.Interface
             if (syncActionListResult.Count > 0)
                 DisplaySyncResult(syncActionListResult);
             else
+            {
+                parent.Focus();
                 this.Close();
+            }
         }
 
         private void confirmButton_MouseDown(object sender, MouseEventArgs e)
@@ -654,14 +655,17 @@ namespace GameAnywhere.Interface
             waitDialog = new WaitingDialog(text);
             waitThread = new Thread(new ThreadStart(waitDialog.startUp));
             waitThread.Start();
-            this.Enabled = false;
         }
 
         private void CloseWaitDialog()
         {
-            waitThread.Abort();
-            this.Focus();
-            this.Enabled = true;
+            try
+            {
+                waitThread.Abort();
+            }
+            catch (Exception) { };
+            parent.Focus();
+            parent.Enabled = true;
         }
 
         public void SetBackgroundImage(System.Windows.Forms.Control control, string resourcePath, ImageLayout imageLayout)
