@@ -12,8 +12,16 @@ namespace GameAnywhere.Interface
     /// <summary>
     /// This Form handles the Waiting Dialog during all waits.
     /// </summary>
+    /// 
+
     public partial class WaitingDialog : Form
     {
+        public bool continueRun = true;
+        public bool ContinueRun
+        {
+            get { return continueRun; }
+            set { continueRun = value; }
+        }
         public WaitingDialog()
         {
             InitializeComponent();
@@ -29,7 +37,7 @@ namespace GameAnywhere.Interface
         {
             this.Show();
             this.Refresh();
-            while (true) { Application.DoEvents(); }
+            while (continueRun) { Application.DoEvents(); }
         }
 
     }

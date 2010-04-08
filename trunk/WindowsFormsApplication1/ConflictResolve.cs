@@ -685,9 +685,11 @@ namespace GameAnywhere.Interface
         {
             try
             {
+                waitDialog.ContinueRun = false;
                 waitThread.Abort();
             }
             catch (Exception) { };
+            this.Show();
             parent.Show();
             parent.Focus();
         }
