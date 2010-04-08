@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
 using System.IO;
+using Amazon.S3;
 using GameAnywhere.Data;
 
 namespace GameAnywhere.Process
@@ -146,32 +147,24 @@ namespace GameAnywhere.Process
             if (String.IsNullOrEmpty(user))
                 throw new ArgumentException("Parameter cannot be empty/null", "user");
 
-            try
-            {
-                Storage s3 = new Storage();
-                HashSet<string> gameSet = new HashSet<string>();
+            Storage s3 = new Storage();
+            HashSet<string> gameSet = new HashSet<string>();
 
-                //Get game name and type(config/save), and add to gameset
-                List<string> files = s3.ListFiles(user);
-                foreach (string file in files)
+            //Get game name and type(config/save), and add to gameset
+            List<string> files = s3.ListFiles(user);
+            foreach (string file in files)
+            {
+                string f = file.Substring(file.IndexOf('/') + 1);
+                string game, type;
+                if (f.IndexOf('/') != -1)
                 {
-                    string f = file.Substring(file.IndexOf('/') + 1);
-                    string game, type;
-                    if (f.IndexOf('/') != -1)
-                    {
-                        game = f.Substring(0, f.IndexOf('/'));
-                        type = f.Substring(f.IndexOf('/') + 1);
-                        gameSet.Add(game + "/" + type.Substring(0, type.IndexOf('/')));
-                    }
+                    game = f.Substring(0, f.IndexOf('/'));
+                    type = f.Substring(f.IndexOf('/') + 1);
+                    gameSet.Add(game + "/" + type.Substring(0, type.IndexOf('/')));
                 }
+            }
 
-                return gameSet.ToList<string>();
-            }
-            catch
-            {
-                //Exceptions: ConnectionFailureException
-                throw;
-            }
+            return gameSet.ToList<string>();
         }
 
         public static List<string> GetGamesAndTypesAndFilesFromWeb(string user)
@@ -180,38 +173,30 @@ namespace GameAnywhere.Process
             if (String.IsNullOrEmpty(user))
                 throw new ArgumentException("Parameter cannot be empty/null", "user");
 
-            try
-            {
-                Storage s3 = new Storage();
-                HashSet<string> gameSet = new HashSet<string>();
+            Storage s3 = new Storage();
+            HashSet<string> gameSet = new HashSet<string>();
 
-                //Get game name and type(config/save), and add to gameset
-                List<string> files = s3.ListFiles(user);
-                foreach (string file in files)
+            //Get game name and type(config/save), and add to gameset
+            List<string> files = s3.ListFiles(user);
+            foreach (string file in files)
+            {
+                string f = file.Substring(file.IndexOf('/') + 1); //remove username
+                string game, type, tail, last;
+                if (f.IndexOf('/') != -1)
                 {
-                    string f = file.Substring(file.IndexOf('/') + 1); //remove username
-                    string game, type, tail, last;
-                    if (f.IndexOf('/') != -1)
-                    {
-                        game = f.Substring(0, f.IndexOf('/')); //get game name
-                        tail = f.Substring(f.IndexOf('/') + 1); //get tail after game name
-                        type = tail.Substring(0, tail.IndexOf('/')); //get config or savedGame
-                        tail = tail.Substring(tail.IndexOf('/') + 1); //get tail after type
-                        if (tail.IndexOf('/') == -1)
-                            last = tail;
-                        else
-                            last = tail.Substring(0, tail.IndexOf('/'));
-                        gameSet.Add(game + "/" + type + "/" + last);
-                    }
+                    game = f.Substring(0, f.IndexOf('/')); //get game name
+                    tail = f.Substring(f.IndexOf('/') + 1); //get tail after game name
+                    type = tail.Substring(0, tail.IndexOf('/')); //get config or savedGame
+                    tail = tail.Substring(tail.IndexOf('/') + 1); //get tail after type
+                    if (tail.IndexOf('/') == -1)
+                        last = tail;
+                    else
+                        last = tail.Substring(0, tail.IndexOf('/'));
+                    gameSet.Add(game + "/" + type + "/" + last);
                 }
+            }
 
-                return gameSet.ToList<string>();
-            }
-            catch
-            {
-                //Exceptions: ConnectionFailureException
-                throw;
-            }
+            return gameSet.ToList<string>();
         }
 
         #endregion
@@ -394,6 +379,7 @@ namespace GameAnywhere.Process
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ConnectionFailureException"></exception>
         /// <exception cref="WebTransferException"></exception>
+        /// <exception cref="NullReferenceException"></exception>
         private void DeleteGameDirectory(string email, string gameName, string syncFolder)
         {
             //Checks user and gamename validity
@@ -558,10 +544,10 @@ namespace GameAnywhere.Process
             }
             catch (IOException)
             {
-                //the file is unavailable because it is:
-                //still being written to
-                //or being processed by another thread
-                //or does not exist (has already been processed)
+                //file is unavailable because it is:
+                // - still being written to
+                // - or being processed by another thread
+                // - or does not exist (has already been processed)
                 return true;
             }
             catch (UnauthorizedAccessException)
@@ -590,7 +576,6 @@ namespace GameAnywhere.Process
         {
             DirectoryInfo di = new DirectoryInfo(folderPath);
 
-
             try
             {
                 DirectoryInfo[] diArr = di.GetDirectories();
@@ -604,6 +589,10 @@ namespace GameAnywhere.Process
             return false;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sa"></param>
         private void PopulatePathLists(SyncAction sa)
         {
             sa.MyGame.ConfigPathList.Clear();
@@ -614,44 +603,44 @@ namespace GameAnywhere.Process
             sa.MyGame.SavePathList.AddRange(GetPathList(saveKey));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        /// <exception cref="AmazonS3Exception"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ConnectionFailureException"></exception>
+        /// <exception cref="NullReferenceException"></exception>
         private List<string> GetPathList(string key)
         {
             //Pre-conditions
             if (String.IsNullOrEmpty(key))
-                throw new ArgumentException("Parameter cannot be empty/null", "user");
+                throw new ArgumentException("Parameter cannot be empty/null", "key");
 
-            try
+            HashSet<string> gameSet = new HashSet<string>();
+
+            //Get game name and type(config/save), and add to gameset
+            List<string> files = s3.ListFiles(key);
+            foreach (string file in files)
             {
-                Storage s3 = new Storage();
-                HashSet<string> gameSet = new HashSet<string>();
-
-                //Get game name and type(config/save), and add to gameset
-                List<string> files = s3.ListFiles(key);
-                foreach (string file in files)
+                string f = file.Substring(file.IndexOf('/') + 1); //remove username
+                string game, type, tail, last;
+                if (f.IndexOf('/') != -1)
                 {
-                    string f = file.Substring(file.IndexOf('/') + 1); //remove username
-                    string game, type, tail, last;
-                    if (f.IndexOf('/') != -1)
-                    {
-                        game = f.Substring(0, f.IndexOf('/')); //get game name
-                        tail = f.Substring(f.IndexOf('/') + 1); //get tail after game name
-                        type = tail.Substring(0, tail.IndexOf('/')); //get config or savedGame
-                        tail = tail.Substring(tail.IndexOf('/') + 1); //get tail after type
-                        if (tail.IndexOf('/') == -1)
-                            last = tail;
-                        else
-                            last = tail.Substring(0, tail.IndexOf('/'));
-                        gameSet.Add("web\\" + last);
-                    }
+                    game = f.Substring(0, f.IndexOf('/')); //get game name
+                    tail = f.Substring(f.IndexOf('/') + 1); //get tail after game name
+                    type = tail.Substring(0, tail.IndexOf('/')); //get config or savedGame
+                    tail = tail.Substring(tail.IndexOf('/') + 1); //get tail after type
+                    if (tail.IndexOf('/') == -1)
+                        last = tail;
+                    else
+                        last = tail.Substring(0, tail.IndexOf('/'));
+                    gameSet.Add("web\\" + last);
                 }
+            }
 
-                return gameSet.ToList<string>();
-            }
-            catch
-            {
-                //Exceptions: ConnectionFailureException
-                throw;
-            }
+            return gameSet.ToList<string>();
         }
         #endregion
     }
