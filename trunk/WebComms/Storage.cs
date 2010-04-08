@@ -150,6 +150,7 @@ namespace GameAnywhere.Process
         /// <exception cref="FileNotFoundException"></exception>
         /// <exception cref="UnauthorizedAccessException"></exception>
         /// <exception cref="WebTransferException"></exception>
+        /// <exception cref="NullReferenceException"></exception>
         public void UploadFile(string path, string key)
         {
             //Pre-conditions
@@ -183,13 +184,13 @@ namespace GameAnywhere.Process
 
                 response.Dispose();
             }
+            catch (NullReferenceException)
+            {
+                throw new NullReferenceException("Problems connecting to web server.");
+            }
             catch (System.Net.WebException)
             {
                 throw new ConnectionFailureException("Unable to connect to web server.");
-            }
-            catch (AmazonS3Exception)
-            {
-                throw;
             }
         }
 
@@ -203,6 +204,7 @@ namespace GameAnywhere.Process
         /// <exception cref="ConnectionFailureException"></exception>
         /// <exception cref="IOException"></exception>
         /// <exception cref="UnauthorizedAccessException"></exception>
+        /// <exception cref="NullReferenceException"></exception>
         public void DownloadFile(string path, string key)
         {
             //Pre-conditions
@@ -238,21 +240,13 @@ namespace GameAnywhere.Process
 
                 response.Dispose();
             }
+            catch (NullReferenceException)
+            {
+                throw new NullReferenceException("Problems connecting to web server.");
+            }
             catch (System.Net.WebException)
             {
                 throw new ConnectionFailureException("Unable to connect to web server.");
-            }
-            catch (AmazonS3Exception)
-            {
-                throw;
-            }
-            catch (IOException)
-            {
-                throw;
-            }
-            catch (UnauthorizedAccessException)
-            {
-                throw;
             }
         }
 
@@ -263,6 +257,7 @@ namespace GameAnywhere.Process
         /// <exception cref="AmazonS3Exception"></exception>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ConnectionFailureException"></exception>
+        /// <exception cref="NullReferenceException"></exception>
         public void DeleteFile(string key)
         {
             //Pre-conditions
@@ -280,13 +275,13 @@ namespace GameAnywhere.Process
 
                 response.Dispose();
             }
+            catch (NullReferenceException)
+            {
+                throw new NullReferenceException("Problems connecting to web server.");
+            }
             catch (System.Net.WebException)
             {
                 throw new ConnectionFailureException("Unable to connect to web server.");
-            }
-            catch (AmazonS3Exception)
-            {
-                throw;
             }
         }
 
@@ -298,6 +293,7 @@ namespace GameAnywhere.Process
         /// <exception cref="AmazonS3Exception"></exception>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ConnectionFailureException"></exception>
+        /// <exception cref="NullReferenceException"></exception>
         public List<string> ListFiles(string key)
         {
             //Pre-conditions
@@ -322,13 +318,13 @@ namespace GameAnywhere.Process
                     return fileList;
                 }
             }
+            catch (NullReferenceException)
+            {
+                throw new NullReferenceException("Problems connecting to web server.");
+            }
             catch (System.Net.WebException)
             {
                 throw new ConnectionFailureException("Unable to connect to web server.");
-            }
-            catch (AmazonS3Exception)
-            {
-                throw;
             }
         }
 
@@ -340,23 +336,17 @@ namespace GameAnywhere.Process
         /// <exception cref="AmazonS3Exception"></exception>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ConnectionFailureException"></exception>
+        /// <exception cref="NullReferenceException"></exception>
         public void DeleteDirectory(string key)
         {
             //Pre-conditions
             if (String.IsNullOrEmpty(key))
                 throw new ArgumentException("Parameter cannot be empty/null.", "key");
 
-            try
+            List<string> files = ListFiles(key);
+            foreach (string file in files)
             {
-                List<string> files = ListFiles(key);
-                foreach (string file in files)
-                {
-                    DeleteFile(file);
-                }
-            }
-            catch
-            {
-                throw;
+                DeleteFile(file);
             }
         }
 
@@ -368,6 +358,7 @@ namespace GameAnywhere.Process
         /// <exception cref="AmazonS3Exception"></exception>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ConnectionFailureException"></exception>
+        /// <exception cref="NullReferenceException"></exception>
         public string GetHash(string key)
         {
             //Pre-conditions
@@ -388,13 +379,13 @@ namespace GameAnywhere.Process
 
                 return hash;
             }
+            catch (NullReferenceException)
+            {
+                throw new NullReferenceException("Problems connecting to web server.");
+            }
             catch (System.Net.WebException)
             {
                 throw new ConnectionFailureException("Unable to connect to web server.");
-            }
-            catch (AmazonS3Exception)
-            {
-                throw;
             }
         }
 
@@ -411,31 +402,25 @@ namespace GameAnywhere.Process
         /// <exception cref="AmazonS3Exception"></exception>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ConnectionFailureException"></exception>
+        /// <exception cref="NullReferenceException"></exception>
         public Dictionary<string,string> GetHashDictionary(string email)
         {
             //Pre-conditions
             if (String.IsNullOrEmpty(email))
                 throw new ArgumentException("Parameter cannot be empty/null.", "email");
 
-            try
+            //Get all files on web(S3)
+            List<string> files = ListFiles(email);
+            
+            //Add to Dictionary the filepath and hashcode of file
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            foreach (string file in files)
             {
-                //Get all files on web(S3)
-                List<string> files = ListFiles(email);
-                
-                //Add to Dictionary the filepath and hashcode of file
-                Dictionary<string, string> dict = new Dictionary<string, string>();
-                foreach (string file in files)
-                {
-                    if (Path.GetFileName(file).Equals("metadata.web")) continue;
-                    dict[file.Replace(email + '/', "")] = GetHash(file);
-                }
+                if (Path.GetFileName(file).Equals("metadata.web")) continue;
+                dict[file.Replace(email + '/', "")] = GetHash(file);
+            }
 
-                return dict;
-            }
-            catch
-            {
-                throw;
-            }
+            return dict;
         }
     }
 }

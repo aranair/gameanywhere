@@ -140,6 +140,7 @@ namespace GameAnywhere.Process
         /// false - Item does not exists in DB.
         /// </returns>
         /// <exception cref="ConnectionFailureException"></exception>
+        /// <exception cref="NullReferenceException"></exception>
         public bool ItemExists(string itemId)
         {
             //Pre-conditions
@@ -164,6 +165,10 @@ namespace GameAnywhere.Process
                     return false;
                 }
             }
+            catch (NullReferenceException)
+            {
+                throw new NullReferenceException("Problems connecting to web server.");
+            }
             catch (AmazonSimpleDBException)
             {
                 //ConnectionFailureException thrown
@@ -178,6 +183,7 @@ namespace GameAnywhere.Process
         /// <param name="attribute">Attribute name.</param>
         /// <returns>Attribute's value.</returns>
         /// <exception cref="ConnectionFailureException"></exception>
+        /// <exception cref="NullReferenceException"></exception>
         public string GetAttribute(string itemId, string attribute)
         {
             //Pre-conditions
@@ -208,6 +214,10 @@ namespace GameAnywhere.Process
                 {
                     return "";
                 }
+            }
+            catch(NullReferenceException)
+            {
+                throw new NullReferenceException("Problems connecting to web server.");
             }
             catch (AmazonSimpleDBException)
             {
