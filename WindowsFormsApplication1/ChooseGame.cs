@@ -57,6 +57,8 @@ namespace GameAnywhere.Interface
 
         private Thread waitThread;
 
+        private volatile bool continueRun;
+
         #endregion
 
         #region Constructors
@@ -661,11 +663,13 @@ namespace GameAnywhere.Interface
         {
             try
             {
-                waitThread.Abort();
+                waitDialog.ContinueRun = false;
             }
             catch (Exception) { };
+
             parent.Focus();
             parent.Enabled = true;
+
         }
 
         public void SetBackgroundImage(System.Windows.Forms.Control control, string resourcePath, ImageLayout imageLayout)

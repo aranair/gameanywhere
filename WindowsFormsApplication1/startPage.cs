@@ -48,7 +48,9 @@ namespace GameAnywhere.Interface
 
         private Thread waitThread;
 
-        public enum ClickStatus { ComToWeb, WebToCom, ExtAndWeb, None}
+        public enum ClickStatus { ComToWeb, WebToCom, ExtAndWeb, None };
+
+        private volatile bool continueRun;
 
         private ClickStatus userClickStatus = ClickStatus.None;
 
@@ -1703,7 +1705,8 @@ namespace GameAnywhere.Interface
         {
             try
             {
-                waitThread.Abort();
+                waitDialog.ContinueRun = false;
+                //waitThread.Abort();
             }
             catch (Exception) { };
             this.Show();
