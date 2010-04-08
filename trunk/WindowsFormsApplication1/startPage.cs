@@ -334,6 +334,7 @@ namespace GameAnywhere.Interface
                 errorLabel.Text = "";
 
                 // Show the ChooseGame form for user to choose the files.
+                CloseWaitDialog();
                 ChooseGame chooseGameForm = new ChooseGame(controller, gameList, this);
                 chooseGameForm.ShowDialog();
             }
@@ -720,6 +721,8 @@ namespace GameAnywhere.Interface
                 else
                 {
                     loginFailedLabel.Text = "Invalid user details";
+                    emailTextBox.Focus();
+
                 }
                 ResetAllLoginPanelTextBoxes();
             }
@@ -1698,7 +1701,11 @@ namespace GameAnywhere.Interface
 
         private void CloseWaitDialog()
         {
-            waitThread.Abort();
+            try
+            {
+                waitThread.Abort();
+            }
+            catch (Exception) { };
             this.Show();
             this.Focus();
             this.Enabled = true;
