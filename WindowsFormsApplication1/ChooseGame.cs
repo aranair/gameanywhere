@@ -404,9 +404,6 @@ namespace GameAnywhere.Interface
             SetVisibilityAndUsability(showGamePanel, false, false);
 
             this.PerformLayout();
-            
-            
-            
         }
 
         /// <summary>
@@ -549,6 +546,7 @@ namespace GameAnywhere.Interface
         #region doneResultPanelButton
         private void doneResultPanelButton_MouseClick(object sender, MouseEventArgs e)
         {
+            parent.Focus();
             this.Close();
         }
         private void doneResultPanelButton_MouseDown(object sender, MouseEventArgs e)
@@ -667,8 +665,8 @@ namespace GameAnywhere.Interface
             }
             catch (Exception) { };
 
-            parent.Focus();
-            parent.Enabled = true;
+            this.Focus();
+            this.Enabled = true;
 
         }
 
