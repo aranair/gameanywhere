@@ -1617,11 +1617,16 @@ namespace GameAnywhere.Interface
         /// <returns>Feedback message for validity of the password passed in</returns>
         public static string IsValidEmail(string email)
         {
+            string strRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
+         @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
+         @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
+
             if (String.IsNullOrEmpty(email))
                 return "Email field cannot be empty. ";
 
             // address is ok regarding the single @ sign
-            if (!Regex.IsMatch(email, @"(\w+)@(\w+)\.(\w+)"))
+            //if (!Regex.IsMatch(email, @"(\w+)@*+\.(\w+)"))
+            if (!Regex.IsMatch(email, strRegex))
                 return "Invalid Email. ";
 
             return "Email Perfect";

@@ -498,7 +498,7 @@ namespace GameAnywhere.Interface
                 DisplaySyncResult(syncActionListResult);
             else
             {
-                parent.Focus();
+                this.Focus();
                 this.Close();
             }
         }
