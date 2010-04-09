@@ -125,11 +125,17 @@ namespace GameAnywhere.Process
 
                     List<SyncAction> singleSyncAction = new List<SyncAction>();
 
-
+                    if (FindInstalledGame(sa.MyGame) == null)
+                        return;
+                    
                     sa.MyGame = FindInstalledGame(sa.MyGame);
+                    
+
                     singleSyncAction.Add(sa);
 
                     RemoveAllBackup(singleSyncAction);
+
+                    
                 }
 
             }
@@ -225,7 +231,7 @@ namespace GameAnywhere.Process
         {
             wantedGame = externalGame;
             Game installedGame = installedGameList.Find(MatchWantedGameName);
-            Debug.Assert(installedGame != null,"Game not found in the installedGameList.");
+            //Debug.Assert(installedGame != null,"Game not found in the installedGameList.");
 
             return installedGame;
         }
@@ -285,6 +291,9 @@ namespace GameAnywhere.Process
 
             //Find the game information on the computer, matched by name
             game = FindInstalledGame(sa.MyGame);
+
+            if (game == null)
+                return None;
 
             //Determine the type of files to be sync
             if (sa.Action == SyncAction.ConfigFiles || sa.Action == SyncAction.AllFiles)
