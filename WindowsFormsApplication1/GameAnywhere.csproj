@@ -457,7 +457,7 @@
     <EmbeddedResource Include="Resources\GameIcons\FIFA 10.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\GameIcons\Abuse.png" />
+    <EmbeddedResource Include="Resources\GameIcons\Abuse.png" />
     <Content Include="Resources\GameIcons\The Sims 3.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
