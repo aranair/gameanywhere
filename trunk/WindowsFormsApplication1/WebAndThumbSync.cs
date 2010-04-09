@@ -450,7 +450,7 @@ namespace GameAnywhere.Process
             try
             {
                 //Serialize Metadata object
-                localHash.Serialize(LocalMetaDataPath);
+                localMeta.Serialize(LocalMetaDataPath);
             }
             catch (ConnectionFailureException)
             {
