@@ -65,3 +65,10 @@ ConfigParentPath=DocumentsPath\Eidos\Batman Arkham Asylum\BmGame\Config
 SavePathList=DocumentsPath\Eidos\Batman Arkham Asylum\SaveData
 SaveParentPath=DocumentsPath\Eidos\Batman Arkham Asylum
 [ENDGAME]
+Game=The Sims 3
+RegValue=Install Dir
+RegKey=RegistrySoftwarePath\Sims\The Sims 3
+RegType=HKLM
+SavePathList=DocumentsPath\Electronic Arts\The Sims 3\Saves
+SaveParentPath=DocumentsPath\Electronic Arts\The Sims 3
+[ENDGAME]
