@@ -339,6 +339,7 @@ namespace GameAnywhere.Interface
         /// <param name="syncActionListDisplay">List of syncActions that represent the results.</param>
         private void DisplaySyncResult(List<SyncAction> syncActionListDisplay)
         {
+            this.Focus();
             Debug.Assert(syncActionListDisplay.Count != 0);
             yAxisLocation = 50;
 
@@ -487,7 +488,7 @@ namespace GameAnywhere.Interface
             }
             catch (ConnectionFailureException)
             {
-                parent.SetErrorLabel("Unable to connect to server", Color.Red);
+                parent.SetErrorLabel("Connection lost. Please re-sync.", Color.Red);
                 CloseWaitDialog();
             }
 
@@ -572,8 +573,6 @@ namespace GameAnywhere.Interface
         #region errorButton
         private void errorButton_MouseClick(object sender, MouseEventArgs e)
         {
-            this.Visible = false;
-            this.Enabled = false;
             SyncErrorDisplay syncErrorDisplay = new SyncErrorDisplay(syncActionListResult, this);
             syncErrorDisplay.ShowDialog();
         }
