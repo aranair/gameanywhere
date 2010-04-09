@@ -322,13 +322,13 @@ namespace GameAnywhere.Interface
             }
             catch (ConnectionFailureException)
             {
-                SetErrorLabel("Connection lost. Please re-synchronize.", Color.Red);
+                SetErrorLabel("Unable to connect to web server.", Color.Red);
                 CloseWaitDialog();
             }
 
             if (gameList == null)
             {
-                SetErrorLabel("Connection lost. Please re-synchronize.", Color.Red);
+                SetErrorLabel("Unable to connect to web server.", Color.Red);
             }
             // If there are no games.
             else if (gameList.Count > 0)
@@ -395,13 +395,13 @@ namespace GameAnywhere.Interface
             }
             catch (ConnectionFailureException)
             {
-                SetErrorLabel("Connection lost. Please re-synchronize.", Color.Red);
+                SetErrorLabel("Unable to connect to web server.", Color.Red);
                 CloseWaitDialog();
             }
 
             if (gameList == null)
             {
-                SetErrorLabel("Connection lost. Please re-synchronize.", Color.Red);
+                SetErrorLabel("Unable to connect to web server.", Color.Red);
             }
             // If there are no games.
             else if (gameList.Count > 0)
@@ -1778,7 +1778,7 @@ namespace GameAnywhere.Interface
             }
             
         }
-
+        
         private void restoreOriginalFiles()
         {
             // User has chosen to restore.
