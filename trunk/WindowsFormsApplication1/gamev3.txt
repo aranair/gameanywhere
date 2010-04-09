@@ -15,6 +15,13 @@ RegType=HKLM
 SaveParentPath=DocumentsPath\Sports Interactive\Football Manager 2010
 SavePathList=DocumentsPath\Sports Interactive\Football Manager 2010\games
 [ENDGAME]
+Game=Football Manager 2009
+RegValue=Path
+RegKey=RegistrySoftwarePath\Sports Interactive Ltd\Installs\FM2009
+RegType=HKLM
+SaveParentPath=DocumentsPath\Sports Interactive\Football Manager 2009
+SavePathList=DocumentsPath\Sports Interactive\Football Manager 2009\games
+[ENDGAME]
 Game=World of Warcraft
 RegValue=InstallPath
 RegKey=RegistrySoftwarePath\Blizzard Entertainment\World of Warcraft
