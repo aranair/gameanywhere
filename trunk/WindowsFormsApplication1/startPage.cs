@@ -336,7 +336,6 @@ namespace GameAnywhere.Interface
                 errorLabel.Text = "";
 
                 // Show the ChooseGame form for user to choose the files.
-                CloseWaitDialog();
                 ChooseGame chooseGameForm = new ChooseGame(controller, gameList, this);
                 chooseGameForm.ShowDialog();
             }
@@ -388,7 +387,7 @@ namespace GameAnywhere.Interface
             List<Game> gameList = null;
             try
             {
-                OpenWaitDialog("Please wait while your files in our server is being fetched.");
+                OpenWaitDialog("Please wait while your files in our server are being fetched.");
                 // Get the list of compatible games to be displayed to user.
                 gameList = controller.GetGameList();
                 CloseWaitDialog();
@@ -464,7 +463,7 @@ namespace GameAnywhere.Interface
             catch (ConnectionFailureException)
             {
                 CloseWaitDialog();
-                SetErrorLabel("Connection lost. Please re-synchronize.", Color.Red);
+                SetErrorLabel("Connection lost. Please re-sync.", Color.Red);
                 return;
             }
             catch (IOException)
@@ -507,10 +506,16 @@ namespace GameAnywhere.Interface
 
                 if (syncErrorList == null)
                 {
-                    SetErrorLabel("Unable to connect to web server.", Color.Red);
+                    SetErrorLabel("Connection lost. Please re-sync.", Color.Red);
                 }
                 else if (syncErrorList.Count == 0)
-                    SetErrorLabel("Successfully synchronized", Color.DeepSkyBlue);
+                {
+                    SetErrorLabel("Successfully Synchronized.", Color.DeepSkyBlue);
+                    this.TopMost = true;
+                    this.Focus();
+                    this.BringToFront();
+                    this.TopMost = false;
+                }
                 else
                 {
                     SyncErrorDisplay syncErrorDisplay = new SyncErrorDisplay(syncErrorList);
@@ -1335,7 +1340,7 @@ namespace GameAnywhere.Interface
                 int errorCode = 0;
                 try
                 {
-                    OpenWaitDialog("Please wait while we process your request");
+                    OpenWaitDialog("Please wait while we process your request.");
                     errorCode = controller.ResendActivation(emailResendActivationPanelTextBox.Text, passwordResendActivationPanelTextBox.Text);
                     CloseWaitDialog();
                 }
@@ -1808,7 +1813,7 @@ namespace GameAnywhere.Interface
                     "Warning");
             }
             else
-                SetErrorLabel("Successfully Restored", Color.DeepSkyBlue);
+                SetErrorLabel("Successfully Restored.", Color.DeepSkyBlue);
         }
 
         private void restoreButton_MouseDown(object sender, MouseEventArgs e)

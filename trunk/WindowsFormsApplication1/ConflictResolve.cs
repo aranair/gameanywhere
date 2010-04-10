@@ -134,7 +134,12 @@ namespace GameAnywhere.Interface
         /// <param name="gameName">Name of the game to create the config items for.</param>
         private void CreateSavedGameItems(string gameName)
         {
-            CreateLabel(new System.Drawing.Point(85, yAxisLocation), "Saved Game Files:", showConflictsPanel);
+            string labelText = "";
+            if (gameName.Equals("World of Warcraft"))
+                labelText = "Game UI:";
+            else
+                labelText = "Saved Game Files:";
+            CreateLabel(new System.Drawing.Point(85, yAxisLocation), labelText, showConflictsPanel);
             CreateUploadCheckBox(gameName, "savedGame");
             CreateArrowPictureBox(gameName, "savedGame");
             CreateDownloadCheckBox(gameName, "savedGame");
@@ -619,22 +624,29 @@ namespace GameAnywhere.Interface
                     resolvedConflictsList.Add(key, 2);
             }
 
-            List<SyncError> syncErrorList = new List<SyncError>();
+            List<SyncError> syncErrorList = null;
             try
             {
-                OpenWaitDialog("Please wait while your files are being synchronized");
+                OpenWaitDialog("Please wait while your files are being synchronized.");
                 syncErrorList = controller.SynchronizeWebAndThumb(resolvedConflictsList);
                 CloseWaitDialog();
             }
             catch (ConnectionFailureException)
             {
                 CloseWaitDialog();
-                MessageBox.Show("Unable to connect to web server.");
+                SetErrorLabel("Connection lost. Please re-sync.");
             }
 
-            if (syncErrorList.Count == 0)
+            if (syncErrorList == null)
             {
-                SetErrorLabel("Successfully synchronized", Color.DeepSkyBlue);
+                SetErrorLabel("Connection lost. Please re-sync.");
+                parent.Focus();
+                this.Close();
+            }
+            else if (syncErrorList.Count == 0)
+            {
+                SetErrorLabel("Successfully Synchronized.", Color.DeepSkyBlue);
+                parent.Focus();
                 this.Close();
             }
             else
