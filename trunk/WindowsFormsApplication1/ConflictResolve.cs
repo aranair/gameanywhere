@@ -634,12 +634,12 @@ namespace GameAnywhere.Interface
             catch (ConnectionFailureException)
             {
                 CloseWaitDialog();
-                SetErrorLabel("Connection lost. Please re-sync.");
+                SetErrorLabel("Connection lost. Please re-sync.", Color.Red);
             }
 
             if (syncErrorList == null)
             {
-                SetErrorLabel("Connection lost. Please re-sync.");
+                SetErrorLabel("Connection lost. Please re-sync.", Color.Red);
                 parent.Focus();
                 this.Close();
             }
