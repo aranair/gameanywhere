@@ -156,5 +156,5 @@ Did not handle file lock exception when creating meta data in constructor.
 18. Test for locking of folder after creating WebAndThumbSync class
 	direction for Game2\configGame\File 4: X : D | Y : D -> updownconflict, changed to download
 
-19. Test for disconnection of internet conenction
+19. Test for disconnection of internet conenction. web has no meta and files. Com has files and no meta.
 	Check for empty meta data to be created.

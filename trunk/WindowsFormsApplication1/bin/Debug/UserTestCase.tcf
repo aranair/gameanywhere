@@ -18,7 +18,7 @@ User|void
 2~ChangePassword|string:jamesbond_007@yahoo.com.sg,string:aaaaaa,string:bbbbbb|int:3|void
 3~ChangePassword|string:evilnicksg@gmail.com,string:hellow,string:hellow|int:1|void
 4~ChangePassword|string:void,string:void,string:void|void|ArgumentException
-1~ResendActivation|string:evilnicksg@gmail.com,string:123|int:2|void
+1~ResendActivation|string:evilnicksg@gmail.com,string:123123|int:2|void
 2~ResendActivation|string:non-existance@gmails.com,string:hellow|int:3|void
 4~ResendActivation|string:nicholas@mrsmellysocks.com,string:123456|int:0|void
 
