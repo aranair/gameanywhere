@@ -10,7 +10,9 @@ using System.Security.Cryptography;
 
 using System.Windows.Forms;
 
-namespace GameAnywhere
+using GameAnywhere.Data;
+
+namespace GameAnywhere.Process
 {
 
     /// <summary>
@@ -98,7 +100,6 @@ namespace GameAnywhere
                     testCases.Add(new TestCase(tests[i], testClass));
             }
         }
-
 
         /// <summary>
         /// This method will create the test folders/files for testing the sync method 

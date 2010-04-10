@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace GameAnywhere
+using GameAnywhere.Data;
+
+namespace GameAnywhere.Process
 {
     class WebThumbVerifier : Verifier
     {
@@ -800,12 +802,29 @@ namespace GameAnywhere
 
                 case 19:
                     {
-                        List<SyncError> errorList = (List<SyncError>)returnType;
-                        if (errorList.Count != 4)
+                        Exception except = (Exception)returnType;
+                        if(! except.InnerException.Equals(typeof(ConnectionFailureException)))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! Error List Expects 4, Current count: " + errorList.Count);
+                            result.AddRemarks("Failed! Expect ConnectionFailureException to be caught.");
                         }
+                        //if metadata do not exist
+                        if (!File.Exists(@".\SyncFolder\metadata.ga"))
+                        {
+                            result.Result = false;
+                            result.AddRemarks("Failed! metadata.ga not created.");
+                        }
+                        else //check for empty meta data
+                        {
+                            MetaData meta = new MetaData();
+                            meta.DeSerialize(@".\SyncFolder\metadata.ga");
+                            if (meta.FileTable.Count != 0)
+                            {
+                                result.Result = false;
+                                result.AddRemarks("Failed! metadata.ga is not empty!");
+                            }
+                        }
+                        
                         break;
                     }
             }

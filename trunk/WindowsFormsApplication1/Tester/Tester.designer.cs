@@ -1,4 +1,4 @@
-﻿namespace GameAnywhere
+﻿namespace GameAnywhere.Process
 {
     partial class Tester
     {

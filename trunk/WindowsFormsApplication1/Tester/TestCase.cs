@@ -9,10 +9,11 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.Diagnostics;
 
+using GameAnywhere.Data;
 
 //Synchronize, restore, game name to be input
 
-namespace GameAnywhere
+namespace GameAnywhere.Process
 {
     /// <summary>
     /// 
@@ -88,8 +89,6 @@ namespace GameAnywhere
             deletedFile = new List<FileInfo>();
             InitializeTestCase();
         }
-
-        
 
         /// <summary>
         /// InitializeTestCase will process the string testcase,
@@ -307,14 +306,14 @@ namespace GameAnywhere
             {
                 case "RefreshList":
                 case "GetGameList":
-                    result = Verifier.VerifyGetGameList(index, returnType, testClass, exceptionThrown, expectedOutput);
+                    result = GameLibraryVerifier.VerifyGetGameList(index, returnType, testClass, exceptionThrown, expectedOutput);
                     break;
                     //add more methods here
                 case "SynchronizeGames":
                     if(testClass.GetType().Equals(typeof(OfflineSync)))
                         result = OfflineSyncVerifier.VerifySynchronizeGames(index, returnType, testClass, exceptionThrown, expectedOutput);
                     else if (testClass.GetType().Equals(typeof(OnlineSync)))
-                        result = Verifier.VerifyOnlineSync(index, returnType, testClass, exceptionThrown, expectedOutput);
+                        result = OnlineSyncVerifier.VerifyOnlineSync(index, returnType, testClass, exceptionThrown, expectedOutput);
                     else if (testClass.GetType().Equals(typeof(WebAndThumbSync)))
                         result = WebThumbVerifier.VerifyWebThumbSync(index, returnType, testClass, exceptionThrown, expectedOutput);
                     break;
@@ -322,17 +321,17 @@ namespace GameAnywhere
                     result = OfflineSyncVerifier.VerifyRestore(index,input, returnType, testClass, exceptionThrown, expectedOutput, deletedFile);
                     break;
                 case "Login":
-                    result = Verifier.VerifyLogin(index, returnType, testClass, exceptionThrown, expectedOutput);
+                    result = UserVerifier.VerifyLogin(index, returnType, testClass, exceptionThrown, expectedOutput);
                     break;
                 case "RetrievePassword":
                 case "Register":
-                    result = Verifier.VerifyRegisterRetrievePassword(index, returnType, testClass, exceptionThrown, expectedOutput);
+                    result = UserVerifier.VerifyRegisterRetrievePassword(index, returnType, testClass, exceptionThrown, expectedOutput);
                     break;
                 case "ChangePassword":
-                    result = Verifier.VerifyChangePassword(index, returnType, testClass, exceptionThrown, expectedOutput);
+                    result = UserVerifier.VerifyChangePassword(index, returnType, testClass, exceptionThrown, expectedOutput);
                     break;
                 case "ResendActivation":
-                    result = Verifier.VerifyResendActivation(index, returnType, testClass, exceptionThrown, expectedOutput);
+                    result = UserVerifier.VerifyResendActivation(index, returnType, testClass, exceptionThrown, expectedOutput);
                     break;
                 case "CheckConflicts":
                     result = WebThumbVerifier.VerifyCheckConflicts(index, returnType, testClass, exceptionThrown, expectedOutput);
@@ -440,6 +439,8 @@ namespace GameAnywhere
                     end = param_string[i].IndexOf(">");
                     string type = param_string[i].Substring(start + 1, end - (start + 1));
                     ArrayList temp = null;
+
+                    //Get the list
                     if (testClass.GetType().Equals(typeof(OfflineSync)))
                     {
                         OfflineSync offline = (OfflineSync)testClass;
@@ -452,6 +453,8 @@ namespace GameAnywhere
                     }
                     else
                         temp = PreCondition.GetArrayList(param_string[i], 0);
+
+                    //Switch according to the List type
                     switch (type)
                     {
                         //convert the arraylist to list
