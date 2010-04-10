@@ -1,2 +1,2 @@
 OnlineSync|int:5,List<Game>:{Warcraft 3#0+FIFA 10#0+Football Manager 2010#0+World of Warcraft#0+Abuse#0},ComToWebUser
-2~SynchronizeGames|List<SyncAction>:{World of Warcraft#5;2+Football Manager 2010#5;1}|int:2|void
+2~SynchronizeGames|List<SyncAction>:{World of Warcraft#5;1+Football Manager 2010#5;2}|int:2|void
