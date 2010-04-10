@@ -146,11 +146,22 @@ namespace GameAnywhere.Process
             if (String.IsNullOrEmpty(user))
                 throw new ArgumentException("Parameter cannot be empty/null", "user");
 
-            Storage s3 = new Storage();
+            Storage s3;
             HashSet<string> gameSet = new HashSet<string>();
+            List<string> files;
+            
 
             //Get game name and type(config/save), and add to gameset
-            List<string> files = s3.ListFiles(user);
+            try
+            {
+                s3 = new Storage();
+                files = s3.ListFiles(user);
+            }
+            catch (Exception)
+            {
+                throw new ConnectionFailureException();
+            }
+
             foreach (string file in files)
             {
                 string f = file.Substring(file.IndexOf('/') + 1);
