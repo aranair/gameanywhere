@@ -80,7 +80,4 @@ Game1\savedGame\File 2.txt,X
 Game2\config\File 4.txt,Y
 @
 webTest19
-Game1\savedGame\File 1.txt,Y
-Game1\savedGame\File 2.txt,X
-Game2\config\File 4.txt,Y
 #

@@ -20,5 +20,6 @@ User|void
 4~ChangePassword|string:void,string:void,string:void|void|ArgumentException
 1~ResendActivation|string:evilnicksg@gmail.com,string:123|int:2|void
 2~ResendActivation|string:non-existance@gmails.com,string:hellow|int:3|void
+4~ResendActivation|string:nicholas@mrsmellysocks.com,string:123456|int:0|void
 
 
