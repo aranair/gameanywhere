@@ -1711,6 +1711,16 @@ namespace GameAnywhere.Interface
             this.Enabled = false;
         }
 
+        public void Shown()
+        {
+            // Make this form the active form and make it TopMost
+            this.TopMost = true;
+            this.Focus();
+            this.BringToFront();
+            this.TopMost = false;
+        }
+
+
         private void CloseWaitDialog()
         {
             try

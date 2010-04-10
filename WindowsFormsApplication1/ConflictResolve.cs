@@ -640,13 +640,13 @@ namespace GameAnywhere.Interface
             if (syncErrorList == null)
             {
                 SetErrorLabel("Connection lost. Please re-sync.", Color.Red);
-                parent.Focus();
+                parent.Shown();
                 this.Close();
             }
             else if (syncErrorList.Count == 0)
             {
                 SetErrorLabel("Successfully Synchronized.", Color.DeepSkyBlue);
-                parent.Focus();
+                parent.Shown();
                 this.Close();
             }
             else
