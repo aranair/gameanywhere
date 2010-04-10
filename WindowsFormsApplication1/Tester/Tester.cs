@@ -15,7 +15,9 @@ using System.Security.AccessControl;
 
 using System.Management;
 
-namespace GameAnywhere
+using GameAnywhere.Data;
+
+namespace GameAnywhere.Process
 {
     public partial class Tester : Form
     {

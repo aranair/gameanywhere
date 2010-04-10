@@ -5,16 +5,15 @@ using System.Text;
 using System.IO;
 using System.Collections;
 using System.Security.AccessControl;
+using GameAnywhere.Data;
 
 using System.Security.Cryptography;
 
-//Codes of md5generation from tutorial site: http://sharpertutorials.com/calculate-md5-checksum-file/
-
-namespace GameAnywhere
+namespace GameAnywhere.Process
 {
     /// <summary>
     /// FolderOperation contains the methods which are required for any folder operations.
-    /// They include: File security modification, copydirectory, folder compare
+    /// They include: File security modification, copydirectory, folder compare ...
     /// </summary>
     class FolderOperation
     {
@@ -39,15 +38,17 @@ namespace GameAnywhere
         {
             sourcePath = source; targetPath = target;
         }
+
         private static string external = @".\SyncFolder";
         public static readonly int CONFIG=1, SAVE =2,BOTH=3, ExtToCom = 4, ComToExt = 5, WebToCom = 6, ComToWeb = 7;
+        
         /// <summary>
+        /// 
         /// copies the original settings to test back up folder to check created backup folder
-        /// settings: FolderOperation.CONFIG/SAVE
-        /// </summary>
-        /// <param name="action"></param>
-        /// <param name="testbackup"></param>
-        /// <param name="settings"></param>
+        /// 
+        /// <param name="synclist"></param>
+        /// <param name="settings">FolderOperation.CONFIG/SAVE</param>
+        /// <param name="direction"></param>
         public static void CopyOriginalSettings(List<SyncAction> synclist, int settings, int direction)
         {
             GameLibrary library = new GameLibrary();
@@ -219,9 +220,12 @@ namespace GameAnywhere
         }
 
         /// <summary>
-        /// This method will serialize and create the meta data file
+        /// Create the metadata according to the test file
         /// </summary>
         /// <param name="metaDataPath"></param>
+        /// <param name="fileName"></param>
+        /// <param name="isTest"></param>
+        /// <param name="testIndex"></param>
         public static void SerializeMetaData(string[] metaDataPath, string fileName, bool isTest, int testIndex)
         {
             int index = 0;
@@ -292,6 +296,7 @@ namespace GameAnywhere
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
+        /// //Codes of md5generation from tutorial site: http://sharpertutorials.com/calculate-md5-checksum-file/
         public static string GetMD5HashFromFile(string fileName)
         {
             FileStream file = new FileStream(fileName, FileMode.Open);
@@ -320,10 +325,10 @@ namespace GameAnywhere
 
         /// <summary>
         /// Return the list of FileInfo which are not found in the target directory
-        /// direction - specifies 1-way(what is in source is in target) or 2-way check(both must be similar)
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
+        /// <param name="direction">false: specifies 1-way(what is in source is in target), true: 2-way check(both must be similar)</param>
         /// <returns></returns>
         public static List<string> FindDifferences(string source, string target, bool direction)
         {
