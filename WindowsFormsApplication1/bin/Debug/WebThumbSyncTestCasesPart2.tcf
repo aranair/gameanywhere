@@ -5,7 +5,7 @@ WebAndThumbSync|WebAndThumbUser
 12~SynchronizeGames|Dictionary<string;int>:{void}|int:0|void
 13~SynchronizeGames|Dictionary<string;int>:{Game1/savedGame;2}|int:0|void
 14~SynchronizeGames|Dictionary<string;int>:{Game1/savedGame;1}|int:0|void
-15~SynchronizeGames|Dictionary<string;int>:{Game1/savedGame;2+}|int:0|void
+15~SynchronizeGames|Dictionary<string;int>:{Game1/savedGame;2}|int:0|void
 16~SynchronizeGames|Dictionary<string;int>:{Game1/savedGame;1+Game2/config;2}|int:0|void
 17~SynchronizeGames|Dictionary<string;int>:{Game1/savedGame;1+Game1/config;1+Game2/config;2}|int:0|UnauthorizedAccessException
 18~SynchronizeGames|Dictionary<string;int>:{Game1/savedGame;1+Game1/config;1+Game2/config;2}|int:0|void
