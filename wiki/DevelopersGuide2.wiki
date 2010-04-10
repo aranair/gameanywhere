@@ -244,11 +244,11 @@ http://farm3.static.flickr.com/2776/4478572596_fc9a553fca_o.jpg
 
 == Meta-data file ==
 
-// ...
+// Please include the meta-data format (Suggested by Dr D.)
 
 == Conflict Resolution == 
 
-//...
+// The algorithm used (also suggested by Dr D.)
 
 ----
 
