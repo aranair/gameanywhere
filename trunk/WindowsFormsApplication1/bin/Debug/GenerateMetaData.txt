@@ -53,6 +53,7 @@ Game1\savedGame\File 1.txt,A
 @
 metaTest13
 Game1\savedGame\File 1.txt,A
+Game1\savedGame\File 2.txt,B
 @
 metaTest14
 Game1\savedGame\File 1.txt,A

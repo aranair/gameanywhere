@@ -58,6 +58,7 @@ localTest12
 @
 localTest13
 Game1\savedGame\File 1.txt,X
+Game1\savedGame\File 2.txt,Y
 @
 localTest14
 Game1

@@ -11,3 +11,4 @@
 10.Test download with games folder path missing. (result: should create them if not present.)
 11.Test download of games from web to com (with existing game files in com) : checks for backup
 	and wc folder unable to create new dirctory.
+*. Test download of games from web to com with no internet conenction (mannual testing)
