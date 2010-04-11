@@ -511,8 +511,8 @@ namespace GameAnywhere.Process
                         else if (direction == 2) NoConflict[key] = NoConflictDirection.DeleteLocal;
                         break;
                     case ConflictDirection.DownloadOrDeleteWeb:
-                        if (direction == 1) NoConflict[key] = NoConflictDirection.Download;
-                        else if (direction == 2) NoConflict[key] = NoConflictDirection.DeleteWeb;
+                        if (direction == 1) NoConflict[key] = NoConflictDirection.DeleteWeb;
+                        else if (direction == 2) NoConflict[key] = NoConflictDirection.Download;
                         break;
                 }
             }
