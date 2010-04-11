@@ -50,8 +50,6 @@ namespace GameAnywhere.Interface
 
         public enum ClickStatus { ComToWeb, WebToCom, ExtAndWeb, None };
 
-        private volatile bool continueRun;
-
         private ClickStatus userClickStatus = ClickStatus.None;
 
         /// <summary>
@@ -73,8 +71,6 @@ namespace GameAnywhere.Interface
             loggedInUserLabel.Text = "";
             SetPanelList();
             
-            
-
         }
 
         /// <summary>
