@@ -463,7 +463,7 @@ namespace GameAnywhere.Interface
             catch (ConnectionFailureException)
             {
                 CloseWaitDialog();
-                SetErrorLabel("Connection lost. Please re-sync.", Color.Red);
+                SetErrorLabel("Unable to connect to server.", Color.Red);
                 return;
             }
             catch (IOException)
