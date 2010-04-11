@@ -72,7 +72,7 @@
             // buttonOk
             // 
             this.buttonOk.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonOk.Location = new System.Drawing.Point(123, 57);
+            this.buttonOk.Location = new System.Drawing.Point(146, 57);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(110, 25);
             this.buttonOk.TabIndex = 1;
