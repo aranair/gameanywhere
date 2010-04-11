@@ -752,6 +752,7 @@ namespace GameAnywhere.Process
                 case 13:
                     {
                         CheckDeleteLocal(index, ref result, ref verifyMeta, ref currentMeta, "File 1.txt", "savedGame", "Game1");
+                        CheckUpload(index, ref result, ref verifyMeta, ref currentMeta, "File 2.txt", "savedGame", "Game1");
                         break;
                     }
                 case 14:
@@ -803,7 +804,7 @@ namespace GameAnywhere.Process
                 case 19:
                     {
                         Exception except = (Exception)returnType;
-                        if(! except.InnerException.Equals(typeof(ConnectionFailureException)))
+                        if(! except.InnerException.GetType().Equals(typeof(ConnectionFailureException)))
                         {
                             result.Result = false;
                             result.AddRemarks("Failed! Expect ConnectionFailureException to be caught.");

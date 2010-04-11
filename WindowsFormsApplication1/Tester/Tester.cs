@@ -80,23 +80,7 @@ namespace GameAnywhere.Process
 
         private void ReadButton_Click(object sender, EventArgs e)
         {
-            string user = WindowsIdentity.GetCurrent().Name;
-            //resume external
-            string externalPath = @".\SyncFolder";
-            FolderOperation.RemoveFileSecurity(externalPath + @"\" + "FIFA 10", user,
-                FileSystemRights.FullControl, AccessControlType.Deny);
-            FolderOperation.AddFileSecurity(externalPath + @"\" + "FIFA 10", user,
-                FileSystemRights.FullControl, AccessControlType.Allow);
-            //resume game folder
-            FolderOperation.RemoveFileSecurity(@"C:\Documents and Settings\Administrator\My Documents\FIFA 10", user,
-                FileSystemRights.FullControl, AccessControlType.Deny);
-            FolderOperation.AddFileSecurity(@"C:\Documents and Settings\Administrator\My Documents\FIFA 10", user,
-                FileSystemRights.FullControl, AccessControlType.Allow);
-            //FolderOperation.RemoveFileSecurity(@".\SyncFolder\Game1\savedGame", user, FileSystemRights.FullControl, AccessControlType.Deny);
-            //FolderOperation.RemoveFileSecurity(@".\SyncFolder\Game2\config", user, FileSystemRights.CreateFiles, AccessControlType.Deny);
-            Game fifa = PreCondition.getGame("FIFA 10",0);
-            FolderOperation.RemoveFileSecurity(fifa.SaveParentPath, user, FileSystemRights.CreateDirectories, AccessControlType.Deny);
-            //MessageBox.Show("Stop!");
+
             //Move any existing SyncFolder
             /*if (Directory.Exists(@".\SyncFolder"))
                 Directory.Move(@".\SyncFolder", @".\SyncFolder-backup");

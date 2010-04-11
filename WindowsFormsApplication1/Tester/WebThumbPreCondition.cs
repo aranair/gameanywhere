@@ -433,6 +433,8 @@ namespace GameAnywhere.Process
             {
                 if (err.GetType().Equals(typeof(UnauthorizedAccessException)))
                 {
+                    FolderOperation.RemoveFileSecurity(@".\SyncFolder\Game1\savedGame", user, FileSystemRights.FullControl, AccessControlType.Deny);
+
                     webThumb = new WebAndThumbSync(gaUser);
                     webThumb.LocalHash.AddEntry("UnauthorizedAccessException", "x");
                     return webThumb;
