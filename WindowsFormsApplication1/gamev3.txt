@@ -26,8 +26,6 @@ Game=World of Warcraft
 RegValue=InstallPath
 RegKey=RegistrySoftwarePath\Blizzard Entertainment\World of Warcraft
 RegType=HKLM
-ConfigPathList=InstallPathVar\WTF\Account
-ConfigParentPath=InstallPathVar\WTF
 SavePathList=InstallPathVar\Interface
 SaveParentPath=InstallPathVar
 [ENDGAME]
