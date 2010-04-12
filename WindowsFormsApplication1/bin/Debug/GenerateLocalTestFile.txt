@@ -58,7 +58,7 @@ localTest12
 @
 localTest13
 Game1\savedGame\File 1.txt,X
-Game1\savedGame\File 2.txt,Y
+Game1\config\File 2.txt,Y
 @
 localTest14
 Game1
@@ -100,6 +100,6 @@ Game5\savedGame\File 13.txt,A
 localTest21
 Game3\savedGame\File 7.txt,X
 Game4\savedGame\File 8.txt,A
-Game4\savedGame\File 9.txt,A
+Game4\config\File 9.txt,A
 Game5\savedGame\File 10.txt,X 
 #

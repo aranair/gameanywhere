@@ -140,7 +140,7 @@ result: conflict contains 2 entries.
 
 Game1\savedGame\File 1: x : A | Y : A -> updownconflict
 Game1\savedGame\File 2: none : B | X : B -> deleteWebconflict
-Game1\configGame\File 3: X : C | none : C -> deletelocal conflict
+Game1\configGame\File 3: X : C | none : C -> upload or deletelocal conflict
 Game2\configGame\File 4: X : D | Y : D -> updownconflict
 
 result: conflict contains 4 entries, noconflict contains 0.

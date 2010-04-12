@@ -1,3 +1,3 @@
-OnlineSync|int:5,List<Game>:{Warcraft 3#0+FIFA 10#0+Football Manager 2010#0+World of Warcraft#0+Abuse#0},ComToWebUser
-6~SynchronizeGames|List<SyncAction>:{Warcraft 3#5;3+FIFA 10#5;3+Football Manager 2010#5;2+World of Warcraft#5;3+Abuse#5;2}|int:1|void
+OnlineSync|int:5,List<Game>:{Warcraft 3#0+FIFA 10#0+Football Manager 2010#0+World of Warcraft#0+Abuse#0+The Sims 3#0},ComToWebUser
+6~SynchronizeGames|List<SyncAction>:{Warcraft 3#5;3+FIFA 10#5;3+Football Manager 2010#5;2+World of Warcraft#5;2+Abuse#5;2+The Sims 3#5;2}|int:1|void
 
