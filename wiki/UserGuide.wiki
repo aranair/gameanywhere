@@ -85,15 +85,11 @@ http://lh4.ggpht.com/_-Xzk-2Bdr-I/S8MWx3GVNNI/AAAAAAAAANk/aRDHR_sdmCI/email.JPG
 
 *Q. Why are there synchronization errors?*
 
-A. There can be many different reasons. The game file might be in use, locked or missing.
+A. There can be many different reasons. The game file might be in use, locked or missing. Please follow the course of action that the program advises should an error occur.
 
 *Q. How can I ensure that synchronization errors do not occur?*
 
 A. Close your running games and open folder windows before you do a synchronization and do not tamper with the game files on both the computer and thumb drive on your own.
-
-*Q. Am I able to use my external hard disk instead of a thumb drive for this program?*
-
-A. Yes.
 
 *Q. Is there a possibility that the restoration of a computer to its original state can fail?*
 
