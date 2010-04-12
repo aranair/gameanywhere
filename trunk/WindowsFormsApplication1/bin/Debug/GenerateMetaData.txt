@@ -81,4 +81,20 @@ Game1\config\File 3.txt,C
 Game2\config\File 4.txt,D
 @
 metaTest19
+@
+metaTest20
+Game1\savedGame\File 1.txt,A
+Game2\savedGame\File 4.txt,A
+Game2\savedGame\File 5.txt,A
+Game3\config\File 6.txt,A
+Game3\savedGame\File 7.txt,A
+Game5\savedGame\File 10.txt,A
+Game5\savedGame\File 11.txt,A
+Game5\savedGame\File 12.txt,A
+Game5\savedGame\File 13.txt,A
+@
+metaTest21
+Game2\savedGame\File 5.txt,A
+Game3\savedGame\File 7.txt,A
+Game5\savedGame\File 12.txt,A
 #
