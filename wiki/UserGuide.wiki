@@ -6,7 +6,7 @@
 Please take note that you should unzip the GameAnywhere folder to your thumb drive and run GameAnywhere.exe from your thumb drive. Do not tamper with the folder. To uninstall, simply delete the GameAnywhere folder from your thumb drive.
 
 
-= Synchronize Game Files between Computer and Thumb Drive =
+== Synchronize Game Files between Computer and Thumb Drive ==
 
 
 1. Choose a synchronization direction.
@@ -28,7 +28,7 @@ http://lh5.ggpht.com/_-Xzk-2Bdr-I/S5z4NdZzp3I/AAAAAAAAAKA/QJRdPz7UUOQ/step3.1.JP
 http://lh4.ggpht.com/_-Xzk-2Bdr-I/S5z56Ybmc9I/AAAAAAAAAKI/pON34-C6Xus/step4.JPG
 
 
-= Restore Computer to Original State =
+== Restore Computer to Original State ==
 
 There are two ways to go about doing it.
 
