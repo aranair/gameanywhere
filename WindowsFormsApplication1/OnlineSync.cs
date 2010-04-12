@@ -429,7 +429,7 @@ namespace GameAnywhere.Process
             if (backupItem == None)
             {
                 //Backup was not successful - Add all game files to error list.
-                AddToUnsuccessfulSyncFiles(sa, Path.Combine(syncFolderPath, sa.MyGame.Name), "Unable to backup original game files");
+                AddToUnsuccessfulSyncFiles(sa, Path.Combine(syncFolderPath, sa.MyGame.Name), "Unable to backup original game files.");
                 return;
             }
 
