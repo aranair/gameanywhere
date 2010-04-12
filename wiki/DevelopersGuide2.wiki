@@ -173,25 +173,44 @@ By first checking the existence of the registry key, then checking the existence
 This is how to extend the list of supported games.
 
 == Variables needed to add a game ==
-
+<br>
 === Critical game information ===
 || *Variable Name* || *Description* ||
 || Game || The Game name.||
-|| RegValue ||  The name of the registry entry, in the registry folder, that contains the install path. ||
-|| RegKey ||  Path to registry folder of game.||
-|| RegType ||  KLM for HKEY_LOCAL_MACHINE or HKCU for HKEY_CURRENT_USER||
+|| !RegValue ||  The name of the registry entry, in the registry folder, that contains the install path. ||
+|| !RegKey ||  Path to registry folder of game.||
+|| !RegType ||  KLM for HKEY_LOCAL_MACHINE or HKCU for HKEY_CURRENT_USER||
 
-
+<br>
 === Below are paths for files ===
 || *Variable Name* || *Description* ||
-|| ConfigParentPath||  Full path to the parent path of all the config game folders/files. ||
-|| ConfigPathList||  Full paths to config files separated by comma. ||
-|| SearchConfigparent||  Regex search to handle batch processing or variable folder/file names for config files. ||
-|| SaveParentPath || Full path to the parent path of all the saved game folders/files. ||
-|| SavePathList || Full paths to saved game files separated by comma.	 ||
-|| SearchSaveParent||  Regex search to handle batch processing or variable folder/file names for saved games. ||
+|| !ConfigParentPath||  Full path to the parent path of all the config game folders/files. ||
+|| !ConfigPathList||  Full paths to config files separated by comma. ||
+|| !SearchConfigparent||  Regex search to handle batch processing or variable folder/file names for config files. ||
+|| !SaveParentPath || Full path to the parent path of all the saved game folders/files. ||
+|| !SavePathList || Full paths to saved game files separated by comma.	 ||
+|| !SearchSaveParent||  Regex search to handle batch processing or variable folder/file names for saved games. ||
 
+== Syntax rules to comply ==
+ * All critical game information variable must be present.
+ * If config files exist, !ConfigParentPath must be present, likewise for saved game files/!SaveParentPath.
+ * [ENDGAME] after the end of each game (refer to example below).
+ * Comma can be used to separate entries for !!ConfigPathList, !SearchConfigParent, !SavePathList and !SearchSaveParent.
+ * To write a comment line, begin the line with #. Example: 
+{{{
+#This is a line of comments.
+}}}
+ * There can only be one entry each for !ConfigParentPath and !SaveParentPath.
+ * !SearchConfigParent/!SearchSaveParent are for [http://msdn.microsoft.com/en-us/library/30wbz966%28VS.71%29.aspx regex] searching to handle variable folder or file names. 	
+   For example, if you have this entry: *!SearchSaveParent=A.[*], B.[*]*
+   <p>'[*]' is a wildcard that will match any character(s). Files like A.Gamer, B.!ThisIsAnExample, B.–Example-2 *will be searched from the SaveParentPath* and be added into the saved game list. An alternative way albeit slower is to add the full paths of these files into !SavePathList separated by comma.
 
+=== Reserved Words/Variables that can be used in the paths for files ===
+|| *Reserved Words/Variables* || *Description* ||
+|| InstallPathVar || Can be used to replace the InstallPath recorded in the registry.|| 
+|| DocumentsPath || Can be used to replace the document paths of running machine, etc: “C:\Users\Tom\Documents\” || 
+|| RegistrySoftwarePath ||  Can be used to replace the registry software path for the different types of OS. 
+For example: “RegistrySoftwarePath\EA Sports\FIFA 10” (with HKLM) will evaluate to “HKEY_LOCAL_MACHINE\SOFTWARE\EA Sports\FIFA 10” for non-64bit OS users and“HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\EA Sports\FIFA 10” for 64bit OS users.||
 
 -----
 
