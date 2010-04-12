@@ -278,7 +278,7 @@ namespace GameAnywhere.Process
                 case 17:
                 case 18:
                     {
-                        FolderOperation.RemoveFileSecurity(@".\SyncFolder\Game1\savedGame", user, FileSystemRights.FullControl, AccessControlType.Deny);
+                        FolderOperation.RemoveFileSecurity(@".\SyncFolder\Game1\savedGame\File 1.txt", user, FileSystemRights.FullControl, AccessControlType.Deny);
                         FolderOperation.RemoveFileSecurity(@".\SyncFolder\Game2\config\File 4.txt", user, FileSystemRights.FullControl, AccessControlType.Deny);
                         break;
                     }
@@ -288,7 +288,7 @@ namespace GameAnywhere.Process
                         int i = 0;
                         while (!ToggleNetworkAdapter(true) && i < 100) ++i;
                         if (i == 100) MessageBox.Show("Network cannot be resumed");
-
+                        while (!IsConnectedToInternet()) ;
                         break;
                     }
 
@@ -304,7 +304,7 @@ namespace GameAnywhere.Process
             if (Directory.Exists(@".\SyncFolder-test2"))
                 Directory.Move(@".\SyncFolder-test2", @".\SyncFolder");
 
-            for (int i = 1; i <= 20; i++)
+            for (int i = 1; i <= 21; i++)
             {
                 if (Directory.Exists(@".\webTest" + i))
                     Directory.Delete(@".\webTest" + i, true);
@@ -342,7 +342,7 @@ namespace GameAnywhere.Process
                         //set up files before lock
                         webThumb = WebAndThumbFileSetUp(index);
                         //Lock Game1\savedGame Folder
-                        FolderOperation.AddFileSecurity(@".\SyncFolder\Game1\savedGame", user, FileSystemRights.FullControl, AccessControlType.Deny);
+                        FolderOperation.AddFileSecurity(@".\SyncFolder\Game1\savedGame\File 1.txt", user, FileSystemRights.FullControl, AccessControlType.Deny);
                         FolderOperation.AddFileSecurity(@".\SyncFolder\Game2\config\File 4.txt", user, FileSystemRights.FullControl, AccessControlType.Deny);
 
                         break;
@@ -399,7 +399,7 @@ namespace GameAnywhere.Process
                         Directory.Move(@".\localTest" + index, @".\SyncFolder");
 
                         //Lock Game1\savedGame Folder
-                        FolderOperation.AddFileSecurity(@".\SyncFolder\Game1\savedGame", user, FileSystemRights.FullControl, AccessControlType.Deny);
+                        FolderOperation.AddFileSecurity(@".\SyncFolder\Game1\savedGame\File 1.txt", user, FileSystemRights.FullControl, AccessControlType.Deny);
 
                         break;
                     }
@@ -433,7 +433,7 @@ namespace GameAnywhere.Process
             {
                 if (err.GetType().Equals(typeof(UnauthorizedAccessException)))
                 {
-                    FolderOperation.RemoveFileSecurity(@".\SyncFolder\Game1\savedGame", user, FileSystemRights.FullControl, AccessControlType.Deny);
+                    FolderOperation.RemoveFileSecurity(@".\SyncFolder\Game1\savedGame\File 1.txt", user, FileSystemRights.FullControl, AccessControlType.Deny);
 
                     webThumb = new WebAndThumbSync(gaUser);
                     webThumb.LocalHash.AddEntry("UnauthorizedAccessException", "x");
@@ -456,7 +456,7 @@ namespace GameAnywhere.Process
                     if (Directory.Exists(@".\localTest" + i + "-test"))
                         Directory.Delete(@".\localTest" + i + "-test", true);
                 }
-                FolderOperation.RemoveFileSecurity(@".\SyncFolder\Game1\savedGame", user, FileSystemRights.FullControl, AccessControlType.Deny);
+                FolderOperation.RemoveFileSecurity(@".\SyncFolder\Game1\savedGame\File 1.txt", user, FileSystemRights.FullControl, AccessControlType.Deny);
                 return null;
             }
 
