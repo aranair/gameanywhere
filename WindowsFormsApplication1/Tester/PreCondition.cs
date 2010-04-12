@@ -31,11 +31,15 @@ namespace GameAnywhere.Process
         
         internal static string externalPath = @".\SyncFolder";
         internal static List<string> supportedGames = new List<string>(new string[] { "Warcraft 3", "FIFA 10" });
+
+        //Games name
         public static readonly string Warcraft3GameName = "Warcraft 3";
         public static readonly string FIFA10GameName = "FIFA 10";
         public static readonly string worldOfWarcraft = "World of Warcraft";
         public static readonly string footballManager = "Football Manager 2010";
         public static readonly string abuseGameName = "Abuse";
+        public static readonly string theSims3 = "The Sims 3";
+
         internal static GameLibrary library = new GameLibrary();
         internal static string fifaSavePath;
         internal static string wc3InstallPath;
@@ -495,7 +499,9 @@ namespace GameAnywhere.Process
                 games[i] = PreCondition.getGame(gameName[i],OfflineSync.ExternalToCom);
                 syncList[i] = new SyncAction(games[i], OfflineSync.ExternalToCom);
                 if (games[i].Name.Equals("Football Manager 2010") ||
-                    games[i].Name.Equals("Abuse"))
+                    games[i].Name.Equals("Abuse")||
+                    games[i].Name.Equals("World of Warcraft")||
+                    games[i].Name.Equals("The Sims 3"))
                     syncList[i].Action = 2;
                 else
                     syncList[i].Action = 3;

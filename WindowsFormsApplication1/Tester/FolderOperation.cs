@@ -102,7 +102,7 @@ namespace GameAnywhere.Process
                     foreach (string s in list)
                     {
                         if (File.Exists(s))
-                            File.Copy(s, testbackup + @"\" + Path.GetFileName(s));
+                            File.Copy(s, testbackup + @"\" + Path.GetFileName(s),true);
                         else
                         {
                             if (Directory.Exists(s))

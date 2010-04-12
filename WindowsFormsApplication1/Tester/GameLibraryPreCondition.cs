@@ -97,7 +97,6 @@ namespace GameAnywhere.Process
 
                                 //copy WoW
                                 FolderOperation.CopyDirectory(externalPath + @"\World of Warcraft\savedGame", wow.SaveParentPath);
-                                FolderOperation.CopyDirectory(externalPath + @"\World of Warcraft\config", wow.ConfigParentPath);
 
                                 //copy Abuse
                                 FolderOperation.CopyDirectory(externalPath + @"\Abuse\savedGame", abuse.SaveParentPath);
