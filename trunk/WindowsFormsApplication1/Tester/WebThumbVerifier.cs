@@ -752,39 +752,36 @@ namespace GameAnywhere.Process
                 case 13:
                     {
                         CheckDeleteLocal(index, ref result, ref verifyMeta, ref currentMeta, "File 1.txt", "savedGame", "Game1");
-                        CheckUpload(index, ref result, ref verifyMeta, ref currentMeta, "File 2.txt", "savedGame", "Game1");
+                        CheckUpload(index, ref result, ref verifyMeta, ref currentMeta, "File 2.txt", "config", "Game1");
                         break;
                     }
                 case 14:
                     {
-                        CheckDownload(index, ref result, ref verifyMeta, ref currentMeta, "File 1.txt", "savedGame", "Game1");
+                        CheckDeleteWeb(index, ref result, ref verifyMeta, ref currentMeta, "File 1.txt", "savedGame", "Game1");
                         break;
                     }
                 case 15:
                     {
                         CheckDownload(index, ref result, ref verifyMeta, ref currentMeta, "File 1.txt", "savedGame", "Game1");
-                        CheckDeleteWeb(index, ref result, ref verifyMeta, ref currentMeta, "File 2.txt", "savedGame", "Game1");
+                        CheckDownload(index, ref result, ref verifyMeta, ref currentMeta, "File 2.txt", "savedGame", "Game1");
                         break;
                     }
                 case 16:
                     {
                         CheckUpload(index, ref result, ref verifyMeta, ref currentMeta, "File 1.txt", "savedGame", "Game1");
-                        CheckDownload(index, ref result, ref verifyMeta, ref currentMeta, "File 2.txt", "savedGame", "Game1");
+                        CheckDeleteWeb(index, ref result, ref verifyMeta, ref currentMeta, "File 2.txt", "savedGame", "Game1");
                         CheckUpload(index, ref result, ref verifyMeta, ref currentMeta, "File 3.txt", "config", "Game1");
                         CheckDownload(index, ref result, ref verifyMeta, ref currentMeta, "File 4.txt", "config", "Game2");
                         break;
                     }
                 case 17:
                     {
-                        List<SyncError> errorList = (List<SyncError>)returnType;
-                        if (errorList.Count != 1)
+                        WebAndThumbSync case17 = (WebAndThumbSync)testClass;
+                        if (!case17.LocalHash.FileTable.ContainsKey("UnauthorizedAccessException"))
                         {
                             result.Result = false;
-                            result.AddRemarks("Failed! Error List fail to include File 1.txt and File 2.txt of Game 1.");
+                            result.AddRemarks("Failed! UnauthorizedAccessException not caught!");
                         }
-
-                        CheckUpload(index, ref result, ref verifyMeta, ref currentMeta, "File 3.txt", "config", "Game1");
-                        CheckDownload(index, ref result, ref verifyMeta, ref currentMeta, "File 4.txt", "config", "Game2");
                         break;
                     }
                 case 18:
@@ -797,7 +794,6 @@ namespace GameAnywhere.Process
                         }
 
                         CheckUpload(index, ref result, ref verifyMeta, ref currentMeta, "File 3.txt", "config", "Game1");
-                        //CheckDownload(index, ref result, ref verifyMeta, ref currentMeta, "File 4.txt", "config", "Game2");
                         break;
                     }
 
@@ -844,7 +840,7 @@ namespace GameAnywhere.Process
                         
                         //Game 2
                         CheckDeleteWeb(index, ref result, ref verifyMeta, ref currentMeta, "File 4.txt", "savedGame", "Game2");
-                        CheckDownload(index, ref result, ref verifyMeta, ref currentMeta, "File 5.txt", "savedGame", "Game2");
+                        CheckDeleteWeb(index, ref result, ref verifyMeta, ref currentMeta, "File 5.txt", "savedGame", "Game2");
 
                         //Game 3
                         CheckDeleteLocal(index, ref result, ref verifyMeta, ref currentMeta, "File 6.txt", "config", "Game3");
@@ -881,7 +877,11 @@ namespace GameAnywhere.Process
                     }
                 case 21:
                     {
-
+                        CheckDownload(index, ref result, ref verifyMeta, ref currentMeta, "File 5.txt", "savedGame", "Game2");
+                        CheckDeleteLocal(index, ref result, ref verifyMeta, ref currentMeta, "File 7.txt", "savedGame", "Game3");
+                        CheckDownload(index, ref result, ref verifyMeta, ref currentMeta, "File 8.txt", "savedGame", "Game4");
+                        CheckDownload(index, ref result, ref verifyMeta, ref currentMeta, "File 9.txt", "config", "Game4");
+                        CheckDownload(index, ref result, ref verifyMeta, ref currentMeta, "File 12.txt", "savedGame", "Game5");
                         break;
                     }
             }
