@@ -34,11 +34,11 @@ There are two ways to go about doing it.
 
 1. Click "Restore" on the bottom right hand corner of the screen and it will be done.
 
-http://lh4.ggpht.com/_-Xzk-2Bdr-I/S7MWfWlrrpI/AAAAAAAAAMY/YDZTIgHl8Ks/successfullyrestored.JPG
+http://lh6.ggpht.com/_-Xzk-2Bdr-I/S8MRojtsRaI/AAAAAAAAANU/zuyKL9mX26I/restoredsuccessfully.JPG
 
 2. Click "Exit on the bottom right hand corner of the screen. You will be prompted whether to restore the computer to its original settings. Click "Yes" to restore. The program will close automatically after restoration is done.
 
-http://lh3.ggpht.com/_-Xzk-2Bdr-I/S5z8FzDvYaI/AAAAAAAAAKY/HvxQeMhydII/step6.JPG
+http://lh4.ggpht.com/_-Xzk-2Bdr-I/S8MRpaoHnGI/AAAAAAAAANY/Re_5vsGx6KU/exitrestore.JPG
 
 
 
