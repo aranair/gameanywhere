@@ -130,6 +130,8 @@ namespace GameAnywhere.Interface
         /// <param name="syncErrorList"></param>
         private void ShowSyncErrors(List<SyncError> syncErrorList)
         {
+            backupErrorMessageShown = false;
+
             // for each error, this portion shows the file path that was not accessible and the error involved.
             foreach (SyncError syncError in syncErrorList)
             {
@@ -139,7 +141,7 @@ namespace GameAnywhere.Interface
                 if (!errorText.Equals("Unable to backup original game files.") || !backupErrorMessageShown)
                     CreateSyncErrorLabel(errorText, errorDisplayPanel);
 
-                // If this error message has been shown before, stop it from showing duplicate.
+                // If this error message is Unable to backup .... and has been shown before, stop it from showing duplicate.
                 if (errorText.Equals("Unable to backup original game files."))
                 {
                     backupErrorMessageShown = true;
