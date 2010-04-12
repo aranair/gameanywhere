@@ -172,26 +172,26 @@ By first checking the existence of the registry key, then checking the existence
 
 This is how to extend the list of supported games.
 
-== Steps to follow to add more game support ==
+== Variables needed to add a game ==
 
- # Create method to use registry entry to check existence of the new game.
- # Create a new instance of Game object.
- # Edit the appropriate information for the Game to work:
-{{{
-- configList = The list of paths to the configuration folders or files of the game.
-- saveList   = The list of paths to the saved game folders or files of the game.
-- configParentPath = the folder in which all the config files/folders are in.
-- gameName = The name of the game.
-- install path = The install path of the game ( found in the registry )
+=== Critical game information ===
+|| *Variable Name* || *Description* ||
+|| Game || The Game name.||
+|| RegValue ||  The name of the registry entry, in the registry folder, that contains the install path. ||
+|| RegKey ||  Path to registry folder of game.||
+|| RegType ||  KLM for HKEY_LOCAL_MACHINE or HKCU for HKEY_CURRENT_USER||
 
-- Private helper methods have been made to find the documents path, the type of OS of user, registry software path, program files path to aid in finding generic paths for all 3 OS:
-  Windows XP, Windows Vista, and Windows 7.
-- Methods to edit the configList and savedGameList are preferably separated because of step 4.
-}}}
- # For the sync direction of external to computer, EditConfigAndSavedGameLists() function is to be editted to support the new game as well. Each new game instance in the common list between the external and the computer, upon finding that the thumb drive has the appropriate folders for the synchronization, MUST be initialized with config/savedList containing the paths to the files in the external thumb drive instead of paths to the computer's files. 
- # You're set to synchronize. If you would like to add icons to your game in the program, you would have to edit the GUI class to load your icons as well.
 
-_For the upcoming version (v2.0), there will be a new implementation that involves parsing some variables from text files to initialize the games._
+=== Below are paths for files ===
+|| *Variable Name* || *Description* ||
+|| ConfigParentPath||  Full path to the parent path of all the config game folders/files. ||
+|| ConfigPathList||  Full paths to config files separated by comma. ||
+|| SearchConfigparent||  Regex search to handle batch processing or variable folder/file names for config files. ||
+|| SaveParentPath || Full path to the parent path of all the saved game folders/files. ||
+|| SavePathList || Full paths to saved game files separated by comma.	 ||
+|| SearchSaveParent||  Regex search to handle batch processing or variable folder/file names for saved games. ||
+
+
 
 -----
 
