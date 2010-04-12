@@ -27,7 +27,7 @@ http://lh6.ggpht.com/_-Xzk-2Bdr-I/S8MOwt_cuOI/AAAAAAAAANI/3zDATKA5-Kg/syncfailed
 
 http://lh4.ggpht.com/_-Xzk-2Bdr-I/S8MOxLXgYEI/AAAAAAAAANM/WUTAsFHyUQA/errorpage.JPG
 
-== Synchronize Game Files between Computer and Thumb Drive ==
+== Synchronize Game Files between Computer and Web ==
 
 1. You need to have an online account to synchronize to the web. Please refer to the registration section on the user guide if you do not have an account. If you have one, click "Login" at the bottom right hand corner of the screen.
 
