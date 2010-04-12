@@ -46,6 +46,7 @@ namespace GameAnywhere.Interface
         {
             this.parent = parent;
             parent.Close();
+            backupErrorMessageShown = false;
 
             InitializeComponent();
             CompileSyncErrors(syncErrorList);
@@ -57,6 +58,7 @@ namespace GameAnywhere.Interface
         private void CompileSyncErrors(List<SyncError> syncErrorList)
         {
             this.syncActionList = new List<SyncAction>();
+            backupErrorMessageShown = false;
             foreach (SyncError se in syncErrorList)
             {
                 string gameName = se.FilePath;
@@ -131,12 +133,10 @@ namespace GameAnywhere.Interface
             // for each error, this portion shows the file path that was not accessible and the error involved.
             foreach (SyncError syncError in syncErrorList)
             {
-                //string shortenedPath = SubstringPaths(syncError.FilePath);               
-
                 string errorText = syncError.ErrorMessage;
                 
                 // Creates Failure label ( one each for each file error )
-                if (!backupErrorMessageShown)
+                if (!errorText.Equals("Unable to backup original game files.") || !backupErrorMessageShown)
                     CreateSyncErrorLabel(errorText, errorDisplayPanel);
 
                 // If this error message has been shown before, stop it from showing duplicate.
