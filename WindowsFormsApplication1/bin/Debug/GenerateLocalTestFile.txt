@@ -85,4 +85,21 @@ localTest19
 Game1\savedGame\File 1.txt,X
 Game1\config\File 3.txt,X
 Game2\config\File 4.txt,X
+@
+localTest20
+Game1\savedGame\File 3.txt,A
+Game3\config\File 6.txt,A
+Game3\savedGame\File 7.txt,X
+Game4\savedGame\File 8.txt,A
+Game4\config\File 9.txt,A
+Game5\savedGame\File 10.txt,A
+Game5\savedGame\File 11.txt,X
+Game5\savedGame\File 12.txt,X
+Game5\savedGame\File 13.txt,A
+@
+localTest21
+Game3\savedGame\File 7.txt,X
+Game4\savedGame\File 8.txt,A
+Game4\savedGame\File 9.txt,A
+Game5\savedGame\File 10.txt,X 
 #

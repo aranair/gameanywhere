@@ -80,4 +80,21 @@ Game1\savedGame\File 2.txt,X
 Game2\config\File 4.txt,Y
 @
 webTest19
+@
+webTest20
+Game1\savedGame\File 2.txt,A
+Game2\savedGame\File 4.txt,A
+Game2\savedGame\File 5.txt,X
+Game4\savedGame\File 8.txt,A
+Game4\config\File 9.txt,X
+Game5\savedGame\File 10.txt,X
+Game5\savedGame\File 11.txt,A
+Game5\savedGame\File 12.txt,Y
+Game5\savedGame\File 13.txt,A
+@
+webTest21
+Game2\savedGame\File 5.txt,X
+Game4\savedGame\File 8.txt,A
+Game4\savedGame\File 9.txt,X
+Game5\savedGame\File 12.txt,Y
 #
