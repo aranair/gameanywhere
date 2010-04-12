@@ -9,7 +9,7 @@ Please take note that you should unzip the GameAnywhere folder to your thumb dri
 == Synchronize Game Files between Computer and Thumb Drive ==
 
 
-1. Choose a synchronization direction.
+1. Choose either PC TO THUMB DRIVE or THUMB DRIVE TO PC.
 
 http://lh3.ggpht.com/_-Xzk-2Bdr-I/S8MOvsVBCoI/AAAAAAAAANA/HDz3CNO2RZw/startup.JPG
 
@@ -27,6 +27,33 @@ http://lh6.ggpht.com/_-Xzk-2Bdr-I/S8MOwt_cuOI/AAAAAAAAANI/3zDATKA5-Kg/syncfailed
 
 http://lh4.ggpht.com/_-Xzk-2Bdr-I/S8MOxLXgYEI/AAAAAAAAANM/WUTAsFHyUQA/errorpage.JPG
 
+== Synchronize Game Files between Computer and Thumb Drive ==
+
+1. You need to have an online account to synchronize to the web. Please refer to the registration section on the user guide if you do not have an account. If you have one, click "Login" at the bottom right hand corner of the screen.
+
+http://lh3.ggpht.com/_-Xzk-2Bdr-I/S8MOvsVBCoI/AAAAAAAAANA/HDz3CNO2RZw/startup.JPG
+
+2. Enter your email and password and click "Login".
+
+http://lh3.ggpht.com/_-Xzk-2Bdr-I/S8MZWENr2JI/AAAAAAAAANw/0AN-6jRdV2c/loggingin.JPG
+
+3. Choose either PC TO WEB or WEB TO PC.
+
+http://lh6.ggpht.com/_-Xzk-2Bdr-I/S8MZV43fzxI/AAAAAAAAANs/wFq58xwCvo0/loggedin.JPG
+
+4. Select the game files that you want to synchronize and click "Confirm".
+
+http://lh4.ggpht.com/_-Xzk-2Bdr-I/S8MOwBGEpxI/AAAAAAAAANE/2ImMt0p0zv0/choosegame.jpg
+
+5. If synchronization is successful, you will be returned to the startup screen. If synchronization has failed, you will be advised on the next course of action to take. You can choose to look at the details of the errors by clicking "Errors" or start another synchronization task by clicking "Done". 
+
+http://lh4.ggpht.com/_-Xzk-2Bdr-I/S8MOxt2O7yI/AAAAAAAAANQ/LTdqgemE5Y0/success.JPG
+
+http://lh6.ggpht.com/_-Xzk-2Bdr-I/S8MOwt_cuOI/AAAAAAAAANI/3zDATKA5-Kg/syncfailed.JPG
+
+6. After you are done viewing the detailed errors, click "Done" to return to the startup screen.
+
+http://lh4.ggpht.com/_-Xzk-2Bdr-I/S8MOxLXgYEI/AAAAAAAAANM/WUTAsFHyUQA/errorpage.JPG
 
 == Restore Computer to Original State ==
 
