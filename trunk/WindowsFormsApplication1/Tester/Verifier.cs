@@ -21,12 +21,14 @@ namespace GameAnywhere.Process
 
         internal static string externalPath = @".\SyncFolder";
         internal static List<string> supportedGames = new List<string>(new string[] {"Warcraft 3","FIFA 10","Football Manager 2010","World of Warcraft"});
+        
+        //Games Name
         public static readonly string Warcraft3GameName = "Warcraft 3";
         public static readonly string FIFA10GameName = "FIFA 10";
         public static readonly string worldOfWarcraft = "World of Warcraft";
         public static readonly string footballManager = "Football Manager 2010";
         public static readonly string abuse = "Abuse";
-
+        public static readonly string theSims3 = "The Sims 3";
        
 
         #region Check Backup and SyncAction helper method
