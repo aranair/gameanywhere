@@ -1,0 +1,2 @@
+WebAndThumbSync|WebAndThumbUser
+20~SynchronizeGames|Dictionary<string;int>:{Game2/savedGame;1+Game3/savedGame;1+Game4/savedGame;1+Game4/config;1+Game5/savedGame;1}|int:0|void
