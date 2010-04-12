@@ -17,7 +17,7 @@ http://lh3.ggpht.com/_-Xzk-2Bdr-I/S8MOvsVBCoI/AAAAAAAAANA/HDz3CNO2RZw/startup.JP
 
 http://lh4.ggpht.com/_-Xzk-2Bdr-I/S8MOwBGEpxI/AAAAAAAAANE/2ImMt0p0zv0/choosegame.jpg
 
-3. If synchronization is successful, you will be returned to the startup screen. If synchronization has failed, you can choose to look at the details of the errors by clicking "Errors" or start another synchronization task by clicking "Done".
+3. If synchronization is successful, you will be returned to the startup screen. If synchronization has failed, you will be advised on the next course of action to take. You can choose to look at the details of the errors by clicking "Errors" or start another synchronization task by clicking "Done". 
 
 http://lh4.ggpht.com/_-Xzk-2Bdr-I/S8MOxt2O7yI/AAAAAAAAANQ/LTdqgemE5Y0/success.JPG
 
