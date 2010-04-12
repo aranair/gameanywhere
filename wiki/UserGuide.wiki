@@ -9,7 +9,7 @@ Please take note that you should unzip the GameAnywhere folder to your thumb dri
 == Synchronize Game Files between Computer and Thumb Drive ==
 
 
-1. Choose either PC TO THUMB DRIVE or THUMB DRIVE TO PC.
+1. Choose either "PC TO THUMB DRIVE" or "THUMB DRIVE TO PC".
 
 http://lh3.ggpht.com/_-Xzk-2Bdr-I/S8MOvsVBCoI/AAAAAAAAANA/HDz3CNO2RZw/startup.JPG
 
@@ -27,7 +27,7 @@ http://lh6.ggpht.com/_-Xzk-2Bdr-I/S8MOwt_cuOI/AAAAAAAAANI/3zDATKA5-Kg/syncfailed
 
 http://lh4.ggpht.com/_-Xzk-2Bdr-I/S8MOxLXgYEI/AAAAAAAAANM/WUTAsFHyUQA/errorpage.JPG
 
-== Synchronize Game Files between Computer and Web ==
+== Synchronize Game Files between Computer and Online Account ==
 
 1. You need to have an online account to synchronize to the web. Please refer to the registration section on the user guide if you do not have an account. If you have one, click "Login" at the bottom right hand corner of the screen.
 
@@ -37,7 +37,7 @@ http://lh3.ggpht.com/_-Xzk-2Bdr-I/S8MOvsVBCoI/AAAAAAAAANA/HDz3CNO2RZw/startup.JP
 
 http://lh3.ggpht.com/_-Xzk-2Bdr-I/S8MZWENr2JI/AAAAAAAAANw/0AN-6jRdV2c/loggingin.JPG
 
-3. Choose either PC TO WEB or WEB TO PC.
+3. Choose either "PC TO WEB" or "WEB TO PC".
 
 http://lh6.ggpht.com/_-Xzk-2Bdr-I/S8MZV43fzxI/AAAAAAAAANs/wFq58xwCvo0/loggedin.JPG
 
@@ -54,6 +54,29 @@ http://lh6.ggpht.com/_-Xzk-2Bdr-I/S8MOwt_cuOI/AAAAAAAAANI/3zDATKA5-Kg/syncfailed
 6. After you are done viewing the detailed errors, click "Done" to return to the startup screen.
 
 http://lh4.ggpht.com/_-Xzk-2Bdr-I/S8MOxLXgYEI/AAAAAAAAANM/WUTAsFHyUQA/errorpage.JPG
+
+== Synchronize Game Files between Thumb Drive and Online Account ==
+
+1. You need to have an online account to synchronize to the web. Please refer to the registration section on the user guide if you do not have an account. If you have one, click "Login" at the bottom right hand corner of the screen.
+
+http://lh3.ggpht.com/_-Xzk-2Bdr-I/S8MOvsVBCoI/AAAAAAAAANA/HDz3CNO2RZw/startup.JPG
+
+2. Enter your email and password and click "Login".
+
+http://lh3.ggpht.com/_-Xzk-2Bdr-I/S8MZWENr2JI/AAAAAAAAANw/0AN-6jRdV2c/loggingin.JPG
+
+3. Click "Thumb Drive and Web"
+
+http://lh6.ggpht.com/_-Xzk-2Bdr-I/S8MZV43fzxI/AAAAAAAAANs/wFq58xwCvo0/loggedin.JPG
+
+4. The program will look through the files on your thumb drive and online account and determine which files to keep or throw. However, if the program cannot determine, you will be asked to choose which files to keep. If you want the files on your thumb drive, click the thumb drive icon. Otherwise, click the web icon. When you are done selecting, click confirm.
+
+http://lh4.ggpht.com/_-Xzk-2Bdr-I/S8Me-dbr3YI/AAAAAAAAAN4/jkI8ab1wrkY/resolveconflict.JPG
+
+5. Your files on the thumb drive and online account should be synchronized. 
+
+http://lh4.ggpht.com/_-Xzk-2Bdr-I/S8Me5C7w-3I/AAAAAAAAAN0/c28tNM31Nf8/watssuccess.JPG
+
 
 == Restore Computer to Original State ==
 
