@@ -61,3 +61,12 @@ RegType=HKLM
 SavePathList=DocumentsPath\Electronic Arts\The Sims 3\Saves
 SaveParentPath=DocumentsPath\Electronic Arts\The Sims 3
 [ENDGAME]
+Game=Borderlands
+RegValue=InstallFolder
+RegKey=RegistrySoftwarePath\Gearbox Software\Borderlands
+RegType=HKLM
+ConfigPathList=DocumentsPath\My Games\Borderlands\WillowGame\Config
+ConfigParentPath=DocumentsPath\My Games\Borderlands\WillowGame
+SavePathList=DocumentsPath\My Games\Borderlands\SaveData
+SaveParentPath=DocumentsPath\My Games\Borderlands
+[ENDGAME]
