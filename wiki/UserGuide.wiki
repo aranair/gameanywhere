@@ -3,7 +3,7 @@
 #sidebar TOC
 <wiki:toc max_depth="2" />
 
-Please take note that you should unzip the GameAnywhere folder to your thumb drive and run GameAnywhere.exe from your thumb drive if you want to synchronize your game data to it. If you are purely doing online synchronization of your game data, you can run the program from your computer. If you require both online and offline synchronization, doing a web and thumb synchronization will keep your thumb drive and web account synchronized. Do not tamper with the folder. To uninstall, simply delete the GameAnywhere folder from your thumb drive.
+Please take note that you should unzip the GameAnywhere folder to your thumb drive and run GameAnywhere.exe from your thumb drive if you want to synchronize your game data to your thumb drive. If you are purely doing online synchronization of your game data, you can run the program from your computer. If you use both online and offline synchronization, doing a web and thumb synchronization will keep your thumb drive and web account synchronized. Do not tamper with the folder. To uninstall, simply delete the GameAnywhere folder.
 
 
 == Synchronize Game Files between Computer and Thumb Drive ==
