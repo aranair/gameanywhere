@@ -95,6 +95,6 @@ Game5\savedGame\File 13.txt,A
 webTest21
 Game2\savedGame\File 5.txt,X
 Game4\savedGame\File 8.txt,A
-Game4\savedGame\File 9.txt,X
+Game4\config\File 9.txt,X
 Game5\savedGame\File 12.txt,Y
 #
