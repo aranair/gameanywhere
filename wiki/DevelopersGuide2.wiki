@@ -213,7 +213,8 @@ To edit the supported games in !GameAnywhere, simply edit the *[DeveloperGuide2#
 {{{
 For example, if you have this entry: SearchSaveParent = A.[*], B.[*]
 * is a wildcard that will match any character(s). 
-It will search in the SaveParentPath and possible files found can "A.boa", "B.ho", "B.man". Then these will be added into the saved game list. 
+It will search in the SaveParentPath and possible files found can "A.boa", "B.ho", "B.man". 
+Then these will be added into the saved game list. 
 An alternative way albeit slower is to add the full paths of these files into SavePathList separated by comma.
 }}}
 
