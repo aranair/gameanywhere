@@ -25,11 +25,9 @@ namespace GameAnywhere.Interface
         /// </summary>
         private int yAxisLocation = 30;
 
-        /// <summary>
-        /// Attribute to determine if the "unable to backup original game files" message has been shown.
-        /// </summary>
-        bool backupErrorMessageShown = false;
-        
+       
+       
+
         public SyncErrorDisplay(List<SyncAction> syncActionList, Form parent)
         {
             this.parent = parent;
@@ -46,7 +44,6 @@ namespace GameAnywhere.Interface
         {
             this.parent = parent;
             parent.Close();
-            backupErrorMessageShown = false;
 
             InitializeComponent();
             CompileSyncErrors(syncErrorList);
@@ -58,7 +55,6 @@ namespace GameAnywhere.Interface
         private void CompileSyncErrors(List<SyncError> syncErrorList)
         {
             this.syncActionList = new List<SyncAction>();
-            backupErrorMessageShown = false;
             foreach (SyncError se in syncErrorList)
             {
                 string gameName = se.FilePath;
@@ -130,22 +126,30 @@ namespace GameAnywhere.Interface
         /// <param name="syncErrorList"></param>
         private void ShowSyncErrors(List<SyncError> syncErrorList)
         {
-            backupErrorMessageShown = false;
+            bool backupErrorMessageShown = false;
+            bool thumbdriveInsufficientSpaceMessageShown = false;
+            bool computerInsufficientSpaceMessageShown = false;
 
             // for each error, this portion shows the file path that was not accessible and the error involved.
             foreach (SyncError syncError in syncErrorList)
             {
                 string errorText = syncError.ErrorMessage;
-                
-                // Creates Failure label ( one each for each file error )
-                if (!errorText.Equals("Unable to backup original game files.") || !backupErrorMessageShown)
-                    CreateSyncErrorLabel(errorText, errorDisplayPanel);
 
-                // If this error message is Unable to backup .... and has been shown before, stop it from showing duplicate.
+                // Bypass the error message if its any of these 3 and it has been shown for this game.
+                if (   (errorText.Equals("Unable to backup original game files.") && backupErrorMessageShown)
+                    || (errorText.Equals("Insufficient space in external storage device.") && thumbdriveInsufficientSpaceMessageShown)
+                    || (errorText.Equals("Insufficient space in computer.") && computerInsufficientSpaceMessageShown))
+                    continue;
+
+                CreateSyncErrorLabel(errorText, errorDisplayPanel);
+                     
+                // Edit dupllicate flags.
                 if (errorText.Equals("Unable to backup original game files."))
-                {
                     backupErrorMessageShown = true;
-                }
+                if (errorText.Equals("Insufficient space in external storage device."))
+                    thumbdriveInsufficientSpaceMessageShown = true;
+                if (errorText.Equals("Insufficient space in computer."))
+                    computerInsufficientSpaceMessageShown = true;
             }
         }
 

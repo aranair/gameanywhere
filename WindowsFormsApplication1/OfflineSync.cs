@@ -174,7 +174,7 @@ namespace GameAnywhere.Process
             if (!enoughSpace)
             {
                 processName = "Checking for enough space";
-                string errorMessage = "Not enough space in external storage device";
+                string errorMessage = "Insufficient space in external storage device.";
                 return GetSyncError(gameItemList, processName, errorMessage);
             }
 
@@ -268,7 +268,7 @@ namespace GameAnywhere.Process
             else //When not enough space in the target location, add all files to error list
             {
                 string currentProcessName = "Checking for enough space";
-                string errorMessage = "Not enough space in computer";
+                string errorMessage = "Insufficient space in computer.";
                 errorList.AddRange(GetSyncError(gameItemList, currentProcessName, errorMessage));
             }
 
