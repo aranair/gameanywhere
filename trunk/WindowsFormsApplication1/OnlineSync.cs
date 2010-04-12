@@ -612,9 +612,14 @@ namespace GameAnywhere.Process
         }
 
         /// <summary>
-        /// 
+        /// Checks S3 and populates the Config and SavedGame PathLists inside the Game objects in the SyncActionList.
         /// </summary>
-        /// <param name="sa"></param>
+        /// <remarks>
+        /// This is required to Undo any actions in case of sync failures.
+        /// The paths are retrieved from the web using GetPathList and appended with "web\".
+        /// </remarks>
+        /// <seealso cref="GetPathList"/>
+        /// <param name="sa">The SyncAction that contains the Game object to be populated.</param>
         private void PopulatePathLists(SyncAction sa)
         {
             sa.MyGame.ConfigPathList.Clear();
@@ -626,10 +631,10 @@ namespace GameAnywhere.Process
         }
 
         /// <summary>
-        /// 
+        /// Gets the ConfigPathList or SavePathList from S3.
         /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
+        /// <param name="key">key to the config/save folder name.</param>
+        /// <returns>A List of strings containing the files that match the key, prefixed with "web\".</returns>
         /// <exception cref="AmazonS3Exception"></exception>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ConnectionFailureException"></exception>
