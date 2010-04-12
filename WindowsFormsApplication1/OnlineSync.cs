@@ -97,6 +97,7 @@ namespace GameAnywhere.Process
                     {
                         if (sa.UnsuccessfulSyncFiles.Count > 0)
                             UndoExternalToComSync(sa);
+                        Restore();
                         throw new ConnectionFailureException();
                     }
                    
