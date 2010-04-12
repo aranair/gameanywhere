@@ -227,13 +227,16 @@ namespace GameAnywhere.Process
                             {
                                 if (file.Contains("savedGame"))
                                     store.DownloadFile(@".\SaveSyncTest-" + worldOfWarcraft + file.Substring(file.LastIndexOf('/')), file);
-                                if (file.Contains("config"))
-                                    store.DownloadFile(@".\ConfigSyncTest-" + worldOfWarcraft + file.Substring(file.LastIndexOf('/')), file);
                             }
                             if (file.Contains(abuseGameName))
                             {
                                 if (file.Contains("savedGame"))
                                     store.DownloadFile(@".\SaveSyncTest-" + abuseGameName + file.Substring(file.LastIndexOf('/')), file);
+                            }
+                            if (file.Contains(theSims3))
+                            {
+                                if (file.Contains("savedGame"))
+                                    store.DownloadFile(@".\SaveSyncTest-" + theSims3 + file.Substring(file.LastIndexOf('/')), file);
                             }
                         }
 

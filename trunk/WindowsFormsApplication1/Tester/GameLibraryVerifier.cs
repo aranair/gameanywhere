@@ -288,11 +288,6 @@ namespace GameAnywhere.Process
                             //check WoW
                             if (game.Name.Equals(worldOfWarcraft))
                             {
-                                if (game.ConfigPathList.Count != 1)
-                                {
-                                    result.Result = false;
-                                    result.AddRemarks("Failed! ConfigPathList of " + game.Name + " expects : 1, returned : " + game.ConfigPathList.Count);
-                                }
                                 if (game.SavePathList.Count != 1)
                                 {
                                     result.Result = false;
@@ -365,11 +360,6 @@ namespace GameAnywhere.Process
                             //check WoW
                             if (game.Name.Equals(worldOfWarcraft))
                             {
-                                if (game.ConfigPathList.Count != 1)
-                                {
-                                    result.Result = false;
-                                    result.AddRemarks("Failed! ConfigPathList of " + game.Name + " expects : 1, returned : " + game.ConfigPathList.Count);
-                                }
                                 if (game.SavePathList.Count != 1)
                                 {
                                     result.Result = false;

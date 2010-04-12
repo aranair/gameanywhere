@@ -137,7 +137,7 @@ namespace GameAnywhere.Process
                         CheckWithGamesOnWeb(ref result, listOfWebPath, wow, SyncAction.AllFiles);
                         break;
                     }
-                case 2: //verifies Wow config, FM 2010 save game
+                case 2: //verifies Wow save, FM 2010 save game
                     {
                         listOfGamesOnWeb = store.ListFiles(comToWeb);
                         foreach (string s in listOfGamesOnWeb)
@@ -149,7 +149,7 @@ namespace GameAnywhere.Process
                         Game wow = PreCondition.getGame(worldOfWarcraft, OnlineSync.ComToWeb);
                         Game fm2010 = PreCondition.getGame(footballManager, OnlineSync.ComToWeb);
                         //check wow
-                        CheckWithGamesOnWeb(ref result, listOfWebPath, wow, SyncAction.ConfigFiles);
+                        CheckWithGamesOnWeb(ref result, listOfWebPath, wow, SyncAction.SavedGameFiles);
                         //check fm
                         CheckWithGamesOnWeb(ref result, listOfWebPath, fm2010, SyncAction.SavedGameFiles);
                         break;
@@ -201,7 +201,8 @@ namespace GameAnywhere.Process
 
                 case 5: //verify all files are unsuccessful
                     {
-                        if (!returnType.GetType().Equals(typeof(ConnectionFailureException)))
+                        Exception except = (Exception)returnType;
+                        if (!except.InnerException.GetType().Equals(typeof(ConnectionFailureException)))
                         {
                             result.Result = false;
                             result.AddRemarks("Failed! return is not ConnectionFailureException!");
@@ -223,8 +224,9 @@ namespace GameAnywhere.Process
                         Game fifa = PreCondition.getGame(FIFA10GameName, OnlineSync.ComToWeb);
                         Game wc3 = PreCondition.getGame(Warcraft3GameName, OnlineSync.ComToWeb);
                         Game abuseGame = PreCondition.getGame(abuse, OnlineSync.ComToWeb);
+                        Game sims = PreCondition.getGame(theSims3, OnlineSync.ComToWeb);
                         //check wow
-                        CheckWithGamesOnWeb(ref result, listOfWebPath, wow, SyncAction.AllFiles);
+                        CheckWithGamesOnWeb(ref result, listOfWebPath, wow, SyncAction.SavedGameFiles);
                         //check fm
                         CheckWithGamesOnWeb(ref result, listOfWebPath, fm2010, SyncAction.SavedGameFiles);
                         //check fifa 10
@@ -233,7 +235,8 @@ namespace GameAnywhere.Process
                         CheckWithGamesOnWeb(ref result, listOfWebPath, wc3, SyncAction.AllFiles);
                         //check abuse
                         CheckWithGamesOnWeb(ref result, listOfWebPath, abuseGame, SyncAction.SavedGameFiles);
-
+                        //check the sims 3
+                        CheckWithGamesOnWeb(ref result, listOfWebPath, sims, SyncAction.SavedGameFiles);
 
                         break;
                     }
