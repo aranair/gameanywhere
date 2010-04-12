@@ -11,21 +11,21 @@ Please take note that you should unzip the GameAnywhere folder to your thumb dri
 
 1. Choose a synchronization direction.
 
-http://picasaweb.google.com/lh/photo/WOo9pYocZCojS5rFUpe6Ew?feat=directlink
+http://lh3.ggpht.com/_-Xzk-2Bdr-I/S8MOvsVBCoI/AAAAAAAAANA/HDz3CNO2RZw/startup.JPG
 
 2. Select the game files that you want to synchronize and click "Confirm".
 
-http://lh3.ggpht.com/_-Xzk-2Bdr-I/S5znfKsCPmI/AAAAAAAAAJU/lBsQmtZn6xw/choosegamescreen.JPG
+http://lh4.ggpht.com/_-Xzk-2Bdr-I/S8MOwBGEpxI/AAAAAAAAANE/2ImMt0p0zv0/choosegame.jpg
 
 3. If synchronization is successful, you will be returned to the startup screen. If synchronization has failed, you can choose to look at the details of the errors by clicking "Errors" or start another synchronization task by clicking "Done".
 
-http://lh6.ggpht.com/_-Xzk-2Bdr-I/S7MSo__nurI/AAAAAAAAAL4/UiaCUPEolzg/successfullysynced.JPG
+http://lh4.ggpht.com/_-Xzk-2Bdr-I/S8MOxt2O7yI/AAAAAAAAANQ/LTdqgemE5Y0/success.JPG
 
-http://lh5.ggpht.com/_-Xzk-2Bdr-I/S5z4NdZzp3I/AAAAAAAAAKA/QJRdPz7UUOQ/step3.1.JPG
+http://lh6.ggpht.com/_-Xzk-2Bdr-I/S8MOwt_cuOI/AAAAAAAAANI/3zDATKA5-Kg/syncfailed.JPG
 
 4. After you are done viewing the detailed errors, click "Done" to return to the startup screen.
 
-http://lh4.ggpht.com/_-Xzk-2Bdr-I/S5z56Ybmc9I/AAAAAAAAAKI/pON34-C6Xus/step4.JPG
+http://lh4.ggpht.com/_-Xzk-2Bdr-I/S8MOxLXgYEI/AAAAAAAAANM/WUTAsFHyUQA/errorpage.JPG
 
 
 == Restore Computer to Original State ==
