@@ -85,11 +85,21 @@ namespace GameAnywhere.Process
                     //Backup files on computer.
                     int backupResult = Backup(sa);
 
-                    //Synchronize from Web to Computer.
-                    WebToComputer(sa, currentUser.Email, backupResult);
-                    if (sa.UnsuccessfulSyncFiles.Count > 0)
-                        UndoExternalToComSync(sa);
+                    try
+                    {
+                        //Synchronize from Web to Computer.
+                        WebToComputer(sa, currentUser.Email, backupResult);
+                        if (sa.UnsuccessfulSyncFiles.Count > 0)
+                            UndoExternalToComSync(sa);
 
+                    }
+                    catch (Exception)
+                    {
+                        if (sa.UnsuccessfulSyncFiles.Count > 0)
+                            UndoExternalToComSync(sa);
+                        throw new ConnectionFailureException();
+                    }
+                   
                 }
                 else if (SyncDirection == ComToWeb)
                 {
