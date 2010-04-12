@@ -828,6 +828,57 @@ namespace GameAnywhere.Process
                         
                         break;
                     }
+                case 20: //check all conflict in one test cases
+                    {
+                        //check fr deletion of file 1 in meta data entries
+                        currentMeta = currentMeta.DeSerialize(@".\SyncFolder\" + WebAndThumbSync.LocalMetaDataFileName);
+                        if (currentMeta.FileTable.ContainsKey("Game1/savedGame/File 1.txt"))
+                        {
+                            result.Result = false;
+                            result.AddRemarks("Failed! Meta data of File 1.txt should be removed!");
+                        }
+
+                        //Game 1
+                        CheckDownload(index, ref result, ref verifyMeta, ref currentMeta, "File 2.txt", "savedGame", "Game1");
+                        CheckUpload(index, ref result, ref verifyMeta, ref currentMeta, "File 3.txt", "savedGame", "Game1");
+                        
+                        //Game 2
+                        CheckDeleteWeb(index, ref result, ref verifyMeta, ref currentMeta, "File 4.txt", "savedGame", "Game2");
+                        CheckDownload(index, ref result, ref verifyMeta, ref currentMeta, "File 5.txt", "savedGame", "Game2");
+
+                        //Game 3
+                        CheckDeleteLocal(index, ref result, ref verifyMeta, ref currentMeta, "File 6.txt", "config", "Game3");
+                        CheckUpload(index, ref result, ref verifyMeta, ref currentMeta, "File 7.txt", "savedGame", "Game3");
+
+                        //Game 4
+                        CheckUpload(index, ref result, ref verifyMeta, ref currentMeta, "File 8.txt", "savedGame", "Game4");
+                        CheckUpload(index, ref result, ref verifyMeta, ref currentMeta, "File 9.txt", "config", "Game4");
+
+                        //Game 5
+                        CheckDownload(index, ref result, ref verifyMeta, ref currentMeta, "File 10.txt", "savedGame", "Game5");
+                        CheckUpload(index, ref result, ref verifyMeta, ref currentMeta, "File 11.txt", "savedGame", "Game5");
+                        CheckUpload(index, ref result, ref verifyMeta, ref currentMeta, "File 12.txt", "savedGame", "Game5");
+                        
+                        //Check File 13 for no change
+                        verifyMeta = verifyMeta.DeSerialize(@".\localTest" + index + "-test" + @"\" + WebAndThumbSync.LocalMetaDataFileName);
+                        currentMeta = currentMeta.DeSerialize(@".\SyncFolder\" + WebAndThumbSync.LocalMetaDataFileName);
+
+                        foreach (string key in verifyMeta.FileTable.Keys)
+                        {
+                            if (key.Equals("Game5/savedGame/File 13.txt"))
+                            {
+                                string testValue = verifyMeta.FileTable[key];
+                                string currentValue = currentMeta.FileTable[key];
+                                if (!testValue.Equals(currentValue))
+                                {
+                                    result.Result = false;
+                                    result.AddRemarks("Failed! current meta : " + key + " " + currentValue + " is different with meta in initial :" + testValue);
+                                }
+                            }               
+                        }
+
+                        break;
+                    }
             }
 
             //All cases conflicts should be 0 after synchronization method.
