@@ -304,7 +304,7 @@ namespace GameAnywhere.Process
             if (Directory.Exists(@".\SyncFolder-test2"))
                 Directory.Move(@".\SyncFolder-test2", @".\SyncFolder");
 
-            for (int i = 1; i <= 19; i++)
+            for (int i = 1; i <= 20; i++)
             {
                 if (Directory.Exists(@".\webTest" + i))
                     Directory.Delete(@".\webTest" + i, true);
