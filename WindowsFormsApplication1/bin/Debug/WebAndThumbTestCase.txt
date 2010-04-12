@@ -159,3 +159,7 @@ Did not handle file lock exception when creating meta data in constructor.
 
 19. Test for disconnection of internet conenction. web has no meta and files. Com has files and no meta.
 	Check for empty meta data to be created.
+
+20. All in one conflict with conflict input as '1'.
+
+21. all conflict input as '2'.
