@@ -209,9 +209,11 @@ To edit the supported games in !GameAnywhere, simply edit the *[DeveloperGuide2#
 #This is a line of comments.
 }}}
  * There can only be one entry each for !ConfigParentPath and !SaveParentPath.
- * !SearchConfigParent/!SearchSaveParent are for [http://msdn.microsoft.com/en-us/library/30wbz966%28VS.71%29.aspx regex] searching to handle variable folder or file names. 	
-   For example, if you have this entry: *!SearchSaveParent=A.[*], B.[*]*
-   <br>[*] is a wildcard that will match any character(s). Files like A.Gamer, B.!ThisIsAnExample, B.–Example-2 *will be searched from the !SaveParentPath* and be added into the saved game list. An alternative way albeit slower is to add the full paths of these files into !SavePathList separated by comma.
+ * !SearchConfigParent/!SearchSaveParent are for [http://msdn.microsoft.com/en-us/library/30wbz966%28VS.71%29.aspx regex] searching to handle variable folder or file names. 
+{{{
+For example, if you have this entry: *!SearchSaveParent=A.[*], B.[*]*
+<br>[*] is a wildcard that will match any character(s). Files like A.Gamer, B.!ThisIsAnExample, B.–Example-2 *will be searched from the !SaveParentPath* and be added into the saved game list. An alternative way albeit slower is to add the full paths of these files into !SavePathList separated by comma.
+}}}
 
 
 == gamev3.txt Example == 
