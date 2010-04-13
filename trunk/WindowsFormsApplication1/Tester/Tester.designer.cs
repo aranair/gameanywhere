@@ -1,4 +1,5 @@
-﻿namespace GameAnywhere.Process
+﻿//Tan Hong Zhou
+namespace GameAnywhere.Process
 {
     partial class Tester
     {
