@@ -16,7 +16,7 @@ In this section, we would introduce the basic features of !GameAnywhere and what
 
 == Software Requirements ==
   * Windows operating system, XP and above.
-  * .Net 3.5 framework installed.
+  * [http://www.microsoft.com/downloads/details.aspx?FamilyID=AB99342F-5D1A-413D-8319-81DA479AB0D7 .Net 3.5 framework] installed.
 
 
 == Features of !GameAnywhere==
@@ -112,7 +112,7 @@ chosen by the user, through the method !GetGameList(direction). The direction of
 
 
 == !OfflineSync Class ==
-This class handles the file/folder manipulation on the computer as well as on the external storage device. The sync direction determine how the game files are transferred.
+This class handles the file/folder manipulation on the computer as well as on the thumb drive. The sync direction determine how the game files are transferred.
 
 === Exception ===
   * !CreateFolderFailedException will be thrown if [DevelopersGuide2#SyncFolder SyncFolder] cannot be created.
@@ -124,7 +124,7 @@ This class handles the file/folder manipulation on the computer as well as on th
 
 == !OnlineSync Class ==
 
-//@Wilson/Nick, fill in a simple description of your class.  
+Similar to OfflineSync Class, OnlineSync Class handles the files/folder manipulation on the computer as well as on the [DevelopersGuide2#Online_Account GA Online Account].
 
 == SimpleDB Class ==
 
@@ -413,7 +413,7 @@ N = No
 
 ----
 
-= GameAnywhere Online Account =
+= !GameAnywhere Online Account =
 
 == Overview ==
 To provide users with their own gameanywhere web account, we need a database to store user account information and Amazon Web Services(AWS) SimpleDB was chosen. Furthermore, by allowing users to synchronize their game data to the web, we need to provide them with a web storage. Thus we would be using AWS Simple Storage Service (S3). For more information about the benefits using AWS, please visit http://aws.amazon.com/. 
