@@ -18,13 +18,12 @@ namespace GameAnywhere.Process
 {
     /// <summary>
     /// 
-    /// The purpose of Test Case is to store the method to test, its input, expected output,
-    /// expected execption to be thrown, and the result
-    /// 
-    /// example of test case format which is stored in the file :-
-    /// [method name]|[input parameters]|[Expected Output]|[Exceptions which may be thrown]
-    /// 
+    /// The purpose of Test Case is to store the method to test, its input, expected output, expected execption to be thrown, and the result.
     /// </summary>
+    /// <remarks>
+    /// Example of test case format which is stored in the file :-
+    /// [method name]|[input parameters]|[Expected Output]|[Exceptions which may be thrown]
+    /// </remarks>
     class TestCase
     {
 

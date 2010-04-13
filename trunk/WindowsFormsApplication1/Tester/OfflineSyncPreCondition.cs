@@ -1,7 +1,7 @@
-﻿using System;
+﻿//Tan Hong Zhou
+using System;
 using System.Collections.Generic;
 using System.Linq;
-//Tan Hong Zhou
 using System.Text;
 using Microsoft.Win32;
 using System.IO;
@@ -21,6 +21,9 @@ using GameAnywhere.Data;
 
 namespace GameAnywhere.Process
 {
+    /// <summary>
+    /// Set the pre-conditions for OfflineSync SynchronizeGames method test cases.
+    /// </summary>
     class OfflineSyncPreCondition : PreCondition
     {
 

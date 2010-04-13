@@ -24,3 +24,9 @@ C:\Users\Gerald\Documents\CS3215\New folder\WebComms\bin\Debug\AWSSDK.xml
 C:\Users\Gerald\Documents\CS3215\New folder\WebComms\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\Gerald\Documents\CS3215\New folder\WebComms\obj\Debug\WebComms.dll
 C:\Users\Gerald\Documents\CS3215\New folder\WebComms\obj\Debug\WebComms.pdb
+C:\Documents and Settings\Wilmer\Desktop\gameanywhere\WebComms\bin\Debug\WebComms.dll
+C:\Documents and Settings\Wilmer\Desktop\gameanywhere\WebComms\bin\Debug\WebComms.pdb
+C:\Documents and Settings\Wilmer\Desktop\gameanywhere\WebComms\bin\Debug\AWSSDK.xml
+C:\Documents and Settings\Wilmer\Desktop\gameanywhere\WebComms\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Wilmer\Desktop\gameanywhere\WebComms\obj\Debug\WebComms.dll
+C:\Documents and Settings\Wilmer\Desktop\gameanywhere\WebComms\obj\Debug\WebComms.pdb

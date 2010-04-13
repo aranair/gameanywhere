@@ -14,7 +14,7 @@ namespace GameAnywhere.Process
 {
     /// <summary>
     /// FolderOperation contains the methods which are required for any folder operations.
-    /// They include: File security modification, copydirectory, folder compare ...
+    /// They include: File security modification, copydirectory, folder compare etc.
     /// </summary>
     class FolderOperation
     {
