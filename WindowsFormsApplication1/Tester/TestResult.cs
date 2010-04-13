@@ -6,6 +6,9 @@ using System.Text;
 
 namespace GameAnywhere.Process
 {
+    /// <summary>
+    /// Stores the results of the test cases.
+    /// </summary>
     class TestResult
     {
         private bool result;

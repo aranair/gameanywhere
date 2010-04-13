@@ -17,7 +17,6 @@ using GameAnywhere.Data;
 namespace GameAnywhere.Process
 {
     /// <summary>
-    /// 
     /// The purpose of Test Case is to store the method to test, its input, expected output, expected execption to be thrown, and the result.
     /// </summary>
     /// <remarks>

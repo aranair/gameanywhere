@@ -20,6 +20,9 @@ using GameAnywhere.Data;
 
 namespace GameAnywhere.Process
 {
+    /// <summary>
+    /// UI for Test Driver.
+    /// </summary>
     public partial class Tester : Form
     {
 

@@ -6,6 +6,9 @@ using System.Text;
 
 namespace GameAnywhere.Process
 {
+    /// <summary>
+    /// Verify  the User class test cases.
+    /// </summary>
     class UserVerifier : Verifier
     {
 
