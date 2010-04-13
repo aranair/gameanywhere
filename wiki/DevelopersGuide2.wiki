@@ -174,7 +174,7 @@ By first checking the existence of the registry key, then checking the existence
 
 = Adding Games =
 
-To edit the supported games in !GameAnywhere, simply edit the [DeveloperGuide2#gamev3.txt_Example !gamev3.txt] file located in the same directory as !GameAnywhere.exe.
+To edit the supported games in !GameAnywhere, simply edit the [DeveloperGuide2#gamev3.txt_Example gamev3.txt] file located in the same directory as !GameAnywhere.exe.
 
 == Variables needed to add a game ==
 
@@ -206,7 +206,7 @@ To edit the supported games in !GameAnywhere, simply edit the [DeveloperGuide2#g
 == Syntax rules to comply ==
  * All critical game information variable must be present.
  * If config files exist, !ConfigParentPath must be present, likewise for saved game files/!SaveParentPath.
- * `[`[DeveloperGuide2#gamev3.txt_Example ENDGAME]`]` after the end of each game (refer to example below).
+ * `[` [DeveloperGuide2#gamev3.txt_Example ENDGAME] `]` after the end of each game (see example below).
  * Comma can be used to separate entries for !ConfigPathList, !SearchConfigParent, !SavePathList and !SearchSaveParent.
  * To write a comment line, begin the line with #. Example: 
 {{{
@@ -332,24 +332,17 @@ Conflicts are checked by comparing the three MetaData objects created, iterating
 === Scenario: No Conflict === 
 
 *Automatic Conflict Resolution* 
-|| *localHash vs.localMeta* || *webHash vs.localMeta* || *Result* || *Action*|| 
-
-|| File exists in both. Hashes are the same. || File exists in both. Hashes are the same. || No changes since last sync. || None|| 
-
-|| File exists in both. Hashes are the same. || File exists in both.
-Hashes are different. ||  File on web has changed. ||  Download|| 
-
-|| File does not exist in both.	||  File exists in webHash only. ||  File on web is newly created. || Download|| 
-
-||  File exists in both. Hashes are different. || File exists in both. Hashes are the same. ||  File on thumb drive has changed. ||  Upload || 
-
-||  File exists in localHash only. || File does not exist in both. || File on thumb drive is newly created. || Upload || 
-
-|| File exists in both. Hashes are the same. ||  File exists in localMeta only.	||  File on web has been deleted. || !DeleteLocal || 
-|| File exists in localMeta only. || File exists in both. Hashes are the same.	|| File on thumb has been deleted || !DeleteWeb || 
-
-|| File exists in localMeta only. || File exists in localMeta only. || File on both thumb and web has been deleted. || !DeleteMetadata || 
-
+|| *File exists in localHash* || *File exists in localMeta* || *File exists in webHash* || *localHash vs.localMeta* || *webHash vs.localMeta* || *Result* || *Action*|| 
+|| Y || Y  || Y || Hashes are the same. || Hashes are the same. || No changes since last sync. || None|| 
+|| Y || Y ||  Y || Hashes are the same. || Hashes are different. ||  File on web has changed. ||  Download || 
+|| N || N ||  Y || - || - ||  File on web is newly created. || Download || 
+||  Y || Y || Y || Hashes are different. || Hashes are the same. ||  File on thumb drive has changed. ||  Upload || 
+|| Y || N || N || - || - || File on thumb drive is newly created. || Upload || 
+|| Y || Y || N || Hashes are the same. || - ||  File on web has been deleted. || !DeleteLocal || 
+|| N || Y || Y || - || Hashes are the same. || File on thumb has been deleted || !DeleteWeb || 
+|| N || Y ||  N || - || - || File on both thumb and web has been deleted. || !DeleteMetadata || 
+Y = Yes
+N = No
 
 ----
 
