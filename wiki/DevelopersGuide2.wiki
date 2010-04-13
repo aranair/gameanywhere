@@ -350,9 +350,9 @@ N = No
 *Manual Conflict Resolution by User*
 
 || *File exists in localHash* || *File exists in localMeta* || *File exists in webHash* || *localHash vs.localMeta* || *webHash vs.localMeta* || *Result* || *Conflict*|| 
-|| Y || Y || Y || Hashes are different. || Hashes are different.|| Both thumb drive and web has changed. || ! UploadOrDownload ||
+|| Y || Y || Y || Hashes are different. || Hashes are different.|| Both thumb drive and web has changed. || !UploadOrDownload ||
 || Y || N ||Y || - || - || File on both thumb drive and web are newly created || !UploadOrDownload ||
-|| Y || Y || 
+|| Y || N || Y ||
 
 ----
 
