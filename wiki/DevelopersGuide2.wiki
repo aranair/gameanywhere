@@ -119,6 +119,7 @@ This class handles the file/folder manipulation on the computer as well as on th
 
 === See Aslo ===
    * [DevelopersGuide2#Game_Files_Storage_Structure Game Files Storage Structure]
+   * [DevelopersGuide2#Offline_Synchronization Offline Synchronization]
 
 
 == !OnlineSync Class ==
@@ -154,9 +155,9 @@ Use camel case for subfolder names i.e. "savedGame".
 
 == !SyncFolder ==
 
-!GameAnywhere would create a folder to store all the games files that you would want to save. This folder is called *SyncFolder*. It would be located at the same directory as !GameAnywhere.exe.
+!GameAnywhere would create a folder to store all the games files that you would want to save. This folder is called *!SyncFolder*. It would be located at the same directory as !GameAnywhere.exe.
 
-The subfolders in SyncFolder are the game folder(s). Each of the game folder is named after a game. 
+The subfolders in !SyncFolder are the game folder(s). Each of the game folder is named after a game. 
 
 Configuration and Saved game files are stored in their respective folder under a game folder. 
 
@@ -173,7 +174,7 @@ By first checking the existence of the registry key, then checking the existence
 
 = Adding Games =
 
-To edit the supported games in !GameAnywhere, simply edit the *[DeveloperGuide2#gamev3.txt_Example gamev3.txt]* file located in the same directory as !GameAnywhere.exe.
+To edit the supported games in !GameAnywhere, simply edit the [DeveloperGuide2#gamev3.txt_Example !gamev3.txt] file located in the same directory as !GameAnywhere.exe.
 
 == Variables needed to add a game ==
 
@@ -205,18 +206,19 @@ To edit the supported games in !GameAnywhere, simply edit the *[DeveloperGuide2#
 == Syntax rules to comply ==
  * All critical game information variable must be present.
  * If config files exist, !ConfigParentPath must be present, likewise for saved game files/!SaveParentPath.
- * [DeveloperGuide2#gamev3.txt_Example ![ENDGAME]] after the end of each game (refer to example below).
+ * `[`[DeveloperGuide2#gamev3.txt_Example ENDGAME]`]` after the end of each game (refer to example below).
  * Comma can be used to separate entries for !ConfigPathList, !SearchConfigParent, !SavePathList and !SearchSaveParent.
  * To write a comment line, begin the line with #. Example: 
 {{{
 #This is a line of comments.
 }}}
  * There can only be one entry each for !ConfigParentPath and !SaveParentPath.
- * !SearchConfigParent/!SearchSaveParent are for [http://msdn.microsoft.com/en-us/library/30wbz966%28VS.71%29.aspx regex] searching to handle variable folder or file names. 
+ * !SearchConfigParent/!SearchSaveParent are for [http://msdn.microsoft.com/en-us/library/30wbz966%28VS.71%29.aspx regex] searching to handle variable folder or file names. Example:
 {{{
-For example, if you have this entry: SearchSaveParent = A.[*], B.[*]
+SearchSaveParent = A.*, B.*
+Possible Result: "A.boa", "B.ho", "B.man"
 * is a wildcard that will match any character(s). 
-It will search in the SaveParentPath and possible files found can "A.boa", "B.ho", "B.man". 
+It will search in the SaveParentPath for all possible files. 
 Then these will be added into the saved game list. 
 An alternative way albeit slower is to add the full paths of these files into SavePathList separated by comma.
 }}}
@@ -301,15 +303,53 @@ http://farm3.static.flickr.com/2776/4478572596_fc9a553fca_o.jpg
 
 = Thumb Drive and Web Synchronization =
 
-//@Wilson, explain how Thumb Drive and Web Sync is executed.
+Web and Thumb Drive Synchronization is a two-way file-level synchronization operation. The aim of this operation is to ensure that the game files stored on the web are the same as the game files stored on the thumb drive. The files on both sides will be checked and compared against a metadata file that is stored on the thumb drive and the user would then be asked to resolve any outstanding conflicts that cannot be automatically be resolved. 
 
-== Meta-data file ==
+== Metadata file ==
 
-// Please include the meta-data format (Suggested by Dr D.)
+The metadata file is a serialized MetaData object.
 
-== Conflict Resolution == 
+  * The !MetaData object contains a Dictionary<String, String> !FileTable which stores the paths of the files as keys, and their MD5 Hash codes as the corresponding values.
+  * The keys are not specific to local or remote paths, only including the path starting from the game name (i.e. “Warcraft III/config/CustomKeys.txt”).
+  * The metadata file stores the state of the files that are previously successfully synchronized between the Web and Thumb Drive.
+  * The metadata file is created/updated only when Thumb Drive and Web Synchronization is executed and not the other modes of synchronization. (See [DevelopersGuide2#Synchronization_Algorithm_/_Conflict_Resolution Web and Thumb Drive Synchronization Algorithm)
 
-// The algorithm used (also suggested by Dr D.)
+
+== Synchronization Algorithm / Conflict Resolution == 
+
+Since the metadata file stores the state of the previous successful synchronization, it can be used to compare if the files have been change, deleted or newly created.
+
+=== Metadata and Syncing ===
+When The WebAndThumbSync object is instantiated, it will:
+  * Create the MetaData object by de-serializing the metadatafile (localMeta).
+  * Create a MetaData object of the current state of the files in the Thumb Drive (localHash).
+  * Create a MetaData object of the current state of the files on the Web (webHash).
+
+=== Checking Conflicts ===
+The CheckConflicts() method is called to check for conflicts, which either can automatically be resolved, or requires the user resolution.
+Conflicts are checked by comparing the three MetaData objects created, iterating through each entry of the FileTable data member.
+
+=== Scenario: No Conflict === 
+
+*Automatic Conflict Resolution* 
+|| *localHash vs.localMeta* || *webHash vs.localMeta* || *Result* || *Action*|| 
+
+|| File exists in both. Hashes are the same. || File exists in both. Hashes are the same. || No changes since last sync. || None|| 
+
+|| File exists in both. Hashes are the same. || File exists in both.
+Hashes are different. ||  File on web has changed. ||  Download|| 
+
+|| File does not exist in both.	||  File exists in webHash only. ||  File on web is newly created. || Download|| 
+
+||  File exists in both. Hashes are different. || File exists in both. Hashes are the same. ||  File on thumb drive has changed. ||  Upload || 
+
+||  File exists in localHash only. || File does not exist in both. || File on thumb drive is newly created. || Upload || 
+
+|| File exists in both. Hashes are the same. ||  File exists in localMeta only.	||  File on web has been deleted. || !DeleteLocal || 
+|| File exists in localMeta only. || File exists in both. Hashes are the same.	|| File on thumb has been deleted || !DeleteWeb || 
+
+|| File exists in localMeta only. || File exists in localMeta only. || File on both thumb and web has been deleted. || !DeleteMetadata || 
+
 
 ----
 
