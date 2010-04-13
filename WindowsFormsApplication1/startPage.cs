@@ -460,7 +460,7 @@ namespace GameAnywhere.Interface
             catch (ConnectionFailureException)
             {
                 CloseWaitDialog();
-                SetErrorLabel("Unable to connect to server.", Color.Red);
+                SetErrorLabel("Unable to connect to web server.", Color.Red);
                 return;
             }
             catch (IOException)
@@ -478,7 +478,7 @@ namespace GameAnywhere.Interface
 
             if (conflictsList == null)
             {
-                SetErrorLabel("Unable to connect to server.", Color.Red);
+                SetErrorLabel("Unable to connect to web server.", Color.Red);
             }
             // There are conflicts to be resolved, popup will be shown.
             else if (conflictsList.Count != 0)
@@ -876,7 +876,7 @@ namespace GameAnywhere.Interface
                     case 1:
                         {
                             InitiateStartPanel();
-                            SetErrorLabel("   Registration Complete", System.Drawing.Color.DeepSkyBlue);
+                            SetErrorLabel("Activation Email Sent.", System.Drawing.Color.DeepSkyBlue);
                             break;
                         }// Successfully Registered.
                     case 2:
@@ -1067,7 +1067,7 @@ namespace GameAnywhere.Interface
                     case 1:
                         {
                             InitiateStartPanel();
-                            SetErrorLabel("Password successfully changed.", System.Drawing.Color.DeepSkyBlue);
+                            SetErrorLabel("   Password Changed.", System.Drawing.Color.DeepSkyBlue);
                             break;
                         }   // Successfully changed password.
                     case 2:
@@ -1248,7 +1248,7 @@ namespace GameAnywhere.Interface
                     case 1:
                         {
                             InitiateStartPanel();
-                            SetErrorLabel("Password sent to email.", System.Drawing.Color.DeepSkyBlue);
+                            SetErrorLabel("    Password Sent.", System.Drawing.Color.DeepSkyBlue);
                             break;
                         }// Success
                     case 2:
