@@ -335,14 +335,24 @@ Conflicts are checked by comparing the three MetaData objects created, iterating
 || *File exists in localHash* || *File exists in localMeta* || *File exists in webHash* || *localHash vs.localMeta* || *webHash vs.localMeta* || *Result* || *Action*|| 
 || Y || Y  || Y || Hashes are the same. || Hashes are the same. || No changes since last sync. || None|| 
 || Y || Y ||  Y || Hashes are the same. || Hashes are different. ||  File on web has changed. ||  Download || 
-|| N || N ||  Y || - || - ||  File on web is newly created. || Download || 
-||  Y || Y || Y || Hashes are different. || Hashes are the same. ||  File on thumb drive has changed. ||  Upload || 
-|| Y || N || N || - || - || File on thumb drive is newly created. || Upload || 
+|| Y || Y || Y || Hashes are different. || Hashes are the same. ||  File on thumb drive has changed. ||  Upload || 
 || Y || Y || N || Hashes are the same. || - ||  File on web has been deleted. || !DeleteLocal || 
-|| N || Y || Y || - || Hashes are the same. || File on thumb has been deleted || !DeleteWeb || 
+|| N || Y || Y || - || Hashes are the same. || File on thumb has been deleted || !DeleteWeb ||
+|| Y || N || N || - || - || File on thumb drive is newly created. || Upload || 
+|| N || N ||  Y || - || - ||  File on web is newly created. || Download ||  
 || N || Y ||  N || - || - || File on both thumb and web has been deleted. || !DeleteMetadata || 
-Y = Yes
+Y = Yes, 
 N = No
+
+
+=== Scenario: Conflict(s) === 
+
+*Manual Conflict Resolution by User*
+
+|| *File exists in localHash* || *File exists in localMeta* || *File exists in webHash* || *localHash vs.localMeta* || *webHash vs.localMeta* || *Result* || *Conflict*|| 
+|| Y || Y || Y || Hashes are different. || Hashes are different.|| Both thumb drive and web has changed. || ! UploadOrDownload ||
+|| Y || N ||Y || - || - || File on both thumb drive and web are newly created || !UploadOrDownload ||
+|| Y || Y || 
 
 ----
 
