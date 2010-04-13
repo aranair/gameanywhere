@@ -24,4 +24,5 @@
     * [UserGuide#Synchronize_Game_Files_between_Thumb_Drive_and_Online_Account Synchronize Game Files between Thumb Drive and Online]
     * [UserGuide#Restore_Computer_to_Original_State Restore Computer to Original State]
     * [UserGuide#Registering_for_your_Online_Account Registering for your Online Account]
+    * [UserGuide#Adding_Games Adding Games]
     * [UserGuide#Frequently_Asked_Questions Frequently Asked Questions]
