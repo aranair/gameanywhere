@@ -10,26 +10,19 @@
     * [DevelopersGuide2#Games_Detection Games Detection]
     * [DevelopersGuide2#Adding_Games Adding Games]
     * [DevelopersGuide2#Offline_Synchronization Offline Synchronization]
-    * [DevelopersGuide2#API_Reference API_Reference]
+    * [DevelopersGuide2#Online_Synchronization Online Synchronization]
+    * [DevelopersGuide2#Thumb_Drive_and_Web_Synchronization Thumb Drive and Web Synchronization]
+    * [DevelopersGuide2#GameAnywhere_Online_Account GameAnywhere Online Account]
+    * [DevelopersGuide2#API_Reference API Reference]
   * [TestDriverUserGuide Test Driver User Guide]
     * [TestDriverUserGuide#Test_Case_File Test Case File]
     * [TestDriverUserGuide#How_to_use_the_Test_Driver Test Driver]
     * [TestDriverUserGuide#How_to_test_GameLibrary_and_OfflineSync Testing]
     * [TestDriverUserGuide#See_Also See Also]
-  * [UserGuide GameAnywhere User Guide]
-    * [UserGuide#Synchronize_Game_Files_Between_Computer_And_Thumb_Drive Synchronize Game Files]
-    * [UserGuide#Exit_Program_And_Restore_Computer_To_Original_State Restore and Exit]
-    * [UserGuide#Frequently_Asked_Questions FAQ]
-
-
-
-<wiki:comment>
-    * [GameDetection Game Detection]
-    * [OfflineSync Offline Synchronization]
-    * [OnlineSync Online Synchronization]
-    * [WebAndExternal Web and External Drive Synchronization]
-    * [Restore Restore Computer to original Game state]
-    * [AutomatedTester Automated Tester]
-    * [API GameAnywhere API]  
-</wiki:comment>
-  
+  * [UserGuide User Guide]
+    * [UserGuide#Synchronize_Game_Files_between_Computer_and_Thumb_Drive Synchronize Game Files between Computer and Thumb Drive]
+    * [UserGuide#Synchronize_Game_Files_between_Computer_and_Online_Account Synchronize Game Files between Computer and Online Account]
+    * [UserGuide#Synchronize_Game_Files_between_Thumb_Drive_and_Online_Account Synchronize Game Files between Thumb Drive and Online]
+    * [UserGuide#Restore_Computer_to_Original_State Restore Computer to Original State]
+    * [UserGuide#Registering_for_your_Online_Account Registering for your Online Account]
+    * [UserGuide#Frequently_Asked_Questions Frequently Asked Questions]
