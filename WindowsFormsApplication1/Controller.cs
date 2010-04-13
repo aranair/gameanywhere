@@ -148,6 +148,7 @@ namespace GameAnywhere.Process
 
                 catch (Exception)
                 {
+                    onlineSync.Restore();
                     throw new ConnectionFailureException();
                 }
             }
