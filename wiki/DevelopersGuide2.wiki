@@ -114,10 +114,10 @@ chosen by the user, through the method !GetGameList(direction). The direction of
 == !OfflineSync Class ==
 This class handles the file/folder manipulation on the computer as well as on the thumb drive. The sync direction determine how the game files are transferred.
 
-=== Exception ===
+==== Exception ====
   * !CreateFolderFailedException will be thrown if [DevelopersGuide2#SyncFolder SyncFolder] cannot be created.
 
-=== See Aslo ===
+==== See Also ====
    * [DevelopersGuide2#Game_Files_Storage_Structure Game Files Storage Structure]
    * [DevelopersGuide2#Offline_Synchronization Offline Synchronization]
 
