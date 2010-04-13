@@ -39,7 +39,7 @@ namespace GameAnywhere.Interface
             // 
             // buttonYes
             // 
-            this.buttonYes.Font = new System.Drawing.Font("Verdana", 9.75F);
+            this.buttonYes.Font = new System.Drawing.Font("Verdana", 9F);
             this.buttonYes.Location = new System.Drawing.Point(12, 58);
             this.buttonYes.Name = "buttonYes";
             this.buttonYes.Size = new System.Drawing.Size(110, 25);
@@ -50,7 +50,7 @@ namespace GameAnywhere.Interface
             // 
             // buttonNo
             // 
-            this.buttonNo.Font = new System.Drawing.Font("Verdana", 9.75F);
+            this.buttonNo.Font = new System.Drawing.Font("Verdana", 9F);
             this.buttonNo.Location = new System.Drawing.Point(131, 58);
             this.buttonNo.Name = "buttonNo";
             this.buttonNo.Size = new System.Drawing.Size(110, 25);
@@ -71,7 +71,7 @@ namespace GameAnywhere.Interface
             // 
             // cancelButton
             // 
-            this.cancelButton.Font = new System.Drawing.Font("Verdana", 9.75F);
+            this.cancelButton.Font = new System.Drawing.Font("Verdana", 9F);
             this.cancelButton.Location = new System.Drawing.Point(250, 58);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(110, 25);

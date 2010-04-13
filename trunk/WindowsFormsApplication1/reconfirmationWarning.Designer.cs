@@ -39,7 +39,7 @@ namespace GameAnywhere.Interface
             // 
             // cancelButton
             // 
-            this.cancelButton.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cancelButton.Font = new System.Drawing.Font("Verdana", 8F);
             this.cancelButton.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.cancelButton.Location = new System.Drawing.Point(268, 57);
             this.cancelButton.Name = "cancelButton";
@@ -72,7 +72,7 @@ namespace GameAnywhere.Interface
             // 
             // buttonOk
             // 
-            this.buttonOk.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonOk.Font = new System.Drawing.Font("Verdana", 8F);
             this.buttonOk.Location = new System.Drawing.Point(146, 57);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(110, 25);
