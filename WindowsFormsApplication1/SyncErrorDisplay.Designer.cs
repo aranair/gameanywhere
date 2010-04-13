@@ -1,4 +1,5 @@
-﻿namespace GameAnywhere.Interface
+﻿//Boa Ho Man
+namespace GameAnywhere.Interface
 {
     partial class SyncErrorDisplay
     {
