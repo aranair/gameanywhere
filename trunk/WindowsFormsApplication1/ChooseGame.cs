@@ -57,8 +57,6 @@ namespace GameAnywhere.Interface
 
         private Thread waitThread;
 
-        private volatile bool continueRun;
-
         #endregion
 
         #region Constructors
