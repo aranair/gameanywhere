@@ -110,9 +110,16 @@ namespace GameAnywhere.Process
 
             else if (direction == OnlineSync.WebToCom)
             {
-                // Obtain games' information from the web first then pass to GameLibrary to process
-                List<string> webGamesList = OnlineSync.GetGamesAndTypesFromWeb(user.Email);
-                gameList = gameLibrary.GetGameList(direction, webGamesList);
+                try
+                {
+                    // Obtain games' information from the web first then pass to GameLibrary to process
+                    List<string> webGamesList = OnlineSync.GetGamesAndTypesFromWeb(user.Email);
+                    gameList = gameLibrary.GetGameList(direction, webGamesList);
+                }
+                catch (Exception)
+                {
+                    throw new ConnectionFailureException();
+                }
             }
 
             Debug.Assert(gameList != null, "Game list is null.");
