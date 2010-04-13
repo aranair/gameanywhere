@@ -458,6 +458,10 @@ namespace GameAnywhere.Process
                         //Move the file into the backup folder
                         File.Move(item, Path.Combine(backupFolderPath, fileName));
                     }
+                    catch (UnauthorizedAccessException)
+                    {
+                        errorList.AddRange(GetSyncError(item, processDescription, "Access to the path " + item + " is denied."));
+                    }
                     catch (Exception ex)
                     {
                         errorList.AddRange(GetSyncError(item, processDescription, ex.Message));

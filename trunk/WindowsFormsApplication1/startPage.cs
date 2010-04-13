@@ -1344,6 +1344,7 @@ namespace GameAnywhere.Interface
                 }
                 catch (ConnectionFailureException)
                 {
+                    CloseWaitDialog();
                     MessageBox.Show("Unable to connect to web server.");
                     return;
                 }
