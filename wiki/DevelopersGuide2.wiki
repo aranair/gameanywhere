@@ -206,7 +206,7 @@ To edit the supported games in !GameAnywhere, simply edit the [DeveloperGuide2#g
 == Syntax rules to comply ==
  * All critical game information variable must be present.
  * If config files exist, !ConfigParentPath must be present, likewise for saved game files/!SaveParentPath.
- * [DeveloperGuide2#gamev3.txt_Example `[ENDGAME]`] after the end of each game (see example below).
+ *  `[``E``N``D``G``A``M``E``]` after the end of each game (see [DeveloperGuide2#gamev3.txt_Example example] below).
  * Comma can be used to separate entries for !ConfigPathList, !SearchConfigParent, !SavePathList and !SearchSaveParent.
  * To write a comment line, begin the line with #. Example: 
 {{{
