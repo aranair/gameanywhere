@@ -21,6 +21,9 @@ using GameAnywhere.Data;
 
 namespace GameAnywhere.Process
 {
+    /// <summary>
+    /// Verify the result for GameLibrary GetGameList method test cases.
+    /// </summary>
     class GameLibraryVerifier : Verifier
     {
 

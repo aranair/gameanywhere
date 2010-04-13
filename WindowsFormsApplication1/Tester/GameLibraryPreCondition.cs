@@ -21,6 +21,9 @@ using GameAnywhere.Data;
 
 namespace GameAnywhere.Process
 {
+    /// <summary>
+    /// Set the pre-conditions for GameLibrary GetGameList method test cases.
+    /// </summary>
     class GameLibraryPreCondition : PreCondition
     {
 

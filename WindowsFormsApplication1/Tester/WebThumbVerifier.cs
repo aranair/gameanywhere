@@ -9,6 +9,9 @@ using GameAnywhere.Data;
 
 namespace GameAnywhere.Process
 {
+    /// <summary>
+    ///  Verify the result of CheckConflicts and SynchronizeGames method test cases.
+    /// </summary>
     class WebThumbVerifier : Verifier
     {
 

@@ -22,8 +22,8 @@ using GameAnywhere.Data;
 namespace GameAnywhere.Process
 {
     /// <summary>
-    /// PreCondition Class is used to set the preconditions for each of the test cases if neccessary
-    /// It also contains Helper methods to clean up the extra files/folders created during the testing process
+    /// PreCondition Class is used to set the preconditions for each of the test cases if neccessary.
+    /// It also contains Helper methods to clean up the extra files/folders created during the testing process.
     /// 
     /// For each test case decription, please refer to the text file decription.
     /// </summary>

@@ -17,6 +17,9 @@ namespace GameAnywhere.Process
 {
 
     /// <summary>
+    /// TestDriver takes in the test cases and execute them.
+    /// </summary>
+    /// <remarks>
     /// Pre-condition for test driver, 
     /// both save and config files 
     /// do not exist in all the games
@@ -27,8 +30,7 @@ namespace GameAnywhere.Process
     ///         for (every possible inputs)
     ///             ensure that the method returns the expected output
     ///             ensure that each of the exceptions is properly handled
-    ///
-    /// </summary>
+    ///</remarks>
     class TestDriver
     {
         private string className;

@@ -10,6 +10,9 @@ using GameAnywhere.Data;
 
 namespace GameAnywhere.Process
 {
+    /// <summary>
+    /// Verify the result of OnlineSync SynchronizeGames method test cases.
+    /// </summary>
     class OnlineSyncVerifier : Verifier
     {
 
