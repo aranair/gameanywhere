@@ -142,7 +142,7 @@ namespace GameAnywhere.Interface
                     continue;
 
                 CreateSyncErrorLabel(errorText, errorDisplayPanel);
-                MessageBox.Show(errorText);
+
                 if (errorText.Contains("There is not enough space on the disk."))
                     break;
      
