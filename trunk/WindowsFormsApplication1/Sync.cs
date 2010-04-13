@@ -460,7 +460,7 @@ namespace GameAnywhere.Process
                     }
                     catch (UnauthorizedAccessException)
                     {
-                        errorList.AddRange(GetSyncError(item, processDescription, "Access to the path " + item + " is denied."));
+                        errorList.AddRange(GetSyncError(item, processDescription, "Access to the path '" + item + "' is denied."));
                     }
                     catch (Exception ex)
                     {
