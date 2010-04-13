@@ -115,7 +115,7 @@ chosen by the user, through the method !GetGameList(direction). The direction of
 This class handles the file/folder manipulation on the computer as well as on the external storage device. The sync direction determine how the game files are transferred.
 
 === Exception ===
-  * !CreateFolderFailedException will be thrown if [DevelopersGuide2#SyncFolder !SyncFolder] cannot be created.
+  * !CreateFolderFailedException will be thrown if [DevelopersGuide2#SyncFolder SyncFolder] cannot be created.
 
 === See Aslo ===
    * [DevelopersGuide2#Game_Files_Storage_Structure Game Files Storage Structure]
@@ -125,6 +125,26 @@ This class handles the file/folder manipulation on the computer as well as on th
 == !OnlineSync Class ==
 
 //@Wilson/Nick, fill in a simple description of your class.  
+
+== SimpleDB Class ==
+
+This class enables communication with the Amazon-SimpleDB service directly. It provides minimal database functions necessary to support the User class.
+
+In Amazon SimpleDB, a table is called a domain while rows are identified as items, and columns are attributes. The unique key is known as the item id. So here is an overview
+  * To insert an item into Amazon SimpleDB, use the !InsertItem method.
+  * To get an item’s attribute value, use the !GetAttribute method.
+  * To update an item’s attribute value, use the !UpdateAttributeValue method.
+  * To check if an item exists in the domain, use the !ItemExists method.
+
+*Note:*
+ # Ensure that you have installed the latest Amazon Web Services SDK for .NET, which can be downloaded from http://aws.amazon.com/sdkfornet/. 
+ # Ensure you have add reference to the Amazon Web Services SDK for .NET in your project.
+ # You have to include the following when using Amazon SimpleDB:
+{{{
+using Amazon;
+using Amazon.SimpleDB;
+using Amazon.SimpleDB.Model;
+}}}
 
 ----
 
@@ -206,7 +226,7 @@ To edit the supported games in !GameAnywhere, simply edit the [DeveloperGuide2#g
 == Syntax rules to comply ==
  * All critical game information variable must be present.
  * If config files exist, !ConfigParentPath must be present, likewise for saved game files/!SaveParentPath.
- *  `[``E``N``D``G``A``M``E``]` after the end of each game (see [DeveloperGuide2#gamev3.txt_Example example] below).
+ *  `[``E``N``D``G``A``M``E``]` after the end of each game (see [DevelopersGuide2#gamev3.txt_Example example] below).
  * Comma can be used to separate entries for !ConfigPathList, !SearchConfigParent, !SavePathList and !SearchSaveParent.
  * To write a comment line, begin the line with #. Example: 
 {{{
@@ -260,24 +280,24 @@ SaveParentPath=DocumentsPath\Eidos\Batman Arkham Asylum
 
 = Offline Synchronization =
 
-Offline synchronization includes synchronizing between the computer and the [DevelopersGuide2#SyncFolder SyncFolder]. [DevelopersGuide2#SyncFolder SyncFolder] is located on an external device.
+Offline synchronization includes synchronizing between the computer and the [DevelopersGuide2#SyncFolder SyncFolder]. [DevelopersGuide2#SyncFolder SyncFolder] is located on an thumb drive.
 
 http://farm3.static.flickr.com/2776/4478572596_fc9a553fca_o.jpg
 
-== External Device to Computer Sync == 
+== Synchronizing Thumb Drive to Computer == 
 
-*Steps for synchronizing from External storage device to Computer:*
+*Steps for synchronizing from Thumb Drive to Computer:*
  # Create a backup folder in the game file parent directory.
    * If backup folder exists, skip backup process.
  # Move original game files in the computer into the backup folder to complete backup process.
    * If backup is not successful, skip sync for game.
- # Copy the game files in the external storage device into the computer.
+ # Copy the game files in the thumb drive into the computer.
 
 
-== Computer to External Device Sync ==
+== Synchronizing Computer to Thumb Drive ==
 
-*Steps for synchronizing from Computer to External storage device:*
- # Remove existing game files in external storage device.
+*Steps for synchronizing from Computer to Thumb Drive:*
+ # Remove existing game files in thumb drive.
  # Create the necessary game folder structure in the external storage device.
  # Copy game files from computer into the new directory.
 
@@ -293,11 +313,23 @@ http://farm3.static.flickr.com/2776/4478572596_fc9a553fca_o.jpg
 
 = Online Synchronization =
 
-//@Wilson/Nick, explain how online sync is executed.
+== Synchronizing Computer to GA Online Account ==
+This is a one way synchronization from PC to GA Online account. Here is how it works:
+ # Given the game and type of data(saved and/or config) to sync. Ensure the game is available in user’s web account.
+ # If the game is available on user’s web account, delete the respective saved and/or config folder of the game.
+ # Given a list of saved/config data files to backup, we will upload them one by one.
+ # In the event there is an error with the upload, it will accumulate the errors and return a list of sync errors.
+ # Lastly, add the list of sync errors to a list of unsuccessful synced files.
 
-== See Also ==
-  * [DevelopersGuide2#Login_System Login System]
-  * [DevelopersGuide2#GameAnywhere_Account_Registration_System GameAnywhere Account Registration System]
+
+== Synchronizing GA Online Account to Computer  == 
+
+*Steps for synchronizing from GA Online Account to Computer:*
+ # Create a backup folder in the game file parent directory.
+   * If backup folder exists, skip backup process.
+ # Move original game files in the computer into the backup folder to complete backup process.
+   * If backup is not successful, skip sync for game.
+ # Copy the game files in the GA Online Account into the computer. 
 
 -----
 
@@ -305,9 +337,17 @@ http://farm3.static.flickr.com/2776/4478572596_fc9a553fca_o.jpg
 
 Web and Thumb Drive Synchronization is a two-way file-level synchronization operation. The aim of this operation is to ensure that the game files stored on the web are the same as the game files stored on the thumb drive. The files on both sides will be checked and compared against a metadata file that is stored on the thumb drive and the user would then be asked to resolve any outstanding conflicts that cannot be automatically be resolved. 
 
+
 == Metadata file ==
 
-The metadata file is a serialized !MetaData object.
+The !MetaData object stores the the path of the files as well as the checksum of each file in the SyncFolder. We have used a Dictionary of strings to store them. 
+This !MetaData object is then output as a serialized metadata file. There will only be one metadata file being stored in the thumb drive (metadata.ga). This file would only be created if a user selects Thumb drive and Web sync.
+
+Here is the format of how the contents of the metadata is stored:
+|| *Path* || *MD5 Hash codes* ||
+|| /config/wc.dat || 4F33DSFE4234 ||
+|| /config/controls/key.bin || 54DS65GHDH6||
+|| /saved/stage2.dat || 43FSDFS3SFD4 ||
 
   * The !MetaData object contains a Dictionary<String, String> !FileTable which stores the paths of the files as keys, and their MD5 Hash codes as the corresponding values.
   * The keys are not specific to local or remote paths, only including the path starting from the game name (i.e. “Warcraft III/config/CustomKeys.txt”).
@@ -315,13 +355,15 @@ The metadata file is a serialized !MetaData object.
   * The metadata file is created/updated only when Thumb Drive and Web Synchronization is executed and not the other modes of synchronization. (See [DevelopersGuide2#Synchronization_Algorithm_/_Conflict_Resolution Web and Thumb Drive Synchronization Algorithm])
 
 
+
+
 == Synchronization Algorithm / Conflict Resolution == 
 
 Since the metadata file stores the state of the previous successful synchronization, it can be used to compare if the files have been change, deleted or newly created.
 
 === Metadata and Syncing ===
-When The WebAndThumbSync object is instantiated, it will:
-  * Create the !MetaData object by de-serializing the metadatafile (!localMeta).
+When The !WebAndThumbSync object is instantiated, it will:
+  * Create the !MetaData object by de-serializing the metadata file (!localMeta).
   * Create a !MetaData object of the current state of the files in the Thumb Drive (!localHash).
   * Create a !MetaData object of the current state of the files on the Web (!webHash).
 
@@ -344,44 +386,146 @@ Conflicts are checked by comparing the three !MetaData objects created, iteratin
 Y = Yes, 
 N = No
 
-
+<br>
 === Scenario: Conflict(s) === 
 
 *Manual Conflict Resolution by User*
 
-|| *File exists in localHash* || *File exists in localMeta* || *File exists in webHash* || *localHash vs.localMeta* || *webHash vs.localMeta* || *Result* || *Conflict*|| 
-|| Y || Y || Y || Hashes are different. || Hashes are different.|| Both thumb drive and web has changed. || !UploadOrDownload ||
-|| Y || Y || N || Hashes are different. || - || File on thumb drive has changed and file on web has been deleted. || !UploadOrDeleteLocal ||
-|| N || Y || Y || - || Hashes are different. || File on web has changed and file on thumb drive has been deleted. || !DownloadOrDeleteWeb ||
+|| *File exists in localHash* || *File exists in localMeta* || *File exists in webHash* || *localHash vs.localMeta* || *webHash vs.localMeta* || *Result* || *Conflict Resolve Option*|| 
+|| Y || Y || Y || Hashes are different. || Hashes are different.|| Both thumb drive and web has changed. || Upload Or Download ||
+|| Y || Y || N || Hashes are different. || - || File on thumb drive has changed and file on web has been deleted. || Upload Or Delete local files||
+|| N || Y || Y || - || Hashes are different. || File on web has changed and file on thumb drive has been deleted. || Download Or Delete Web File ||
 || Y || N ||Y || - || - || File on both thumb drive and web are newly created || !UploadOrDownload ||
+Y = Yes, 
+N = No
+
+<br>
+=== More about Conflicts ===
+  * All conflicts that are automatically resolved are stored in static Dictionary<string, !NoConflictDirection> !noConflict with their respective actions.
+  * All conflicts that cannot be automatically resolved are stored in a static Dictionary<string, !ConflictDirection> Conflicts with their respective conflicts.
+  * The Conflicts Dictionary is then passed through !FilterConflicts() which “folds” the conflicts from file-level to folder-level (Config or !savedGame) for each game.
+  * The user is not allowed to resolve conflicts on a file-level basis, as it would be more intuitive for them to select the direction of conflicting Config or savedGame files.
+  * The folded Dictionary is then passed back to the GUI as a Dictionary<String, int> where the int values are initialized to 0.
+  * The GUI gets his input from the user, changes the 0 to either a 1 or 2 depending on the user’s choice and calls !OnlineSync.!SynchronizeGames(Dictionary<String, int> resolvedConflicts) with the updated Dictionary.
+  * The !resolvedConflicts Dictionary then passes through !MergeConflicts() which will “unfolds” the conflicts to file-level according to the Conflicts Dictionary and add the resolved conflicts to the !noConflict Dictionary.
+  * The whole !noConflict Dictionary is then processed entry-by-entry and the files will be synchronized.
+
 
 ----
 
-= Login System =
-== Overview ==
-To provide users with their own gameanywhere account, we need a database to store account information and Amazon Web Services(AWS) SimpleDB was chosen.
+= GameAnywhere Online Account =
 
-== How the Components Interact ==
+== Overview ==
+To provide users with their own gameanywhere web account, we need a database to store user account information and Amazon Web Services(AWS) SimpleDB was chosen. Furthermore, by allowing users to synchronize their game data to the web, we need to provide them with a web storage. Thus we would be using AWS Simple Storage Service (S3). For more information about the benefits using AWS, please visit http://aws.amazon.com/. 
+
+Here we will share with you how authentication is done for a user to login. And lastly, we will tell you how we store files on AWS S3.
+
+
+== Authentication ==
+
+=== How the Components Interact ===
 [http://img30.imageshack.us/img30/381/onlinecomponents.jpg]
 
-The User component consists of user related functions such as Login, Register, ChangePassword and Logout.
+*User*
 
-In AWS SimpleDB, a table is called a domain while rows are identified as items, and columns are attributes. The unique key is known as the item name. So here is an overview of the SimpleDB component, it is meant for database functions like:
- * Inserting an item into Amazon SimpleDB, use the InsertItem method.
- * Getting an item’s attribute value, use the GetAttribute method.
- * Updating an item’s attribute value, use the UpdateAttributeValue method.
- * Checking if an item exists in the domain, use the ItemExists method.
+The User component consists of user related functions such as Login, Register, ChangePassword, Logout, etc. It is an abstraction of what a user can do. Behind each function, it actually interacts with the database on the cloud(AWS SimpleDB) to retrieve, create and update information. As such, we have a specialized component called SimpleDB, which we will discuss further.
 
-AmazonSimpleDBClient component mainly deals with amazon simpleDB web service directly by sending requests and receiving responses from it. It hides all the low level amazon webservices programming like authentication and error handling. You may download the latest Amazon Web Services SDK for .NET from http://aws.amazon.com/sdkfornet/.
+*SimpleDB*
 
-== Data structure of Domain ==
-The domain that has been created and we will be using is called “UserAccounts”. Each item has the following attributes: ItemName, Password, ActivationStatus, ActivationKey. The ItemName acts like a unique key, there should be no duplicates in the domain. Every attribute is of string datatype as it is a limitation of AWS SimpleDB.
+In AWS SimpleDB, a table is called a domain while rows are identified as items, and columns are attributes. The primary key to distinguish a unique row is known as the item name. So here is an overview of the SimpleDB component, it is meant for communicating with AWS SimpleDB and it provides database functions like:
+  * Inserting an item into Amazon SimpleDB, use the InsertItem method.
+  * Getting an item’s attribute value, use the GetAttribute method.
+  * Updating an item’s attribute value, use the UpdateAttributeValue method.
+  * Checking if an item exists in the domain, use the ItemExists method.
+  * Adding a new attribute to an item, use the AddAttributeValue method.
 
-----
+This component is dependent on the AmazonSimpleDBClient, which is part of the .NET AWS SDK provided by Amazon.
 
-= !GameAnywhere Account Registration System =
+*AmazonSimpleDBClient*
 
-//@Nick, :)
+The AmazonSimpleDBClient component is a wrapper class. It mainly deals with amazon SimpleDB web service directly by sending requests and receiving responses from it. By using the AWS SDK for .NET, it hides all the low level amazon webservices programming like authentication and error handling which are actually SOAP/REST calls. You may download the latest Amazon Web Services SDK for .NET from http://aws.amazon.com/sdkfornet/.
+
+== Data structure of Database ==
+
+The domain we have created and will be using is called “UserAccounts”.
+
+Each item/row in the database has the following attributes: ItemName, Password, ActivationStatus, ActivationKey. The ItemName acts like a primary key, there should be no duplicates in the domain. And every attribute value is of string datatype as it is a limitation of AWS SimpleDB. Below shows the structure of the “UserAccounts” domain:
+
+[http://lh5.ggpht.com/_SHs8HAxHUn8/S8Qz2CpETkI/AAAAAAAADew/WWis9Mqlhnk/s640/databaseDesign2.jpg]
+
+== How secure are the passwords being stored? ==
+
+In order to ensure optimum security of users password, all passwords are encrypted in our database. This is secure because even us admins do not know your password as it is not even readable from the database.
+
+MD5 is a one way encryption that we have used. It will always return the same hash value for the same given input. The way we store your passwords is to MD5 hash your username together with your password. This is a method known as Salted MD5, it ensures that no two users will have the same MD5 hashed passwords even if they have similar passwords. For more information about MD5, please visit http://msdn.microsoft.com/en-us/library/system.security.cryptography.md5.aspx.
+
+You can find the CreateMD5Hash method being used very frequently in the User component for processes such as the Login and Registration.
+
+== Registration ==
+
+To register for an account we need the following details:
+  * Username (which will be a valid email)
+  * Password (with at least 6 characters)
+
+Before adding a user into the database, it first ensures that the user account does not exist in our database. Here are the steps for inserting a user to the database:
+
+  # Create an activation key by getting the MD5 hash of user’s partial username and password.
+  # Create the encrypted password by getting the MD5 hash of the username and password.
+  # Insert the user account details into the database, this includes the activation key, username, and encrypted password.
+  # Finally, send out an email to the user with an account activation link together with the username and password. The activation link is of the following format, http://game-anywhere.com/activate/?key=activation-key.
+In order to reduce the number of spam users, all accounts registered with us would require to be activatd by clicking on the link provided in our email after registration. Lets take a look at how it is done:
+  # Initially when a user is added to the database, an attribute “ActivationStatus” is set to value ‘0’ by default.
+  # When the user clicks on the activation link in the email (http://game-anywhere.com/activate/?key=activation-key), the website actually matches this activation key with the activation key found in the database.
+  # If the activation keys match, it will update the “ActivationStatus” to value “1”. There can be only 1 matched item because the activation key is a Salted MD5 string.
+
+== Login ==
+
+Login requires a username and password from the user. Here are the steps to login a user:
+  # With the username, check the database if the user account exists and is activated.
+  # If user exists and account has been activated. Retrieve the user’s encrypted password from the database.
+  # Create a encrypted password using the CreateMD5Hash method with the user’s input(username and password).
+  # Compare the encrypted password from the database and the one created from the CreateMD5Hash method.
+  # The passwords should match and the user is logged in. 
+
+== Password Retrieval ==
+
+The password retrieval system does not actually send a user back his original password but rather it sends the user an email to reset his password. The reason is because the passwords in the database are encrypted, thus we are unable to recover a user’s password using the username. Here is how the resetting of password works:
+
+  # Check if user exists and is activated in the database.
+  # If user exists and is activated, retrieve the encrypted password from the database.
+  # Create a reset key using the CreateMD5 method with the username and encrypted password.
+  # Add a new attribute called “ResetKey” to the user’s item in the database with the reset key we just created.
+  # Send out an email with a reset password link. The link is of the following format, http://game-anywhere.com/reset/?key=reset-key.
+
+When the user receives the Reset password email, he may choose to ignore it. However, in order for the user to reset his password, here is how it is done:
+  # The user’s item in the database now has an attribute called “ResetKey”.
+  # When the user clicks on the reset password link in the email(http://game-anywhere.com/reset/?key=reset-key), the website matches this reset key with the one in the database.
+  # If the reset keys matched, a random password is generated.
+  # With the username and random password, an encrypted password is created using MD5.
+  # The attribute “ResetKey” is deleted from the user’s item.
+  # Update the user’s password in the database with the new encrypted password.
+  # An email is sent to the user with the new password.
+ 
+== Change Password ==
+
+To change a user’s password, it requires the user to provide the username, current password and new password. Here is how the password can be changed:
+
+  # Check if user exists and is activated in the database.
+  # If user exists and is activated, retrieve the user’s encrypted password from the database.
+  # With the current password, create the encrypted password using the CreateMD5Hash method with the username and current password.
+  # Match it with the one retrieved from the database.
+  # If it matches, it means that the user entered the correct password successfully.
+  # With the new password, encrypt it using the username and new password.
+  # Update the user’s item in database with the new encrypted password.
+
+== Resend Activation Email ==
+At times, users might have our activation email in their spam folders or GameAnywhere fails to deliver the email. Thus, a ResendActivation method which takes in the username and password is needed. In order to reduce spams, we disallow malicious users to enter usernames of unactivated accounts by enforcing a password to be entered as well. Below is how ResendActivation method works:
+
+  # Check if user exists and account is not activated in database.
+  # If user exists and account is not activated, retrieve the user’s encrypted password from the database.
+  # Create the activation key by getting the MD5 hash of the partial username and password.
+  # Since the password from the database is encrypted, we need to encrypt the username and original password first in order to check if they matched.
+  # If they match, send an email to the user with the activation link.
 
 
 ----
