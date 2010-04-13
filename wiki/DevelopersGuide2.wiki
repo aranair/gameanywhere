@@ -307,12 +307,12 @@ Web and Thumb Drive Synchronization is a two-way file-level synchronization oper
 
 == Metadata file ==
 
-The metadata file is a serialized MetaData object.
+The metadata file is a serialized !MetaData object.
 
   * The !MetaData object contains a Dictionary<String, String> !FileTable which stores the paths of the files as keys, and their MD5 Hash codes as the corresponding values.
   * The keys are not specific to local or remote paths, only including the path starting from the game name (i.e. “Warcraft III/config/CustomKeys.txt”).
   * The metadata file stores the state of the files that are previously successfully synchronized between the Web and Thumb Drive.
-  * The metadata file is created/updated only when Thumb Drive and Web Synchronization is executed and not the other modes of synchronization. (See [DevelopersGuide2#Synchronization_Algorithm_/_Conflict_Resolution Web and Thumb Drive Synchronization Algorithm)
+  * The metadata file is created/updated only when Thumb Drive and Web Synchronization is executed and not the other modes of synchronization. (See [DevelopersGuide2#Synchronization_Algorithm_/_Conflict_Resolution Web and Thumb Drive Synchronization Algorithm])
 
 
 == Synchronization Algorithm / Conflict Resolution == 
@@ -321,13 +321,13 @@ Since the metadata file stores the state of the previous successful synchronizat
 
 === Metadata and Syncing ===
 When The WebAndThumbSync object is instantiated, it will:
-  * Create the MetaData object by de-serializing the metadatafile (localMeta).
-  * Create a MetaData object of the current state of the files in the Thumb Drive (localHash).
-  * Create a MetaData object of the current state of the files on the Web (webHash).
+  * Create the !MetaData object by de-serializing the metadatafile (!localMeta).
+  * Create a !MetaData object of the current state of the files in the Thumb Drive (!localHash).
+  * Create a !MetaData object of the current state of the files on the Web (!webHash).
 
 === Checking Conflicts ===
-The CheckConflicts() method is called to check for conflicts, which either can automatically be resolved, or requires the user resolution.
-Conflicts are checked by comparing the three MetaData objects created, iterating through each entry of the FileTable data member.
+The !CheckConflicts() method is called to check for conflicts, which either can automatically be resolved, or requires the user resolution.
+Conflicts are checked by comparing the three !MetaData objects created, iterating through each entry of the !FileTable data member.
 
 === Scenario: No Conflict === 
 
@@ -351,8 +351,9 @@ N = No
 
 || *File exists in localHash* || *File exists in localMeta* || *File exists in webHash* || *localHash vs.localMeta* || *webHash vs.localMeta* || *Result* || *Conflict*|| 
 || Y || Y || Y || Hashes are different. || Hashes are different.|| Both thumb drive and web has changed. || !UploadOrDownload ||
+|| Y || Y || N || Hashes are different. || - || File on thumb drive has changed and file on web has been deleted. || !UploadOrDeleteLocal ||
+|| N || Y || Y || - || Hashes are different. || File on web has changed and file on thumb drive has been deleted. || !DownloadOrDeleteWeb ||
 || Y || N ||Y || - || - || File on both thumb drive and web are newly created || !UploadOrDownload ||
-|| Y || N || Y ||
 
 ----
 
