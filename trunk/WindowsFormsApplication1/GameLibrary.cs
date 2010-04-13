@@ -45,22 +45,6 @@ namespace GameAnywhere.Process
         private Controller controller;
 
         /// <summary>
-        /// List of all currently supposed game names for use with GUI and other classes.
-        /// </summary>
-        #region static game names
-        ///<value>Warcraft 3 game name.</value>
-        public static readonly string Warcraft3GameName = "Warcraft 3";
-        ///<value>FIFA10 game name.</value>
-        public static readonly string FIFA10GameName = "FIFA 10";
-        ///<value>Football Manager 2010 game name.</value>
-        public static readonly string FM2010GameName = "Football Manager 2010";
-        ///<value>World of Warcraft game name.</value>
-        public static readonly string WOWGameName = "World of Warcraft";
-        ///<value>Abuse game name.</value>
-        public static readonly string AbuseGameName = "Abuse";
-        #endregion
-
-        /// <summary>
         /// Default Constructor.
         /// </summary>
         public GameLibrary()
