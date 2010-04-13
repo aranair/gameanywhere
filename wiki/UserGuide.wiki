@@ -104,6 +104,13 @@ http://lh5.ggpht.com/_-Xzk-2Bdr-I/S8MVc0G6yTI/AAAAAAAAANc/u1Tr3cUwhOQ/registrati
 
 http://lh4.ggpht.com/_-Xzk-2Bdr-I/S8MWx3GVNNI/AAAAAAAAANk/aRDHR_sdmCI/email.JPG
 
+== Adding your Games ==
+
+!GameAnwyhere allows you to add your favorite games and sync your game files.
+Simply edit the !userGames.txt text file and add in the relevant information.
+
+Click [DevelopersGuide2#Adding_Games here] for more information.
+
 == Frequently Asked Questions ==
 
 *Q. Why are there synchronization errors?*
