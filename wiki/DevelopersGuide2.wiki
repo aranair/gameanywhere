@@ -74,7 +74,7 @@ This section describes the various classes that were used to store information.
 
 Game is a class that stores the necessary information regarding a Game, i.e. game file path, install path, game name. 
 
-=== See Also === 
+* See Also *
   * [DevelopersGuide2#GameLibrary_Class GameLibrary Class]
 
 
@@ -83,7 +83,7 @@ Game is a class that stores the necessary information regarding a Game, i.e. gam
 
 SyncError stores the information for an synchronization error. It would contain the unsuccessful sync file/folder path, the process that encountered this error and lastly, the error message.
 
-=== See Also ===
+* See Also *
   * [DevelopersGuide2#OfflineSync_Class OfflineSync Class]
 
 
@@ -94,7 +94,7 @@ SyncAction contains the necessary information to sync a game. A [DevelopersGuide
 
 !SyncAction also contain the sync action, which indicates what type of game files to be synced. There are basically two types of games files, saved games files and game configuration files. User can choose to sync either one or both.
 
-=== See Also ===
+* See Also *
   * [DevelopersGuide2#OfflineSync_Class OfflineSync Class]
   * [DevelopersGuide2#GameLibrary_Class GameLibrary Class]
 
@@ -114,10 +114,10 @@ chosen by the user, through the method !GetGameList(direction). The direction of
 == !OfflineSync Class ==
 This class handles the file/folder manipulation on the computer as well as on the thumb drive. The sync direction determine how the game files are transferred.
 
-==== Exception ====
+* Exception *
   * !CreateFolderFailedException will be thrown if [DevelopersGuide2#SyncFolder SyncFolder] cannot be created.
 
-==== See Also ====
+* See Also *
    * [DevelopersGuide2#Game_Files_Storage_Structure Game Files Storage Structure]
    * [DevelopersGuide2#Offline_Synchronization Offline Synchronization]
 
@@ -171,7 +171,7 @@ A general structure looks like this:
 
 http://game-anywhere.com/images/folder_structure.jpg
 
-Use camel case for subfolder names i.e. "savedGame". 
+Use camel case for sub-folder names i.e. "savedGame". 
 
 == !SyncFolder ==
 
@@ -181,22 +181,14 @@ The subfolders in !SyncFolder are the game folder(s). Each of the game folder is
 
 Configuration and Saved game files are stored in their respective folder under a game folder. 
 
-----
-
-= Games Detection =
-
-For version 1.0, game detection is hard coded, by reading a registry key for each individual game and finding the *installpath* variable value of the game's registry entry.
-
-By first checking the existence of the registry key, then checking the existence of the game folder at the install path, we can determine if a particular game exists on the system running the application. The paths to files and folders for each game are hard coded, and these paths will be initialized into the corresponding config list, and saved game list of a Game Object. Other information about a game will also be found and loaded into the Game Object which serves primarily as a data encapsulation.
-
 
 ----
 
 = Adding Games =
 
-To edit the supported games in !GameAnywhere, simply edit the [DeveloperGuide2#gamev3.txt_Example gamev3.txt] file located in the same directory as !GameAnywhere.exe.
+To edit the supported games in !GameAnywhere, simply edit the [DeveloperGuide2#userGames.txt_Example userGames.txt] file located in the same directory as !GameAnywhere.exe.
 
-== Variables needed to add a game ==
+== Variables Needed to Add Game ==
 
 === Critical game information ===
 || *Variable Name* || *Description* ||
@@ -206,7 +198,7 @@ To edit the supported games in !GameAnywhere, simply edit the [DeveloperGuide2#g
 || !RegType ||  KLM for HKEY_LOCAL_MACHINE or HKCU for HKEY_CURRENT_USER||
 
 <br>
-=== Below are paths for files ===
+=== Paths for files ===
 || *Variable Name* || *Description* ||
 || !ConfigParentPath||  Full path to the parent path of all the config game folders/files. ||
 || !ConfigPathList||  Full paths to config files separated by comma. ||
@@ -223,7 +215,7 @@ To edit the supported games in !GameAnywhere, simply edit the [DeveloperGuide2#g
 || !RegistrySoftwarePath || Can be used to replace the registry software path for the different types of OS. For example: “RegistrySoftwarePath\EA Sports\FIFA 10” (with HKLM) will evaluate to “HKEY_LOCAL_MACHINE\SOFTWARE\EA Sports\FIFA 10” for non-64bit OS users and“HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\EA Sports\FIFA 10” for 64bit OS users. ||
 
 
-== Syntax rules to comply ==
+== Syntax Rules ==
  * All critical game information variable must be present.
  * If config files exist, !ConfigParentPath must be present, likewise for saved game files/!SaveParentPath.
  *  `[``E``N``D``G``A``M``E``]` after the end of each game (see [DevelopersGuide2#gamev3.txt_Example example] below).
@@ -244,7 +236,7 @@ An alternative way albeit slower is to add the full paths of these files into Sa
 }}}
 
 
-== gamev3.txt Example == 
+== userGames.txt Example == 
 {{{
 Game=FIFA 10
 RegValue=Install Dir
@@ -315,7 +307,7 @@ http://farm3.static.flickr.com/2776/4478572596_fc9a553fca_o.jpg
 
 == Synchronizing Computer to GA Online Account ==
 This is a one way synchronization from PC to GA Online account. Here is how it works:
- # Given the game and type of data(saved and/or config) to sync. Ensure the game is available in user’s web account.
+ # Given the game and type of data(saved and/or config) to sync. 
  # If the game is available on user’s web account, delete the respective saved and/or config folder of the game.
  # Given a list of saved/config data files to backup, we will upload them one by one.
  # In the event there is an error with the upload, it will accumulate the errors and return a list of sync errors.
@@ -445,7 +437,7 @@ This component is dependent on the AmazonSimpleDBClient, which is part of the .N
 
 The AmazonSimpleDBClient component is a wrapper class. It mainly deals with amazon SimpleDB web service directly by sending requests and receiving responses from it. By using the AWS SDK for .NET, it hides all the low level amazon webservices programming like authentication and error handling which are actually SOAP/REST calls. You may download the latest Amazon Web Services SDK for .NET from http://aws.amazon.com/sdkfornet/.
 
-== Data structure of Database ==
+== Database Structure ==
 
 The domain we have created and will be using is called “UserAccounts”.
 
@@ -453,7 +445,7 @@ Each item/row in the database has the following attributes: ItemName, Password, 
 
 [http://lh5.ggpht.com/_SHs8HAxHUn8/S8Qz2CpETkI/AAAAAAAADew/WWis9Mqlhnk/s640/databaseDesign2.jpg]
 
-== How secure are the passwords being stored? ==
+== Passwords Security ==
 
 In order to ensure optimum security of users password, all passwords are encrypted in our database. This is secure because even us admins do not know your password as it is not even readable from the database.
 
@@ -482,7 +474,7 @@ In order to reduce the number of spam users, all accounts registered with us wou
 
 Login requires a username and password from the user. Here are the steps to login a user:
   # With the username, check the database if the user account exists and is activated.
-  # If user exists and account has been activated. Retrieve the user’s encrypted password from the database.
+  # If user exists and account has been activated, retrieve the user’s encrypted password from the database.
   # Create a encrypted password using the CreateMD5Hash method with the user’s input(username and password).
   # Compare the encrypted password from the database and the one created from the CreateMD5Hash method.
   # The passwords should match and the user is logged in. 
