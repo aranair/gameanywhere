@@ -330,7 +330,7 @@ Web and Thumb Drive Synchronization is a two-way file-level synchronization oper
 
 == Metadata file ==
 
-The !MetaData object stores the the path of the files as well as the checksum of each file in the SyncFolder. We have used a Dictionary of strings to store them. 
+The !MetaData object stores the the path of the files as well as the checksum of each file in the !SyncFolder. We have used a Dictionary of strings to store them. 
 This !MetaData object is then output as a serialized metadata file. There will only be one metadata file being stored in the thumb drive (metadata.ga). This file would only be created if a user selects Thumb drive and Web sync.
 
 Here is the format of how the contents of the metadata is stored:
