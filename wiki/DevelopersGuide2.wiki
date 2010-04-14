@@ -79,7 +79,7 @@ Game is a class that stores the necessary information regarding a Game, i.e. gam
 
 == !SyncError ==
 
-SyncError stores the information for an synchronization error. It would contain the unsuccessful sync file/folder path, the process that encountered this error and lastly, the error message.
+!SyncError stores the information for an synchronization error. It would contain the unsuccessful sync file/folder path, the process that encountered this error and lastly, the error message.
 
 * See Also *
   * [DevelopersGuide2#OfflineSync_Class OfflineSync Class]
@@ -88,7 +88,7 @@ SyncError stores the information for an synchronization error. It would contain 
 
 == !SyncAction ==
 
-SyncAction contains the necessary information to sync a game. A [DevelopersGuide2#Game Game] object and a list of [DevelopersGuide2#SyncError SyncError] would be wrapped in a SyncAction object. The unsuccessfully synced files will be related to the [DevelopersGuide2#Game Game] object. Initially, it contains an empty list of !SyncError when it is created by the GUI. 
+!SyncAction contains the necessary information to sync a game. A [DevelopersGuide2#Game Game] object and a list of [DevelopersGuide2#SyncError SyncError] would be wrapped in a !SyncAction object. The unsuccessfully synced files will be related to the [DevelopersGuide2#Game Game] object. Initially, it contains an empty list of !SyncError when it is created by the GUI. 
 
 !SyncAction also contain the sync action, which indicates what type of game files to be synced. There are basically two types of games files, saved games files and game configuration files. User can choose to sync either one or both.
 
@@ -184,7 +184,7 @@ Configuration and Saved game files are stored in their respective folder under a
 
 = Adding Games =
 
-To edit the supported games in !GameAnywhere, simply edit the [DeveloperGuide2#userGames.txt_Example userGames.txt] file located in the same directory as !GameAnywhere.exe.
+To edit the supported games in !GameAnywhere, simply edit the [DevelopersGuide2#userGames.txt_Example userGames.txt] file located in the same directory as !GameAnywhere.exe.
 
 == Variables Needed to Add Game ==
 
