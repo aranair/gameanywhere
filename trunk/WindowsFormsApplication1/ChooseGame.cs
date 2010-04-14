@@ -389,7 +389,7 @@ namespace GameAnywhere.Interface
                     CreateLabel(new System.Drawing.Point(300, yAxisLocation), "Successfully Synchronized.", resultPanel);
                     yAxisLocation += 20; 
                 }
-                yAxisLocation += 40;
+                yAxisLocation += 50;
             }//end foreach syncAction
 
             // Creates the done button in this panel (result display) for user to finish up 
