@@ -478,6 +478,21 @@ In order to reduce the number of spam users, all accounts registered with us wou
 == Login ==
 
 Login requires a username and password from the user. Here are the steps to login a user:
+
+{{{
+if (UserExists(email) && IsAccountActivated(email))
+{
+  string userPassword = db.GetAttribute(email, "Password");
+  string md5Password = CreateMD5Hash(email + password);
+  if (userPassword.Equals(md5Password))
+  {
+    this.email = email;
+    this.password = password;
+    this.state = UserState.UserLoggedIn;
+    return true;
+  }
+}
+}}}
   # With the username, check the database if the user account exists and is activated.
   # If user exists and account has been activated, retrieve the user’s encrypted password from the database.
   # Create a encrypted password using the CreateMD5Hash method with the user’s input(username and password).
@@ -507,6 +522,22 @@ When the user receives the Reset password email, he may choose to ignore it. How
 
 To change a user’s password, it requires the user to provide the username, current password and new password. Here is how the password can be changed:
 
+{{{
+if (UserExists(email) && IsAccountActivated(email))
+{
+  string userPassword = db.GetAttribute(email, "Password");
+  string md5OldPassword = CreateMD5Hash(email + oldPassword);
+
+  //Check if current password matches in DB
+  if (userPassword.Equals(md5OldPassword))
+  {
+    //Change to new password and update item in DB
+    string md5NewPassword = CreateMD5Hash(email + newPassword);
+    db.UpdateAttributeValue(email, "Password", md5NewPassword);
+  }
+}
+}}}
+
   # Check if user exists and is activated in the database.
   # If user exists and is activated, retrieve the user’s encrypted password from the database.
   # With the current password, create the encrypted password using the CreateMD5Hash method with the username and current password.
@@ -516,7 +547,22 @@ To change a user’s password, it requires the user to provide the username, cur
   # Update the user’s item in database with the new encrypted password.
 
 == Resend Activation Email ==
-At times, users might have our activation email in their spam folders or !GameAnywhere fails to deliver the email. Thus, a ResendActivation method which takes in the username and password is needed. In order to reduce spams, we disallow malicious users to enter usernames of unactivated accounts by enforcing a password to be entered as well. Below is how ResendActivation method works:
+At times, users might have our activation email in their spam folders or !GameAnywhere fails to deliver the email. Thus, a ResendActivation method which takes in the username and password is needed. In order to reduce spams, we disallow malicious users to enter usernames of unactivated accounts by enforcing a password to be entered as well. Below is how !ResendActivation method works:
+
+{{{
+if (UserExists(email))
+{
+  if (!IsAccountActivated(email))
+  {
+    string password = db.GetAttribute(email, "Password");
+    string md5InputPassword = CreateMD5Hash(email + inputPassword);
+    string activationKey = CreateMD5Hash(email.Substring(email.Length / 2) + inputPassword);
+
+    if (md5InputPassword.Equals(password))
+      SendActivationEmail(email, inputPassword, activationKey))
+   }
+}
+}}}
 
   # Check if user exists and account is not activated in database.
   # If user exists and account is not activated, retrieve the user’s encrypted password from the database.
