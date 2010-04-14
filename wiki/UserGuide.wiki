@@ -3,15 +3,17 @@
 #sidebar TOC
 <wiki:toc max_depth="2" />
 
-== General Guidelines == 
+== New User Guidelines == 
 
-Please take note that you should unzip the !GameAnywhere folder to your thumb drive and run GameAnywhere.exe from your thumb drive if you want to synchronize your game data to your thumb drive. If you are purely doing online synchronization of your game data, you can run the program from your computer. If you use both online and offline synchronization, doing a web and thumb synchronization will keep your thumb drive and web account synchronized. 
+After downloading the !GameAnywhere.zip, unzip to your thumb drive and run !GameAnywhere.exe from your thumb drive. This would enable you to synchronize your game data to your thumb drive. If you are purely doing online synchronization of your game data, you can run the program from your computer. 
+
+To keep your [UserGuide#Registering_for_your_Online_Account GameAnywhere online] game files synchronized with your thumb drive, simply do a web and thumb synchronization.
 
 We would like to advise you that although storage space is unlimited for each user on our server, synchronization of very large game files e.g. The Sims 3, Football Manager 2009, Football Manager 2010, Dragon Age Origins will take a substantial amount of time as there is a cap on the upload/download bandwidth of each user. Uploading/downloading configuration game files would be very fast as they are not too big in size.
 
+To uninstall, simply remove all file that was unzip from !GameAnywhere.zip.
 
-Do not tamper with the folder. To uninstall, simply delete the GameAnywhere folder.
-
+*For !GameAnywhere to function normally, please do not tamper with the !SyncFolder.*
 
 == Synchronize Game Files between Computer and Thumb Drive ==
 
