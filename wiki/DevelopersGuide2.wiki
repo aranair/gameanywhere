@@ -109,40 +109,18 @@ It will also resolve and return the common set of games that are found in both t
 chosen by the user, through the method !GetGameList(direction). The direction of synchronization must be properly defined with this method.
 
 
+== Sync Class ==
+This parent class contains the general methods to backup and restore the computer to original game state.
+
 == !OfflineSync Class ==
-This class handles the file/folder manipulation on the computer as well as on the thumb drive. The sync direction determine how the game files are transferred.
-
-* Exception *
-  * !CreateFolderFailedException will be thrown if [DevelopersGuide2#SyncFolder SyncFolder] cannot be created.
-
-* See Also *
-   * [DevelopersGuide2#Game_Files_Storage_Structure Game Files Storage Structure]
-   * [DevelopersGuide2#Offline_Synchronization Offline Synchronization]
+!OfflineSync Class inherit from Sync Class. This class contains the algorithm to handle the synchronization between computer and thumb drive. The sync direction determine how the game files are transferred.
 
 
 == !OnlineSync Class ==
 
-Similar to !OfflineSync Class, !OnlineSync Class handles the files/folder manipulation on the computer as well as on the [DevelopersGuide2#Online_Account GA Online Account].
+Similar to !OfflineSync Class, !OnlineSync Class inherit from Sync Class.
+!OnlineSync Class contains the algorithm to handle the synchronization between computer and [DevelopersGuide2#Online_Account GA Online Account].
 
-== SimpleDB Class ==
-
-This class enables communication with the Amazon-SimpleDB service directly. It provides minimal database functions necessary to support the User class.
-
-In Amazon SimpleDB, a table is called a domain while rows are identified as items, and columns are attributes. The unique key is known as the item id. So here is an overview
-  * To insert an item into Amazon SimpleDB, use the !InsertItem method.
-  * To get an item’s attribute value, use the !GetAttribute method.
-  * To update an item’s attribute value, use the !UpdateAttributeValue method.
-  * To check if an item exists in the domain, use the !ItemExists method.
-
-*Note:*
- # Ensure that you have installed the latest Amazon Web Services SDK for .NET, which can be downloaded from http://aws.amazon.com/sdkfornet/. 
- # Ensure you have add reference to the Amazon Web Services SDK for .NET in your project.
- # You have to include the following when using Amazon SimpleDB:
-{{{
-using Amazon;
-using Amazon.SimpleDB;
-using Amazon.SimpleDB.Model;
-}}}
 
 ----
 
