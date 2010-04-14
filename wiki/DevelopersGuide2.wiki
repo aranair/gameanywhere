@@ -30,15 +30,15 @@ In this section, we would introduce the basic features of !GameAnywhere and what
  * Restores the computer to its original state after you're done playing on the computer with the files you have synchronized.
 
  * Supported games:
-   # World of Warcraft 
-   # Warcraft 3: The Frozen Throne
-   # FIFA 10
-   # Football Manager 2010
-   # Football Manager 2009
-   # The Sims 3
-   # Dragon Age Origins, 
-   # Borderlands 
-   # Abuse (for testing purpose)
+   # [www.worldofwarcraft.com World of Warcraft]
+   # [http://www.diablo3.nl/war3x/ Warcraft 3: The Frozen Throne]
+   # [fifa.easports.com/ FIFA 10]
+   # [http://www.footballmanager.com/ Football Manager 2010]
+   # [phttp://www.sega.co.uk/fm09/ Football Manager 2009]
+   # [The Sims 3 The Sims 3]
+   # [dragonage.bioware.com/ Dragon Age Origins]
+   # [www.borderlandsthegame.com/ Borderlands  ]
+   # [http://abuse-game.com/ Abuse] (for testing purpose)
 
  * Add Your Own Games.
 
