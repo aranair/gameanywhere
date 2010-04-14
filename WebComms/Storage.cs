@@ -47,8 +47,8 @@ namespace GameAnywhere.Process
         /// </summary>
         public Storage()
         {
-            accessKeyID = "*";
-            secretAccessKeyID = "*";
+            accessKeyID = "";
+            secretAccessKeyID = "";
             bucketName = "GameAnywhere";
             client = new AmazonS3Client(accessKeyID, secretAccessKeyID, new AmazonS3Config().WithCommunicationProtocol(Protocol.HTTP));
         }

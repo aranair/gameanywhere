@@ -160,8 +160,10 @@ namespace GameAnywhere.Process
 
                 //Insert user info into DB
                 db.InsertItem(email, md5Password, activationKey);
-                SendActivationEmail(email, password, activationKey);
-                return 1;
+                if (SendActivationEmail(email, password, activationKey))
+                    return 1;
+                else
+                    return 4;
             }
             else
             {
@@ -206,8 +208,10 @@ namespace GameAnywhere.Process
 
                     //Insert new attribute to item DB
                     db.AddAttributeValue(email, "ResetKey", resetKey);
-                    SendPasswordEmail(email, resetKey);
-                    return 1;
+                    if (SendPasswordEmail(email, resetKey))
+                        return 1;
+                    else
+                        return 4;
                 }
                 else
                 {
@@ -311,8 +315,10 @@ namespace GameAnywhere.Process
                     }
                     else
                     {
-                        SendActivationEmail(email, inputPassword, activationKey);
-                        return 1;
+                        if (SendActivationEmail(email, inputPassword, activationKey))
+                            return 1;
+                        else
+                            return 4;
                     }
                 }
                 else
