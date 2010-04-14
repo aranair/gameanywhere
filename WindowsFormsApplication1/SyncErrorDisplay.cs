@@ -130,6 +130,7 @@ namespace GameAnywhere.Interface
             bool backupErrorMessageShown = false;
             bool thumbdriveInsufficientSpaceMessageShown = false;
             bool computerInsufficientSpaceMessageShown = false;
+            bool unableToCreateFolderShown = false;
 
             // for each error, this portion shows the file path that was not accessible and the error involved.
             foreach (SyncError syncError in syncErrorList)
@@ -139,18 +140,17 @@ namespace GameAnywhere.Interface
                 // Bypass the error message if its any of these 3 and it has been shown for this game.
                 if (   (errorText.Equals("Unable to backup original game files.") && backupErrorMessageShown)
                     || (errorText.Equals("Insufficient space in external storage device.") && thumbdriveInsufficientSpaceMessageShown)
-                    || (errorText.Equals("Insufficient space in computer.") && computerInsufficientSpaceMessageShown))
+                    || (errorText.Equals("Insufficient space in computer.") && computerInsufficientSpaceMessageShown)
+                    || (errorText.Contains("Unable to create folder in directory.") && unableToCreateFolderShown) )
                     continue;
                 
-                CreateSyncErrorLabel(errorText, errorDisplayPanel);
-                
-                if (errorText.Contains("There is not enough space on the disk."))
-                    break;
-                if (errorText.Contains("GameAnywhere.CreateFolderFailedException"))
+                if (errorText.Contains("GameAnywhere.CreateFolderFailedException") || errorText.Contains("There is not enough space on the disk."))
                 {
                     CreateSyncErrorLabel("There is not enough space on the disk.", errorDisplayPanel);
                     break;
                 }
+                else
+                    CreateSyncErrorLabel(errorText, errorDisplayPanel);
      
                 // Edit duplicate flags.
                 if (errorText.Equals("Unable to backup original game files."))
@@ -159,6 +159,8 @@ namespace GameAnywhere.Interface
                     thumbdriveInsufficientSpaceMessageShown = true;
                 if (errorText.Equals("Insufficient space in computer."))
                     computerInsufficientSpaceMessageShown = true;
+                if (errorText.Contains("Unable to create folder in directory."))
+                    unableToCreateFolderShown = true;
             }
         }
 
