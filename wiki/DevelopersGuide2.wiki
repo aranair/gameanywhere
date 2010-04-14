@@ -23,7 +23,7 @@ In this section, we would introduce the basic features of !GameAnywhere and what
 
  * Carry your personal game data in a thumb drive or have it saved in your free online account.
 
- * Easily sync your game data between PC, thumb drive and your GameAnywhere online account.
+ * Easily sync your game data between PC, thumb drive and your !GameAnywhere online account.
 
  * Automatically detects the games installed on the computer and offer you the appropriate synchronization options.
 
@@ -56,9 +56,9 @@ This diagram depicts what happens in the program.
 
 The Controller is declared and the Controller starts up the GUI. The GUI interacts with the user. 
 
-In a typical synchronization scenario, the user indicates the direction of the synchronization first. The GUI will request information regarding the games from Controller, which in turn calls GameLibrary for the information to return to GUI. 
+In a typical synchronization scenario, the user indicates the direction of the synchronization first. The GUI will request information regarding the games from Controller, which in turn calls !GameLibrary for the information to return to GUI. 
 
-After the user selects the games to synchronize, GUI will then create a list of SyncAction with the games' information and send it to Controller for synchronization. Controller will then provide the information to OfflineSync class to process.
+After the user selects the games to synchronize, GUI will then create a list of !SyncAction with the games' information and send it to Controller for synchronization. Controller will then provide the information to !OfflineSync class to process.
 
 ----
 
@@ -103,7 +103,7 @@ SyncAction contains the necessary information to sync a game. A [DevelopersGuide
 
 == !GameLibrary Class ==
 
-The GameLibrary class, contains all the methods and information to initialize installed games into a list of games, that will contain all the appropriate paths to the config files and saved game files of each individual game.
+The !GameLibrary class, contains all the methods and information to initialize installed games into a list of games, that will contain all the appropriate paths to the config files and saved game files of each individual game.
 
 It will also resolve and return the common set of games that are found in both the source and target paths according to the synchronization direction
 chosen by the user, through the method !GetGameList(direction). The direction of synchronization must be properly defined with this method.
@@ -122,7 +122,7 @@ This class handles the file/folder manipulation on the computer as well as on th
 
 == !OnlineSync Class ==
 
-Similar to OfflineSync Class, OnlineSync Class handles the files/folder manipulation on the computer as well as on the [DevelopersGuide2#Online_Account GA Online Account].
+Similar to !OfflineSync Class, !OnlineSync Class handles the files/folder manipulation on the computer as well as on the [DevelopersGuide2#Online_Account GA Online Account].
 
 == SimpleDB Class ==
 
@@ -208,9 +208,9 @@ To edit the supported games in !GameAnywhere, simply edit the [DeveloperGuide2#u
 <br>
 === Reserved Words/Variables that can be used in the paths for files ===
 || *Reserved Words/Variables* || *Description* ||
-|| !InstallPathVar || Can be used to replace the InstallPath recorded in the registry.|| 
+|| !InstallPathVar || Can be used to replace the !InstallPath recorded in the registry.|| 
 || !DocumentsPath || Can be used to replace the document paths of running machine, etc: “C:\Users\Tom\Documents\” || 
-|| !RegistrySoftwarePath || Can be used to replace the registry software path for the different types of OS. For example: “RegistrySoftwarePath\EA Sports\FIFA 10” (with HKLM) will evaluate to “HKEY_LOCAL_MACHINE\SOFTWARE\EA Sports\FIFA 10” for non-64bit OS users and“HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\EA Sports\FIFA 10” for 64bit OS users. ||
+|| !RegistrySoftwarePath || Can be used to replace the registry software path for the different types of OS. For example: “!RegistrySoftwarePath\EA Sports\FIFA 10” (with HKLM) will evaluate to “HKEY_LOCAL_MACHINE\SOFTWARE\EA Sports\FIFA 10” for non-64bit OS users and“HKEY_LOCAL_MACHINE\SOFTWARE\!Wow6432Node\EA Sports\FIFA 10” for 64bit OS users. ||
 
 
 == Syntax Rules ==
@@ -340,7 +340,7 @@ Here is the format of how the contents of the metadata is stored:
 || /saved/stage2.dat || 43FSDFS3SFD4 ||
 
   * The !MetaData object contains a Dictionary<String, String> !FileTable which stores the paths of the files as keys, and their MD5 Hash codes as the corresponding values.
-  * The keys are not specific to local or remote paths, only including the path starting from the game name (i.e. “Warcraft III/config/CustomKeys.txt”).
+  * The keys are not specific to local or remote paths, only including the path starting from the game name (i.e. “Warcraft III/config/!CustomKeys.txt”).
   * The metadata file stores the state of the files that are previously successfully synchronized between the Web and Thumb Drive.
   * The metadata file is created/updated only when Thumb Drive and Web Synchronization is executed and not the other modes of synchronization. (See [DevelopersGuide2#Synchronization_Algorithm_/_Conflict_Resolution Web and Thumb Drive Synchronization Algorithm])
 
@@ -406,7 +406,7 @@ N = No
 = !GameAnywhere Online Account =
 
 == Overview ==
-To provide users with their own gameanywhere web account, we need a database to store user account information and Amazon Web Services(AWS) SimpleDB was chosen. Furthermore, by allowing users to synchronize their game data to the web, we need to provide them with a web storage. Thus we would be using AWS Simple Storage Service (S3). For more information about the benefits using AWS, please visit http://aws.amazon.com/. 
+To provide users with their own !GameAnywhere web account, we need a database to store user account information and Amazon Web Services(AWS) SimpleDB was chosen. Furthermore, by allowing users to synchronize their game data to the web, we need to provide them with a web storage. Thus we would be using AWS Simple Storage Service (S3). For more information about the benefits using AWS, please visit http://aws.amazon.com/. 
 
 Here we will share with you how authentication is done for a user to login.
 
@@ -509,7 +509,7 @@ To change a user’s password, it requires the user to provide the username, cur
   # Update the user’s item in database with the new encrypted password.
 
 == Resend Activation Email ==
-At times, users might have our activation email in their spam folders or GameAnywhere fails to deliver the email. Thus, a ResendActivation method which takes in the username and password is needed. In order to reduce spams, we disallow malicious users to enter usernames of unactivated accounts by enforcing a password to be entered as well. Below is how ResendActivation method works:
+At times, users might have our activation email in their spam folders or !GameAnywhere fails to deliver the email. Thus, a ResendActivation method which takes in the username and password is needed. In order to reduce spams, we disallow malicious users to enter usernames of unactivated accounts by enforcing a password to be entered as well. Below is how ResendActivation method works:
 
   # Check if user exists and account is not activated in database.
   # If user exists and account is not activated, retrieve the user’s encrypted password from the database.
