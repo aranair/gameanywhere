@@ -310,12 +310,12 @@ This is a one way synchronization from PC to !GameAnywhere Online account. Here 
 
 http://lh3.ggpht.com/_SHs8HAxHUn8/S8YOnYnPLRI/AAAAAAAADgA/jZgsS4fJITE/webToComputerButton.gif
 
-*Steps for synchronizing from GA Online Account to Computer:*
+*Steps for synchronizing from !GameAnywhere Online Account to Computer:*
  # Create a backup folder in the game file parent directory.
    * If backup folder exists, skip backup process.
  # Move original game files in the computer into the backup folder to complete backup process.
    * If backup is not successful, skip sync for game.
- # Copy the game files in the GA Online Account into the computer. 
+ # Copy the game files in the !GameAnywhere Online Account into the computer. 
 
 -----
 
