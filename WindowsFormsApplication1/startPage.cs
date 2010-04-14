@@ -899,7 +899,7 @@ namespace GameAnywhere.Interface
                         } // Unactivated Account
                     case 4:
                         {
-                            emailInvalidLabel.Text = "Send failed. Please check connection settings.";
+                            emailInvalidLabel.Text = "Activation email cannot be sent. Please re-send.";
                             break;
                         }
                     default: break;
