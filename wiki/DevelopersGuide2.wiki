@@ -408,7 +408,7 @@ N = No
 == Overview ==
 To provide users with their own gameanywhere web account, we need a database to store user account information and Amazon Web Services(AWS) SimpleDB was chosen. Furthermore, by allowing users to synchronize their game data to the web, we need to provide them with a web storage. Thus we would be using AWS Simple Storage Service (S3). For more information about the benefits using AWS, please visit http://aws.amazon.com/. 
 
-Here we will share with you how authentication is done for a user to login. And lastly, we will tell you how we store files on AWS S3.
+Here we will share with you how authentication is done for a user to login.
 
 
 == Authentication ==
