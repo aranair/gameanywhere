@@ -3,7 +3,7 @@
 #sidebar TOC
 <wiki:toc max_depth="2" />
 
-== New User Guidelines == 
+== Guidelines for New User == 
 
 After downloading the !GameAnywhere.zip, unzip to your thumb drive and run !GameAnywhere.exe from your thumb drive. This would enable you to synchronize your game data to your thumb drive. If you are purely doing online synchronization of your game data, you can run the program from your computer. 
 
