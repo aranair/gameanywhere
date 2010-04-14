@@ -156,7 +156,10 @@ namespace GameAnywhere.Process
 
                 catch (Exception)
                 {
-                    onlineSync.Restore();
+                    if (direction == OnlineSync.WebToCom)
+                    {
+                        onlineSync.Restore();
+                    }
                     throw new ConnectionFailureException();
                 }
             }
