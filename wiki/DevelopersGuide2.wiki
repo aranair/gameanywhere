@@ -353,9 +353,9 @@ Since the metadata file stores the state of the previous successful synchronizat
 
 === Metadata and Syncing ===
 When The !WebAndThumbSync object is instantiated, it will:
-  * Create the !MetaData object by de-serializing the metadata file (!localMeta).
-  * Create a !MetaData object of the current state of the files in the Thumb Drive (!localHash).
-  * Create a !MetaData object of the current state of the files on the Web (!webHash).
+  * Create the !MetaData object by de-serializing the metadata file (localMeta).
+  * Create a !MetaData object of the current state of the files in the Thumb Drive (localHash).
+  * Create a !MetaData object of the current state of the files on the Web (webHash).
 
 === Checking Conflicts ===
 The !CheckConflicts() method is called to check for conflicts, which either can automatically be resolved, or requires the user resolution.
@@ -391,14 +391,14 @@ N = No
 
 <br>
 === More about Conflicts ===
-  * All conflicts that are automatically resolved are stored in static Dictionary<string, !NoConflictDirection> !noConflict with their respective actions.
+  * All conflicts that are automatically resolved are stored in static Dictionary<string, !NoConflictDirection> noConflict with their respective actions.
   * All conflicts that cannot be automatically resolved are stored in a static Dictionary<string, !ConflictDirection> Conflicts with their respective conflicts.
-  * The Conflicts Dictionary is then passed through !FilterConflicts() which “folds” the conflicts from file-level to folder-level (Config or !savedGame) for each game.
+  * The Conflicts Dictionary is then passed through !FilterConflicts() which “folds” the conflicts from file-level to folder-level (Config or savedGame) for each game.
   * The user is not allowed to resolve conflicts on a file-level basis, as it would be more intuitive for them to select the direction of conflicting Config or savedGame files.
   * The folded Dictionary is then passed back to the GUI as a Dictionary<String, int> where the int values are initialized to 0.
   * The GUI gets his input from the user, changes the 0 to either a 1 or 2 depending on the user’s choice and calls !OnlineSync.!SynchronizeGames(Dictionary<String, int> resolvedConflicts) with the updated Dictionary.
-  * The !resolvedConflicts Dictionary then passes through !MergeConflicts() which will “unfolds” the conflicts to file-level according to the Conflicts Dictionary and add the resolved conflicts to the !noConflict Dictionary.
-  * The whole !noConflict Dictionary is then processed entry-by-entry and the files will be synchronized.
+  * The resolvedConflicts Dictionary then passes through !MergeConflicts() which will “unfolds” the conflicts to file-level according to the Conflicts Dictionary and add the resolved conflicts to the noConflict Dictionary.
+  * The whole noConflict Dictionary is then processed entry-by-entry and the files will be synchronized.
 
 
 ----
