@@ -358,6 +358,9 @@ When The !WebAndThumbSync object is instantiated, it will:
   * Create a !MetaData object of the current state of the files on the Web (webHash).
 
 === Checking Conflicts ===
+
+http://img576.imageshack.us/img576/5619/watsconflictresolution.png
+
 The !CheckConflicts() method is called to check for conflicts, which either can automatically be resolved, or requires the user resolution.
 Conflicts are checked by comparing the three !MetaData objects created, iterating through each entry of the !FileTable data member.
 
