@@ -714,7 +714,7 @@ namespace GameAnywhere.Interface
                 // Login succeeds
                 if (loginResult)
                 {
-                    loggedInUserLabel.Text = emailTextBox.Text;
+                    loggedInUserLabel.Text = "User: " + emailTextBox.Text;
                     InitiateStartPanel();
                     if (userClickStatus == ClickStatus.WebToCom)
                         WebToComFunctions();

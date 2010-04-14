@@ -264,7 +264,6 @@ namespace GameAnywhere.Interface
             // startPanel
             // 
             this.startPanel.BackColor = System.Drawing.Color.Black;
-            this.startPanel.Controls.Add(this.loggedInUserLabel);
             this.startPanel.Controls.Add(this.label4);
             this.startPanel.Controls.Add(this.label3);
             this.startPanel.Controls.Add(this.errorLabel);
@@ -283,12 +282,13 @@ namespace GameAnywhere.Interface
             this.loggedInUserLabel.AutoSize = true;
             this.loggedInUserLabel.Font = new System.Drawing.Font("Verdana", 7F);
             this.loggedInUserLabel.ForeColor = System.Drawing.Color.DeepSkyBlue;
-            this.loggedInUserLabel.Location = new System.Drawing.Point(281, 190);
-            this.loggedInUserLabel.MaximumSize = new System.Drawing.Size(170, 0);
+            this.loggedInUserLabel.Location = new System.Drawing.Point(63, 352);
+            this.loggedInUserLabel.MaximumSize = new System.Drawing.Size(240, 15);
             this.loggedInUserLabel.Name = "loggedInUserLabel";
             this.loggedInUserLabel.Size = new System.Drawing.Size(32, 12);
             this.loggedInUserLabel.TabIndex = 21;
             this.loggedInUserLabel.Text = "label";
+            this.loggedInUserLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label4
             // 
@@ -961,6 +961,7 @@ namespace GameAnywhere.Interface
             this.BackgroundImage = global::GameAnywhere.Properties.Resources.overallbackground3;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(832, 435);
+            this.Controls.Add(this.loggedInUserLabel);
             this.Controls.Add(this.titlePanel);
             this.Controls.Add(this.startNavPanel);
             this.Controls.Add(this.startPanel);
@@ -994,6 +995,7 @@ namespace GameAnywhere.Interface
             this.changePasswordPanel.ResumeLayout(false);
             this.changePasswordPanel.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
