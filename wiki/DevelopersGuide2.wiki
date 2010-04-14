@@ -294,7 +294,7 @@ http://lh6.ggpht.com/_SHs8HAxHUn8/S8YPLoABtlI/AAAAAAAADgE/0IDd-7_3xMM/buttonRest
 
 = Online Synchronization =
 
-== Synchronizing Computer to GA Online Account ==
+== Synchronizing Computer to !GameAnywhere Online Account ==
 
 http://lh4.ggpht.com/_SHs8HAxHUn8/S8YOnEFV3fI/AAAAAAAADf4/dKMSCiEydkk/computerToWebButton.gif
 
