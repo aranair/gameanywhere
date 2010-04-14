@@ -308,7 +308,7 @@ namespace GameAnywhere.Process
             }
             catch (CreateFolderFailedException ex)
             {
-                return GetSyncError(gameItemList, processName, ex.errorMessage);
+                return GetSyncError(gameItemList, processName, "Unable to create directory/Directory is missing - " + syncFolderGameSubPath + ".");
             }
 
             //Iterate through each path in list and copy
@@ -361,7 +361,7 @@ namespace GameAnywhere.Process
             }
             catch (CreateFolderFailedException ex)
             {
-                return GetSyncError(sourcePath, processName, ex.errorMessage);
+                return GetSyncError(sourcePath, processName, "Unable to create directory/Directory is missing - " + targetPath + ".");
             }
 
             try
