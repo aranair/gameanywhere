@@ -359,8 +359,6 @@ When The !WebAndThumbSync object is instantiated, it will:
 
 === Checking Conflicts ===
 
-http://img576.imageshack.us/img576/5619/watsconflictresolution.png
-
 The !CheckConflicts() method is called to check for conflicts, which either can automatically be resolved, or requires the user resolution.
 Conflicts are checked by comparing the three !MetaData objects created, iterating through each entry of the !FileTable data member.
 
@@ -393,10 +391,16 @@ Y = Yes,
 N = No
 
 <br>
-=== More about Conflicts ===
+=== Conflicts and GUI ===
+
+http://lh5.ggpht.com/_SHs8HAxHUn8/S8XgzreFE_I/AAAAAAAADfk/ujoZn5T8QKY/CheckConflict%28%29.jpg
+
   * All conflicts that are automatically resolved are stored in static Dictionary<string, !NoConflictDirection> noConflict with their respective actions.
   * All conflicts that cannot be automatically resolved are stored in a static Dictionary<string, !ConflictDirection> Conflicts with their respective conflicts.
   * The Conflicts Dictionary is then passed through !FilterConflicts() which “folds” the conflicts from file-level to folder-level (Config or savedGame) for each game.
+
+http://lh3.ggpht.com/_SHs8HAxHUn8/S8XUA5LOjtI/AAAAAAAADfU/HOOOnakdNcE/Passing%20conflicts%20to%20the%20GUI.jpg
+
   * The user is not allowed to resolve conflicts on a file-level basis, as it would be more intuitive for them to select the direction of conflicting Config or savedGame files.
   * The folded Dictionary is then passed back to the GUI as a Dictionary<String, int> where the int values are initialized to 0.
   * The GUI gets his input from the user, changes the 0 to either a 1 or 2 depending on the user’s choice and calls !OnlineSync.!SynchronizeGames(Dictionary<String, int> resolvedConflicts) with the updated Dictionary.
