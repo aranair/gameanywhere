@@ -163,3 +163,36 @@ Did not handle file lock exception when creating meta data in constructor.
 20. All in one conflict with conflict input as '1'.
 
 21. all conflict input as '2'.
+
+All conflict in one test cases, with all conflicts resolve with "1"
+
+[key/file] = [thumb,web,meta] -> [actions to be done]
+
+Game1/savedGame/File 1 = 0,0,A -> delete metadata
+Game1/savedGame/File 2 = 0,A,0 -> download
+Game1/savedGame/File 3 = A,0,0 -> upload
+
+Game2/savedGame/File 4 = 0,A,A -> delete Web
+Game2/savedGame/File 5 = 0,X,A -> delete web
+
+Game3/config/File 6 = A,0,A -> delete local
+Game3/savedGame/File 7 = X,0,A -> upload 
+
+Game4/savedGame/File 8 = A,A,0 -> upload
+Game4/config/File 9 = A,X,0 -> upload
+ 
+Game5/savedGame/File 10 = A,X,A -> download
+Game5/savedGame/File 11 = X,A,X -> upload
+Game5/savedGame/File 12 = X,Y,A -> upload
+Game5/savedGame/File 13 = A,A,A -> No Change
+
+Conflicts only resolve with "2"
+
+Game2/savedGame/File 5 = 0,X,A -> download
+
+Game3/savedGame/File 7 = x,0,A -> Delete Local
+
+Game4/savedGame/File 8 = A,A,0 -> download
+Game4/savedGame/File 9 = A,X,0 -> download
+
+Game5/savedGame/File 12 = X,Y,A -> download
