@@ -7,11 +7,11 @@
 
 After downloading the !GameAnywhere.zip, unzip to your thumb drive and run !GameAnywhere.exe from your thumb drive. This would enable you to synchronize your game data to your thumb drive. If you are purely doing online synchronization of your game data, you can run the program from your computer. 
 
-You can save your game files on our *free* [UserGuide#Registering_for_your_Online_Account GameAnywhere Online Account]. Do remember to register before you start.
+You can save your game files on our free [UserGuide#Registering_for_your_Online_Account GameAnywhere Online Account]. Do remember to register before you start.
 
 To keep your !GameAnywhere online game files synchronized with your thumb drive, simply do a web and thumb synchronization.
 
-Take note that although the online storage space is unlimited for each user on our server (Amazon S3), synchronization of very large game files (e.g. during first syncing and after make major changes to multiple saved game files) will take a substantial amount of time as there is a cap on the upload/download bandwidth of each user. However, synchronizing configuration game files is fast as they are smaller in size.
+Please note that although the online storage space is unlimited for each user on our server (Amazon S3), synchronization of very large game files (e.g. during first syncing and after make major changes to multiple saved game files) will take a substantial amount of time as there is a cap on the upload/download bandwidth of each user. However, synchronizing configuration game files is fast as they are smaller in size.
 
 <wiki:comment>
 We would like to advise you that although storage space is unlimited for each user on our server, synchronization of very large game files e.g. The Sims 3, Football Manager 2009, Football Manager 2010, Dragon Age Origins will take a substantial amount of time as there is a cap on the upload/download bandwidth of each user. Uploading/downloading configuration game files would be very fast as they are not too big in size. 
