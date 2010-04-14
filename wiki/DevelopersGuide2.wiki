@@ -47,7 +47,7 @@ In this section, we would introduce the basic features of !GameAnywhere and what
  * Free and Open-Source.
 
 
-== Screenshots ==
+== GUI ==
 
 http://lh3.ggpht.com/_-Xzk-2Bdr-I/S8MOvsVBCoI/AAAAAAAAANA/HDz3CNO2RZw/startup.JPG
 
@@ -81,18 +81,10 @@ This section describes the various classes that were used to store information.
 
 Game is a class that stores the necessary information regarding a Game, i.e. game file path, install path, game name. 
 
-* See Also *
-  * [DevelopersGuide2#GameLibrary_Class GameLibrary Class]
-
-
 
 == !SyncError ==
 
 !SyncError stores the information for an synchronization error. It would contain the unsuccessful sync file/folder path, the process that encountered this error and lastly, the error message.
-
-* See Also *
-  * [DevelopersGuide2#OfflineSync_Class OfflineSync Class]
-
 
 
 == !SyncAction ==
@@ -100,10 +92,6 @@ Game is a class that stores the necessary information regarding a Game, i.e. gam
 !SyncAction contains the necessary information to sync a game. A [DevelopersGuide2#Game Game] object and a list of [DevelopersGuide2#SyncError SyncError] would be wrapped in a !SyncAction object. The unsuccessfully synced files will be related to the [DevelopersGuide2#Game Game] object. Initially, it contains an empty list of !SyncError when it is created by the GUI. 
 
 !SyncAction also contain the sync action, which indicates what type of game files to be synced. There are basically two types of games files, saved games files and game configuration files. User can choose to sync either one or both.
-
-* See Also *
-  * [DevelopersGuide2#OfflineSync_Class OfflineSync Class]
-  * [DevelopersGuide2#GameLibrary_Class GameLibrary Class]
 
 
 ----
@@ -273,6 +261,8 @@ http://farm3.static.flickr.com/2776/4478572596_fc9a553fca_o.jpg
 
 == Synchronizing Thumb Drive to Computer == 
 
+http://lh4.ggpht.com/_SHs8HAxHUn8/S8YOnMmV_YI/AAAAAAAADfw/dZ-Q6OjJWnM/buttonThumbdriveToComputer.gif
+
 *Steps for synchronizing from Thumb Drive to Computer:*
  # Create a backup folder in the game file parent directory.
    * If backup folder exists, skip backup process.
@@ -283,6 +273,8 @@ http://farm3.static.flickr.com/2776/4478572596_fc9a553fca_o.jpg
 
 == Synchronizing Computer to Thumb Drive ==
 
+http://lh4.ggpht.com/_SHs8HAxHUn8/S8YOnEc936I/AAAAAAAADf0/CKqtgnVldlM/computerToThumbdriveButton.gif
+
 *Steps for synchronizing from Computer to Thumb Drive:*
  # Remove existing game files in thumb drive.
  # Create the necessary game folder structure in the external storage device.
@@ -290,6 +282,8 @@ http://farm3.static.flickr.com/2776/4478572596_fc9a553fca_o.jpg
 
 
 == Restore Computer to Original Game State ==
+
+http://lh6.ggpht.com/_SHs8HAxHUn8/S8YPLoABtlI/AAAAAAAADgE/0IDd-7_3xMM/buttonRestore.gif
 
 *Steps for restore:*
  # Remove game files on computer.
@@ -301,7 +295,10 @@ http://farm3.static.flickr.com/2776/4478572596_fc9a553fca_o.jpg
 = Online Synchronization =
 
 == Synchronizing Computer to GA Online Account ==
-This is a one way synchronization from PC to GA Online account. Here is how it works:
+
+http://lh4.ggpht.com/_SHs8HAxHUn8/S8YOnEFV3fI/AAAAAAAADf4/dKMSCiEydkk/computerToWebButton.gif
+
+This is a one way synchronization from PC to !GameAnywhere Online account. Here is how it works:
  # Given the game and type of data(saved and/or config) to sync. 
  # If the game is available on user’s web account, delete the respective saved and/or config folder of the game.
  # Given a list of saved/config data files to backup, we will upload them one by one.
@@ -309,7 +306,9 @@ This is a one way synchronization from PC to GA Online account. Here is how it w
  # Lastly, add the list of sync errors to a list of unsuccessful synced files.
 
 
-== Synchronizing GA Online Account to Computer  == 
+== Synchronizing !GameAnywhere Online Account to Computer  == 
+
+http://lh3.ggpht.com/_SHs8HAxHUn8/S8YOnYnPLRI/AAAAAAAADgA/jZgsS4fJITE/webToComputerButton.gif
 
 *Steps for synchronizing from GA Online Account to Computer:*
  # Create a backup folder in the game file parent directory.
@@ -321,6 +320,8 @@ This is a one way synchronization from PC to GA Online account. Here is how it w
 -----
 
 = Thumb Drive and Web Synchronization =
+
+http://lh4.ggpht.com/_SHs8HAxHUn8/S8YOnZD4FRI/AAAAAAAADf8/HBrMPJWbhgY/thumbdriveAndWebButton.gif
 
 Web and Thumb Drive Synchronization is a two-way file-level synchronization operation. The aim of this operation is to ensure that the game files stored on the web are the same as the game files stored on the thumb drive. The files on both sides will be checked and compared against a metadata file that is stored on the thumb drive and the user would then be asked to resolve any outstanding conflicts that cannot be automatically be resolved. 
 
