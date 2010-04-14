@@ -40,10 +40,10 @@ namespace GameAnywhere.Interface
             this.webToComputerButton = new System.Windows.Forms.Button();
             this.computerToThumbdriveButton = new System.Windows.Forms.Button();
             this.startPanel = new System.Windows.Forms.Panel();
-            this.loggedInUserLabel = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.errorLabel = new System.Windows.Forms.Label();
+            this.loggedInUserLabel = new System.Windows.Forms.Label();
             this.loginNavPanel = new System.Windows.Forms.Panel();
             this.loginLoginPanelButton = new System.Windows.Forms.Button();
             this.cancelLoginPanelButton = new System.Windows.Forms.Button();
@@ -277,19 +277,6 @@ namespace GameAnywhere.Interface
             this.startPanel.Size = new System.Drawing.Size(734, 237);
             this.startPanel.TabIndex = 18;
             // 
-            // loggedInUserLabel
-            // 
-            this.loggedInUserLabel.AutoSize = true;
-            this.loggedInUserLabel.Font = new System.Drawing.Font("Verdana", 7F);
-            this.loggedInUserLabel.ForeColor = System.Drawing.Color.DeepSkyBlue;
-            this.loggedInUserLabel.Location = new System.Drawing.Point(63, 352);
-            this.loggedInUserLabel.MaximumSize = new System.Drawing.Size(240, 15);
-            this.loggedInUserLabel.Name = "loggedInUserLabel";
-            this.loggedInUserLabel.Size = new System.Drawing.Size(32, 12);
-            this.loggedInUserLabel.TabIndex = 21;
-            this.loggedInUserLabel.Text = "label";
-            this.loggedInUserLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -320,6 +307,19 @@ namespace GameAnywhere.Interface
             this.errorLabel.Size = new System.Drawing.Size(38, 16);
             this.errorLabel.TabIndex = 18;
             this.errorLabel.Text = "label";
+            // 
+            // loggedInUserLabel
+            // 
+            this.loggedInUserLabel.AutoSize = true;
+            this.loggedInUserLabel.Font = new System.Drawing.Font("Verdana", 7F);
+            this.loggedInUserLabel.ForeColor = System.Drawing.Color.DeepSkyBlue;
+            this.loggedInUserLabel.Location = new System.Drawing.Point(63, 352);
+            this.loggedInUserLabel.MaximumSize = new System.Drawing.Size(270, 15);
+            this.loggedInUserLabel.Name = "loggedInUserLabel";
+            this.loggedInUserLabel.Size = new System.Drawing.Size(32, 12);
+            this.loggedInUserLabel.TabIndex = 21;
+            this.loggedInUserLabel.Text = "label";
+            this.loggedInUserLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // loginNavPanel
             // 
