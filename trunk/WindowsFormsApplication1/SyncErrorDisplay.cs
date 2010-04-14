@@ -147,7 +147,10 @@ namespace GameAnywhere.Interface
                 if (errorText.Contains("There is not enough space on the disk."))
                     break;
                 if (errorText.Contains("GameAnywhere.CreateFolderFailedException"))
-                    CreateSyncErrorLabel("There is not enough space on the disk.", errorDisplayPanel);    
+                {
+                    CreateSyncErrorLabel("There is not enough space on the disk.", errorDisplayPanel);
+                    break;
+                }
      
                 // Edit duplicate flags.
                 if (errorText.Equals("Unable to backup original game files."))
