@@ -899,9 +899,9 @@ namespace GameAnywhere.Interface
                         } // Unactivated Account
                     case 4:
                         {
-                            emailInvalidLabel.Text = "Invalid email";
+                            emailInvalidLabel.Text = "Send failed. Please check connection settings.";
                             break;
-                        }  // Invalid Email
+                        }
                     default: break;
                 }
 
@@ -1088,7 +1088,6 @@ namespace GameAnywhere.Interface
                             userDetailsInvalidChangePasswordPanelLabel.Text = "Invalid user details.";
                             break;
                         }   // Invalid user details.
-
                     default: break;
                 }
                 ResetAllChangePasswordPanelTextBoxes();
@@ -1269,6 +1268,11 @@ namespace GameAnywhere.Interface
                             emailInvalidForgetPasswordPanelLabel.Text = "Invalid Email.";
                             break;
                         }  // Invalid user
+                    case 4:
+                        {
+                            emailInvalidForgetPasswordPanelLabel.Text = "Send failed. Please check connection settings.";
+                            break;
+                        }
                     default: break;
                 }
                 ResetAllForgetPasswordPanelTextBoxes();
@@ -1377,6 +1381,11 @@ namespace GameAnywhere.Interface
                             userDetailsInvalidResendActivationPanelLabel.Text = "Invalid user details.";
                             break;
                         }// Invalid user details
+                    case 4:
+                        {
+                            userDetailsInvalidResendActivationPanelLabel.Text = "Send failed. Please check connection settings.";
+                            break;
+                        }
                     default: break;
                 }
 
