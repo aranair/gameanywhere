@@ -713,7 +713,8 @@ namespace GameAnywhere.Interface
 
                 // Login succeeds
                 if (loginResult)
-                {                   
+                {
+                    loggedInUserLabel.Text = emailTextBox.Text;
                     InitiateStartPanel();
                     if (userClickStatus == ClickStatus.WebToCom)
                         WebToComFunctions();
@@ -721,8 +722,6 @@ namespace GameAnywhere.Interface
                         ComToWebFunctions();
                     else if (userClickStatus == ClickStatus.ExtAndWeb)
                         ExtAndWebFunctions();
-
-                    loggedInUserLabel.Text = emailTextBox.Text;
                 }
                 // Login fails
                 else
