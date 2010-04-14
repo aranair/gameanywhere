@@ -45,8 +45,8 @@ namespace GameAnywhere.Process
         /// </summary>
         public SimpleDB()
         {
-            this.accessKey = "*";
-            this.secretAccessKey = "*";
+            this.accessKey = "";
+            this.secretAccessKey = "";
             this.sdb = new AmazonSimpleDBClient(accessKey, secretAccessKey);
             this.domain = "UserAccounts";
         }
