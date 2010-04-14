@@ -309,6 +309,7 @@ namespace GameAnywhere.Interface
 
         private void ComToWebFunctions()
         {
+            userClickStatus = ClickStatus.None;
             controller.direction = OnlineSync.ComToWeb;
             List<Game> gameList = null;
             try
@@ -381,6 +382,7 @@ namespace GameAnywhere.Interface
 
         private void WebToComFunctions()
         {
+            userClickStatus = ClickStatus.None;
             controller.direction = OnlineSync.WebToCom;
             List<Game> gameList = null;
             try
@@ -451,6 +453,8 @@ namespace GameAnywhere.Interface
 
         private void ExtAndWebFunctions()
         {
+
+            userClickStatus = ClickStatus.None;
             Dictionary<string, int> conflictsList = null;
             try
             {
@@ -688,7 +692,7 @@ namespace GameAnywhere.Interface
             if (CheckLoginDetails())
             {
                 // Log out current user if any.
-                controller.Logout();
+                LogoutUser();
 
                 // Attempt to login.
                 bool loginResult = false;
@@ -709,7 +713,7 @@ namespace GameAnywhere.Interface
 
                 // Login succeeds
                 if (loginResult)
-                {
+                {                   
                     InitiateStartPanel();
                     if (userClickStatus == ClickStatus.WebToCom)
                         WebToComFunctions();
@@ -718,19 +722,22 @@ namespace GameAnywhere.Interface
                     else if (userClickStatus == ClickStatus.ExtAndWeb)
                         ExtAndWebFunctions();
 
-                    userClickStatus = ClickStatus.None;
-                    //SetErrorLabel("       User Logged In", System.Drawing.Color.DeepSkyBlue);
-                    loggedInUserLabel.Text = "User Logged In.";
+                    loggedInUserLabel.Text = emailTextBox.Text;
                 }
                 // Login fails
                 else
                 {
                     loginFailedLabel.Text = "Invalid user details";
                     emailTextBox.Focus();
-
                 }
                 ResetAllLoginPanelTextBoxes();
             }
+        }
+
+        private void LogoutUser()
+        {
+            controller.Logout();
+            loggedInUserLabel.Text = "";
         }
 
         /// <summary>
@@ -784,6 +791,7 @@ namespace GameAnywhere.Interface
         }
         private void cancelLoginPanelButton_MouseClick(object sender, MouseEventArgs e)
         {
+            userClickStatus = ClickStatus.None;
             InitiateStartPanel();
         }
         #endregion

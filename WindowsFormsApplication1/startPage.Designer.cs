@@ -40,6 +40,7 @@ namespace GameAnywhere.Interface
             this.webToComputerButton = new System.Windows.Forms.Button();
             this.computerToThumbdriveButton = new System.Windows.Forms.Button();
             this.startPanel = new System.Windows.Forms.Panel();
+            this.loggedInUserLabel = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.errorLabel = new System.Windows.Forms.Label();
@@ -89,7 +90,6 @@ namespace GameAnywhere.Interface
             this.userDetailsInvalidChangePasswordPanelLabel = new System.Windows.Forms.Label();
             this.confirmChangePasswordPanelButton = new System.Windows.Forms.Button();
             this.cancelChangePasswordPanelButton = new System.Windows.Forms.Button();
-            this.loggedInUserLabel = new System.Windows.Forms.Label();
             this.startPanel.SuspendLayout();
             this.loginNavPanel.SuspendLayout();
             this.loginPanel.SuspendLayout();
@@ -275,8 +275,20 @@ namespace GameAnywhere.Interface
             this.startPanel.Controls.Add(this.thumbdriveToComputerButton);
             this.startPanel.Location = new System.Drawing.Point(50, 100);
             this.startPanel.Name = "startPanel";
-            this.startPanel.Size = new System.Drawing.Size(734, 242);
+            this.startPanel.Size = new System.Drawing.Size(734, 237);
             this.startPanel.TabIndex = 18;
+            // 
+            // loggedInUserLabel
+            // 
+            this.loggedInUserLabel.AutoSize = true;
+            this.loggedInUserLabel.Font = new System.Drawing.Font("Verdana", 7F);
+            this.loggedInUserLabel.ForeColor = System.Drawing.Color.DeepSkyBlue;
+            this.loggedInUserLabel.Location = new System.Drawing.Point(281, 190);
+            this.loggedInUserLabel.MaximumSize = new System.Drawing.Size(170, 0);
+            this.loggedInUserLabel.Name = "loggedInUserLabel";
+            this.loggedInUserLabel.Size = new System.Drawing.Size(32, 12);
+            this.loggedInUserLabel.TabIndex = 21;
+            this.loggedInUserLabel.Text = "label";
             // 
             // label4
             // 
@@ -940,17 +952,6 @@ namespace GameAnywhere.Interface
             this.cancelChangePasswordPanelButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.cancelChangePasswordPanelButton_MouseDown);
             this.cancelChangePasswordPanelButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.cancelChangePasswordPanelButton_MouseUp);
             this.cancelChangePasswordPanelButton.MouseEnter += new System.EventHandler(this.cancelChangePasswordPanelButton_MouseEnter);
-            // 
-            // loggedInUserLabel
-            // 
-            this.loggedInUserLabel.AutoSize = true;
-            this.loggedInUserLabel.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.loggedInUserLabel.ForeColor = System.Drawing.Color.DeepSkyBlue;
-            this.loggedInUserLabel.Location = new System.Drawing.Point(309, 201);
-            this.loggedInUserLabel.Name = "loggedInUserLabel";
-            this.loggedInUserLabel.Size = new System.Drawing.Size(38, 16);
-            this.loggedInUserLabel.TabIndex = 21;
-            this.loggedInUserLabel.Text = "label";
             // 
             // startPage
             // 
