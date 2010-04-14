@@ -19,6 +19,7 @@
     * [TestDriverUserGuide#How_to_test_GameLibrary_and_OfflineSync Testing]
     * [TestDriverUserGuide#See_Also See Also]
   * [UserGuide User Guide]
+    * [UserGuide#Guidelines_for_New_User Guidelines for New User]
     * [UserGuide#Synchronize_Game_Files_between_Computer_and_Thumb_Drive Synchronize Game Files between Computer and Thumb Drive]
     * [UserGuide#Synchronize_Game_Files_between_Computer_and_Online_Account Synchronize Game Files between Computer and Online Account]
     * [UserGuide#Synchronize_Game_Files_between_Thumb_Drive_and_Online_Account Synchronize Game Files between Thumb Drive and Online]
