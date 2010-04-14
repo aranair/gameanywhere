@@ -120,6 +120,10 @@ Click [DevelopersGuide2#Adding_Games here] for more information.
 
 == Frequently Asked Questions ==
 
+*Q Why does the program inform me that it cannot send activation e-mail to me?
+
+A. Your firewall is most likely blocking our program from sending. Please reconfigure your firewall settings to allow our program to send. 
+
 *Q. Why are there synchronization errors?*
 
 A. There can be many different reasons. The game file might be in use, locked or missing. Please follow the course of action that the program advises should an error occur.
