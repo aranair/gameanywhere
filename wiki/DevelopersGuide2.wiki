@@ -464,11 +464,25 @@ To register for an account we need the following details:
 
 Before adding a user into the database, it first ensures that the user account does not exist in our database. Here are the steps for inserting a user to the database:
 
+{{{
+if (!UserExists(email))
+{
+  //Registration complete
+  string activationKey = CreateMD5Hash(email.Substring(email.Length / 2) + password);
+  string md5Password = CreateMD5Hash(email + password);
+
+  //Insert user info into DB
+  db.InsertItem(email, md5Password, activationKey);
+  SendActivationEmail(email, password, activationKey))
+}
+}}}
+
   # Create an activation key by getting the MD5 hash of user’s partial username and password.
   # Create the encrypted password by getting the MD5 hash of the username and password.
   # Insert the user account details into the database, this includes the activation key, username, and encrypted password.
   # Finally, send out an email to the user with an account activation link together with the username and password. The activation link is of the following format, http://game-anywhere.com/activate/?key=activation-key.
 In order to reduce the number of spam users, all accounts registered with us would require to be activatd by clicking on the link provided in our email after registration. Lets take a look at how it is done:
+
   # Initially when a user is added to the database, an attribute “ActivationStatus” is set to value ‘0’ by default.
   # When the user clicks on the activation link in the email (http://game-anywhere.com/activate/?key=activation-key), the website actually matches this activation key with the activation key found in the database.
   # If the activation keys match, it will update the “ActivationStatus” to value “1”. There can be only 1 matched item because the activation key is a Salted MD5 string.
@@ -500,6 +514,23 @@ if (UserExists(email) && IsAccountActivated(email))
 == Password Retrieval ==
 
 The password retrieval system does not actually send a user back his original password but rather it sends the user an email to reset his password. The reason is because the passwords in the database are encrypted, thus we are unable to recover a user’s password using the username. Here is how the resetting of password works:
+
+{{{
+if (UserExists(email))
+{
+  if (IsAccountActivated(email))
+  {
+    //Retrieve complete
+    string password = db.GetAttribute(email, "Password");
+    string resetKey = CreateMD5Hash(email + password);
+
+    //Insert new attribute to item DB
+    db.AddAttributeValue(email, "ResetKey", resetKey);
+    SendPasswordEmail(email, resetKey))
+  }
+}
+}}}
+
 
   # Check if user exists and is activated in the database.
   # If user exists and is activated, retrieve the encrypted password from the database.
