@@ -41,7 +41,7 @@ http://lh4.ggpht.com/_-Xzk-2Bdr-I/S8MOxLXgYEI/AAAAAAAAANM/WUTAsFHyUQA/errorpage.
 
 == Synchronize Game Files between Computer and Online Account ==
 
-1. You need to have an online account to synchronize to the web. Please refer to the registration section on the user guide if you do not have an account. If you have one, click "Login" at the bottom right hand corner of the screen.
+1. You need to have an online account to synchronize to the web. Please refer to the [UserGuide#Registering_for_your_Online_Account Registration] section of the user guide if you do not have an account. If you have one, click "Login" at the bottom right hand corner of the screen.
 
 http://lh3.ggpht.com/_-Xzk-2Bdr-I/S8MOvsVBCoI/AAAAAAAAANA/HDz3CNO2RZw/startup.JPG
 
@@ -69,7 +69,7 @@ http://lh4.ggpht.com/_-Xzk-2Bdr-I/S8MOxLXgYEI/AAAAAAAAANM/WUTAsFHyUQA/errorpage.
 
 == Synchronize Game Files between Thumb Drive and Online Account ==
 
-1. You need to have an online account to synchronize to the web. Please refer to the [UserGuide#Registering_for_your_Online_Account Registration] section on the user guide if you do not have an account. If you have one, click "Login" at the bottom right hand corner of the screen.
+1. You need to have an online account to synchronize to the web. Please refer to the [UserGuide#Registering_for_your_Online_Account Registration] section of the user guide if you do not have an account. If you have one, click "Login" at the bottom right hand corner of the screen.
 
 http://lh3.ggpht.com/_-Xzk-2Bdr-I/S8MOvsVBCoI/AAAAAAAAANA/HDz3CNO2RZw/startup.JPG
 
