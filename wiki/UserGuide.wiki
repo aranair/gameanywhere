@@ -59,7 +59,7 @@ http://lh4.ggpht.com/_-Xzk-2Bdr-I/S8MOwBGEpxI/AAAAAAAAANE/2ImMt0p0zv0/choosegame
 
 5. If synchronization is successful, you will be returned to the startup screen. If synchronization has failed, you will be advised on the next course of action to take. You can choose to look at the details of the errors by clicking "Errors" or start another synchronization task by clicking "Done". 
 
-http://lh4.ggpht.com/_-Xzk-2Bdr-I/S8MOxt2O7yI/AAAAAAAAANQ/LTdqgemE5Y0/success.JPG
+http://lh5.ggpht.com/_-Xzk-2Bdr-I/S8biOFbeS-I/AAAAAAAAAOg/A1SXnL8PYEY/loggedinsuccessfullysync.JPG
 
 http://lh5.ggpht.com/_-Xzk-2Bdr-I/S8bdPU4ZB2I/AAAAAAAAAOY/2NtDnSao6u8/syncfailedpleasetry.JPG
 
@@ -87,7 +87,7 @@ http://lh4.ggpht.com/_-Xzk-2Bdr-I/S8Me-dbr3YI/AAAAAAAAAN4/jkI8ab1wrkY/resolvecon
 
 5. Your files on the thumb drive and online account should be synchronized. 
 
-http://lh4.ggpht.com/_-Xzk-2Bdr-I/S8Me5C7w-3I/AAAAAAAAAN0/c28tNM31Nf8/watssuccess.JPG
+http://lh5.ggpht.com/_-Xzk-2Bdr-I/S8biOFbeS-I/AAAAAAAAAOg/A1SXnL8PYEY/loggedinsuccessfullysync.JPG
 
 
 == Restore Computer to Original State ==
