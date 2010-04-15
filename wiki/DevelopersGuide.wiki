@@ -1,4 +1,5 @@
 #summary This document explains the high level software architecture of GameAnywhere for developers.
+#labels Deprecated
 
 = Developer Guide V0.9 =
 
