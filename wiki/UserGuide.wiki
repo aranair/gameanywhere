@@ -7,7 +7,7 @@
 
 After downloading the zip file, unzip to your thumb drive and run !GameAnywhere.exe from your thumb drive. This would enable you to synchronize your game data to your thumb drive. If you are purely doing online synchronization of your game data, you can run the program from your computer. 
 
-You can store your game files on our free [UserGuide#Registering_for_your_Online_Account GameAnywhere Online Account]. Do remember to register before you start.
+You can store your game files on our free GameAnywhere Online Account. [UserGuide#Registering_for_your_Online_Account Registration] of an account is free.
 
 To keep your !GameAnywhere online game files synchronized with your thumb drive, simply do a web and thumb synchronization.
 
