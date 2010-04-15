@@ -126,12 +126,12 @@ Similar to !OfflineSync Class, !OnlineSync Class inherit from Sync Class.
 
 == !WebAndThumb Class ==
 
-This class handles contains the algorithm to handle the synchronization between thumb drive and [DevelopersGuide2#Online_Account GameAnywhere Online Account].
+This class handles contains the algorithm to handle the synchronization between thumb drive and a GameAnywhere Online Account.
 
 
 == !WebComms == 
 
-This class contains the methods and information needed to connect and communicate with the [DevelopersGuide2#Online_Account GameAnywhere Online Account].
+This class contains the methods and information needed to connect and communicate with the a GameAnywhere Online Account.
 
 ----
 
