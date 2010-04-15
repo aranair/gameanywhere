@@ -93,7 +93,7 @@ Game is a class that stores the necessary information regarding a Game, i.e. gam
 
 == !SyncAction ==
 
-!SyncAction contains the necessary information to sync a game. A [DevelopersGuide2#Game Game] object and a list of [DevelopersGuide2#SyncError SyncError] would be wrapped in a !SyncAction object. The unsuccessfully synced files will be related to the [DevelopersGuide2#Game Game] object. Initially, it contains an empty list of !SyncError when it is created by the GUI. 
+!SyncAction contains the necessary information to sync a game. A [DevelopersGuide2#Game Game] object and a list of [DevelopersGuide2#SyncError SyncError] are wrapped in a !SyncAction object. The unsuccessfully synced files will be related to the [DevelopersGuide2#Game Game] object. Initially, it contains an empty list of !SyncError when it is created by the GUI. 
 
 !SyncAction also contain the sync action, which indicates what type of game files to be synced. There are basically two types of games files, saved games files and game configuration files. User can choose to sync either one or both.
 
