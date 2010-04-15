@@ -1,0 +1,10 @@
+GameLibrary test case description
+1.Test refresh tog et the installed game
+2.Test direction 2 - com to ext
+3.Test direction 1 - ext to com
+4.Test ext to com with no folders in ext
+5.Test invalid direction
+6.Test lock game folder
+7.Test for missing save folder (eg. MyDocument\FIFA 10 is missing)
+8.Test missing game folder
+New: Test lock folder initialize game

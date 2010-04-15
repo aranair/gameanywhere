@@ -1,0 +1,65 @@
+# ------------------------------
+# Custom Game Configuration File
+# ------------------------------
+# Use this file to add your own games for GameAnywhere.exe.
+#
+# Variable Names:
+# Critical game info (not optional):
+#  Game                 The Game name.
+#  RegValue              The name of the registry entry, in the registry folder,
+#                        that contains the install path.
+#  RegKey                Path to registry folder of game.
+#  RegType               HKLM for HKEY_LOCAL_MACHINE or HKCU for HKEY_CURRENT_USER
+#
+# Paths for files (optional):
+#  ConfigParentPath	 Full path to the parent path of all the config game folders/files.
+#  ConfigPathList	 Full paths to config files separated by comma.
+#  SearchConfigparent	 Regex search to handle batch processing or variable folder/file names for config files.
+#  SaveParentPath	 Full path to the parent path of all the saved game folders/files.
+#  SavePathList	         Full paths to saved game files separated by comma.
+#  SearchSaveParent	 Regex search to handle batch processing or variable folder/file names for saved games
+#
+# Reserved Words/Variables that can be used in the paths for files:
+#  InstallPathVar	 Can be used to replace the InstallPath recorded
+#                        in the registry.
+#
+#  DocumentsPath	 Can be used to replace the document paths of
+#                        running machine, etc: “C:\Users\Tom\Documents\”
+#
+#  RegistrySoftwarePath	 Can be used to replace the registry software path
+#                        for the different types of OS.
+#                        For #example: “RegistrySoftwarePath\EA Sports\FIFA 10” (with HKLM)
+#                        will evaluate to “HKEY_LOCAL_MACHINE\SOFTWARE\EA #Sports\FIFA 10” for
+#                        non-64bit OS users and“HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node?\EA Sports\FIFA 10”
+#                        for 64bit #OS users.
+# 
+# Syntax Rules:
+# - All critical game information variable must be present.
+# - If config files exist, ConfigParentPath must be present, likewise for saved game files/SaveParentPath.
+# - [ENDGAME] after the end of each game (see example below).
+# - Comma can be used to separate entries for ConfigPathList, SearchConfigParent, SavePathList and SearchSaveParent.
+# - To write a comment line, begin the line with #.
+#
+# This is an example of a game (without the #):
+# Game=Dragon Age Origins
+# RegValue=Path
+# RegKey=RegistrySoftwarePath\BioWare\Dragon Age
+# RegType=HKLM
+# ConfigPathList=DocumentsPath\BioWare\Dragon Age\Settings
+# ConfigParentPath=DocumentsPath\BioWare\Dragon Age
+# SavePathList=DocumentsPath\BioWare\Dragon Age\Characters
+# SaveParentPath=DocumentsPath\BioWare\Dragon Age
+# [ENDGAME]
+#
+# A template is provided below. Uncomment the # and fill in the information to use.
+#
+# Game=
+# RegValue=
+# RegKey=
+# RegType=
+# ConfigPathList=
+# ConfigParentPath=
+# SavePathList=
+# SaveParentPath=
+# SearchSaveParent=
+# [ENDGAME]

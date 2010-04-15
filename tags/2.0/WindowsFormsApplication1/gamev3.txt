@@ -1,0 +1,72 @@
+Game=Warcraft 3
+RegValue=InstallPath
+RegKey=Software\Blizzard Entertainment\Warcraft III
+RegType=HKCU
+ConfigPathList=InstallPathVar\CustomKeys.txt
+ConfigParentPath=InstallPathVar
+SavePathList=InstallPathVar\Save
+SaveParentPath=InstallPathVar
+[ENDGAME]
+#Comments	
+Game=Football Manager 2010
+RegValue=Path
+RegKey=RegistrySoftwarePath\Sports Interactive Ltd\Installs\FM2010
+RegType=HKLM
+SaveParentPath=DocumentsPath\Sports Interactive\Football Manager 2010
+SavePathList=DocumentsPath\Sports Interactive\Football Manager 2010\games
+[ENDGAME]
+Game=Football Manager 2009
+RegValue=Path
+RegKey=RegistrySoftwarePath\Sports Interactive Ltd\Installs\FM2009
+RegType=HKLM
+SaveParentPath=DocumentsPath\Sports Interactive\Football Manager 2009
+SavePathList=DocumentsPath\Sports Interactive\Football Manager 2009\games
+[ENDGAME]
+Game=World of Warcraft
+RegValue=InstallPath
+RegKey=RegistrySoftwarePath\Blizzard Entertainment\World of Warcraft
+RegType=HKLM
+SavePathList=InstallPathVar\Interface
+SaveParentPath=InstallPathVar
+[ENDGAME]
+Game=FIFA 10
+RegValue=Install Dir
+RegKey=RegistrySoftwarePath\EA Sports\FIFA 10
+RegType=HKLM
+ConfigPathList=DocumentsPath\FIFA 10\user
+ConfigParentPath=DocumentsPath\FIFA 10
+SaveParentPath=DocumentsPath\FIFA 10
+SearchSaveParent=A. *,B. *,C. *,D. *,I. *,J. *
+[ENDGAME]
+Game=   Abuse
+RegValue=   Install_Dir
+RegKey=RegistrySoftwarePath\Abuse
+RegType=HKLM
+SaveParentPath=InstallPathVar
+SearchSaveParent=    *.spe
+[ENDGAME]
+Game=Dragon Age Origins
+RegValue=Path
+RegKey=RegistrySoftwarePath\BioWare\Dragon Age
+RegType=HKLM
+ConfigPathList=DocumentsPath\BioWare\Dragon Age\Settings
+ConfigParentPath=DocumentsPath\BioWare\Dragon Age
+SavePathList=DocumentsPath\BioWare\Dragon Age\Characters
+SaveParentPath=DocumentsPath\BioWare\Dragon Age
+[ENDGAME]
+Game=The Sims 3
+RegValue=Install Dir
+RegKey=RegistrySoftwarePath\Sims\The Sims 3
+RegType=HKLM
+SavePathList=DocumentsPath\Electronic Arts\The Sims 3\Saves
+SaveParentPath=DocumentsPath\Electronic Arts\The Sims 3
+[ENDGAME]
+Game=Borderlands
+RegValue=InstallFolder
+RegKey=RegistrySoftwarePath\Gearbox Software\Borderlands
+RegType=HKLM
+ConfigPathList=DocumentsPath\My Games\Borderlands\WillowGame\Config
+ConfigParentPath=DocumentsPath\My Games\Borderlands\WillowGame
+SavePathList=DocumentsPath\My Games\Borderlands\SaveData
+SaveParentPath=DocumentsPath\My Games\Borderlands
+[ENDGAME]

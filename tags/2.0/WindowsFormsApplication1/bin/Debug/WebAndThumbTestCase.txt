@@ -1,0 +1,198 @@
+WebAndThumbSync Test case for conflict check and synchronize game
+
+
+Conflict = 0, upload = 1, download = 2, deleteLocal = 3, deleteWeb = 4
+
+TODO: Check if deletion on one side, do we remove meta data entry.
+MoDIFICATION: Return type is filtered, check for conflict and noconflict variables.
+
+Format:
+
+Local Hash : Local Meta | Web Hash 
+
+1.Test for no change
+
+file 1	A : A | A 
+file 2	B : B | B 
+
+result : empty conflict and noConflict hash set
+
+2.Test for 1 conflict only, Web latest copy
+
+file 1	A : A | X 
+file 2	B : B | B 
+
+result : noConflict contains 1 entry: File 1, 2 (download)
+
+3.Test for 1 conflict only, thumb latest
+
+file 1	X : A | A 
+file 2	B : B | B 
+
+result : noConflict contains 1 entry: File 1, 1 (Upload)
+
+4.Test for conflicts on Both Web and Thumb 
+
+file 1:	A : A | A 
+file 2: X : B | B 
+file 3:	C : C | X 
+file 4: D : D | D 
+
+result : noConflict contains 2 entries: File 2, 1(dir) and File 3, 2
+
+5.Test for unresolve conflicts, with case 4
+
+file 1:	X : A | Y : A -> conflict code: UpDownConflict
+file 2: X : B | B : B
+file 3:	C : C | X : C
+file 4: D : D | D : D
+
+result : noConflict contains 2 entries: File 2, 1(dir) and File 3, 2
+	 conflict contains 1 entry: File 1, UpDownConflict
+
+6.Test for deletion at Thumb with case 5 condition
+
+file 1:	X : A | Y  -> Conflict code: UpDownConflict
+file 2: X : B | B
+file 3:	C : C | X
+file 4: D : D | none
+
+result : noConflict contains 3 entries: File 2, 1(dir) and File 3, 2, File 4,3 (DeleteThumb)
+	 conflict contains 1 entry: File 1, UpDownConflict
+
+7.Test deletion at Web with case 5 condition
+
+file 1:	X : A | Y  -> Conflict code: UpDownConflict
+file 2: X : B | B
+file 3:	C : C | X
+file 4: none : D | D
+
+result : noConflict contains 3 entries: File 2, 1(dir) and File 3, 2, File 4,4 (DeleteWeb)
+	 conflict contains 1 entry: File 1, UpDownConflict
+
+8.Test copy over to Web with 6 & 7 case
+
+file 1:	X : A | Y -> conflict code: upDownConflict
+file 2: X : B | B
+file 3:	C : C | X
+file 4: D : D | none
+file 5: none : E | E
+file 6: F : none | none
+
+result : noConflict contains 5 entries: File 2, 1(dir) and File 3, 2, File 4,3 (DeleteThumb), File 5, 4 (DeleteWeb)
+	 File 6, 1 (upload to web)
+	 conflict contains 1 entry: File 1, UpDownConflict
+
+9.Test for unResolve conflict only case : (1,0,1,0) Both side new files
+
+File 1:	X : none | Y -> conflict Code: UpDownConflict
+
+result : conflict contains 1 entry: File 1, UpDownConflict
+
+10.Test for conflict, Empty entry in the thumb with case 10.
+
+File 1:	X : none | Y -> Conflict code: UpDownconflict
+File 2:	none : none | A
+
+result : conflict contains 1 entry: File 1, UpDownConflict
+	 noconflict contains 1 entry: File 2, 2
+
+11.Test for conflict, Empty at Web with case from 10 and 11.
+
+File 1:	X : none | Y -> Conflict code: UpDownConflict
+File 2:	none : none | A
+File 3: A : none | none
+File 4: W : none | Z -> Conflict code: UpDownConflict
+
+result : conflict contains 2 entries: File 1, UpDownConflict and File 4,UpDownConflict
+	 noconflict contains 2 entries: File 2, 2 and File 3, 1
+
+12.Test for spceial case: 0,1,0,1 (Both side no file, but meta data exist)
+
+File 1:	none : A | none
+
+result : nothing in conflicts and noconflict, meta Data of this entry is deleted for this File
+
+13. Test for DeleteLocal Conflict
+
+File 1: X : A | none
+File 2: Y : B | none
+
+result: conflict contains one entry with direction: DeleteLocalConflict
+	return one entry with direction: 0
+
+14. Test for DeleteWebConflict
+
+File 1: none : A | X
+
+result: conflict contains one entry with direction: DeleteWebConflict
+	return contains one entry: Game1\savedGame : 0
+
+15. Test for similar file conflict return type
+
+Game1\savedGame\File 1: x : A | Y -> updownconflict
+Game1\savedGame\File 2: none : B | X -> deleteWebconflict
+
+result: conflict contains 2 entries.	
+	return only one: Game1\savedGame : 0
+
+16. Test for multiple file conflict return 
+
+Game1\savedGame\File 1: x : A | Y : A -> updownconflict
+Game1\savedGame\File 2: none : B | X : B -> deleteWebconflict
+Game1\configGame\File 3: X : C | none : C -> upload or deletelocal conflict
+Game2\configGame\File 4: X : D | Y : D -> updownconflict
+
+result: conflict contains 4 entries, noconflict contains 0.
+	return 3 entires:
+		1:- Game1\savedGame : 0
+		2:- Game1\configGame : 0
+		3:- Game2\configGame : 0
+
+17. Test for Game1\savedGame folder locked.
+	Case 17 uses case 16 folders/files set.
+
+Did not handle file lock exception when creating meta data in constructor.
+
+18. Test for locking of folder after creating WebAndThumbSync class
+	direction for Game2\configGame\File 4: X : D | Y : D -> updownconflict, changed to download
+
+19. Test for disconnection of internet conenction. web has no meta and files. Com has files and no meta.
+	Check for empty meta data to be created.
+
+20. All in one conflict with conflict input as '1'.
+
+21. all conflict input as '2'.
+
+All conflict in one test cases, with all conflicts resolve with "1"
+
+[key/file] = [thumb,web,meta] -> [actions to be done]
+
+Game1/savedGame/File 1 = 0,0,A -> delete metadata
+Game1/savedGame/File 2 = 0,A,0 -> download
+Game1/savedGame/File 3 = A,0,0 -> upload
+
+Game2/savedGame/File 4 = 0,A,A -> delete Web
+Game2/savedGame/File 5 = 0,X,A -> delete web
+
+Game3/config/File 6 = A,0,A -> delete local
+Game3/savedGame/File 7 = X,0,A -> upload 
+
+Game4/savedGame/File 8 = A,A,0 -> upload
+Game4/config/File 9 = A,X,0 -> upload
+ 
+Game5/savedGame/File 10 = A,X,A -> download
+Game5/savedGame/File 11 = X,A,X -> upload
+Game5/savedGame/File 12 = X,Y,A -> upload
+Game5/savedGame/File 13 = A,A,A -> No Change
+
+Conflicts only resolve with "2"
+
+Game2/savedGame/File 5 = 0,X,A -> download
+
+Game3/savedGame/File 7 = x,0,A -> Delete Local
+
+Game4/savedGame/File 8 = A,A,0 -> download
+Game4/savedGame/File 9 = A,X,0 -> download
+
+Game5/savedGame/File 12 = X,Y,A -> download

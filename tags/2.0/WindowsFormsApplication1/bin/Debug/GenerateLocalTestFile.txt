@@ -1,0 +1,105 @@
+@
+localTest1
+Game1\savedGame\File 1.txt,A
+Game2\savedGame\File 2.txt,B
+@
+localTest2
+Game1\savedGame\File 1.txt,A
+Game2\savedGame\File 2.txt,B
+@
+localTest3
+Game1\savedGame\File 1.txt,X
+Game2\savedGame\File 2.txt,B
+@
+localTest4
+Game1\savedGame\File 1.txt,A
+Game2\savedGame\File 2.txt,X
+Game3\savedGame\File 3.txt,C
+Game4\savedGame\File 4.txt,D
+@
+localTest5
+Game1\savedGame\File 1.txt,X
+Game2\savedGame\File 2.txt,X
+Game3\savedGame\File 3.txt,C
+Game4\savedGame\File 4.txt,D
+@
+localTest6
+Game1\savedGame\File 1.txt,X
+Game2\savedGame\File 2.txt,X
+Game3\savedGame\File 3.txt,C
+Game4\savedGame\File 4.txt,D
+@
+localTest7
+Game1\savedGame\File 1.txt,X
+Game2\savedGame\File 2.txt,X
+Game3\savedGame\File 3.txt,C
+Game4\savedGame\
+@
+localTest8
+Game1\savedGame\File 1.txt,X
+Game2\savedGame\File 2.txt,X
+Game3\savedGame\File 3.txt,C
+Game4\savedGame\File 4.txt,D
+Game5\
+Game6\savedGame\File 6.txt,F
+@
+localTest9
+Game1\savedGame\File 1.txt,X
+@
+localTest10
+Game1\savedGame\File 1.txt,X
+@
+localTest11
+Game1\savedGame\File 1.txt,X
+Game3\savedGame\File 3.txt,A
+Game4\savedGame\File 4.txt,W
+@
+localTest12
+@
+localTest13
+Game1\savedGame\File 1.txt,X
+Game1\config\File 2.txt,Y
+@
+localTest14
+Game1
+@
+localTest15
+Game1\savedGame\File 1.txt,X
+@
+localTest16
+Game1\savedGame\File 1.txt,X
+Game1\config\File 3.txt,X
+Game2\config\File 4.txt,X
+@
+localTest17
+Game1\savedGame\File 1.txt,X
+Game1\config\File 3.txt,X
+Game2\config\File 4.txt,X
+@
+localTest18
+Game1\savedGame\File 1.txt,X
+Game1\config\File 3.txt,X
+Game2\config\File 4.txt,X
+@
+localTest19
+Game1\savedGame\File 1.txt,X
+Game1\config\File 3.txt,X
+Game2\config\File 4.txt,X
+@
+localTest20
+Game1\savedGame\File 3.txt,A
+Game3\config\File 6.txt,A
+Game3\savedGame\File 7.txt,X
+Game4\savedGame\File 8.txt,A
+Game4\config\File 9.txt,A
+Game5\savedGame\File 10.txt,A
+Game5\savedGame\File 11.txt,X
+Game5\savedGame\File 12.txt,X
+Game5\savedGame\File 13.txt,A
+@
+localTest21
+Game3\savedGame\File 7.txt,X
+Game4\savedGame\File 8.txt,A
+Game4\config\File 9.txt,A
+Game5\savedGame\File 10.txt,X 
+#

@@ -1,0 +1,100 @@
+@
+metaTest1
+Game1\savedGame\File 1.txt,A
+Game2\savedGame\File 2.txt,B
+@
+metaTest2
+Game1\savedGame\File 1.txt,A
+Game2\savedGame\File 2.txt,B
+@
+metaTest3
+Game1\savedGame\File 1.txt,A
+Game2\savedGame\File 2.txt,B
+@
+metaTest4
+Game1\savedGame\File 1.txt,A
+Game2\savedGame\File 2.txt,B
+Game3\savedGame\File 3.txt,C
+Game4\savedGame\File 4.txt,D
+@
+metaTest5
+Game1\savedGame\File 1.txt,A
+Game2\savedGame\File 2.txt,B
+Game3\savedGame\File 3.txt,C
+Game4\savedGame\File 4.txt,D
+@
+metaTest6
+Game1\savedGame\File 1.txt,A
+Game2\savedGame\File 2.txt,B
+Game3\savedGame\File 3.txt,C
+Game4\savedGame\File 4.txt,D
+@
+metaTest7
+Game1\savedGame\File 1.txt,A
+Game2\savedGame\File 2.txt,B
+Game3\savedGame\File 3.txt,C
+Game4\savedGame\File 4.txt,D
+@
+metaTest8
+Game1\savedGame\File 1.txt,A
+Game2\savedGame\File 2.txt,B
+Game3\savedGame\File 3.txt,C
+Game4\savedGame\File 4.txt,D
+Game5\savedGame\File 5.txt,E
+@
+metaTest9
+@
+metaTest10
+@
+metaTest11
+@
+metaTest12
+Game1\savedGame\File 1.txt,A
+@
+metaTest13
+Game1\savedGame\File 1.txt,A
+Game1\config\File 2.txt,B
+@
+metaTest14
+Game1\savedGame\File 1.txt,A
+@
+metaTest15
+Game1\savedGame\File 1.txt,A
+Game1\savedGame\File 2.txt,B
+@
+metaTest16
+Game1\savedGame\File 1.txt,A
+Game1\savedGame\File 2.txt,B
+Game1\config\File 3.txt,C
+Game2\config\File 4.txt,D
+@
+metaTest17
+Game1\savedGame\File 1.txt,A
+Game1\savedGame\File 2.txt,B
+Game1\config\File 3.txt,C
+Game2\config\File 4.txt,D
+@
+metaTest18
+Game1\savedGame\File 1.txt,A
+Game1\savedGame\File 2.txt,B
+Game1\config\File 3.txt,C
+Game2\config\File 4.txt,D
+@
+metaTest19
+@
+metaTest20
+Game1\savedGame\File 1.txt,A
+Game2\savedGame\File 4.txt,A
+Game2\savedGame\File 5.txt,A
+Game3\config\File 6.txt,A
+Game3\savedGame\File 7.txt,A
+Game5\savedGame\File 10.txt,A
+Game5\savedGame\File 11.txt,A
+Game5\savedGame\File 12.txt,A
+Game5\savedGame\File 13.txt,A
+@
+metaTest21
+Game2\savedGame\File 5.txt,A
+Game3\savedGame\File 7.txt,A
+Game5\savedGame\File 12.txt,A
+#

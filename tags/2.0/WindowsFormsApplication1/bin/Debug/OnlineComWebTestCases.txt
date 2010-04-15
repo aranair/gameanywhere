@@ -1,0 +1,14 @@
+1. Test upload of both games files to web (Web empty)
+2. Test upload of a game file with only save and another config (web empty)
+3. Test upload of upload with existing file on web (ensure overwrites)
+4. Test upload of games with one of the file unable to access (checks for unsuccessful file upload)
+5. Test for no internet connection.
+6. Test of upload of all games to the internet.
+*. Test upload of games to web with internet connection off in middle of transaction. (manual testing)
+7. Test download of games from web to com (empty games files in com)
+8. Test download of games from web to com (with existing game files in com) : checks for backup
+9. Test download of games(Wc3/FIFA 10) from web to com with unable to create backup. : result add into sync action list
+10.Test download with games folder path missing. (result: should create them if not present.)
+11.Test download of games from web to com (with existing game files in com) : checks for backup
+	and wc folder unable to create new dirctory.
+*. Test download of games from web to com with no internet conenction (mannual testing)
