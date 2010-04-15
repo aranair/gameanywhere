@@ -127,7 +127,7 @@ Click [DevelopersGuide2#Adding_Games here] for more information.
 
 *Q The program is unable to detect my Abuse/Warcraft 3 game files. Why?
 
-A. If you are running under windows Vista/7, please make sure that you have full User Account Control(UAC) rights for the Abuse/Warcraft 3 folder on your computer. To view/edit UAC rights, right click on the folder, go to "Properties" and click the "Security" tab. 
+A. If you are running under Windows Vista/7, please make sure that you have full User Account Control(UAC) rights for the Abuse/Warcraft 3 folder on your computer. To view/edit UAC rights, right click on the folder, go to "Properties" and click the "Security" tab. 
 
 *Q Why does the program inform me that it cannot send activation e-mail to me?
 
