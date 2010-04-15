@@ -51,7 +51,7 @@ http://lh3.ggpht.com/_-Xzk-2Bdr-I/S8MZWENr2JI/AAAAAAAAANw/0AN-6jRdV2c/loggingin.
 
 3. Choose either "PC TO WEB" or "WEB TO PC".
 
-http://lh6.ggpht.com/_-Xzk-2Bdr-I/S8MZV43fzxI/AAAAAAAAANs/wFq58xwCvo0/loggedin.JPG
+http://lh3.ggpht.com/_-Xzk-2Bdr-I/S8biyJdQ2JI/AAAAAAAAAOk/2gpUsYj88GQ/loginsuccessnew.JPG
 
 4. Select the game files that you want to synchronize and click "Confirm".
 
@@ -79,7 +79,7 @@ http://lh3.ggpht.com/_-Xzk-2Bdr-I/S8MZWENr2JI/AAAAAAAAANw/0AN-6jRdV2c/loggingin.
 
 3. Click "Thumb Drive and Web"
 
-http://lh6.ggpht.com/_-Xzk-2Bdr-I/S8MZV43fzxI/AAAAAAAAANs/wFq58xwCvo0/loggedin.JPG
+http://lh3.ggpht.com/_-Xzk-2Bdr-I/S8biyJdQ2JI/AAAAAAAAAOk/2gpUsYj88GQ/loginsuccessnew.JPG
 
 4. The program will look through the files on your thumb drive and online account and determine which files to keep or throw. However, if the program cannot determine, you will be asked to choose which files to keep. If you want the files on your thumb drive, click the thumb drive icon. Otherwise, click the web icon. When you are done selecting, click confirm.
 
