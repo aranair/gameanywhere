@@ -452,7 +452,7 @@ Each item/row in the database has the following attributes: ItemName, Password, 
 
 [http://lh5.ggpht.com/_SHs8HAxHUn8/S8Qz2CpETkI/AAAAAAAADew/WWis9Mqlhnk/s640/databaseDesign2.jpg]
 
-== Passwords Security ==
+== Password Security ==
 
 In order to ensure optimum security of users password, all passwords are encrypted in our database. This is secure because even us admins do not know your password as it is not even readable from the database.
 
@@ -608,4 +608,4 @@ if (UserExists(email))
 
 = API Reference =
 
-Click here for !GameAnywhere [http://api.game-anywhere.com/index.html library].
+Click here for !GameAnywhere [http://api.game-anywhere.com/index.html API].
