@@ -1,4 +1,5 @@
 #summary Class descriptions and functions.
+#labels Deprecated
 {{{
 = <Class Name Here> =
 
