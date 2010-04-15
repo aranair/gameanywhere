@@ -115,7 +115,7 @@ This parent class contains the general methods to backup and restore the compute
 
 
 == !OfflineSync Class ==
-!OfflineSync Class inherit from Sync Class. This class contains the algorithm to handle the synchronization between computer and thumb drive. The sync direction determine how the game files are transferred.
+!OfflineSync Class inherits from Sync Class. This class contains the algorithm to handle the synchronization between computer and thumb drive. The sync direction determine how the game files are transferred.
 
 
 == !OnlineSync Class ==
