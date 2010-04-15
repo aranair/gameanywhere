@@ -21,30 +21,34 @@ In this section, we would introduce the basic features of !GameAnywhere and what
 
 == Features of !GameAnywhere==
 
- * Carry your personal game data in a thumb drive or have it saved in your free online account.
+ * Enables you to carry your personal game data in a thumb drive or have them stored in your free online account.
 
- * Easily sync your game data between PC, thumb drive and your !GameAnywhere online account.
 
- * Automatically detects the games installed on the computer and offer you the appropriate synchronization options.
+ * Easily syncs your game data between PC, thumb drive and your !GameAnywhere online account.
 
- * Restores the computer to its original state after you're done playing on the computer with the files you have synchronized.
 
- * Supported games:
-   # [http://www.worldofwarcraft.com World of Warcraft]
-   # [http://www.diablo3.nl/war3x/ Warcraft 3: The Frozen Throne]
-   # [http://fifa.easports.com/ FIFA 10]
-   # [http://www.footballmanager.com/ Football Manager 2010]
-   # [http://www.sega.co.uk/fm09/ Football Manager 2009]
-   # [http://www.thesims3.com/ The Sims 3]
-   # [http://dragonage.bioware.com/ Dragon Age Origins]
-   # [http://www.borderlandsthegame.com/ Borderlands  ]
-   # [http://abuse-game.com/ Abuse] (for testing purpose)
+ * Automatically detects the games installed on the computer and offers you the appropriate synchronization options.
 
- * Add Your Own Games.
 
- * No installation needed.
+ * Restores the computer to its original state after you are done playing on the computer with the files you have synchronized.
 
- * Free and Open-Source.
+
+ * Supports 
+     # [http://www.worldofwarcraft.com World of Warcraft]
+     # [http://www.diablo3.nl/war3x/ Warcraft 3: The Frozen Throne]
+     # [http://fifa.easports.com/ FIFA 10]
+     # [http://www.footballmanager.com/ Football Manager 2010]
+     # [http://www.sega.co.uk/fm09/ Football Manager 2009]
+     # [http://www.thesims3.com/ The Sims 3]
+     # [http://dragonage.bioware.com/ Dragon Age Origins]
+     # [http://www.borderlandsthegame.com/ Borderlands  ]
+     # [http://abuse-game.com/ Abuse]
+
+ * Allows users to add their own games.
+
+ * Does not require installation.
+
+ * Is free and open-source.
 
 
 == GUI ==
