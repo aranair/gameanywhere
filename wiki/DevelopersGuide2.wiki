@@ -121,7 +121,7 @@ This parent class contains the general methods to backup and restore the compute
 == !OnlineSync Class ==
 
 Similar to !OfflineSync Class, !OnlineSync Class inherit from Sync Class.
-!OnlineSync Class contains the algorithm to handle the synchronization between computer and [DevelopersGuide2#Online_Account GameAnywhere Online Account].
+!OnlineSync Class contains the algorithm to handle the synchronization between computer and a GameAnywhere Online Account.
 
 
 == !WebAndThumb Class ==
