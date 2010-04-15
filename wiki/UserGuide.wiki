@@ -144,7 +144,3 @@ A. Close your running games and open folder windows before you do a synchronizat
 *Q. Is there a possibility that the restoration of a computer to its original state can fail?*
 
 A. The likelihood is slim but it is possible. Please follow the on-screen instructions should a restoration fail.
-
-*Q. I don't understand why the program can never restore my files even though I have synchronized successfully to the computer.
-
-A. Windows has a very inconsistent file locking mechanism. To ensure that your synchronization and restoration are always smooth, make sure that the game folder (usually located at C:\Program Files) is not locked i.e. you do not require administrator permission to access it.
