@@ -249,6 +249,7 @@ namespace GameAnywhere.Interface
         }
         private void loginButton_MouseClick(object sender, MouseEventArgs e)
         {
+            userClickStatus = ClickStatus.None;
             InitiateLoginPanel();
         }
         #endregion
@@ -1496,6 +1497,7 @@ namespace GameAnywhere.Interface
 
             ResetErrorLabels();
             ResetAllRegisterPanelTextboxes();
+            userClickStatus = ClickStatus.None;
             SetVisibilityAndUsability(registerPanel, true, true);
             DisableOtherPanels(registerPanel);
             SetVisibilityAndUsability(loginButton, true, true);
@@ -1532,6 +1534,7 @@ namespace GameAnywhere.Interface
             this.SuspendLayout();
             ResetErrorLabels();
             ResetAllForgetPasswordPanelTextBoxes();
+            userClickStatus = ClickStatus.None;
 
             SetVisibilityAndUsability(forgetPasswordPanel, true, true);
             DisableOtherPanels(forgetPasswordPanel);
@@ -1549,6 +1552,7 @@ namespace GameAnywhere.Interface
             this.SuspendLayout();
             ResetErrorLabels();
             ResetAllResendActivationPanelTextBoxes();
+            userClickStatus = ClickStatus.None;
 
             SetVisibilityAndUsability(resendActivationPanel, true, true);
             DisableOtherPanels(resendActivationPanel);
@@ -1566,6 +1570,7 @@ namespace GameAnywhere.Interface
             this.SuspendLayout();
             ResetErrorLabels();
             ResetAllChangePasswordPanelTextBoxes();
+            userClickStatus = ClickStatus.None;
 
             SetVisibilityAndUsability(changePasswordPanel, true, true);
             DisableOtherPanels(changePasswordPanel);
