@@ -51,7 +51,7 @@ In this section, we would introduce the basic features of !GameAnywhere and what
  * Is free and open-source.
 
 
-== GUI ==
+== Screenshots ==
 
 http://lh3.ggpht.com/_-Xzk-2Bdr-I/S8MOvsVBCoI/AAAAAAAAANA/HDz3CNO2RZw/startup.JPG
 
