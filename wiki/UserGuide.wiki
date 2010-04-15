@@ -128,6 +128,10 @@ Click [DevelopersGuide2#Adding_Games here] for more information.
 
 == Frequently Asked Questions ==
 
+*Q Why is the program not detecting my game files?
+
+A. If you are running under windows Vista/7, please make sure that you run the game under proper User Access Control rights. If the game requires administrator access to write to the folder and you are running the game under a normal user account, your game files are actually kept in Users\AppData\Local\VirtualStore, which will not be detected by our program. Fortunately, this happens only with a minority of the games we support as most games do not store the game files in the install directory anymore, due to User Access Control rights issues.
+
 *Q Why does the program inform me that it cannot send activation e-mail to me?
 
 A. Your firewall is most likely blocking our program from sending. Please reconfigure your firewall settings to allow our program to send. 
