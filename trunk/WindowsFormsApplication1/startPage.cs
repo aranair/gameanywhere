@@ -66,6 +66,7 @@ namespace GameAnywhere.Interface
             ResetErrorLabels();
             if (controller.IsFixedMedia())
             {
+                MessageBox.Show("To synchronize files to/from your thumbdrive, please extract and run GameAnywhere on your thumbdrive.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 DisableThumbdriveFunctions();
             }
 
